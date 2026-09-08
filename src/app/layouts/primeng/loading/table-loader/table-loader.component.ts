@@ -13,4 +13,5 @@ import { TableDirective } from '@coreui/angular';
 })
 
 // This loader mimics the optic of a table that is loading data
-export class TableLoaderComponent {}
+export class TableLoaderComponent {
+}

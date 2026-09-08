@@ -13,16 +13,9 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
-import {
-    ControlValueAccessor,
-    FormsModule,
-    NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
-import {
-    MultiSelectChangeEvent,
-    MultiSelectFilterEvent,
-} from '@openng/optimus-ui/multiselect';
+import { MultiSelectChangeEvent, MultiSelectFilterEvent, } from '@openng/optimus-ui/multiselect';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
 import { TranslocoService } from '@jsverse/transloco';
 import { debounceTime } from 'rxjs/operators';
@@ -43,9 +36,7 @@ import { Select } from '@openng/optimus-ui/select';
     styleUrl: './select.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SelectComponent
-    implements ControlValueAccessor, OnInit, OnDestroy
-{
+export class SelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
     private init: boolean = false;
 
     @ViewChild('selectOptgroup') selectOptgroup: Select | undefined;

@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import {
     EvcAddVServiceValidationResult,
     EvcDeleteNode,
@@ -52,11 +45,7 @@ import {
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
-import {
-    TranslocoDirective,
-    TranslocoPipe,
-    TranslocoService,
-} from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe, TranslocoService, } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { EvcTreeEditComponent } from './evc-tree-edit/evc-tree-edit.component';
 import {
@@ -70,13 +59,12 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
-import {
-    GenericSuccessResponse,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericSuccessResponse, GenericValidationError, } from '../../../../../generic-responses';
 
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
-import { MultiSelectOptgroupComponent } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import _ from 'lodash';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EvcTreeValidationErrors } from '../eventcorrelations-view/evc-tree/evc-tree.interface';
@@ -135,8 +123,7 @@ import { ScoreSumPipe } from './score-sum.pipe';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventcorrelationsEditCorrelationComponent
-    implements OnInit, OnDestroy
-{
+    implements OnInit, OnDestroy {
     private readonly TranslocoService = inject(TranslocoService);
 
     public isLoading: boolean = true;
@@ -778,13 +765,13 @@ export class EventcorrelationsEditCorrelationComponent
 
                             for (const jsonKey in updates[layerIndexToUpdate][
                                 newParentId
-                            ]) {
+                                ]) {
                                 this.evcTree[layerIndexToUpdateInt][
                                     newParentId
-                                ].push(
+                                    ].push(
                                     updates[layerIndexToUpdate][newParentId][
                                         jsonKey
-                                    ],
+                                        ],
                                 );
                             }
                         }
@@ -794,28 +781,28 @@ export class EventcorrelationsEditCorrelationComponent
                     if (layerIndexToUpdateInt > 0) {
                         for (const newParentIdvService in updates[
                             layerIndexToUpdate
-                        ]) {
+                            ]) {
                             //Add new vService to evcTree as array
                             this.evcTree[layerIndexToUpdateInt][
                                 newParentIdvService
-                            ] = [];
+                                ] = [];
 
                             //The new vService has always the key "0" !
                             updates[layerIndexToUpdate][newParentIdvService][
                                 '0'
-                            ].usedBy = []; //This needs to be an array but PHP's JSON_FORCE_OBJECT force this into an {} object
+                                ].usedBy = []; //This needs to be an array but PHP's JSON_FORCE_OBJECT force this into an {} object
                             this.evcTree[layerIndexToUpdateInt][
                                 newParentIdvService
-                            ].push(
+                                ].push(
                                 updates[layerIndexToUpdate][
                                     newParentIdvService
-                                ]['0'],
+                                    ]['0'],
                             );
 
                             const newParentIdWithoutvServiceSuffix =
                                 updates[layerIndexToUpdate][
                                     newParentIdvService
-                                ]['0'].id;
+                                    ]['0'].id;
 
                             //Update old vServices with the new parentId (NO _vService prefix!)
                             //Only update if we do not add any 1st layer services.
@@ -827,7 +814,7 @@ export class EventcorrelationsEditCorrelationComponent
                                     //Create new evc "container" with new parent id as key (no _vService suffix)
                                     this.evcTree[
                                         this.modalVService.current_evc.layerIndex
-                                    ][newParentIdWithoutvServiceSuffix] = [];
+                                        ][newParentIdWithoutvServiceSuffix] = [];
 
                                     for (const index in this.modalVService
                                         .service_ids) {
@@ -835,18 +822,18 @@ export class EventcorrelationsEditCorrelationComponent
                                         const oldKeyToUpdate =
                                             this.modalVService.service_ids[
                                                 index
-                                            ];
+                                                ];
                                         const evcNodeToUpdateArray =
                                             this.evcTree[
                                                 this.modalVService.current_evc
                                                     .layerIndex
-                                            ][oldKeyToUpdate];
+                                                ][oldKeyToUpdate];
 
                                         //Remove old and parent less evcNode
                                         delete this.evcTree[
                                             this.modalVService.current_evc
                                                 .layerIndex
-                                        ][oldKeyToUpdate];
+                                            ][oldKeyToUpdate];
 
                                         for (const evcIndex in evcNodeToUpdateArray) {
                                             const evcNodeToUpdate =
@@ -857,9 +844,9 @@ export class EventcorrelationsEditCorrelationComponent
                                             this.evcTree[
                                                 this.modalVService.current_evc
                                                     .layerIndex
-                                            ][
+                                                ][
                                                 newParentIdWithoutvServiceSuffix
-                                            ].push(evcNodeToUpdate);
+                                                ].push(evcNodeToUpdate);
                                         }
                                     }
                                 }
@@ -897,39 +884,39 @@ export class EventcorrelationsEditCorrelationComponent
                                     (service_score) => {
                                         for (let parentEvcId in this.evcTree[
                                             previousLayerIndex
-                                        ]) {
+                                            ]) {
                                             if (
                                                 parentEvcId ===
                                                 newParentIdWithoutvServiceSuffix
                                             ) {
                                                 for (let k in this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId]) {
+                                                    ][parentEvcId]) {
                                                     //Find the evcNode by the given id
                                                     if (
                                                         this.evcTree[
                                                             previousLayerIndex
-                                                        ][parentEvcId][k]
+                                                            ][parentEvcId][k]
                                                             .service_id ==
                                                         service_score.vService_id
                                                     ) {
                                                         this.evcTree[
                                                             previousLayerIndex
-                                                        ][parentEvcId][
+                                                            ][parentEvcId][
                                                             k
-                                                        ].score_warning =
+                                                            ].score_warning =
                                                             service_score.score_warning;
                                                         this.evcTree[
                                                             previousLayerIndex
-                                                        ][parentEvcId][
+                                                            ][parentEvcId][
                                                             k
-                                                        ].score_critical =
+                                                            ].score_critical =
                                                             service_score.score_critical;
                                                         this.evcTree[
                                                             previousLayerIndex
-                                                        ][parentEvcId][
+                                                            ][parentEvcId][
                                                             k
-                                                        ].score_unknown =
+                                                            ].score_unknown =
                                                             service_score.score_unknown;
                                                     }
                                                 }
@@ -1000,14 +987,14 @@ export class EventcorrelationsEditCorrelationComponent
 
                 find_evc_node: for (let services in this.evcTree[
                     this.modalVService.current_evc.layerIndex
-                ]) {
+                    ]) {
                     for (let eventCorrelation in this.evcTree[
                         this.modalVService.current_evc.layerIndex
-                    ][services]) {
+                        ][services]) {
                         evcNode =
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation];
+                                ][services][eventCorrelation];
 
                         //Find the vService node that was edited
                         if (
@@ -1016,64 +1003,64 @@ export class EventcorrelationsEditCorrelationComponent
                         ) {
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].operator =
+                                ][services][eventCorrelation].operator =
                                 this.getOperatorString(
                                     this.modalVService.operator,
                                     this.modalVService.operator_modifier,
                                 );
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].operator_warning_min =
+                                ][services][eventCorrelation].operator_warning_min =
                                 this.modalVService.operator_warning_min;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].operator_warning_max =
+                                ][services][eventCorrelation].operator_warning_max =
                                 this.modalVService.operator_warning_max;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][
+                                ][services][
                                 eventCorrelation
-                            ].operator_critical_min =
+                                ].operator_critical_min =
                                 this.modalVService.operator_critical_min;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][
+                                ][services][
                                 eventCorrelation
-                            ].operator_critical_max =
+                                ].operator_critical_max =
                                 this.modalVService.operator_critical_max;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].operator_unknown_min =
+                                ][services][eventCorrelation].operator_unknown_min =
                                 this.modalVService.operator_unknown_min;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].operator_unknown_max =
+                                ][services][eventCorrelation].operator_unknown_max =
                                 this.modalVService.operator_unknown_max;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].score_warning =
+                                ][services][eventCorrelation].score_warning =
                                 this.modalVService.score_warning;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].score_critical =
+                                ][services][eventCorrelation].score_critical =
                                 this.modalVService.score_critical;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].score_unknown =
+                                ][services][eventCorrelation].score_unknown =
                                 this.modalVService.score_unknown;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].service.servicename =
+                                ][services][eventCorrelation].service.servicename =
                                 this.modalVService.servicename;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][eventCorrelation].service.name =
+                                ][services][eventCorrelation].service.name =
                                 this.modalVService.servicename;
                             this.evcTree[
                                 this.modalVService.current_evc.layerIndex
-                            ][services][
+                                ][services][
                                 eventCorrelation
-                            ].service.servicetemplate_id =
+                                ].service.servicetemplate_id =
                                 this.modalVService.servicetemplate_id;
 
                             break find_evc_node;
@@ -1141,13 +1128,13 @@ export class EventcorrelationsEditCorrelationComponent
                         let evcsToKeep: EvcTreeItem[] = [];
                         for (let index in this.evcTree[previousLayerIndex][
                             evcNode.id
-                        ]) {
+                            ]) {
                             // The value of the select box has the _vService suffix!
 
                             let idToCheck =
                                 this.evcTree[previousLayerIndex][evcNode.id][
                                     index
-                                ].id + '_vService';
+                                    ].id + '_vService';
                             if (
                                 !servicesToDelete.some(
                                     (item) => item == idToCheck,
@@ -1157,7 +1144,7 @@ export class EventcorrelationsEditCorrelationComponent
                                 evcsToKeep.push(
                                     this.evcTree[previousLayerIndex][
                                         evcNode.id
-                                    ][index],
+                                        ][index],
                                 );
                             } else {
                                 //This service got removed from current evc node
@@ -1166,7 +1153,7 @@ export class EventcorrelationsEditCorrelationComponent
                                 let evcServiceToMove =
                                     this.evcTree[previousLayerIndex][
                                         evcNode.id
-                                    ][index];
+                                        ][index];
 
                                 let vServiceJsonKey =
                                     evcServiceToMove.id + '_vService';
@@ -1177,7 +1164,7 @@ export class EventcorrelationsEditCorrelationComponent
 
                                 this.evcTree[previousLayerIndex][
                                     vServiceJsonKey
-                                ] = [evcServiceToMove];
+                                    ] = [evcServiceToMove];
                             }
                         }
 
@@ -1221,11 +1208,11 @@ export class EventcorrelationsEditCorrelationComponent
                         (service_score) => {
                             for (let parentEvcId in this.evcTree[
                                 previousLayerIndex
-                            ]) {
+                                ]) {
                                 if (parentEvcId === parentIdForScoreCheck) {
                                     for (let k in this.evcTree[
                                         previousLayerIndex
-                                    ][parentEvcId]) {
+                                        ][parentEvcId]) {
                                         //Find the evcNode by the given id
                                         if (
                                             this.modalVService &&
@@ -1237,27 +1224,27 @@ export class EventcorrelationsEditCorrelationComponent
                                             if (
                                                 this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId][k].id +
-                                                    '_vService' ==
+                                                    ][parentEvcId][k].id +
+                                                '_vService' ==
                                                 service_score.vService_id
                                             ) {
                                                 this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId][
+                                                    ][parentEvcId][
                                                     k
-                                                ].score_warning =
+                                                    ].score_warning =
                                                     service_score.score_warning;
                                                 this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId][
+                                                    ][parentEvcId][
                                                     k
-                                                ].score_critical =
+                                                    ].score_critical =
                                                     service_score.score_critical;
                                                 this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId][
+                                                    ][parentEvcId][
                                                     k
-                                                ].score_unknown =
+                                                    ].score_unknown =
                                                     service_score.score_unknown;
                                             }
                                         } else {
@@ -1265,26 +1252,26 @@ export class EventcorrelationsEditCorrelationComponent
                                             if (
                                                 this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId][k].service_id ==
+                                                    ][parentEvcId][k].service_id ==
                                                 service_score.vService_id
                                             ) {
                                                 this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId][
+                                                    ][parentEvcId][
                                                     k
-                                                ].score_warning =
+                                                    ].score_warning =
                                                     service_score.score_warning;
                                                 this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId][
+                                                    ][parentEvcId][
                                                     k
-                                                ].score_critical =
+                                                    ].score_critical =
                                                     service_score.score_critical;
                                                 this.evcTree[
                                                     previousLayerIndex
-                                                ][parentEvcId][
+                                                    ][parentEvcId][
                                                     k
-                                                ].score_unknown =
+                                                    ].score_unknown =
                                                     service_score.score_unknown;
                                             }
                                         }
@@ -1557,15 +1544,15 @@ export class EventcorrelationsEditCorrelationComponent
                 if (typeof this.evcTree[evcLayerToCheck] != 'undefined') {
                     for (let parentEvcIdToCheck in this.evcTree[
                         evcLayerToCheck
-                    ]) {
+                        ]) {
                         for (let k in this.evcTree[evcLayerToCheck][
                             parentEvcIdToCheck
-                        ]) {
+                            ]) {
                             if (
                                 String(
                                     this.evcTree[evcLayerToCheck][
                                         parentEvcIdToCheck
-                                    ][k].id,
+                                        ][k].id,
                                 ) === String(parentEvcId)
                             ) {
                                 parentExists = true;

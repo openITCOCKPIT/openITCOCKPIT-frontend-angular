@@ -14,10 +14,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SidebarService } from './sidebar.service';
 import { NavigationService } from '../../../components/navigation/navigation.service';
 import { Subscription } from 'rxjs';
-import {
-    MenuHeadline,
-    NavigationInterface,
-} from '../../../components/navigation/navigation.interface';
+import { MenuHeadline, NavigationInterface, } from '../../../components/navigation/navigation.interface';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavbarGroupComponent } from './navbar-group/navbar-group.component';
@@ -41,7 +38,7 @@ import { Skeleton } from '@openng/optimus-ui/skeleton';
     ],
     templateUrl: './coreui-navbar.component.html',
     styleUrl: './coreui-navbar.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoreuiNavbarComponent implements OnInit, OnDestroy {
     constructor(
@@ -53,12 +50,13 @@ export class CoreuiNavbarComponent implements OnInit, OnDestroy {
         private sidebarService: SidebarService,
         private navigationService: NavigationService,
         private breakpointObserver: BreakpointObserver,
-    ) {}
+    ) {
+    }
 
     //@Input() navItems?: INavData[] = [];
     @Input() dropdownMode: 'path' | 'none' | 'close' = 'path';
-    @Input({ transform: booleanAttribute }) groupItems?: boolean;
-    @Input({ transform: booleanAttribute }) compact?: boolean;
+    @Input({transform: booleanAttribute}) groupItems?: boolean;
+    @Input({transform: booleanAttribute}) compact?: boolean;
     private cdr = inject(ChangeDetectorRef);
     private readonly TranslocoService = inject(TranslocoService);
     private readonly mobileBreakpoint = 767.98; // do not move this line or it is undefined

@@ -1,10 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../../auth/auth.service';
 import { ProfileService } from '../../../../pages/profile/profile.service';
@@ -19,7 +13,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
     imports: [Avatar, FaIconComponent, TooltipDirective, TranslocoPipe],
     templateUrl: './header-avatar.component.html',
     styleUrl: './header-avatar.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderAvatarComponent implements OnDestroy {
     public image: string | null = null;

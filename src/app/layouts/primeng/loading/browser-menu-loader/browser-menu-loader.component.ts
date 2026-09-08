@@ -11,4 +11,5 @@ import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 })
 
 // This loader mimics the optic of the menu used on /hosts/browser and /services/browser pages
-export class BrowserMenuLoaderComponent {}
+export class BrowserMenuLoaderComponent {
+}

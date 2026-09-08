@@ -14,18 +14,10 @@ import {
     ViewChild,
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import {
-    MultiSelect,
-    MultiSelectChangeEvent,
-    MultiSelectFilterEvent,
-} from '@openng/optimus-ui/multiselect';
+import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent, } from '@openng/optimus-ui/multiselect';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { TranslocoService } from '@jsverse/transloco';
-import {
-    ControlValueAccessor,
-    FormsModule,
-    NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CheckboxModule } from '@openng/optimus-ui/checkbox';
@@ -51,9 +43,7 @@ import _ from 'lodash';
     styleUrl: './multi-select-optgroup.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MultiSelectOptgroupComponent
-    implements ControlValueAccessor, OnInit, OnDestroy
-{
+export class MultiSelectOptgroupComponent implements ControlValueAccessor, OnInit, OnDestroy {
     @ViewChild('multiSelectOptgroup') multiSelectOptgroup:
         | MultiSelect
         | undefined;
@@ -66,7 +56,7 @@ export class MultiSelectOptgroupComponent
      * Array of the options for the select box
      * @group Props
      */
-    //@Input() options: any[] | undefined;
+        //@Input() options: any[] | undefined;
     private _options: any[] | undefined;
     @Input()
     set options(options) {

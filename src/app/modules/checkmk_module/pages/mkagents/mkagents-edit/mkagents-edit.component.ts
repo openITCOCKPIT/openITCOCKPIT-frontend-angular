@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -34,10 +27,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { MkagentPost } from '../mkagents.interface';
-import {
-    GenericIdResponse,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError, } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { MkagentsService } from '../mkagents.service';

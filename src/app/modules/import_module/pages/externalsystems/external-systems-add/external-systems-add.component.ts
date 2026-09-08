@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import {
@@ -47,31 +40,25 @@ import { Subscription } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
-import {
-    SelectItemOptionGroup,
-    SelectKeyValue,
-} from '../../../../../layouts/primeng/select.interface';
+import { SelectItemOptionGroup, SelectKeyValue, } from '../../../../../layouts/primeng/select.interface';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
-import {
-    ExternalSystemConnect,
-    ExternalSystemPost,
-    IdoitObjectTypeResult,
-} from '../external-systems.interface';
+import { ExternalSystemConnect, ExternalSystemPost, IdoitObjectTypeResult, } from '../external-systems.interface';
 
-import {
-    GenericIdResponse,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError, } from '../../../../../generic-responses';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { ExternalSystemsService } from '../external-systems.service';
 
-import { MultiSelectOptgroupComponent } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { SystemnameService } from '../../../../../services/systemname.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { HistoryService } from '../../../../../history.service';
-import { RegexHelperTooltipComponent } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ExternalSystems } from '../external-systems.enum';
 import { MultiSelectChangeEvent } from '@openng/optimus-ui/multiselect';
 

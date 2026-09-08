@@ -24,13 +24,13 @@ import { Popover, PopoverModule } from '@openng/optimus-ui/popover';
 const uPlot: any = (_uPlot as any)?.default;
 
 type PerfParams = {
-    angular: true;
-    disableGlobalLoader: true;
-    host_uuid: string;
-    service_uuid: string;
-    start: number;
-    end: number;
-    jsTimestamp: number;
+    angular: true,
+    disableGlobalLoader: true,
+    host_uuid: string,
+    service_uuid: string,
+    start: number,
+    end: number,
+    jsTimestamp: number,
 };
 
 @Component({
@@ -77,7 +77,8 @@ export class PopoverGraphComponent implements OnDestroy {
 
     private cdr = inject(ChangeDetectorRef);
 
-    public constructor(private window: Window) {}
+    public constructor(private window: Window) {
+    }
 
     get service() {
         return this._serviceUuid;

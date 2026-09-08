@@ -1,9 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    inject,
-    ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChild, } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { FujitsuEternusTapeLibraryWizardService } from './fujitsu-eternus-tape-library-wizard.service';
@@ -23,7 +18,9 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormsModule } from '@angular/forms';
-import { WizardsDynamicfieldsComponent } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
+import {
+    WizardsDynamicfieldsComponent
+} from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
 import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { SNMPWizardPost } from '../../../../../pages/wizards/wizards.interface';
@@ -78,25 +75,25 @@ export class FujitsuEternusTapeLibraryComponent extends WizardsAbstractComponent
         snmpVersion: '2',
     } as SNMPWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
-        { value: '1', key: 'SNMP V 1' },
-        { value: '2', key: 'SNMP V 2c' },
-        { value: '3', key: 'SNMP V 3' },
+        {value: '1', key: 'SNMP V 1'},
+        {value: '2', key: 'SNMP V 2c'},
+        {value: '3', key: 'SNMP V 3'},
     ];
 
     protected securityLevels: SelectKeyValueString[] = [
-        { key: 'authPriv', value: '1' },
-        { key: 'authNoPriv', value: '2' },
-        { key: 'noAuthNoPriv', value: '3' },
+        {key: 'authPriv', value: '1'},
+        {key: 'authNoPriv', value: '2'},
+        {key: 'noAuthNoPriv', value: '3'},
     ];
     protected authProtocols: SelectKeyValueString[] = [
-        { key: 'MD5', value: 'md5' },
-        { key: 'SHA', value: 'sha' },
+        {key: 'MD5', value: 'md5'},
+        {key: 'SHA', value: 'sha'},
     ];
     protected privacyProtocols: SelectKeyValueString[] = [
-        { key: 'DES', value: 'des' },
-        { key: 'AES', value: 'aes' },
-        { key: 'AES128', value: 'aes128' },
-        { key: '3DES', value: '3des' },
-        { key: '3DESDE', value: '3desde' },
+        {key: 'DES', value: 'des'},
+        {key: 'AES', value: 'aes'},
+        {key: 'AES128', value: 'aes128'},
+        {key: '3DES', value: '3des'},
+        {key: '3DESDE', value: '3desde'},
     ];
 }

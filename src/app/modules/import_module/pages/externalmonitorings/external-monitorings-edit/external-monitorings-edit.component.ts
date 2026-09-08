@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import {
     AlertComponent,
@@ -24,7 +17,9 @@ import {
     NavItemComponent,
     RowComponent,
 } from '@coreui/angular';
-import { DynamicalFormFieldsComponent } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
+import {
+    DynamicalFormFieldsComponent
+} from '../../../../../components/dynamical-form-fields/dynamical-form-fields.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
@@ -38,10 +33,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
-import {
-    GenericIdResponse,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError, } from '../../../../../generic-responses';
 import { DynamicalFormFields } from '../../../../../components/dynamical-form-fields/dynamical-form-fields.interface';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
@@ -148,7 +140,8 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
     public containers: SelectKeyValue[] = [];
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(private route: ActivatedRoute) {
+    }
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));

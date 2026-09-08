@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -39,10 +32,7 @@ import {
     ScansHost,
     ScansProcessListDiscoveryResult,
 } from '../scans.interface';
-import {
-    SelectKeyValue,
-    SelectKeyValueString,
-} from '../../../../../layouts/primeng/select.interface';
+import { SelectKeyValue, SelectKeyValueString, } from '../../../../../layouts/primeng/select.interface';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
@@ -52,10 +42,7 @@ import { CheckmkAddressFamily } from '../../../checkmk.enums';
 
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import {
-    GenericIdResponse,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError, } from '../../../../../generic-responses';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { AgentHttpClientErrors } from '../../../../../pages/agentconnector/agentconnector.enums';
@@ -269,14 +256,14 @@ export class ScansIndexComponent implements OnInit, OnDestroy {
                                             processResponse.MkProcesses &&
                                             processResponse.MkProcesses[
                                                 typescriptKey
-                                            ]
+                                                ]
                                         ) {
                                             for (const md5hash in processResponse
                                                 .MkProcesses[typescriptKey]) {
                                                 const item =
                                                     processResponse.MkProcesses[
                                                         typescriptKey
-                                                    ][md5hash];
+                                                        ][md5hash];
 
                                                 switch (typescriptKey) {
                                                     case 'ps':
@@ -443,7 +430,7 @@ export class ScansIndexComponent implements OnInit, OnDestroy {
                         ) {
                             for (const md5hash in result.MkProcesses[
                                 typescriptKey
-                            ]) {
+                                ]) {
                                 const item =
                                     result.MkProcesses[typescriptKey][md5hash];
 
@@ -497,7 +484,7 @@ export class ScansIndexComponent implements OnInit, OnDestroy {
                 systemd_units_services: this.systemdSelectedHashes, // dot (.) in post name is a bad idea
             },
             overwriteServicetemplateArguments:
-                this.overwriteServicetemplateArguments,
+            this.overwriteServicetemplateArguments,
         };
 
         this.subscriptions.add(

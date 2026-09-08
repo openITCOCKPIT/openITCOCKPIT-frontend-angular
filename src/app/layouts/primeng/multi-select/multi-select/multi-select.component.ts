@@ -14,18 +14,10 @@ import {
     ViewChild,
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import {
-    MultiSelect,
-    MultiSelectChangeEvent,
-    MultiSelectFilterEvent,
-} from '@openng/optimus-ui/multiselect';
+import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent, } from '@openng/optimus-ui/multiselect';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { TranslocoService } from '@jsverse/transloco';
-import {
-    ControlValueAccessor,
-    FormsModule,
-    NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import _ from 'lodash';
@@ -52,8 +44,7 @@ import _ from 'lodash';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiSelectComponent
-    implements ControlValueAccessor, OnInit, OnDestroy
-{
+    implements ControlValueAccessor, OnInit, OnDestroy {
     @ViewChild('multiSelectOptgroup') multiSelectOptgroup:
         | MultiSelect
         | undefined;

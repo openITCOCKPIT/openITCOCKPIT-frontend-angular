@@ -1,16 +1,8 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    inject,
-    ViewChildren,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewChildren, } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { GudeSensorsWizardService } from './gude-sensors-wizard.service';
-import {
-    GudeSensorsWizardGet,
-    GudeSensorsWizardPost,
-} from './gude-sensors-wizard.interface';
+import { GudeSensorsWizardGet, GudeSensorsWizardPost, } from './gude-sensors-wizard.interface';
 import { RouterLink } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -42,16 +34,10 @@ import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import {
-    GenericResponseWrapper,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError, } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import {
-    ServiceForWizard,
-    ServicetemplateForWizard,
-} from '../../../../../pages/wizards/wizards.interface';
+import { ServiceForWizard, ServicetemplateForWizard, } from '../../../../../pages/wizards/wizards.interface';
 
 @Component({
     selector: 'oitc-gude-sensors',
@@ -119,27 +105,27 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
         snmpVersion: '2',
     } as GudeSensorsWizardPost;
     protected snmpVersions: SelectKeyValueString[] = [
-        { value: '1', key: 'SNMP V 1' },
-        { value: '2', key: 'SNMP V 2c' },
-        { value: '3', key: 'SNMP V 3' },
+        {value: '1', key: 'SNMP V 1'},
+        {value: '2', key: 'SNMP V 2c'},
+        {value: '3', key: 'SNMP V 3'},
     ];
     protected searchedTags: string[] = [];
 
     protected securityLevels: SelectKeyValueString[] = [
-        { key: 'authPriv', value: '1' },
-        { key: 'authNoPriv', value: '2' },
-        { key: 'noAuthNoPriv', value: '3' },
+        {key: 'authPriv', value: '1'},
+        {key: 'authNoPriv', value: '2'},
+        {key: 'noAuthNoPriv', value: '3'},
     ];
     protected authProtocols: SelectKeyValueString[] = [
-        { key: 'MD5', value: 'md5' },
-        { key: 'SHA', value: 'sha' },
+        {key: 'MD5', value: 'md5'},
+        {key: 'SHA', value: 'sha'},
     ];
     protected privacyProtocols: SelectKeyValueString[] = [
-        { key: 'DES', value: 'des' },
-        { key: 'AES', value: 'aes' },
-        { key: 'AES128', value: 'aes128' },
-        { key: '3DES', value: '3des' },
-        { key: '3DESDE', value: '3desde' },
+        {key: 'DES', value: 'des'},
+        {key: 'AES', value: 'aes'},
+        {key: 'AES128', value: 'aes128'},
+        {key: '3DES', value: '3des'},
+        {key: '3DESDE', value: '3desde'},
     ];
     protected sensorsServicetemplateTemp: ServicetemplateForWizard =
         {} as ServicetemplateForWizard;
@@ -292,9 +278,9 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
                             host_id: this.post.host_id,
                             name: tempSensorName,
                             servicecommandargumentvalues:
-                                servicetemplatecommandargumentvaluesTemp,
+                            servicetemplatecommandargumentvaluesTemp,
                             servicetemplate_id:
-                                this.sensorsServicetemplateTemp.id,
+                            this.sensorsServicetemplateTemp.id,
                         });
                         this.post.sensorServices.push({
                             createService: !this.isServiceAlreadyPresent(
@@ -305,9 +291,9 @@ export class GudeSensorsComponent extends WizardsAbstractComponent {
                             host_id: this.post.host_id,
                             name: humiditySensorName,
                             servicecommandargumentvalues:
-                                servicetemplatecommandargumentvaluesHumidity,
+                            servicetemplatecommandargumentvaluesHumidity,
                             servicetemplate_id:
-                                this.sensorsServicetemplateHumidity.id,
+                            this.sensorsServicetemplateHumidity.id,
                         });
                     }
                     this.endDiscovery();

@@ -1,17 +1,7 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import {
-    GenericIdResponse,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericIdResponse, GenericValidationError, } from '../../../../../generic-responses';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { MkchecksService } from '../mkchecks.service';

@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import {
     AlertComponent,
     AlertHeadingDirective,
@@ -39,7 +32,9 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { FormsModule } from '@angular/forms';
-import { MultiSelectOptgroupComponent } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import {
+    MultiSelectOptgroupComponent
+} from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
@@ -54,14 +49,8 @@ import {
     IdoitObjectTypeResult,
 } from '../external-systems.interface';
 import { Subscription } from 'rxjs';
-import {
-    SelectItemOptionGroup,
-    SelectKeyValue,
-} from '../../../../../layouts/primeng/select.interface';
-import {
-    GenericIdResponse,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { SelectItemOptionGroup, SelectKeyValue, } from '../../../../../layouts/primeng/select.interface';
+import { GenericIdResponse, GenericValidationError, } from '../../../../../generic-responses';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
@@ -72,7 +61,9 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 import { HistoryService } from '../../../../../history.service';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { RegexHelperTooltipComponent } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ExternalSystems } from '../external-systems.enum';
 import { MultiSelectChangeEvent } from '@openng/optimus-ui/multiselect';
 
@@ -187,7 +178,8 @@ export class ExternalSystemsEditComponent implements OnInit, OnDestroy {
     public connectMessage: string = '';
     private cdr = inject(ChangeDetectorRef);
 
-    constructor(private route: ActivatedRoute) {}
+    constructor(private route: ActivatedRoute) {
+    }
 
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));

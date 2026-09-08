@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    inject,
-    OnDestroy,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ChangecalendarsService } from '../changecalendars.service';
@@ -13,10 +6,7 @@ import { ContainersService } from '../../../../../pages/containers/containers.se
 import { HistoryService } from '../../../../../history.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import {
-    GenericResponseWrapper,
-    GenericValidationError,
-} from '../../../../../generic-responses';
+import { GenericResponseWrapper, GenericValidationError, } from '../../../../../generic-responses';
 import { AddChangeCalendar } from '../changecalendars.interface';
 import { ContainersLoadContainersByStringParams } from '../../../../../pages/containers/containers.interface';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';

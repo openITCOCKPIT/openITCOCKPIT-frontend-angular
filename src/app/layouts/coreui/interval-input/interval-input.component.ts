@@ -40,7 +40,7 @@ import { FormsModule } from '@angular/forms';
     ],
     templateUrl: './interval-input.component.html',
     styleUrl: './interval-input.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IntervalInputComponent {
     private readonly TranslocoService = inject(TranslocoService);

@@ -400,7 +400,7 @@ export class ChangecalendarsEditComponent implements OnInit, OnDestroy {
             ),
         );
     }
-    
+
     public updateChangecalendar(): void {
         this.subscriptions.add(
             this.ChangecalendarsService.updateChangecalendar(
