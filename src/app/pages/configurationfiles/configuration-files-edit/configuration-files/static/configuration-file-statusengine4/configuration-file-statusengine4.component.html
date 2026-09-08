@@ -1,0 +1,122 @@
+<ng-container *transloco="let t">
+    @for (field of fields; track $index) {
+        @switch (field.type) {
+            @case (ConfigurationFilesFieldTypes.bool) {
+                <div class="mb-3">
+                    <c-form-check>
+                        <input cFormCheckInput
+                               [attr.id]="field.field"
+                               [name]="field.field"
+                               type="checkbox"
+                               trueFalseValue
+                               [trueValue]="1"
+                               [falseValue]="0"
+                               [(ngModel)]="field.value"
+                               oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}"
+                        />
+                        <label cFormCheckLabel [for]="field.field">
+                            {{ field.field }}
+                        </label>
+                    </c-form-check>
+                    <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+                    @if (field.help) {
+                        <div class="help-block">
+                            {{ field.help }}
+                        </div>
+                    }
+                </div>
+            }
+            @case (ConfigurationFilesFieldTypes.int) {
+                <div class="mb-3">
+                    <label cLabel [for]="field.field">
+                        {{ field.field }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           [attr.id]="field.field"
+                           [name]="field.field"
+                           type="number"
+                           [placeholder]="field.placeholder"
+                           [(ngModel)]="field.value"
+                           oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
+                    <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+                    @if (field.help) {
+                        <div class="help-block">
+                            {{ field.help }}
+                        </div>
+                    }
+                </div>
+            }
+            @case (ConfigurationFilesFieldTypes.string) {
+                <div class="mb-3">
+                    <label cLabel [for]="field.field">
+                        {{ field.field }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl
+                           [attr.id]="field.field"
+                           [name]="field.field"
+                           type="text"
+                           [placeholder]="field.placeholder"
+                           [(ngModel)]="field.value"
+                           oitcFormError [errors]="errors" errorField="Configfile.{{field.field}}">
+                    <oitc-form-feedback [errors]="errors"
+                                        errorField="Configfile.{{field.field}}"></oitc-form-feedback>
+                    @if (field.help) {
+                        <div class="help-block">
+                            {{ field.help }}
+                        </div>
+                    }
+                </div>
+            }
+            @case (ConfigurationFilesFieldTypes.string_array) {
+                @if (Array.isArray(field.value)) {
+                    <div class="mb-3">
+                        <label cLabel [for]="field.field">
+                            {{ field.field }}
+                        </label>
+                        @for (arrayValue of field.value; track $index) {
+                            <c-row>
+                                <c-col xs="10" class="mb-1">
+                                    <input cFormControl
+                                           [attr.id]="field.field+$index"
+                                           [name]="field.field+$index"
+                                           type="text"
+                                           [readonly]="true"
+                                           [disabled]="true"
+                                           [(ngModel)]="field.value[$index]"
+                                           oitcFormError [errors]="errors"
+                                           errorField="{{field.field}}.{{$index}}">
+                                    <oitc-form-feedback [errors]="errors"
+                                                        errorField="{{field.field}}.{{$index}}"></oitc-form-feedback>
+                                </c-col>
+                                <c-col xs="2" class="mb-1">
+                                    <button cButton class="ripple" color="danger" type="button"
+                                            (click)="removeApiKey(field, $index)">
+                                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                    </button>
+                                </c-col>
+                            </c-row>
+                        }
+
+                        <c-row class="mt-3">
+                            <c-col xs="12" lg="10" class="text-end">
+                                <button cButton class="ripple" color="success" type="button"
+                                        (click)="pushApiKey(field)">
+                                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                    {{ t('Add new API Key') }}
+                                </button>
+                            </c-col>
+
+                        </c-row>
+                        @if (field.help) {
+                            <div class="help-block">
+                                {{ field.help }}
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        }
+    }
+</ng-container>
