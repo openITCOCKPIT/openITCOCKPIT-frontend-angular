@@ -91,7 +91,7 @@
                                                         </c-col>
                                                         <c-col>
                                                             <div class="fs-2 fw-semibold lh-1 mb-1">
-                                                                @if (hoststatusSummary.failed.count > 0) {
+                                                                @if (hoststatusSummary.recovered.count > 0) {
                                                                     <span *oitcPermission="['hosts', 'index']">
                                                                         <a [routerLink]="['/', 'hosts', 'index']"
                                                                            class="text-success"
