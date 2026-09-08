@@ -287,7 +287,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                     const dateObj = DateTime.fromISO(dataArray.value[0]).setZone(this.timezone());
 
                     const hoursStr = dateObj.toFormat('HH');
-                    const eventMinutesStr = dateObj.toFormat('mm');
+                    const eventMinutesStr = dataArray.value[1].toString().padStart(2, '0');
 
                     const count = dataArray.value[2];
 
