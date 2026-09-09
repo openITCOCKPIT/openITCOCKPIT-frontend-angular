@@ -162,7 +162,7 @@
                                                                             <c-col class="text-end">
                                                                                 <span *oitcPermission="['hosts', 'index']">
                                                                                     <a [routerLink]="['/', 'hosts', 'index']"
-                                                                                       [queryParams]="{'id': hoststatusSummary.state.hostIds['1']}"
+                                                                                       [queryParams]="{'id': [...hoststatusSummary.state.hostIds['1'], ...hoststatusSummary.state.hostIds['2']] }"
                                                                                        class="text-danger">
                                                                                         {{ hoststatusSummary.state['1'] + hoststatusSummary.state['2'] }}
                                                                                     </a>
@@ -176,7 +176,7 @@
                                                                                         [{{ t('Not handled') }}:
                                                                                         <span *oitcPermission="['hosts', 'index']">
                                                                                             <a [routerLink]="['/', 'hosts', 'index']"
-                                                                                               [queryParams]="{'id': hoststatusSummary.not_handled.hostIds['1']}"
+                                                                                               [queryParams]="{'id': [...hoststatusSummary.not_handled.hostIds['1'], ...hoststatusSummary.not_handled.hostIds['2']] }"
                                                                                                class="text-danger">
                                                                                                 {{ hoststatusSummary.not_handled['1'] + hoststatusSummary.not_handled['2'] }}
                                                                                             </a>
