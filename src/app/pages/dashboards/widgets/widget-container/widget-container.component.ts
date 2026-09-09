@@ -50,6 +50,7 @@ import { ResourcegroupsCronjobStatusWidgetComponent } from '../../../../modules/
 import { EventcorrelationsSummaryWidgetComponent } from '../../../../modules/eventcorrelation_module/widgets/eventcorrelations-summary-widget/eventcorrelations-summary-widget.component';
 import { CylinderWidgetComponent } from '../cylinder-widget/cylinder-widget.component';
 import { HostOperationsSummaryWidgetComponent } from '../host-operations-summary-widget/host-operations-summary-widget.component';
+import { ServiceOperationsSummaryWidgetComponent } from '../service-operations-summary-widget/service-operations-summary-widget.component';
 
 @Component({
     selector: 'oitc-widget-container',
@@ -102,7 +103,8 @@ import { HostOperationsSummaryWidgetComponent } from '../host-operations-summary
         ResourcegroupsCronjobStatusWidgetComponent,
         EventcorrelationsSummaryWidgetComponent,
         CylinderWidgetComponent,
-        HostOperationsSummaryWidgetComponent
+        HostOperationsSummaryWidgetComponent,
+        ServiceOperationsSummaryWidgetComponent
     ],
     templateUrl: './widget-container.component.html',
     styleUrl:

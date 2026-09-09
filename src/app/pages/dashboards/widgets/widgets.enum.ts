@@ -25,6 +25,7 @@ export enum WidgetTypes {
     TrafficlightWidget = 11,
     ServiceStatusOverviewWidget = 17,
     ServicesStatusExtendedWidget = 26,            // services-status-list-extended-widget
+    ServiceOperationsSummaryWidgetWidget = 43,
     TacticalOverviewServicesWidget = 22,
     ServiceStatusOverviewExtendedWidget = 20,
     AutomapWidget = 19,

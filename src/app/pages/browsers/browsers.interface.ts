@@ -1,9 +1,8 @@
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
-    ServiceSummaryStatesServices,
-    SummaryStatesHosts, SummaryUnhandledHosts,
-    SummaryUnhandledServices
+    SummaryStatesHosts, SummaryUnhandledHosts
 } from '../hosts/summary_state.interface';
+import { ServiceSummaryStatesServices, SummaryUnhandledServices } from '../services/summary_state.interface';
 
 export interface BrowsersIndexResponse {
     containers: BrowsersContainer[]

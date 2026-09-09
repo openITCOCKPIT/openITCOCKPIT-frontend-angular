@@ -246,6 +246,10 @@
                 [isReadonly]="isReadonly()">
             </oitc-host-operations-summary-widget>
         }
+        @case (WidgetTypes.ServiceOperationsSummaryWidgetWidget) {
+            <oitc-service-operations-summary-widget [widgetInput]="widget" [isReadonly]="isReadonly()">
+            </oitc-service-operations-summary-widget>
+        }
         <!-- Fallback Widget -->
         @default {
             <oitc-alert

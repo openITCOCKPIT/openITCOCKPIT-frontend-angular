@@ -1,5 +1,5 @@
 import { GenericIdAndName } from '../../generic.interfaces';
-import { HoststatusObject } from './hosts.interface';
+import { SummaryStateServices } from '../services/summary_state.interface';
 
 export interface SummaryState {
     state: number[]
@@ -72,25 +72,25 @@ export interface SummaryStateHostsExtended extends SummaryStateHosts {
         count: number
         ids: number[]
     }
-    statusEvents: StatusEvents
-    buckets: StatusBuckets
+    statusEvents: HostStatusEvents
+    buckets: HostStatusBuckets
     from: number
     to: number
     userTimezone: string
 }
 
-export type StatusEvents = {
-    [key in 'up' | 'down' | 'unreachable']: StatusEventDetails[];
+export type HostStatusEvents = {
+    [key in 'up' | 'down' | 'unreachable']: StatusEventHostDetails[];
 };
 
 
-type BucketKeys = 'up' | 'down' | 'unreachable';
-export type StatusBuckets = Record<BucketKeys, StatusBucketDetails[]> & {
+type BucketKeysHost = 'up' | 'down' | 'unreachable';
+export type HostStatusBuckets = Record<BucketKeysHost, StatusBucketHostDetails[]> & {
     min: number
     max: number
 };
 
-export interface StatusEventDetails {
+export interface StatusEventHostDetails {
     hostId: number
     type: string
     timestamp: number
@@ -99,7 +99,7 @@ export interface StatusEventDetails {
     host: GenericIdAndName
 }
 
-export interface StatusBucketDetails {
+export interface StatusBucketHostDetails {
     0: string
     1: number
     2: number
@@ -112,37 +112,4 @@ export interface HostStatusDetails {
     name: string
     hostpriority: number
     current_state: number
-}
-
-export interface HostDetails {
-    id: number
-    name: string
-    Hoststatus: HoststatusObject
-}
-
-
-export interface ServiceSummaryStatesServices {
-    "0": number
-    "1": number
-    "2": number
-    "3": number
-    serviceIds: number[][]
-}
-
-export interface SummaryUnhandledServices {
-    "0": number
-    "1": number
-    "2": number
-    "3": number
-    serviceIds: number[][]
-    totalServiceIds: number[]
-}
-
-export interface SummaryStateServices {
-    state: ServiceSummaryStatesServices
-    acknowledged: ServiceSummaryStatesServices
-    in_downtime: ServiceSummaryStatesServices
-    not_handled: ServiceSummaryStatesServices
-    passive: ServiceSummaryStatesServices
-    total: number
 }

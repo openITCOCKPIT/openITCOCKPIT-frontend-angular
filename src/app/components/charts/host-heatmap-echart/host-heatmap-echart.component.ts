@@ -386,7 +386,7 @@ export class HostHeatmapEchartComponent implements OnDestroy, AfterViewInit {
         entries.forEach((entry, index) => {
             const x = index % columnsCount;
             const regularY = Math.floor(index / columnsCount);
-            const echartsY = (rowsCount - 1) - regularY; // Y-Achse fuer ECharts spiegeln (Top-Left Start)
+            const echartsY = (rowsCount - 1) - regularY;
 
             tagNames.push(entry.name);
             tileSummaries.push(entry.summary);
@@ -428,10 +428,6 @@ export class HostHeatmapEchartComponent implements OnDestroy, AfterViewInit {
             {offset: 1, color: `rgba(${palette.unreachable[1]},${alpha})`}
         ]);
 
-        const gradientUnknown = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(${palette.unknown[0]},${alpha})`},
-            {offset: 1, color: `rgba(${palette.unknown[1]},${alpha})`}
-        ]);
 
         let contrastColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-medium-emphasis').trim();
         let backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-body-bg').trim();
@@ -440,7 +436,7 @@ export class HostHeatmapEchartComponent implements OnDestroy, AfterViewInit {
             if (state === 0) return gradientUp;
             if (state === 1) return gradientDown;
             if (state === 2) return gradientUnreachable;
-            return gradientUnknown;
+            return gradientUnreachable;
         };
 
         // Base color of a legend entry (matches the top of the tile gradient)

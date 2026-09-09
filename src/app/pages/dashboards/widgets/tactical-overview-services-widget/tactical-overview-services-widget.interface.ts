@@ -1,4 +1,4 @@
-import { SummaryStateServices } from '../../../hosts/summary_state.interface';
+import { SummaryStateServices } from '../../../services/summary_state.interface';
 
 export interface TacticalOverviewServicesResponse {
     config: TacticalOverviewServicesConfig

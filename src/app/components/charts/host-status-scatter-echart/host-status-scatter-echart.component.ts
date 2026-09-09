@@ -18,7 +18,7 @@ import * as echarts from 'echarts/core';
 import { BarChart, LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { HostStatusDetails, StatusBuckets } from '../../../pages/hosts/summary_state.interface';
+import { HostStatusBuckets, HostStatusDetails } from '../../../pages/hosts/summary_state.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { Router } from '@angular/router';
@@ -55,7 +55,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     private readonly containerHeight = signal<number>(0);
     private readonly currentTheme = signal<'light' | 'dark'>('light');
 
-    public statusBuckets = input.required<StatusBuckets>();
+    public statusBuckets = input.required<HostStatusBuckets>();
     public fromTimestamp = input.required<number>();
     public toTimestamp = input.required<number>();
     public timezone = input.required<string>();
@@ -382,7 +382,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 min: new Date(this.fromTimestamp() * 1000).toISOString(),
                 max: new Date(this.toTimestamp() * 1000).toISOString(),
                 splitLine: {show: true},
-                offset:15,
+                offset: 15,
                 axisLabel: {
                     hideOverlap: true,
                     formatter: (value) => {
@@ -408,7 +408,7 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 name: this.TranslocoService.translate('Minute'),
                 interval: 10,
                 minInterval: 1,
-                offset:15,
+                offset: 15,
                 axisPointer: {
                     show: true,
                     label: {

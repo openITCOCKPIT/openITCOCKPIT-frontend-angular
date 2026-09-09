@@ -1,5 +1,4 @@
 import { SummaryStateHostsExtended } from '../../../hosts/summary_state.interface';
-
 export interface HostOperationsSummaryConfig {
     Host: {
         name: string

@@ -3,19 +3,22 @@ import { WidgetGetForRender } from '../../dashboards.interface';
 import { map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
-import { HostOperationsSummaryConfig, HostOperationsSummaryResponse } from './host-operations-summary-widget.interface';
+import {
+    ServiceOperationsSummaryConfig,
+    ServiceOperationsSummaryResponse
+} from './service-operations-summary-widget.interface';
 import { GenericResponseWrapper } from '../../../../generic-responses';
 
 @Injectable({
     providedIn: "root",
 })
-export class HostOperationsSummaryWidgetService {
+export class ServiceOperationsSummaryWidgetService {
     private readonly http = inject(HttpClient);
     private readonly proxyPath = inject(PROXY_PATH);
 
-    public getHostOperationsSummaryWidget(widget: WidgetGetForRender, widgetType: string): Observable<HostOperationsSummaryResponse> {
+    public getServiceOperationsSummaryWidget(widget: WidgetGetForRender, widgetType: string): Observable<ServiceOperationsSummaryResponse> {
         const proxyPath = this.proxyPath;
-        return this.http.get<HostOperationsSummaryResponse>(`${proxyPath}/dashboards/operationsSummaryWidget.json`, {
+        return this.http.get<ServiceOperationsSummaryResponse>(`${proxyPath}/dashboards/operationsSummaryWidget.json`, {
             params: {
                 angular: true,
                 'widgetId': widget.id,
@@ -28,7 +31,7 @@ export class HostOperationsSummaryWidgetService {
         )
     }
 
-    public saveWidget(widget: WidgetGetForRender, config: HostOperationsSummaryConfig): Observable<GenericResponseWrapper> {
+    public saveWidget(widget: WidgetGetForRender, config: ServiceOperationsSummaryConfig): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
         return this.http.post<any>(`${proxyPath}/dashboards/operationsSummaryWidget.json?angular=true&widgetId=${widget.id}`, config
         ).pipe(
