@@ -41,14 +41,14 @@
                     </label>
 
                     <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.container_id"
-                        [options]="containers?.containers"
-                        (onChange)="onContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container_id">
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers?.containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
 
                     @if (!post.container_id) {
@@ -61,7 +61,7 @@
                 <div class="form-text">
                     {{
                         t('Notification escalations could be used to notify a certain user group in case of an emergency.\n' +
-                            'Once a host or service escalated, contacts, contact group and notification options will be overwritten by the escalation.')
+                                'Once a host or service escalated, contacts, contact group and notification options will be overwritten by the escalation.')
                     }}
                 </div>
                 <div class="border-start border-primary border-4 rounded-top rounded-bottom px-2 py-1 my-2">
@@ -76,22 +76,55 @@
                                 <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
                             </span>
                             <oitc-multi-select
-                                name="HostescalationIncludeHosts"
-                                id="HostescalationIncludeHosts"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.hosts._ids"
-                                [options]="hosts"
-                                [searchCallback]="loadHosts"
-                                (onChange)="loadExcludedHostgroups('')"
-                                (ngModelChange)="processChosenExcludedHosts()"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="hosts">
+                                    name="HostescalationIncludeHosts"
+                                    id="HostescalationIncludeHosts"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.hosts._ids"
+                                    [options]="hosts"
+                                    [searchCallback]="loadHosts"
+                                    (onChange)="loadExcludedHostgroups('')"
+                                    (ngModelChange)="processChosenExcludedHosts()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="hosts">
                             </oitc-multi-select>
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors"
                                             errorField="hosts"></oitc-form-feedback>
                     </div>
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped>
+                        <thead>
+                        <tr>
+                            <th class="width-50 text-center" scope="col">
+                                <fa-icon [icon]="['fas', 'hashtag']"></fa-icon>
+                                {{ t('Host') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Description') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Last used') }}
+                            </th>
+                            <th scope="col" class="width-130">
+                                {{ t('Show') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @for (hostWithCheckValues of hostsCheckValues; track hostWithCheckValues) {
+                                <tr>
+                                    <td>{{ hostWithCheckValues.name }}</td>
+                                    <td>{{ hostWithCheckValues.check_interval }}</td>
+                                    <td>{{ hostWithCheckValues.max_check_attempts }}</td>
+                                    <td>{{ hostWithCheckValues.retry_interval }}</td>
+                                    <td>
+                                        <oitc-human-time
+                                                [seconds]="(hostWithCheckValues.check_interval + (hostWithCheckValues.max_check_attempts -1) * hostWithCheckValues.retry_interval)"></oitc-human-time>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                     <div class="mb-3 arrowd-vertical-on-right">
                         <label cLabel for="HostescalationExcludeHostgroups">
                             <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
@@ -102,16 +135,16 @@
                                 <fa-icon [icon]="['fas', 'server']" class="text-white"></fa-icon>
                             </span>
                             <oitc-multi-select
-                                name="HostescalationExcludeHostgroups"
-                                id="HostescalationExcludeHostgroups"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.hostgroups_excluded._ids"
-                                [options]="hostgroups_excluded"
-                                [disabled]="post.hosts._ids.length == 0"
-                                (ngModelChange)="processChosenHostgroups()"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="hosts">
+                                    name="HostescalationExcludeHostgroups"
+                                    id="HostescalationExcludeHostgroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.hostgroups_excluded._ids"
+                                    [options]="hostgroups_excluded"
+                                    [disabled]="post.hosts._ids.length == 0"
+                                    (ngModelChange)="processChosenHostgroups()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="hosts">
                             </oitc-multi-select>
                         </c-input-group>
                     </div>
@@ -128,16 +161,16 @@
                                 <fa-icon [icon]="['fas', 'server']" class="text-white"></fa-icon>
                             </span>
                             <oitc-multi-select
-                                name="HostescalationIncludeHostgroups"
-                                id="HostescalationIncludeHostgroups"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.hostgroups._ids"
-                                [options]="hostgroups"
-                                (onChange)="loadExcludedHosts('')"
-                                (ngModelChange)="processChosenExcludedHostgroups()"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="hostgroups">
+                                    name="HostescalationIncludeHostgroups"
+                                    id="HostescalationIncludeHostgroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.hostgroups._ids"
+                                    [options]="hostgroups"
+                                    (onChange)="loadExcludedHosts('')"
+                                    (ngModelChange)="processChosenExcludedHostgroups()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="hostgroups">
                             </oitc-multi-select>
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors"
@@ -153,17 +186,17 @@
                                 <fa-icon [icon]="['fas', 'desktop']" class="text-white"></fa-icon>
                             </span>
                             <oitc-multi-select
-                                name="HostescalationExcludeHosts"
-                                id="HostescalationExcludeHosts"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.hosts_excluded._ids"
-                                [options]="hosts_excluded"
-                                [disabled]="post.hostgroups._ids.length == 0"
-                                [searchCallback]="loadExcludedHosts"
-                                (ngModelChange)="processChosenHosts()"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="hosts_excluded">
+                                    name="HostescalationExcludeHosts"
+                                    id="HostescalationExcludeHosts"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.hosts_excluded._ids"
+                                    [options]="hosts_excluded"
+                                    [disabled]="post.hostgroups._ids.length == 0"
+                                    [searchCallback]="loadExcludedHosts"
+                                    (ngModelChange)="processChosenHosts()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="hosts_excluded">
                             </oitc-multi-select>
                         </c-input-group>
                     </div>
@@ -208,10 +241,10 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-interval-input
-                        id="notification_interval"
-                        name="notification_interval"
-                        [selectedInterval]="post.notification_interval"
-                        (selectedIntervalChange)="post.notification_interval = $event"
+                            id="notification_interval"
+                            name="notification_interval"
+                            [selectedInterval]="post.notification_interval"
+                            (selectedIntervalChange)="post.notification_interval = $event"
                     ></oitc-interval-input>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="notification_interval"></oitc-form-feedback>
@@ -220,22 +253,22 @@
                 <div class="mb-3">
                     <label cLabel for="HostescalationTimeperiod">
                         <oitc-label-link
-                            [objectId]="post.timeperiod_id"
-                            [route]="'/timeperiods/edit'"
-                            [permissions]="'timeperiods.edit'">
+                                [objectId]="post.timeperiod_id"
+                                [route]="'/timeperiods/edit'"
+                                [permissions]="'timeperiods.edit'">
                             {{ t('Escalation period') }}
                         </oitc-label-link>
                     </label>
 
                     <oitc-select
-                        name="HostescalationTimeperiod"
-                        id="HostescalationTimeperiod"
-                        optionValue="key"
-                        optionLabel="value"
-                        [showClear]="true"
-                        [(ngModel)]="post.timeperiod_id"
-                        [options]="timeperiods"
-                        oitcFormError [errors]="errors" errorField="timeperiod_id">
+                            name="HostescalationTimeperiod"
+                            id="HostescalationTimeperiod"
+                            optionValue="key"
+                            optionLabel="value"
+                            [showClear]="true"
+                            [(ngModel)]="post.timeperiod_id"
+                            [options]="timeperiods"
+                            oitcFormError [errors]="errors" errorField="timeperiod_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="timeperiod_id"></oitc-form-feedback>
@@ -247,13 +280,13 @@
                     </label>
 
                     <oitc-multi-select
-                        name="HostescalationContacts"
-                        id="HostescalationContacts"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.contacts._ids"
-                        [options]="contacts"
-                        oitcFormError [errors]="errors" errorField="contacts">
+                            name="HostescalationContacts"
+                            id="HostescalationContacts"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.contacts._ids"
+                            [options]="contacts"
+                            oitcFormError [errors]="errors" errorField="contacts">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="contacts"></oitc-form-feedback>
@@ -265,13 +298,13 @@
                     </label>
 
                     <oitc-multi-select
-                        name="HostescalationContactgroups"
-                        id="HostescalationContactgroups"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.contactgroups._ids"
-                        [options]="contactgroups"
-                        oitcFormError [errors]="errors" errorField="contactgroups">
+                            name="HostescalationContactgroups"
+                            id="HostescalationContactgroups"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.contactgroups._ids"
+                            [options]="contactgroups"
+                            oitcFormError [errors]="errors" errorField="contactgroups">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="contactgroups"></oitc-form-feedback>
@@ -292,15 +325,15 @@
                     <div class="input-group mx-1">
                         <span class="input-group-text">
                             <input
-                                cFormCheckInput
-                                class="checkbox-success"
-                                name="escalate_on_recovery"
-                                id="escalate_on_recovery"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.escalate_on_recovery"/>
+                                    cFormCheckInput
+                                    class="checkbox-success"
+                                    name="escalate_on_recovery"
+                                    id="escalate_on_recovery"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.escalate_on_recovery"/>
                         </span>
                         <div class="form-control bg-success text-white text-center">
                             <label for="escalate_on_recovery">
@@ -312,15 +345,15 @@
                     <div class="input-group mx-1">
                         <span class="input-group-text">
                             <input
-                                cFormCheckInput
-                                class="checkbox-danger"
-                                name="escalate_on_down"
-                                id="escalate_on_down"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.escalate_on_down"/>
+                                    cFormCheckInput
+                                    class="checkbox-danger"
+                                    name="escalate_on_down"
+                                    id="escalate_on_down"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.escalate_on_down"/>
                         </span>
                         <div class="form-control bg-danger text-white text-center">
                             <label for="escalate_on_down">
@@ -332,15 +365,15 @@
                     <div class="input-group mx-1">
                         <span class="input-group-text">
                             <input
-                                cFormCheckInput
-                                class="checkbox-secondary"
-                                name="escalate_on_unreachable"
-                                id="escalate_on_unreachable"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.escalate_on_unreachable"/>
+                                    cFormCheckInput
+                                    class="checkbox-secondary"
+                                    name="escalate_on_unreachable"
+                                    id="escalate_on_unreachable"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.escalate_on_unreachable"/>
                         </span>
                         <div class="form-control bg-unknown text-white text-center">
                             <label for="escalate_on_unreachable">

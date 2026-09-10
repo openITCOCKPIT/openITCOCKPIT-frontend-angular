@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
@@ -20,12 +19,13 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HostescalationContainerResult, HostescalationPost } from '../hostescalations.interface';
+import { HostescalationContainerResult, HostescalationPost, HostWithCheckValues } from '../hostescalations.interface';
 import { HostescalationsService } from '../hostescalations.service';
 import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -42,6 +42,7 @@ import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/i
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { HistoryService } from '../../../history.service';
+import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human-time/human-time.component';
 
 @Component({
     selector: 'oitc-hostescalations-add',
@@ -75,7 +76,9 @@ import { HistoryService } from '../../../history.service';
         LabelLinkComponent,
         FormCheckInputDirective,
         TrueFalseDirective,
-        CardFooterComponent
+        CardFooterComponent,
+        TableDirective,
+        HumanTimeComponent
     ],
     templateUrl: './hostescalations-add.component.html',
     styleUrl: './hostescalations-add.component.css',
@@ -91,6 +94,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public timeperiods: SelectKeyValue[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
+    public hostsCheckValues: HostWithCheckValues[] = [];
     public errors: GenericValidationError | null = null;
 
     private readonly HostescalationsService = inject(HostescalationsService);
@@ -190,6 +194,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
                 this.timeperiods = result.timeperiods;
                 this.contacts = result.contacts;
                 this.contactgroups = result.contactgroups;
+                this.hostsCheckValues = result.hostsWithCheckValues;
             })
         );
     }
