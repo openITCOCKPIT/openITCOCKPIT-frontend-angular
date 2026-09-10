@@ -155,23 +155,23 @@
                                                                 </div>
                                                                 <div class="mt-3 pt-2 border-top border-danger-subtle small">
                                                                     <c-row>
-                                                                        @if (servicestatusSummary.state['2'] > 0 || servicestatusSummary.state['3'] > 0) {
+                                                                        @if (servicestatusSummary.state['1'] > 0 || servicestatusSummary.state['3'] > 0) {
                                                                             <c-col>
                                                                                 {{ t('Problems') }}
                                                                             </c-col>
-                                                                            <c-col class="text-end">
+                                                                            <c-col class="text-end px-0">
                                                                                 <span *oitcPermission="['services', 'index']">
                                                                                     <a [routerLink]="['/', 'services', 'index']"
-                                                                                       [queryParams]="{'id': [...servicestatusSummary.state.serviceIds['2'], ...servicestatusSummary.state.serviceIds['3']] }"
+                                                                                       [queryParams]="{'id': [...servicestatusSummary.state.serviceIds['1'], ...servicestatusSummary.state.serviceIds['2'], ...servicestatusSummary.state.serviceIds['3']] }"
                                                                                        class="text-danger">
-                                                                                        {{ servicestatusSummary.state['2'] + servicestatusSummary.state['3'] }}
+                                                                                        {{ servicestatusSummary.state['1'] + servicestatusSummary.state['2'] + servicestatusSummary.state['3'] }}
                                                                                     </a>
                                                                                 </span>
                                                                                 <span *oitcPermission="['services', 'index']; negate: true"
                                                                                       class="text-danger">
-                                                                                    {{ servicestatusSummary.state['1'] + servicestatusSummary.state['2'] }}
+                                                                                    {{ servicestatusSummary.state['1'] + servicestatusSummary.state['2'] + servicestatusSummary.state['3'] }}
                                                                                 </span>
-                                                                                @if (servicestatusSummary.not_handled['1'] > 0 || servicestatusSummary.not_handled['2'] > 0) {
+                                                                                @if (servicestatusSummary.not_handled['1'] > 0 || servicestatusSummary.not_handled['2'] > 0 || servicestatusSummary.not_handled['3'] > 0) {
                                                                                     <span class="ps-2">
                                                                                         [{{ t('Not handled') }}:
                                                                                         <span *oitcPermission="['services', 'index']">

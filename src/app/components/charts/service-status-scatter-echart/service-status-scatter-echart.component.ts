@@ -18,7 +18,6 @@ import * as echarts from 'echarts/core';
 import { BarChart, LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { HostStatusBuckets, HostStatusDetails } from '../../../pages/hosts/summary_state.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { Router } from '@angular/router';
@@ -50,6 +49,10 @@ export class ServiceStatusScatterEchartComponent implements OnDestroy, AfterView
     public theme: string = '';
     public chartOption: EChartsOption = {};
     private resizeObserver?: ResizeObserver;
+    public chartInitOptions = {
+        renderer: 'svg' as const,
+        devicePixelRatio: (window as any).devicePixelRatio || 1
+    };
 
     // Current size of the container - drives the responsive layout of the chart
     private readonly containerWidth = signal<number>(0);
@@ -134,6 +137,27 @@ export class ServiceStatusScatterEchartComponent implements OnDestroy, AfterView
 
     onChartInit(ec: any) {
         this.echartsInstance = ec;
+        let hideTimeout: ReturnType<typeof setTimeout> | null = null;
+        this.echartsInstance.on('mousemove', () => {
+            if (hideTimeout) {
+                clearTimeout(hideTimeout);
+            }
+            hideTimeout = setTimeout(() => {
+                this.echartsInstance.dispatchAction({type: 'hideTip'});
+                this.echartsInstance.dispatchAction({
+                    type: 'showTip',
+                    seriesIndex: 0,
+                    dataIndex: -1
+                });
+            }, 1000);
+        });
+
+        this.echartsInstance.on('globalout', () => {
+            if (hideTimeout) clearTimeout(hideTimeout);
+            this.echartsInstance.dispatchAction({type: 'hideTip'});
+            this.echartsInstance.dispatchAction({type: 'showTip', seriesIndex: 0, dataIndex: -1});
+        });
+
         this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['services', 'index']).subscribe(hasPermission => {
             if (hasPermission) {
                 this.echartsInstance.on('click', (params: any) => {
@@ -279,11 +303,12 @@ export class ServiceStatusScatterEchartComponent implements OnDestroy, AfterView
                 axisPointer: {
                     type: 'none'
                 },
-                showDelay: 200,
+                showDelay: 0,
                 //triggerOn: 'click',
                 backgroundColor: backgroundColor,
                 padding: [10, 20, 10, 20],
                 transitionDuration: 0,
+                hideDelay: 0,
                 extraCssText: 'width: 280px;white-space: normal;padding:0;',
                 textStyle: {
                     fontSize: 12,
@@ -438,6 +463,14 @@ export class ServiceStatusScatterEchartComponent implements OnDestroy, AfterView
                 {
                     name: 'ok',
                     type: 'scatter',
+                    large: true,
+                    largeThreshold: 200,
+                    progressive: 3000,
+                    progressiveThreshold: 5000,
+                    emphasis: {
+                        scale: false,
+                        disabled: false
+                    },
                     itemStyle: {color: gradientOk},
                     data: transformdata['ok'],
                     symbolSize: getDynamicSymbolSize,
@@ -446,6 +479,14 @@ export class ServiceStatusScatterEchartComponent implements OnDestroy, AfterView
                 {
                     name: 'warning',
                     type: 'scatter',
+                    large: true,
+                    largeThreshold: 200,
+                    progressive: 3000,
+                    progressiveThreshold: 5000,
+                    emphasis: {
+                        scale: false,
+                        disabled: false
+                    },
                     itemStyle: {color: gradientWarning},
                     data: transformdata['warning'],
                     symbolSize: getDynamicSymbolSize,
@@ -454,6 +495,14 @@ export class ServiceStatusScatterEchartComponent implements OnDestroy, AfterView
                 {
                     name: 'critical',
                     type: 'scatter',
+                    large: true,
+                    largeThreshold: 200,
+                    progressive: 3000,
+                    progressiveThreshold: 5000,
+                    emphasis: {
+                        scale: false,
+                        disabled: false
+                    },
                     itemStyle: {color: gradientCritical},
                     data: transformdata['critical'],
                     symbolSize: getDynamicSymbolSize,
@@ -462,6 +511,14 @@ export class ServiceStatusScatterEchartComponent implements OnDestroy, AfterView
                 {
                     name: 'unknown',
                     type: 'scatter',
+                    large: true,
+                    largeThreshold: 200,
+                    progressive: 3000,
+                    progressiveThreshold: 5000,
+                    emphasis: {
+                        scale: false,
+                        disabled: false
+                    },
                     itemStyle: {color: gradientUnknown},
                     data: transformdata['unknown'],
                     symbolSize: getDynamicSymbolSize,

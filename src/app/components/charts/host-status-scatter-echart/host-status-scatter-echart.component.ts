@@ -50,6 +50,11 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     public chartOption: EChartsOption = {};
     private resizeObserver?: ResizeObserver;
 
+    public chartInitOptions = {
+        renderer: 'svg' as const,
+        devicePixelRatio: (window as any).devicePixelRatio || 1
+    };
+
     // Current size of the container - drives the responsive layout of the chart
     private readonly containerWidth = signal<number>(0);
     private readonly containerHeight = signal<number>(0);
@@ -133,6 +138,26 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
 
     onChartInit(ec: any) {
         this.echartsInstance = ec;
+        let hideTimeout: ReturnType<typeof setTimeout> | null = null;
+        this.echartsInstance.on('mousemove', () => {
+            if (hideTimeout) {
+                clearTimeout(hideTimeout);
+            }
+            hideTimeout = setTimeout(() => {
+                this.echartsInstance.dispatchAction({type: 'hideTip'});
+                this.echartsInstance.dispatchAction({
+                    type: 'showTip',
+                    seriesIndex: 0,
+                    dataIndex: -1
+                });
+            }, 1000);
+        });
+
+        this.echartsInstance.on('globalout', () => {
+            if (hideTimeout) clearTimeout(hideTimeout);
+            this.echartsInstance.dispatchAction({type: 'hideTip'});
+            this.echartsInstance.dispatchAction({type: 'showTip', seriesIndex: 0, dataIndex: -1});
+        });
         this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hosts', 'index']).subscribe(hasPermission => {
             if (hasPermission) {
                 this.echartsInstance.on('click', (params: any) => {
@@ -423,6 +448,14 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 {
                     name: 'up',
                     type: 'scatter',
+                    large: true,
+                    largeThreshold: 200,
+                    progressive: 3000,
+                    progressiveThreshold: 5000,
+                    emphasis: {
+                        scale: false,
+                        disabled: false
+                    },
                     itemStyle: {color: gradientUp},
                     data: transformdata['up'],
                     symbolSize: getDynamicSymbolSize,
@@ -431,6 +464,14 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 {
                     name: 'down',
                     type: 'scatter',
+                    large: true,
+                    largeThreshold: 200,
+                    progressive: 3000,
+                    progressiveThreshold: 5000,
+                    emphasis: {
+                        scale: false,
+                        disabled: false
+                    },
                     itemStyle: {color: gradientDown},
                     data: transformdata['down'],
                     symbolSize: getDynamicSymbolSize,
@@ -439,6 +480,14 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
                 {
                     name: 'unreachable',
                     type: 'scatter',
+                    large: true,
+                    largeThreshold: 200,
+                    progressive: 3000,
+                    progressiveThreshold: 5000,
+                    emphasis: {
+                        scale: false,
+                        disabled: false
+                    },
                     itemStyle: {color: gradientUnreachable},
                     data: transformdata['unreachable'],
                     symbolSize: getDynamicSymbolSize,
