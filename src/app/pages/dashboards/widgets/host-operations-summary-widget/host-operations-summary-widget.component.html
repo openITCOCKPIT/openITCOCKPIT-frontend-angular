@@ -176,7 +176,7 @@
                                                                                         [{{ t('Not handled') }}:
                                                                                         <span *oitcPermission="['hosts', 'index']">
                                                                                             <a [routerLink]="['/', 'hosts', 'index']"
-                                                                                               [queryParams]="{'id': [...hoststatusSummary.not_handled.hostIds['1'], ...hoststatusSummary.not_handled.hostIds['2']] }"
+                                                                                               [queryParams]="{'id': hoststatusSummary.not_handled.totalHostIds }"
                                                                                                class="text-danger">
                                                                                                 {{ hoststatusSummary.not_handled['1'] + hoststatusSummary.not_handled['2'] }}
                                                                                             </a>

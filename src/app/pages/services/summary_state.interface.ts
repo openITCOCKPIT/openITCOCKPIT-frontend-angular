@@ -4,7 +4,7 @@ export interface SummaryStateServices {
     state: ServiceSummaryStatesServices
     acknowledged: ServiceSummaryStatesServices
     in_downtime: ServiceSummaryStatesServices
-    not_handled: ServiceSummaryStatesServices
+    not_handled: SummaryUnhandledServices
     passive: ServiceSummaryStatesServices
     total: number
 }
@@ -16,7 +16,7 @@ export interface SummaryStateServices {
 export interface SummaryStateServicesTag extends SummaryStateServices {
     not_handled: SummaryUnhandledServices
     cumulative_state: number
-    hostIds: number[]
+    serviceIds: number[]
 }
 
 export interface SummaryStateServicesExtended extends SummaryStateServices {
@@ -104,7 +104,7 @@ export interface SummaryStateServices {
     state: ServiceSummaryStatesServices
     acknowledged: ServiceSummaryStatesServices
     in_downtime: ServiceSummaryStatesServices
-    not_handled: ServiceSummaryStatesServices
+    not_handled: SummaryUnhandledServices
     passive: ServiceSummaryStatesServices
     total: number
 }

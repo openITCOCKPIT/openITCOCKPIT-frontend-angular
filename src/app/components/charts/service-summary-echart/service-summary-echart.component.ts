@@ -21,7 +21,7 @@ import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { PieChart } from 'echarts/charts';
-import {  SummaryStateServices } from '../../../pages/services/summary_state.interface';
+import { SummaryStateServices } from '../../../pages/services/summary_state.interface';
 import { Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { SVGRenderer } from 'echarts/renderers';
@@ -186,7 +186,7 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
             case 'acknowledged':
                 return this.collectServiceIds(data.acknowledged.serviceIds, [0, 1, 2, 3]);
             case 'unhandled':
-                return this.collectServiceIds(data.not_handled.serviceIds, [1, 2]);
+                return this.collectServiceIds(data.not_handled.serviceIds, [1, 2, 3]);
             default:
                 return [];
         }
@@ -210,23 +210,23 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
         const alpha = 1;
 
         const gradientOk = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(0,200,81,${alpha})`},
-            {offset: 1, color: `rgba(0,163,66,${alpha})`}
+            {offset: 0, color: '#00C851'},
+            {offset: 1, color: '#019737'}
         ]);
 
         const gradientWarning = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(0,200,81,${alpha})`},
-            {offset: 1, color: `rgba(0,163,66,${alpha})`}
+            {offset: 0, color: '#ffbb33'},
+            {offset: 1, color: '#dda42d'}
         ]);
 
         const gradientCritical = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(204,0,0,${alpha})`},
-            {offset: 1, color: `rgba(163,0,0,${alpha})`}
+            {offset: 0, color: '#CC0000'},
+            {offset: 1, color: '#ba0101'}
         ]);
 
         const gradientUnknown = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(107,119,133,${alpha})`},
-            {offset: 1, color: `rgba(86,97,112,${alpha})`}
+            {offset: 0, color: '#6b7785'},
+            {offset: 1, color: '#5b6470'}
         ]);
 
         const gradientInDowntime = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -271,14 +271,14 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
         };
 
         const polarLayouts = [
-            {radius: ['20%', '29%']}, // Ok      ↑ inner
-            {radius: ['31%', '40%']}, // Warning
-            {radius: ['42%', '51%']}, // Critical
-            {radius: ['53%', '62%']}, // Unknown
-            {radius: ['64%', '73%']}, // InDowntime
-            {radius: ['75%', '84%']}  // Acknowledged   ↓ outer
+            {radius: ['11%', '18%']}, // Unhandled      ↑ inner
+            {radius: ['20%', '29%']}, // Acknowledged
+            {radius: ['31%', '40%']}, // InDowntime
+            {radius: ['42%', '51%']}, // Unknown
+            {radius: ['53%', '62%']}, // Critical
+            {radius: ['64%', '73%']}, // Warning
+            {radius: ['75%', '84%']}  // Ok             ↓ outer
         ];
-
 
         // ---- Responsive layout ----------------------------------------------------
         // 0 = not measured yet -> fall back to a sensible default
@@ -345,7 +345,7 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
                     type: 'none',
                     show: false
                 },
-                formatter: '{c} ' + this.TranslocoService.translate('Hosts'),
+                formatter: '{c} ' + this.TranslocoService.translate('Services'),
                 appendToBody: true,
                 confine: true,
                 backgroundColor: backgroundColor,
@@ -370,7 +370,7 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
                     interval: stepInterval,
 
                     axisLabel: {
-                        show: index === 5,
+                        show: index === 6,
                         formatter: (value: number) => {
                             if (value === 0) return '0';
                             if (value >= total - (stepInterval / 2)) {
@@ -389,7 +389,7 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
                         show: false
                     },
                     axisTick: {
-                        show: index === 5,
+                        show: index === 6,
                         lineStyle: {
                             color: 'transparent'
                         }
@@ -441,7 +441,7 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
                     name: 'ok',
                     type: 'bar',
                     coordinateSystem: 'polar',
-                    polarIndex: 5,
+                    polarIndex: 6,
                     data: [values['ok']],
                     itemStyle: {color: gradientOk}
                 },
@@ -506,9 +506,7 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
                     data: [values['unhandled']],
                 }
             ]
-
         };
-
         this.cdr.markForCheck();
     }
 }

@@ -56,7 +56,7 @@
                                                                 </span>
                                                             </div>
                                                             <div class="text-uppercase text-muted small fw-bold tracking-wide">
-                                                                {{ t('Total hosts') }}
+                                                                {{ t('Total services') }}
                                                             </div>
                                                         </c-col>
                                                         <c-col>
@@ -176,14 +176,14 @@
                                                                                         [{{ t('Not handled') }}:
                                                                                         <span *oitcPermission="['services', 'index']">
                                                                                             <a [routerLink]="['/', 'services', 'index']"
-                                                                                               [queryParams]="{'id': [...servicestatusSummary.not_handled.serviceIds['1'], ...servicestatusSummary.not_handled.serviceIds['2']] }"
+                                                                                               [queryParams]="{'id':  servicestatusSummary.not_handled.totalServiceIds}"
                                                                                                class="text-danger">
-                                                                                                {{ servicestatusSummary.not_handled['1'] + servicestatusSummary.not_handled['2'] }}
+                                                                                                {{ servicestatusSummary.not_handled['1'] + servicestatusSummary.not_handled['2'] + servicestatusSummary.not_handled['3'] }}
                                                                                             </a>
                                                                                         </span>
                                                                                         <span *oitcPermission="['services', 'index']; negate: true"
                                                                                               class="text-danger">
-                                                                                            {{ servicestatusSummary.not_handled['1'] + servicestatusSummary.not_handled['2'] }}
+                                                                                            {{ servicestatusSummary.not_handled['1'] + servicestatusSummary.not_handled['2'] + servicestatusSummary.not_handled['3'] }}
                                                                                         </span>
                                                                                         ]
                                                                                     </span>
@@ -217,7 +217,7 @@
                                                                     </span>
                                                                 </div>
                                                                 <div class="text-uppercase text-muted small fw-bold tracking-wide">
-                                                                    {{ t('Stable Hosts (Last 24h)') }}
+                                                                    {{ t('Stable Services (Last 24h)') }}
                                                                 </div>
                                                                 <div class="mt-3 pt-2 border-top border-success-subtle small text-success">
                                                                     <c-row>
@@ -315,11 +315,11 @@
                                     <span cInputGroupText>
                                         <fa-icon [icon]="['fas', 'filter']"></fa-icon>
                                     </span>
-                                    <input [(ngModel)]="config['Host']['address']"
-                                           [placeholder]="'Filter by IP address' | transloco"
+                                    <input [(ngModel)]="config['Service']['servicename']"
+                                           [placeholder]="'Filter by service name' | transloco"
                                            cFormControl
-                                           [id]="'Hosts.address-'+widget.id"
-                                           [name]="'Hosts.address-'+widget.id"
+                                           [id]="'Service.servicename-'+widget.id"
+                                           [name]="'Service.servicename-'+widget.id"
                                            type="text"
                                     />
                                     <span cInputGroupText>
@@ -327,9 +327,9 @@
                                             {{ t('Enable RegEx') }}
                                             <input type="checkbox"
                                                    cFormCheckInput
-                                                   [id]="'Hosts.address_regex-'+widget.id"
-                                                   [name]="'Hosts.address_regex-'+widget.id"
-                                                   [(ngModel)]="config['Host']['address_regex']"
+                                                   [id]="'Service.servicename_regex-'+widget.id"
+                                                   [name]="'Service.servicename_regex-'+widget.id"
+                                                   [(ngModel)]="config['Service']['servicename_regex']"
                                             />
                                             <oitc-regex-helper-tooltip/>
                                         </label>
@@ -351,11 +351,11 @@
                                             [id]="'HostKeywordsInput-'+widget.id"
                                             [name]="'HostKeywordsInput-'+widget.id"
                                             [items]="[]"
-                                            [(ngModel)]="keywords"
+                                            [(ngModel)]="keywordsHost"
                                             [addTag]="true"
                                             [multiple]="true"
                                             [selectOnTab]="true"
-                                            [placeholder]="'Filter by tags'|transloco"
+                                            [placeholder]="'Filter by host tags'|transloco"
                                             [isOpen]="false">
                                     </ng-select>
                                 </c-input-group>
@@ -375,11 +375,59 @@
                                             [id]="'HostNotKeywordsInput-'+widget.id"
                                             [name]="'HostNotKeywordsInput-'+widget.id"
                                             [items]="[]"
+                                            [(ngModel)]="notKeywordsHost"
+                                            [addTag]="true"
+                                            [multiple]="true"
+                                            [selectOnTab]="true"
+                                            [placeholder]="'Filter by excluded host tags'|transloco"
+                                            [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-success cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                            [id]="'ServiceKeywordsInput-'+widget.id"
+                                            [name]="'ServiceKeywordsInput-'+widget.id"
+                                            [items]="[]"
+                                            [(ngModel)]="keywords"
+                                            [addTag]="true"
+                                            [multiple]="true"
+                                            [selectOnTab]="true"
+                                            [placeholder]="'Filter by service tags'|transloco"
+                                            [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'cogs']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-danger cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                            [id]="'ServiceNotKeywordsInput-'+widget.id"
+                                            [name]="'ServiceNotKeywordsInput-'+widget.id"
+                                            [items]="[]"
                                             [(ngModel)]="notKeywords"
                                             [addTag]="true"
                                             [multiple]="true"
                                             [selectOnTab]="true"
-                                            [placeholder]="'Filter by excluded tags'|transloco"
+                                            [placeholder]="'Filter by excluded service tags'|transloco"
                                             [isOpen]="false">
                                     </ng-select>
                                 </c-input-group>
@@ -479,6 +527,80 @@
                                 </fieldset>
                             </c-col>
                         </c-row>
+                        <c-row>
+                            <c-col>
+                                <fieldset class="mt-2">
+                                    <legend class="fs-5">
+                                        {{ t('Service groups') }}
+                                    </legend>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                                [id]="'Servicegroups-'+widget.id"
+                                                [name]="'Servicegroups-'+widget.id"
+                                                optionValue="key"
+                                                optionLabel="value"
+                                                [options]="servicegroups"
+                                                [(ngModel)]="config['Servicegroup']['_ids']"
+                                                [searchCallback]="loadServicegroups"
+                                                [appendTo]="'body'"
+                                                class="flex-1">
+                                        </oitc-multi-select>
+                                    </c-input-group>
+                                    <c-row class="my-1">
+                                        <c-col [xs]="12" [lg]="12">
+                                            <c-input-group>
+                                                <span cInputGroupText class="pe-0 ps-2">
+                                                    <fa-stack>
+                                                        <fa-icon [icon]="['fas', 'cogs']"
+                                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                                 stackItemSize="1x"
+                                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                                    </fa-stack>
+                                                </span>
+                                                <ng-select
+                                                        [id]="'ServicegroupKeywordsInput-'+widget.id"
+                                                        [name]="'ServicegroupKeywordsInput-'+widget.id"
+                                                        [items]="[]"
+                                                        [(ngModel)]="servicegroupKeywords"
+                                                        [addTag]="true"
+                                                        [multiple]="true"
+                                                        [selectOnTab]="true"
+                                                        [placeholder]="'Filter by service group tags'|transloco"
+                                                        [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col [xs]="12" [lg]="12">
+                                            <c-input-group>
+                                                <span cInputGroupText class="pe-0 ps-2">
+                                                    <fa-stack>
+                                                        <fa-icon [icon]="['fas', 'cogs']"
+                                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                                 stackItemSize="1x"
+                                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                                    </fa-stack>
+                                                </span>
+                                                <ng-select
+                                                        [id]="'ServicegroupNotKeywordsInput-'+widget.id"
+                                                        [name]="'ServicegroupNotKeywordsInput-'+widget.id"
+                                                        [items]="[]"
+                                                        [(ngModel)]="servicegroupNotKeywords"
+                                                        [addTag]="true"
+                                                        [multiple]="true"
+                                                        [selectOnTab]="true"
+                                                        [placeholder]="'Filter by excluded service group tags'|transloco"
+                                                        [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
                         <c-row class="mb-2">
                             <c-col [xs]="12" [lg]="12">
                                 <fieldset>
@@ -486,97 +608,88 @@
                                         {{ t('Priority') }}
                                     </legend>
                                     <c-form-check>
-                                        <input
-                                                cFormCheckInput
-                                                class="checkbox-lg checkbox-primary"
-                                                [name]="'Hosts.Priority_1-'+widget.id"
-                                                [attr.id]="'Hosts.Priority_1-'+widget.id"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['1']"/>
-
-                                        <label cFormCheckLabel
-                                               [for]="'Hosts.Priority_1'+widget.id"
-                                               class="ms-1 mt-1 ok-soft">
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        <input cFormCheckInput type="checkbox"
+                                               class="checkbox-lg custom-check-default"
+                                               [name]="'Services.Priority_1-'+widget.id"
+                                               [attr.id]="'Services.Priority_1-'+widget.id"
+                                               [(ngModel)]="priorityFilter[1]"
+                                               oitcDebounce/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'Services.Priority_1-'+widget.id">
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="ok-soft"></fa-icon>
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input
-                                                cFormCheckInput
-                                                class="checkbox-lg checkbox-primary"
-                                                [name]="'Hosts.Priority_2-'+widget.id"
-                                                [attr.id]="'Hosts.Priority_2-'+widget.id"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['2']"/>
-
-                                        <label cFormCheckLabel
-                                               [for]="'Hosts.Priority_2-'+widget.id" class="ms-1 mt-1 ok">
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        <input cFormCheckInput type="checkbox"
+                                               class="checkbox-lg custom-check-default"
+                                               [name]="'Services.Priority_2-'+widget.id"
+                                               [attr.id]="'Services.Priority_2-'+widget.id"
+                                               [(ngModel)]="priorityFilter[2]"
+                                               oitcDebounce/>
+                                        <label cFormCheckLabel class="ms-1  mt-1"
+                                               [for]="'Services.Priority_2-'+widget.id">
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="ok"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="ok"></fa-icon>
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input
-                                                cFormCheckInput
-                                                class="checkbox-lg checkbox-primary"
-                                                [name]="'Hosts.Priority_3-'+widget.id"
-                                                [attr.id]="'Hosts.Priority_3-'+widget.id"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['3']"/>
-
-                                        <label cFormCheckLabel
-                                               [for]="'Hosts.Priority_3-'+widget.id"
-                                               class="ms-1 mt-1 warning">
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        <input cFormCheckInput type="checkbox"
+                                               class="checkbox-lg custom-check-default"
+                                               [name]="'Services.Priority_3-'+widget.id"
+                                               [attr.id]="'Services.Priority_3-'+widget.id"
+                                               [(ngModel)]="priorityFilter[3]"
+                                               oitcDebounce/>
+                                        <label cFormCheckLabel class="ms-1  mt-1"
+                                               [for]="'Services.Priority_3-'+widget.id">
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="warning"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="warning"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="warning"></fa-icon>
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input
-                                                cFormCheckInput
-                                                class="checkbox-lg checkbox-primary"
-                                                [name]="'Hosts.Priority_4-'+widget.id"
-                                                [attr.id]="'Hosts.Priority_4-'+widget.id"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['4']"/>
-
-                                        <label cFormCheckLabel
-                                               [for]="'Hosts.Priority_4-'+widget.id"
-                                               class="ms-1 mt-1 critical-soft">
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        <input cFormCheckInput type="checkbox"
+                                               class="checkbox-lg custom-check-default"
+                                               [name]="'Services.Priority_4-'+widget.id"
+                                               [attr.id]="'Services.Priority_4-'+widget.id"
+                                               [(ngModel)]="priorityFilter[4]"
+                                               oitcDebounce/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'Services.Priority_4-'+widget.id">
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical-soft"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical-soft"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical-soft"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical-soft"></fa-icon>
                                         </label>
                                     </c-form-check>
                                     <c-form-check>
-                                        <input
-                                                cFormCheckInput
-                                                class="checkbox-lg checkbox-primary"
-                                                [name]="'Hosts.Priority_5-'+widget.id"
-                                                [attr.id]="'Hosts.Priority_5-'+widget.id"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                oitcDebounce
-                                                [(ngModel)]="priorityFilter['5']"/>
-
-                                        <label cFormCheckLabel
-                                               [for]="'Hosts.Priority_5-'+widget.id"
-                                               class="ms-1 mt-1 critical">
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
-                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        <input cFormCheckInput type="checkbox"
+                                               class="checkbox-lg custom-check-default"
+                                               [name]="'Services.Priority_5-'+widget.id"
+                                               [attr.id]="'Services.Priority_5-'+widget.id"
+                                               [(ngModel)]="priorityFilter[5]"
+                                               oitcDebounce/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'Services.Priority_5-'+widget.id">
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"
+                                                     class="critical"></fa-icon>
                                         </label>
                                     </c-form-check>
                                 </fieldset>

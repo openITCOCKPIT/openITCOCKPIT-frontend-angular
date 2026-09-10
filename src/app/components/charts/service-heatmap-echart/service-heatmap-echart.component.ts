@@ -48,14 +48,14 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
         {state: 0, label: 'OK'},
         {state: 1, label: 'WARNING'},
         {state: 2, label: 'CRITICAL'},
-        {state: 2, label: 'UNKNOWN'}
+        {state: 3, label: 'UNKNOWN'}
     ];
 
     // Status colors of the application (assets/coreui/variables.scss and
     // assets/coreui/_status-colors.scss) - used for the tooltip bullets.
     private static readonly STATUS_COLORS = {
         ok: '#00C851',
-        warning: '#00C851',
+        warning: '#FFBB33',
         critical: '#CC0000',
         unknown: '#6b7785',
         acknowledged: '#A128ff',
@@ -85,7 +85,7 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
     private readonly ngZone = inject(NgZone);
 
     // Host ids per tile - the index matches the dataIndex of the custom series
-    private tileHostIds: number[][] = [];
+    private tileServiceIds: number[][] = [];
 
     // Current size of the container - drives the responsive layout of the chart
     private readonly containerWidth = signal<number>(0);
@@ -95,7 +95,8 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
     private readonly selectedStates = signal<{ [state: number]: boolean }>({
         0: true,
         1: true,
-        2: true
+        2: true,
+        3: true
     });
     private resizeObserver?: ResizeObserver;
 
@@ -192,7 +193,7 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
             });
         });
 
-        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hosts', 'index']).subscribe(hasPermission => {
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['services', 'index']).subscribe(hasPermission => {
             if (!hasPermission) {
                 return;
             }
@@ -202,13 +203,13 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
                     return;
                 }
 
-                const serviceIds = this.tileHostIds[params.dataIndex] ?? [];
+                const serviceIds = this.tileServiceIds[params.dataIndex] ?? [];
                 if (serviceIds.length === 0) {
                     return;
                 }
 
                 this.ngZone.run(() => {
-                    this.router.navigate(['/', 'hosts', 'index'], {
+                    this.router.navigate(['/', 'services', 'index'], {
                         queryParams: {id: serviceIds}
                     });
                 });
@@ -233,10 +234,10 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
      * report the previous size while a resize is in progress.
      */
     private measureAvailableWidth(): number {
-        const host = this.elementRef.nativeElement as HTMLElement;
-        const hostWidth = Math.round(host?.getBoundingClientRect?.().width ?? 0);
-        if (hostWidth > 0) {
-            return hostWidth;
+        const container = this.elementRef.nativeElement as HTMLElement;
+        const containerWidth = Math.round(container?.getBoundingClientRect?.().width ?? 0);
+        if (containerWidth > 0) {
+            return containerWidth;
         }
 
         return Math.round(this.echartsInstance?.getWidth?.() ?? 0);
@@ -244,9 +245,9 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
 
 
     /**
-     * Collects all host ids of a summary block (up/down/unreachable) without duplicates.
+     * Collects all service ids of a summary block (ok/warning/critical/unknown) without duplicates.
      */
-    private static collectHostIds(serviceIds?: number[][]): number[] {
+    private static collectServiceIds(serviceIds?: number[][]): number[] {
         const uniqueIds = new Set<number>();
         for (const bucket of serviceIds ?? []) {
             for (const id of bucket ?? []) {
@@ -287,7 +288,7 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
         const tooltipDetails: string[] = [];
         const rawCoordinates: { x: number, y: number, value: number, visible: boolean }[] = [];
 
-        this.tileHostIds = [];
+        this.tileServiceIds = [];
 
         const selection = this.selectedStates();
 
@@ -302,9 +303,9 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
                 const warning = data?.state?.['1'] ?? 0;
                 const critical = data?.state?.['2'] ?? 0;
                 const unknown = data?.state?.['3'] ?? 0;
-                const acknowledged = data?.acknowledged['0'] + data?.acknowledged['1'] + data?.acknowledged['2']+ data?.acknowledged['3'];
-                const inDowntime = data?.in_downtime['0'] + data?.in_downtime['1'] + data?.in_downtime['2']+ data?.in_downtime['3'];
-                const notHandled = data?.not_handled['1'] + data?.not_handled['2']+data?.not_handled['3'];
+                const acknowledged = data?.acknowledged['0'] + data?.acknowledged['1'] + data?.acknowledged['2'] + data?.acknowledged['3'];
+                const inDowntime = data?.in_downtime['0'] + data?.in_downtime['1'] + data?.in_downtime['2'] + data?.in_downtime['3'];
+                const notHandled = data?.not_handled['1'] + data?.not_handled['2'] + data?.not_handled['3'];
 
                 const colors = ServiceHeatmapEchartComponent.STATUS_COLORS;
 
@@ -312,12 +313,12 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
                     name,
                     state,
                     visible: selection[state],
-                    // All hosts of this tag - used for the click navigation
-                    serviceIds: ServiceHeatmapEchartComponent.collectHostIds(data?.state?.serviceIds),
+                    // All services of this tag - used for the click navigation
+                    serviceIds: ServiceHeatmapEchartComponent.collectServiceIds(data?.state?.serviceIds),
                     // Compact overview shown below the tag name
                     summary: {
                         total,
-                        problems: critical + unknown,
+                        problems: warning + critical + unknown,
                         unhandled: notHandled
                     },
                     details: ServiceHeatmapEchartComponent.buildTooltipTable([
@@ -343,7 +344,7 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
                             label: this.TranslocoService.translate('Unknown'),
                             value: unknown,
                             color: colors.unknown,
-                            className: 'unreachable'
+                            className: 'unknown'
                         },
                         {
                             label: this.TranslocoService.translate('Acknowledged'),
@@ -400,7 +401,7 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
             tagNames.push(entry.name);
             tileSummaries.push(entry.summary);
             tooltipDetails.push(entry.details);
-            this.tileHostIds.push(entry.serviceIds);
+            this.tileServiceIds.push(entry.serviceIds);
             rawCoordinates.push({x, y: echartsY, value: entry.state, visible: entry.visible});
         });
 
@@ -415,36 +416,25 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
         const isDarkTheme = this.currentTheme() === 'dark';
         const alpha = 1;
 
-        const palette = {
-            ok: ['0,200,81', '0,163,66'],
-            warning: ['0,200,81', '0,163,66'],
-            critical: ['204,0,0', '163,0,0'],
-            unknown: ['138,148,161', '107,119,133']
-        };
 
         const gradientOk = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(${palette.ok[0]},${alpha})`},
-            {offset: 1, color: `rgba(${palette.ok[1]},${alpha})`}
+            {offset: 0, color: '#00C851'},
+            {offset: 1, color: '#019737'}
         ]);
 
         const gradientWarning = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(${palette.warning[0]},${alpha})`},
-            {offset: 1, color: `rgba(${palette.warning[1]},${alpha})`}
+            {offset: 0, color: '#ffbb33'},
+            {offset: 1, color: '#dda42d'}
         ]);
 
         const gradientCritical = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(${palette.critical[0]},${alpha})`},
-            {offset: 1, color: `rgba(${palette.critical[1]},${alpha})`}
-        ]);
-
-        const gradientUnreachable = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(${palette.unknown[0]},${alpha})`},
-            {offset: 1, color: `rgba(${palette.unknown[1]},${alpha})`}
+            {offset: 0, color: '#CC0000'},
+            {offset: 1, color: '#ba0101'}
         ]);
 
         const gradientUnknown = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(${palette.unknown[0]},${alpha})`},
-            {offset: 1, color: `rgba(${palette.unknown[1]},${alpha})`}
+            {offset: 0, color: '#6b7785'},
+            {offset: 1, color: '#5b6470'}
         ]);
 
         let contrastColor = getComputedStyle(document.documentElement).getPropertyValue('--cui-medium-emphasis').trim();
@@ -460,10 +450,10 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
 
         // Base color of a legend entry (matches the top of the tile gradient)
         const pieceColors: { [state: number]: string } = {
-            0: palette.ok[0],
-            1: palette.warning[0],
-            2: palette.critical[0],
-            3: palette.unknown[0]
+            0: '#00C851',
+            1: '#ffbb33',
+            2: '#CC0000',
+            3: '#6b7785'
         };
 
         // Tiles are always dark and saturated - white labels give the best contrast.
@@ -552,7 +542,7 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
                 pieces: ServiceHeatmapEchartComponent.PIECES.map(piece => ({
                     value: piece.state,
                     label: this.TranslocoService.translate(piece.label),
-                    color: `rgba(${pieceColors[piece.state]},${alpha})`
+                    color: pieceColors[piece.state]
                 }))
             },
             series: [{
@@ -623,7 +613,7 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
                                 }
                             },
                             {
-                                // Small overview: total hosts, problems, unhandled
+                                // Small overview: total services, problems, unhandled
                                 type: 'text',
                                 style: {
                                     text: `Σ ${summary.total}   ✖ ${summary.problems}   ⚠ ${summary.unhandled}`,

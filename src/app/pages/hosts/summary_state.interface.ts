@@ -36,7 +36,7 @@ export interface SummaryStateHosts {
     state: SummaryStatesHosts
     acknowledged: SummaryStatesHosts
     in_downtime: SummaryStatesHosts
-    not_handled: SummaryStatesHosts
+    not_handled: SummaryUnhandledHosts
     passive: SummaryStatesHosts
     total: number
 }

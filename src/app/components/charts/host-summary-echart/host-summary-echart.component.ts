@@ -207,19 +207,19 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
         // The same palette is used by the tag heatmap (oitc-host-heatmap-echart).
         const alpha = 1;
 
-        const gradientUp = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(0,200,81,${alpha})`},
-            {offset: 1, color: `rgba(0,163,66,${alpha})`}
+        const gradientUp = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
+            {offset: 0, color: '#00C851'},
+            {offset: 1, color: '#019737'}
         ]);
 
-        const gradientDown = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(204,0,0,${alpha})`},
-            {offset: 1, color: `rgba(163,0,0,${alpha})`}
+        const gradientDown = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
+            {offset: 0, color: '#CC0000'},
+            {offset: 1, color: '#ba0101'}
         ]);
 
-        const gradientUnreachable = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {offset: 0, color: `rgba(107,119,133,${alpha})`},
-            {offset: 1, color: `rgba(86,97,112,${alpha})`}
+        const gradientUnreachable = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
+            {offset: 0, color: '#6b7785'},
+            {offset: 1, color: '#5b6470'}
         ]);
 
         const gradientInDowntime = new echarts.graphic.LinearGradient(0, 0, 0, 1, [

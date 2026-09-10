@@ -233,22 +233,23 @@ export class ServiceStatusScatterEchartComponent implements OnDestroy, AfterView
         };
 
 
-        const gradientOk = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
+        const gradientOk = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {offset: 0, color: '#00C851'},
             {offset: 1, color: '#00C8517F'}
         ]);
 
-        const gradientWarning = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
-            {offset: 0, color: '#00C851'},
-            {offset: 1, color: '#00C8517F'}
+        const gradientWarning = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {offset: 0, color: '#ffbb33'},
+            {offset: 1, color: '#ffbb337F'}
+
         ]);
 
-        const gradientCritical = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
+        const gradientCritical = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {offset: 0, color: '#CC0000'},
             {offset: 1, color: '#CC00007F'}
         ]);
 
-        const gradientUnknown = new echarts.graphic.RadialGradient(0.4, 0.3, 1, [
+        const gradientUnknown = new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {offset: 0, color: '#6b7785'},
             {offset: 1, color: '#6b77857F'}
         ]);

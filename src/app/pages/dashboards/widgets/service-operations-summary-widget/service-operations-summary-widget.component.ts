@@ -32,15 +32,18 @@ import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { CanvasRenderer } from 'echarts/renderers';
 import { SummaryStateServicesExtended } from '../../../services/summary_state.interface';
 import { RouterLink } from '@angular/router';
-import { ServiceHeatmapEchartComponent } from '../../../../components/charts/service-heatmap-echart/service-heatmap-echart.component';
-import { ServiceStatusScatterEchartComponent } from '../../../../components/charts/service-status-scatter-echart/service-status-scatter-echart.component';
 import { ServicegroupsService } from '../../../servicegroups/servicegroups.service';
 import { ServicegroupsLoadServicegroupsByStringParams } from '../../../servicegroups/servicegroups.interface';
-import { IntervalPickerComponent } from '../../../../components/interval-picker/interval-picker.component';
+import { DebounceDirective } from '../../../../directives/debounce.directive';
+import { RegexHelperTooltipComponent } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
+import { TrueFalseDirective } from '../../../../directives/true-false.directive';
+import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ServiceSummaryEchartComponent } from '../../../../components/charts/service-summary-echart/service-summary-echart.component';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
-import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { RegexHelperTooltipComponent } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import { ServiceHeatmapEchartComponent } from '../../../../components/charts/service-heatmap-echart/service-heatmap-echart.component';
+import { ServiceStatusScatterEchartComponent } from '../../../../components/charts/service-status-scatter-echart/service-status-scatter-echart.component';
+import { IntervalPickerComponent } from '../../../../components/interval-picker/interval-picker.component';
 
 echarts.use([
     TooltipComponent,
@@ -64,22 +67,23 @@ echarts.use([
         InputGroupComponent,
         FormControlDirective,
         TranslocoPipe,
+        DebounceDirective,
         FormCheckInputDirective,
+        RegexHelperTooltipComponent,
         NgSelectComponent,
+        MultiSelectComponent,
         FaStackComponent,
         FaStackItemSizeDirective,
         FormCheckComponent,
         FormCheckLabelDirective,
         TranslocoDirective,
-        //    ServiceSummaryEchartComponent,
-        RouterLink,
-        IntervalPickerComponent,
+        XsButtonDirective,
         ServiceSummaryEchartComponent,
         PermissionDirective,
+        RouterLink,
+        ServiceHeatmapEchartComponent,
         ServiceStatusScatterEchartComponent,
-        MultiSelectComponent,
-        RegexHelperTooltipComponent,
-        ServiceHeatmapEchartComponent
+        IntervalPickerComponent
     ],
     templateUrl: "./service-operations-summary-widget.component.html",
     styleUrl: "./service-operations-summary-widget.component.css",
@@ -101,7 +105,10 @@ export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent
     protected hostgroups: SelectKeyValue[] = [];
     protected servicegroups: SelectKeyValue[] = [];
     protected containers: SelectKeyValue[] = [];
+
+    public keywordsHost: string[] = [];
     public keywords: string[] = [];
+    public notKeywordsHost: string[] = [];
     public notKeywords: string[] = [];
     public hostgroupKeywords: string[] = [];
     public hostgroupNotKeywords: string[] = [];
@@ -162,8 +169,10 @@ export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent
                 .subscribe((result) => {
                     this.config = result.config;
                     this.servicestatusSummary = result.servicestatusSummary;
-                    this.keywords = this.config.Host.keywords.split(',').filter(Boolean);
-                    this.notKeywords = this.config.Host.not_keywords.split(',').filter(Boolean);
+                    this.keywordsHost = this.config.Host.keywords.split(',').filter(Boolean);
+                    this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
+                    this.notKeywordsHost = this.config.Host.not_keywords.split(',').filter(Boolean);
+                    this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
                     this.hostgroupKeywords = this.config.Hostgroup.keywords.split(',').filter(Boolean);
                     this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
                     this.servicegroupKeywords = this.config.Servicegroup.keywords.split(',').filter(Boolean);
