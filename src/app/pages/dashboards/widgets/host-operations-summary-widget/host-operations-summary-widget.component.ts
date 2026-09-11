@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, signal, ViewChild } from "@angular/core";
+import {
+    ChangeDetectionStrategy,
+    Component,
+    effect,
+    ElementRef,
+    inject,
+    OnDestroy,
+    signal,
+    ViewChild
+} from "@angular/core";
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
@@ -33,7 +42,6 @@ import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive
 import { BarChart, HeatmapChart, PieChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TooltipComponent, VisualMapComponent } from 'echarts/components';
 import 'echarts/theme/dark.js';
-import { Subscription } from 'rxjs';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { CanvasRenderer } from 'echarts/renderers';
 import { HostSummaryEchartComponent } from '../../../../components/charts/host-summary-echart/host-summary-echart.component';
@@ -89,7 +97,7 @@ echarts.use([
     styleUrl: "./host-operations-summary-widget.component.css",
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent {
+export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent implements OnDestroy {
     private readonly LayoutService = inject(LayoutService);
 
     protected flipped = signal<boolean>(false);
@@ -116,9 +124,6 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent {
         '4': false,
         '5': false
     };
-
-    @ViewChild('pieChartContainer') pieChartContainer!: ElementRef;
-    @ViewChild('barChartContainer') barChartContainer!: ElementRef;
     @ViewChild('heatmapContainer') heatmapContainer!: ElementRef;
 
     private pieChart!: echarts.ECharts;
@@ -149,6 +154,7 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent {
     }
 
     public override ngOnDestroy() {
+        this.stopRefreshInterval();
         this.resizeObserver?.disconnect();
         this.pieChart?.dispose();
         this.barChart?.dispose();
@@ -279,8 +285,8 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent {
     }
 
     protected refresh(): void {
-            this.load();
-            this.cdr.markForCheck();
+        this.load();
+        this.cdr.markForCheck();
 
     }
 

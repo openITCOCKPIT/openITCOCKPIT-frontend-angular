@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, signal, ViewChild } from "@angular/core";
+import {
+    ChangeDetectionStrategy,
+    Component,
+    effect,
+    ElementRef,
+    inject,
+    OnDestroy,
+    signal,
+    ViewChild
+} from "@angular/core";
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
@@ -37,7 +46,6 @@ import { ServicegroupsLoadServicegroupsByStringParams } from '../../../servicegr
 import { DebounceDirective } from '../../../../directives/debounce.directive';
 import { RegexHelperTooltipComponent } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
-import { TrueFalseDirective } from '../../../../directives/true-false.directive';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ServiceSummaryEchartComponent } from '../../../../components/charts/service-summary-echart/service-summary-echart.component';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
@@ -89,7 +97,7 @@ echarts.use([
     styleUrl: "./service-operations-summary-widget.component.css",
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent {
+export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent implements OnDestroy {
     private readonly LayoutService = inject(LayoutService);
 
     protected flipped = signal<boolean>(false);
@@ -106,10 +114,12 @@ export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent
     protected servicegroups: SelectKeyValue[] = [];
     protected containers: SelectKeyValue[] = [];
 
-    public keywordsHost: string[] = [];
-    public keywords: string[] = [];
-    public notKeywordsHost: string[] = [];
-    public notKeywords: string[] = [];
+    public serviceKeywords: string[] = [];
+    public serviceNotKeywords: string[] = [];
+
+    public hostKeywords: string[] = [];
+    public hostNotKeywords: string[] = [];
+
     public hostgroupKeywords: string[] = [];
     public hostgroupNotKeywords: string[] = [];
     public servicegroupKeywords: string[] = [];
@@ -124,8 +134,6 @@ export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent
         '5': false
     };
 
-    @ViewChild('pieChartContainer') pieChartContainer!: ElementRef;
-    @ViewChild('barChartContainer') barChartContainer!: ElementRef;
     @ViewChild('heatmapContainer') heatmapContainer!: ElementRef;
 
     private pieChart!: echarts.ECharts;
@@ -157,6 +165,7 @@ export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent
     }
 
     public override ngOnDestroy() {
+        this.stopRefreshInterval();
         this.resizeObserver?.disconnect();
         this.pieChart?.dispose();
         this.barChart?.dispose();
@@ -169,12 +178,15 @@ export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent
                 .subscribe((result) => {
                     this.config = result.config;
                     this.servicestatusSummary = result.servicestatusSummary;
-                    this.keywordsHost = this.config.Host.keywords.split(',').filter(Boolean);
-                    this.keywords = this.config.Service.keywords.split(',').filter(Boolean);
-                    this.notKeywordsHost = this.config.Host.not_keywords.split(',').filter(Boolean);
-                    this.notKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
+                    this.hostKeywords = this.config.Host.keywords.split(',').filter(Boolean);
+                    this.hostNotKeywords = this.config.Host.not_keywords.split(',').filter(Boolean);
+
+                    this.serviceKeywords = this.config.Service.keywords.split(',').filter(Boolean);
+                    this.serviceNotKeywords = this.config.Service.not_keywords.split(',').filter(Boolean);
+
                     this.hostgroupKeywords = this.config.Hostgroup.keywords.split(',').filter(Boolean);
                     this.hostgroupNotKeywords = this.config.Hostgroup.not_keywords.split(',').filter(Boolean);
+
                     this.servicegroupKeywords = this.config.Servicegroup.keywords.split(',').filter(Boolean);
                     this.servicegroupNotKeywords = this.config.Servicegroup.not_keywords.split(',').filter(Boolean);
 
@@ -245,12 +257,14 @@ export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent
             return;
         }
 
-        this.config.Host.keywords = this.keywords.join(',');
-        this.config.Host.not_keywords = this.notKeywords.join(',');
-        this.config.Service.keywords = this.keywords.join(',');
-        this.config.Service.not_keywords = this.notKeywords.join(',');
+        this.config.Host.keywords = this.hostKeywords.join(',');
+        this.config.Host.not_keywords = this.hostNotKeywords.join(',');
+        this.config.Service.keywords = this.serviceKeywords.join(',');
+        this.config.Service.not_keywords = this.serviceNotKeywords.join(',');
         this.config.Hostgroup.keywords = this.hostgroupKeywords.join(',');
         this.config.Hostgroup.not_keywords = this.hostgroupNotKeywords.join(',');
+        this.config.Servicegroup.keywords = this.servicegroupKeywords.join(',');
+        this.config.Servicegroup.not_keywords = this.servicegroupNotKeywords.join(',');
 
         this.config.servicepriority = [];
         _.map(this.priorityFilter,
