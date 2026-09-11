@@ -600,17 +600,20 @@
                                                             <div class="d-flex justify-content-between align-items-center mb-1">
                                                                 <div class="d-flex align-items-center ">
                                                                     <fa-icon [icon]="['fas', 'satellite-dish']"
-                                                                             [class]="satellite.satellite_status.status === 2 ? 'text-danger me-2' : 'text-warning me-2'">
+                                                                             [class]="satellite.satellite_status.status === 2 ? 'text-warning me-2' : 'text-danger me-2'">
                                                                     </fa-icon>
                                                                     <span class="fw-bold txt-overflow-ellipsis"
                                                                           title="{{ satellite.name }}">
                                                                         {{ satellite.name }}
+
+
                                                                     </span>
+
                                                                 </div>
 
                                                                 <span class="badge rounded-pill status-badge-text border"
-                                                                      [class]="satellite.satellite_status.status === 2 ?  'text-danger border-danger' : 'text-warning border-warning'">
-                                                                    {{ satellite.satellite_status.status === 2 ?  t('Critical') : t('Warning') }}
+                                                                      [class]="satellite.satellite_status.status === 2 ?  'text-warning border-warning' : 'text-danger border-danger'">
+                                                                    {{ satellite.satellite_status.status === 2 ? t('Warning') : t('Critical') }}
                                                                 </span>
                                                             </div>
 
