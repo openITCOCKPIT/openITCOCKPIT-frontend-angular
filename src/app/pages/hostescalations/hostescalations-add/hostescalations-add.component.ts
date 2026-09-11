@@ -25,7 +25,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HostescalationContainerResult, HostescalationPost, HostWithCheckValues } from '../hostescalations.interface';
+import { HostescalationContainerResult, HostescalationPost, HostsWithCheckValues } from '../hostescalations.interface';
 import { HostescalationsService } from '../hostescalations.service';
 import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -43,6 +43,7 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { HistoryService } from '../../../history.service';
 import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human-time/human-time.component';
+import { KeyValuePipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-hostescalations-add',
@@ -78,7 +79,8 @@ import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human
         TrueFalseDirective,
         CardFooterComponent,
         TableDirective,
-        HumanTimeComponent
+        HumanTimeComponent,
+        KeyValuePipe
     ],
     templateUrl: './hostescalations-add.component.html',
     styleUrl: './hostescalations-add.component.css',
@@ -94,7 +96,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
     public timeperiods: SelectKeyValue[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
-    public hostsCheckValues: HostWithCheckValues[] = [];
+    public hostsCheckValues: HostsWithCheckValues = {};
     public errors: GenericValidationError | null = null;
 
     private readonly HostescalationsService = inject(HostescalationsService);
@@ -337,4 +339,7 @@ export class HostescalationsAddComponent implements OnInit, OnDestroy {
             })
         );
     }
+
+    protected readonly Number = Number;
+    protected readonly Object = Object;
 }
