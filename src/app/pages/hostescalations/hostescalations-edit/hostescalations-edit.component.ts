@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
@@ -20,12 +19,18 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { HostescalationContainerResult, HostescalationGet, HostescalationPost } from '../hostescalations.interface';
+import {
+    HostescalationContainerResult,
+    HostescalationGet,
+    HostescalationPost,
+    HostsWithCheckValues
+} from '../hostescalations.interface';
 import { HostescalationsService } from '../hostescalations.service';
 import { SelectKeyValue, SelectKeyValueWithDisabled } from '../../../layouts/primeng/select.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../generic-responses';
@@ -44,6 +49,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human-time/human-time.component';
+import { KeyValuePipe } from '@angular/common';
 
 @Component({
     selector: 'oitc-hostescalations-add',
@@ -79,7 +86,10 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         TrueFalseDirective,
         CardFooterComponent,
         FormLoaderComponent,
-        ObjectUuidComponent
+        ObjectUuidComponent,
+        HumanTimeComponent,
+        KeyValuePipe,
+        TableDirective
     ],
     templateUrl: './hostescalations-edit.component.html',
     styleUrl: './hostescalations-edit.component.css',
@@ -96,6 +106,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
     public timeperiods: SelectKeyValue[] = [];
     public contacts: SelectKeyValue[] = [];
     public contactgroups: SelectKeyValue[] = [];
+    public hostsCheckValues: HostsWithCheckValues = {};
     public errors: GenericValidationError | null = null;
 
     private readonly HostescalationsService = inject(HostescalationsService);
@@ -205,6 +216,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
                 this.timeperiods = result.timeperiods;
                 this.contacts = result.contacts;
                 this.contactgroups = result.contactgroups;
+                this.hostsCheckValues = result.hostsWithCheckValues;
             })
         );
     }
@@ -345,4 +357,7 @@ export class HostescalationsEditComponent implements OnInit, OnDestroy {
             }));
 
     }
+
+    protected readonly Object = Object;
+    protected readonly Number = Number;
 }
