@@ -33,6 +33,7 @@ import { autoreportModuleRoutes } from './modules/autoreport_module/autoreport_m
 import { prometheusModuleRoutes } from './modules/prometheus_module/prometheus_module.routes';
 import { changecalendarsModuleRoutes } from './modules/changecalendar_module/changecalendar_module.routes';
 import { scmModuleRoutes } from './modules/scm_module/scm_module.routes';
+import { aiModuleRoutes } from './modules/ai_module/ai_module.routes';
 import { slackModuleRoutes } from './modules/slack_module/slack_module.routes';
 import { designModuleRoutes } from './modules/design_module/design_module.routes';
 import { mattermostModuleRoutes } from './modules/mattermost_module/mattermost_module.routes';
@@ -120,6 +121,7 @@ const moduleRoutes: Routes = [
     ...autoreportModuleRoutes,
     ...changecalendarsModuleRoutes,
     ...scmModuleRoutes,
+    ...aiModuleRoutes,
     ...slackModuleRoutes,
     ...designModuleRoutes,
     ...mattermostModuleRoutes,

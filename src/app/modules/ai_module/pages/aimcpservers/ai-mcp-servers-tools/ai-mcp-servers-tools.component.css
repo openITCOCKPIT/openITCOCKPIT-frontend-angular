@@ -1,0 +1,17 @@
+/* Fixed widths, so a long tool name cannot push the switches around and the
+   two switch columns stay under their headings. */
+.ai-kind-col {
+    width: 8rem;
+}
+
+.ai-switch-col {
+    width: 9rem;
+}
+
+.ai-tool-facts dt {
+    font-weight: 600;
+}
+
+.ai-tool-facts dd {
+    margin-bottom: 0.35rem;
+}

@@ -1,0 +1,6 @@
+/* The filter list sits beside a table that can be long, so it scrolls on its
+   own rather than stretching the page. */
+.ai-agent-filter {
+    max-height: 30rem;
+    overflow-y: auto;
+}

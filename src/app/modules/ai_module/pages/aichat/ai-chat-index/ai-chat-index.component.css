@@ -1,0 +1,81 @@
+.ai-agent-card {
+    cursor: pointer;
+}
+
+.ai-session-list {
+    max-height: 28rem;
+    overflow-y: auto;
+}
+
+.ai-transcript {
+    max-height: 32rem;
+    overflow-y: auto;
+}
+
+.ai-msg {
+    margin-bottom: .75rem;
+    display: flex;
+    gap: .5rem;
+}
+
+.ai-msg-body {
+    /* The rendered answer is a block of real markup now, so it needs the room
+       the flex row would otherwise deny it. */
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* A model writes short paragraphs and lists. Left at browser defaults they
+   carry more vertical space than a chat bubble should. */
+.ai-msg-body ::ng-deep p:last-child,
+.ai-msg-body ::ng-deep ul:last-child,
+.ai-msg-body ::ng-deep ol:last-child {
+    margin-bottom: 0;
+}
+
+.ai-msg-body ::ng-deep ul,
+.ai-msg-body ::ng-deep ol {
+    padding-left: 1.25rem;
+}
+
+.ai-msg-body ::ng-deep code {
+    background: var(--cui-tertiary-bg, #f8f9fa);
+    padding: .1rem .25rem;
+    border-radius: .2rem;
+}
+
+.ai-msg-body ::ng-deep pre {
+    background: var(--cui-tertiary-bg, #f8f9fa);
+    padding: .5rem;
+    border-radius: .25rem;
+    overflow-x: auto;
+}
+
+.ai-msg-body ::ng-deep table {
+    width: auto;
+    margin-bottom: .5rem;
+}
+
+.ai-msg-body ::ng-deep table th,
+.ai-msg-body ::ng-deep table td {
+    padding: .2rem .5rem;
+    border: 1px solid var(--cui-border-color, #dee2e6);
+}
+
+.ai-msg-error .ai-msg-body {
+    color: var(--cui-danger, #e55353);
+}
+
+.ai-msg-tool {
+    display: block;
+    font-size: .875rem;
+}
+
+.ai-msg-tool pre,
+.ai-confirm-args {
+    max-height: 16rem;
+    overflow: auto;
+    background: var(--cui-tertiary-bg, #f8f9fa);
+    padding: .5rem;
+    border-radius: .25rem;
+}

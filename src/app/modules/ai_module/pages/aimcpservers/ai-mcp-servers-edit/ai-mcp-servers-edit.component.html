@@ -1,0 +1,187 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('AI Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'ai_module', 'mcpservers', 'index']"
+                   *oitcPermission="['AiModule', 'Mcpservers', 'index']">
+                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                    {{ t('AI MCP Servers') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                {{ t('Edit MCP server') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            <form cForm (ngSubmit)="submit()">
+                <div class="mb-3">
+                    <label cLabel for="name">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="name" name="name" type="text" [(ngModel)]="post.name"
+                           oitcFormError [errors]="errors" errorField="name"/>
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="slug">
+                        {{ t('Slug') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="slug" name="slug" type="text" [(ngModel)]="post.slug"
+                           placeholder="triage"
+                           oitcFormError [errors]="errors" errorField="slug"/>
+                    <span class="help-block">
+                        {{ t('Ties this row to the running instance: it is the systemd instance name, the compose service name and the environment variable prefix. Lower case letters, digits, hyphen and underscore.') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="slug"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="container_id">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select name="container_id" id="container_id" [options]="containers"
+                                 [(ngModel)]="post.container_id" optionValue="key" optionLabel="value"
+                                 oitcFormError [errors]="errors" errorField="container_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="description">{{ t('Description') }}</label>
+                    <input cFormControl id="description" name="description" type="text"
+                           [(ngModel)]="post.description"
+                           oitcFormError [errors]="errors" errorField="description"/>
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="url">
+                        {{ t('Endpoint') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="url" name="url" type="text" [(ngModel)]="post.url"
+                           placeholder="http://127.0.0.1:8801/mcp"
+                           oitcFormError [errors]="errors" errorField="url"/>
+                    <span class="help-block">
+                        {{ t('Include the /mcp path. In a containerised installation the environment wins over this value, so the compose file stays the single source of truth there.') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="url"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="auth_token">{{ t('Bearer token') }}</label>
+                    <input cFormControl id="auth_token" name="auth_token" type="password" autocomplete="new-password"
+                           [(ngModel)]="post.auth_token"
+                           oitcFormError [errors]="errors" errorField="auth_token"/>
+                    <span class="help-block">
+                        @if (hasStoredToken) {
+                            {{ t('A token is stored. Leave empty to keep it. This is the token the instance was started with (MCP_AUTH_TOKEN), not an openITCOCKPIT API key.') }}
+                        } @else {
+                            {{ t('The MCP_AUTH_TOKEN the instance was started with. Not an openITCOCKPIT API key - that one lives in the instance, never here.') }}
+                        }
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="auth_token"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="toolsets">{{ t('Toolsets') }}</label>
+                    <input cFormControl id="toolsets" name="toolsets" type="text" [(ngModel)]="post.toolsets"
+                           oitcFormError [errors]="errors" errorField="toolsets"/>
+                    <span class="help-block">
+                        {{ t('Mirrors the instance OITC_TOOLSETS setting, for display. Use "all" for the full surface. What the instance actually registered is read by Sync.') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="toolsets"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="service_account_label">{{ t('Service account') }}</label>
+                    <input cFormControl id="service_account_label" name="service_account_label" type="text"
+                           [(ngModel)]="post.service_account_label"
+                           placeholder="oitc-ai-triage (read)"
+                           oitcFormError [errors]="errors" errorField="service_account_label"/>
+                    <span class="help-block">
+                        {{ t('Which openITCOCKPIT account this instance uses. Written down here because it is the permission boundary for every agent pointed at it, and it is shown next to the agent form.') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="service_account_label"></oitc-form-feedback>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label cLabel for="timeout_seconds">{{ t('Timeout (seconds)') }}</label>
+                        <input cFormControl id="timeout_seconds" name="timeout_seconds" type="number" min="5"
+                               [(ngModel)]="post.timeout_seconds"
+                               oitcFormError [errors]="errors" errorField="timeout_seconds"/>
+                        <oitc-form-feedback [errors]="errors" errorField="timeout_seconds"></oitc-form-feedback>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input cFormCheckInput type="checkbox" id="write_tools_enabled" name="write_tools_enabled"
+                               [(ngModel)]="post.write_tools_enabled"/>
+                        <label cLabel class="form-check-label" for="write_tools_enabled">
+                            {{ t('This instance was started with write tools enabled') }}
+                        </label>
+                    </div>
+                    <span class="help-block">
+                        {{ t('A note for the agent form. Ticking it here does not enable anything - the instance decides, and Sync reads what it registered.') }}
+                    </span>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input cFormCheckInput type="checkbox" id="ignore_ssl_certificate" name="ignore_ssl_certificate"
+                               [(ngModel)]="post.ignore_ssl_certificate"/>
+                        <label cLabel class="form-check-label" for="ignore_ssl_certificate">
+                            {{ t('Do not verify the TLS certificate') }}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input cFormCheckInput type="checkbox" id="is_enabled" name="is_enabled"
+                               [(ngModel)]="post.is_enabled"/>
+                        <label cLabel class="form-check-label" for="is_enabled">{{ t('Enabled') }}</label>
+                    </div>
+                </div>
+            </form>
+        </c-card-body>
+        <c-card-footer>
+            <button cButton type="submit" class="ripple" color="primary" (click)="submit()">
+                <fa-icon [icon]="['fas', 'save']"></fa-icon>
+                {{ t('Save') }}
+            </button>
+            <button cButton class="ripple ms-1" color="secondary" oitcBackButton>
+                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                {{ t('Cancel') }}
+            </button>
+        </c-card-footer>
+    </c-card>
+</ng-container>

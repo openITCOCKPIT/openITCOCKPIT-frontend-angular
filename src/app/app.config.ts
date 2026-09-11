@@ -30,6 +30,7 @@ import { routes } from './app.routes';
 import { LEGACY_BASE_URL } from "./tokens/legacy-base-url.token";
 import { AuthService } from "./auth/auth.service";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
 import { PROXY_PATH } from "./tokens/proxy-path.token";
 import { authInterceptor } from "./auth/auth.interceptor";
 import { csrfInterceptor } from "./auth/csrf.interceptor";
@@ -64,6 +65,19 @@ export const appConfig: ApplicationConfig = {
         //importProvidersFrom(BrowserAnimationsModule),
 
         provideRouter(routes),
+        // Used by the AI assistant to render a model's answer. Its output is
+        // Markdown, and the data inside it comes from the monitoring system,
+        // so it is untrusted text: sanitize stays on (Angular's DomSanitizer
+        // runs over the result) and raw HTML in the answer is not honoured.
+        provideMarkdown({
+            markedOptions: {
+                provide: MARKED_OPTIONS,
+                useValue: {
+                    gfm: true,
+                    breaks: true
+                }
+            }
+        }),
         //provideRouter(snmpTrapModuleRoutes),
         provideHttpClient(),
         provideToastr(),

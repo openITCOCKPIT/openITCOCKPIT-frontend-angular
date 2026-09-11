@@ -1,0 +1,65 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('AI Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'ai_module', 'chatsessions', 'index']"
+                   *oitcPermission="['AiModule', 'Chatsessions', 'index']">
+                    <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+                    {{ t('Conversations') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'comments']"></fa-icon>
+                {{ t('Conversation') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                <fa-icon [icon]="['fas', 'comments']"></fa-icon>
+                {{ session?.title || t('Conversation') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            @if (isLoading) {
+                <oitc-table-loader></oitc-table-loader>
+            } @else {
+                @for (message of messages; track trackByMessageId($index, message)) {
+                    @if (message.role === 'tool') {
+                        <details class="ai-msg-tool mb-2">
+                            <summary>
+                                <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                                <code>{{ message.tool_name }}</code>
+                                @if (message.is_error) {
+                                    <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
+                                }
+                            </summary>
+                            <pre class="mb-0">{{ message.content }}</pre>
+                        </details>
+                    } @else if (message.content) {
+                        <div class="mb-2 d-flex gap-2">
+                            <fa-icon [icon]="['fas', message.role === 'user' ? 'user' : 'robot']"></fa-icon>
+                            <span class="ai-msg-body" [ngClass]="{'text-danger': message.is_error}">
+                                {{ message.content }}
+                            </span>
+                        </div>
+                    }
+                }
+            }
+        </c-card-body>
+    </c-card>
+</ng-container>

@@ -1,0 +1,10 @@
+/* Fixed columns, so a test outcome or a long account name cannot reflow the
+   row. The test message goes to a toast for the same reason. */
+.ai-status-col {
+    width: 11rem;
+}
+
+.ai-tools-col {
+    width: 8rem;
+    white-space: nowrap;
+}

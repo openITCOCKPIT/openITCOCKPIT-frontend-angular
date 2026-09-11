@@ -1,0 +1,152 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('AI Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'ai_module', 'mcpservers', 'index']"
+                   *oitcPermission="['AiModule', 'Mcpservers', 'index']">
+                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                    {{ t('AI MCP Servers') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                {{ t('Tools') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                {{ t('Tools') }}
+                @if (server) {
+                    <span class="text-muted">&middot; {{ server.name }}</span>
+                }
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            @if (server) {
+                <!-- The account whose reach these tools carry. -->
+                <dl class="row mb-3 ai-tool-facts">
+                    <dt class="col-sm-3">{{ t('Endpoint') }}</dt>
+                    <dd class="col-sm-9"><code>{{ server.url }}</code></dd>
+
+                    <dt class="col-sm-3">{{ t('Toolsets') }}</dt>
+                    <dd class="col-sm-9">
+                        <code>{{ server.toolsets }}</code>
+                        @if (server.write_tools_enabled) {
+                            <span class="badge bg-warning ms-1">{{ t('write tools') }}</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">{{ t('Service account') }}</dt>
+                    <dd class="col-sm-9">
+                        {{ server.service_account_label || t('not documented') }}
+                    </dd>
+
+                    <dt class="col-sm-3">{{ t('Catalogue') }}</dt>
+                    <dd class="col-sm-9">
+                        @if (syncedAt) {
+                            {{ tools.length }} {{ t('tools') }},
+                            {{ enabledCount }} {{ t('offered') }},
+                            {{ writingCount }} {{ t('of them change the configuration') }}
+                            <span class="text-muted">&middot; {{ syncedAt }}</span>
+                        } @else {
+                            <span class="text-warning">{{ t('not read yet') }}</span>
+                        }
+                    </dd>
+                </dl>
+
+                <div class="mb-3">
+                    <button cButton class="ripple" color="info" variant="outline" type="button"
+                            [disabled]="isSyncing" (click)="sync()">
+                        <fa-icon [icon]="['fas', 'rotate']" [animation]="isSyncing ? 'spin' : undefined"></fa-icon>
+                        {{ t('Read the catalogue again') }}
+                    </button>
+                </div>
+            }
+
+            @if (isLoading) {
+                <oitc-table-loader></oitc-table-loader>
+            } @else if (tools.length === 0) {
+                <div class="text-center text-muted py-4">
+                    <fa-icon [icon]="['fas', 'wrench']" size="2x" class="mb-2"></fa-icon>
+                    <p class="mb-0">
+                        {{ t('This MCP server has no catalogue yet. Read it once, so the module knows what the instance can do.') }}
+                    </p>
+                </div>
+            } @else {
+                <table cTable [hover]="true" class="mb-0">
+                    <thead>
+                    <tr>
+                        <th>{{ t('Tool') }}</th>
+                        <th class="ai-kind-col">{{ t('Kind') }}</th>
+                        <th class="ai-switch-col text-center">{{ t('offered') }}</th>
+                        <th class="ai-switch-col text-center">{{ t('needs approval') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (tool of tools; track trackById($index, tool)) {
+                            <tr>
+                                <td>
+                                    <code>{{ tool.name }}</code>
+                                    @if (tool.title) {
+                                        <div class="small text-muted">{{ tool.title }}</div>
+                                    }
+                                </td>
+                                <td class="ai-kind-col">
+                                    @if (tool.read_only) {
+                                        <span class="badge bg-success">{{ t('read') }}</span>
+                                    } @else if (tool.destructive) {
+                                        <span class="badge bg-danger">{{ t('destructive') }}</span>
+                                    } @else {
+                                        <span class="badge bg-warning">{{ t('write') }}</span>
+                                    }
+                                </td>
+                                <!-- The labels are in the table header rather
+                                     than beside every switch. -->
+                                <td class="ai-switch-col text-center">
+                                    <input cFormCheckInput type="checkbox" role="switch"
+                                           [ngModel]="tool.is_enabled"
+                                           [name]="'enabled_' + tool.id"
+                                           [disabled]="!server?.allow_edit"
+                                           (ngModelChange)="setEnabled(tool, $event)"/>
+                                </td>
+                                <td class="ai-switch-col text-center">
+                                    <input cFormCheckInput type="checkbox" role="switch"
+                                           [ngModel]="tool.requires_confirmation"
+                                           [name]="'confirm_' + tool.id"
+                                           [disabled]="!server?.allow_edit"
+                                           (ngModelChange)="setConfirmation(tool, $event)"/>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <p class="text-muted small mt-3 mb-0">
+                    {{ t('A tool that is not offered cannot be called. Approval is asked for before a tool runs, and is always required for one that changes the configuration.') }}
+                </p>
+            }
+        </c-card-body>
+        <c-card-footer>
+            <button cButton class="ripple" color="secondary" oitcBackButton>
+                <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>
+                {{ t('Back') }}
+            </button>
+        </c-card-footer>
+    </c-card>
+</ng-container>

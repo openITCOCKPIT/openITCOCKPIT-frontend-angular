@@ -1,0 +1,6 @@
+/* The catalogue can be long - 39 tools on an unfiltered instance - so it
+   scrolls inside the form instead of pushing the save button off screen. */
+.ai-tool-list {
+    max-height: 18rem;
+    overflow-y: auto;
+}

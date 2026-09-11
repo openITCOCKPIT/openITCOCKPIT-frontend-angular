@@ -1,0 +1,141 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('AI Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'ai_module', 'settings', 'index']"
+                   *oitcPermission="['AiModule', 'Settings', 'index']">
+                    <fa-icon [icon]="['fas', 'sliders']"></fa-icon>
+                    {{ t('AI Globals') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                <fa-icon [icon]="['fas', 'sliders']"></fa-icon>
+                {{ t('AI Globals') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            @if (settings) {
+                <form cForm (ngSubmit)="submit()">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label cLabel for="poll_interval_seconds">{{ t('Poll interval (seconds)') }}</label>
+                            <input cFormControl id="poll_interval_seconds" name="poll_interval_seconds"
+                                   type="number" min="1" max="60"
+                                   [(ngModel)]="settings.poll_interval_seconds"
+                                   oitcFormError [errors]="errors" errorField="poll_interval_seconds"/>
+                            <span class="help-block">
+                                {{ t('How often the chat asks for new messages while an answer is being worked on.') }}
+                            </span>
+                            <oitc-form-feedback [errors]="errors" errorField="poll_interval_seconds"></oitc-form-feedback>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label cLabel for="turn_timeout_seconds">{{ t('Turn timeout (seconds)') }}</label>
+                            <input cFormControl id="turn_timeout_seconds" name="turn_timeout_seconds"
+                                   type="number" min="30"
+                                   [(ngModel)]="settings.turn_timeout_seconds"
+                                   oitcFormError [errors]="errors" errorField="turn_timeout_seconds"/>
+                            <span class="help-block">
+                                {{ t('How long a running request may go silent before it is assumed dead and put back in the queue.') }}
+                            </span>
+                            <oitc-form-feedback [errors]="errors" errorField="turn_timeout_seconds"></oitc-form-feedback>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label cLabel for="max_attempts">{{ t('Attempts per request') }}</label>
+                            <input cFormControl id="max_attempts" name="max_attempts" type="number" min="1" max="10"
+                                   [(ngModel)]="settings.max_attempts"
+                                   oitcFormError [errors]="errors" errorField="max_attempts"/>
+                            <oitc-form-feedback [errors]="errors" errorField="max_attempts"></oitc-form-feedback>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label cLabel for="default_confirmation_ttl_minutes">
+                                {{ t('Approval expires after (minutes)') }}
+                            </label>
+                            <input cFormControl id="default_confirmation_ttl_minutes"
+                                   name="default_confirmation_ttl_minutes" type="number" min="1"
+                                   [(ngModel)]="settings.default_confirmation_ttl_minutes"
+                                   oitcFormError [errors]="errors" errorField="default_confirmation_ttl_minutes"/>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="default_confirmation_ttl_minutes"></oitc-form-feedback>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label cLabel for="session_retention_days">{{ t('Keep conversations (days)') }}</label>
+                            <input cFormControl id="session_retention_days" name="session_retention_days"
+                                   type="number" min="0"
+                                   [(ngModel)]="settings.session_retention_days"
+                                   oitcFormError [errors]="errors" errorField="session_retention_days"/>
+                            <span class="help-block">{{ t('0 keeps them forever.') }}</span>
+                            <oitc-form-feedback [errors]="errors" errorField="session_retention_days"></oitc-form-feedback>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label cLabel for="audit_retention_days">{{ t('Keep audit entries (days)') }}</label>
+                            <input cFormControl id="audit_retention_days" name="audit_retention_days"
+                                   type="number" min="0"
+                                   [(ngModel)]="settings.audit_retention_days"
+                                   oitcFormError [errors]="errors" errorField="audit_retention_days"/>
+                            <span class="help-block">
+                                {{ t('Separate from the conversations on purpose: the audit records actions and usually has to be kept longer than the text.') }}
+                            </span>
+                            <oitc-form-feedback [errors]="errors" errorField="audit_retention_days"></oitc-form-feedback>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h6 class="fw-bold mb-3">{{ t('Model for internal jobs') }}</h6>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label cLabel for="ai_llm_provider_id_utility">{{ t('Utility model') }}</label>
+                            <oitc-select name="ai_llm_provider_id_utility" id="ai_llm_provider_id_utility"
+                                         [options]="providers"
+                                         [(ngModel)]="settings.ai_llm_provider_id_utility"
+                                         optionValue="key" optionLabel="value"
+                                         oitcFormError [errors]="errors"
+                                         errorField="ai_llm_provider_id_utility">
+                            </oitc-select>
+                            <span class="help-block">
+                                {{ t('Used for work that is not answering: naming a conversation from its first question. A small fast model is right here - a thinking model spends a lot to produce six words.') }}
+                            </span>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="ai_llm_provider_id_utility"></oitc-form-feedback>
+                        </div>
+                    </div>
+                </form>
+            } @else {
+                <oitc-table-loader></oitc-table-loader>
+            }
+        </c-card-body>
+        <c-card-footer>
+            <button cButton type="submit" class="ripple" color="primary" (click)="submit()">
+                <fa-icon [icon]="['fas', 'save']"></fa-icon>
+                {{ t('Save') }}
+            </button>
+        </c-card-footer>
+    </c-card>
+</ng-container>

@@ -1,0 +1,163 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('AI Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'ai_module', 'mcpservers', 'index']"
+                   *oitcPermission="['AiModule', 'Mcpservers', 'index']">
+                    <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                    {{ t('AI MCP Servers') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list']"></fa-icon>
+                {{ t('Overview') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                <fa-icon [icon]="['fas', 'plug']"></fa-icon>
+                {{ t('MCP servers') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            <p class="text-muted">
+                {{ t('Each instance runs with one openITCOCKPIT service account and one set of tools. That account decides what every agent pointed at this instance can see and do.') }}
+            </p>
+
+            <div class="mb-3">
+                <a cButton class="ripple" color="primary" routerLink="/ai_module/mcpservers/add">
+                    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                    {{ t('Add MCP server') }}
+                </a>
+            </div>
+
+            @if (isLoading) {
+                <oitc-table-loader></oitc-table-loader>
+            } @else if (servers.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            } @else {
+                <table cTable [hover]="true" class="mb-0">
+                    <thead>
+                    <tr>
+                        <th>{{ t('Name') }}</th>
+                        <th>{{ t('Endpoint') }}</th>
+                        <th>{{ t('Toolsets') }}</th>
+                        <th>{{ t('Service account') }}</th>
+                        <th class="ai-tools-col text-end">{{ t('Tools') }}</th>
+                        <!-- Fixed width, so a test result cannot reflow the row. -->
+                        <th class="ai-status-col">{{ t('Status') }}</th>
+                        <th class="text-end">{{ t('Actions') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (server of servers; track trackById($index, server)) {
+                            <tr>
+                                <td>
+                                    <!-- One dot for the enabled state. -->
+                                    <fa-icon [icon]="['fas', 'circle']"
+                                             [ngClass]="server.is_enabled ? 'text-success' : 'text-secondary'"
+                                             [title]="server.is_enabled ? t('enabled') : t('disabled')"
+                                             size="xs"></fa-icon>
+                                    {{ server.name }}
+                                    <div class="small text-muted"><code>{{ server.slug }}</code></div>
+                                </td>
+                                <td><code class="small">{{ server.url }}</code></td>
+                                <td>
+                                    <code>{{ server.toolsets }}</code>
+                                    @if (server.write_tools_enabled) {
+                                        <div class="small text-warning">{{ t('writes') }}</div>
+                                    }
+                                </td>
+                                <td class="small">
+                                    {{ server.service_account_label || '&ndash;' }}
+                                </td>
+                                <td class="ai-tools-col text-end">
+                                    <!-- The catalogue size, linking to it. -->
+                                    @if (server.tools_synced_at) {
+                                        <a [routerLink]="['/ai_module/mcpservers/tools', server.id]"
+                                           [title]="t('Tools of this instance')">
+                                            {{ server.tool_count }} {{ t('Tools') }}
+                                            <fa-icon [icon]="['fas', 'chevron-right']" size="xs"></fa-icon>
+                                        </a>
+                                    } @else {
+                                        <a class="text-warning"
+                                           [routerLink]="['/ai_module/mcpservers/tools', server.id]">
+                                            {{ t('not read yet') }}
+                                            <fa-icon [icon]="['fas', 'chevron-right']" size="xs"></fa-icon>
+                                        </a>
+                                    }
+                                </td>
+                                <td class="ai-status-col">
+                                    @switch (testState[server.id]) {
+                                        @case ('running') {
+                                            <fa-icon class="text-muted" [icon]="['fas', 'spinner']"
+                                                     animation="spin"></fa-icon>
+                                            {{ t('testing') }}
+                                        }
+                                        @case ('ok') {
+                                            <fa-icon class="text-success" [icon]="['fas', 'circle-check']"></fa-icon>
+                                            {{ t('answered') }}
+                                        }
+                                        @case ('failed') {
+                                            <fa-icon class="text-danger" [icon]="['fas', 'circle-exclamation']"></fa-icon>
+                                            {{ t('no answer') }}
+                                        }
+                                        @default {
+                                            @if (server.last_error) {
+                                                <!-- A failure recorded on a previous
+                                                     attempt, not in this session. -->
+                                                <fa-icon class="text-warning" [icon]="['fas', 'triangle-exclamation']"
+                                                         [title]="server.last_error"></fa-icon>
+                                                {{ t('last attempt failed') }}
+                                            } @else if (server.last_seen) {
+                                                <span class="text-muted small">{{ server.last_seen }}</span>
+                                            } @else {
+                                                <span class="text-muted">&ndash;</span>
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td class="text-end text-nowrap">
+                                    <button cButton size="sm" color="secondary" variant="ghost"
+                                            [title]="t('Test')" (click)="test(server)">
+                                        <fa-icon [icon]="['fas', 'plug-circle-check']"></fa-icon>
+                                    </button>
+                                    <button cButton size="sm" color="info" variant="ghost"
+                                            [title]="t('Sync')" (click)="sync(server)">
+                                        <fa-icon [icon]="['fas', 'rotate']"></fa-icon>
+                                    </button>
+                                    @if (server.allow_edit) {
+                                        <a cButton size="sm" color="primary" variant="ghost"
+                                           [title]="t('Edit')"
+                                           [routerLink]="['/ai_module/mcpservers/edit', server.id]">
+                                            <fa-icon [icon]="['fas', 'pen']"></fa-icon>
+                                        </a>
+                                        <button cButton size="sm" color="danger" variant="ghost"
+                                                [title]="t('Delete')" (click)="delete(server)">
+                                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </c-card-body>
+    </c-card>
+</ng-container>

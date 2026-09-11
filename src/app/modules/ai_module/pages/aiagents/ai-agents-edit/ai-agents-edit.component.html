@@ -1,0 +1,302 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a>
+                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                    {{ t('AI Module') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'ai_module', 'agents', 'index']"
+                   *oitcPermission="['AiModule', 'Agents', 'index']">
+                    <fa-icon [icon]="['fas', 'robot']"></fa-icon>
+                    {{ t('Agents') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'pen']"></fa-icon>
+                {{ t('Edit') }}
+            </li>
+        </ol>
+    </nav>
+
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                <fa-icon [icon]="['fas', 'robot']"></fa-icon>
+                {{ t('Edit AI agent') }}
+            </h5>
+        </c-card-header>
+        <c-card-body>
+            <form cForm (ngSubmit)="submit()">
+
+                <!-- 1. Identity -->
+                <h6 class="fw-bold mb-3">{{ t('What this agent is for') }}</h6>
+
+                <div class="mb-3">
+                    <label cLabel for="name">
+                        {{ t('Name') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <input cFormControl id="name" name="name" type="text"
+                           [(ngModel)]="post.name"
+                           oitcFormError [errors]="errors" errorField="name"/>
+                    <oitc-form-feedback [errors]="errors" errorField="name"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="description">{{ t('Description') }}</label>
+                    <input cFormControl id="description" name="description" type="text"
+                           [(ngModel)]="post.description"
+                           oitcFormError [errors]="errors" errorField="description"/>
+                    <span class="help-block">
+                        {{ t('Shown to operators when they pick an agent. Say what it is good at.') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="description"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="container_id">
+                        {{ t('Container') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select name="container_id" id="container_id"
+                                 [options]="containers"
+                                 [(ngModel)]="post.container_id"
+                                 optionValue="key" optionLabel="value"
+                                 oitcFormError [errors]="errors" errorField="container_id">
+                    </oitc-select>
+                    <span class="help-block">
+                        {{ t('Decides who can use this agent. An agent sees everything the service account of its MCP server sees, so place it in the container that matches what that account may reach.') }}
+                    </span>
+                    <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
+                </div>
+
+                <hr>
+
+                <!-- 2. Wiring -->
+                <h6 class="fw-bold mb-3">{{ t('What it is connected to') }}</h6>
+
+                <div class="mb-3">
+                    <label cLabel for="ai_llm_provider_id">
+                        {{ t('Language model') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select name="ai_llm_provider_id" id="ai_llm_provider_id"
+                                 [options]="providers"
+                                 [(ngModel)]="post.ai_llm_provider_id"
+                                 optionValue="key" optionLabel="value"
+                                 oitcFormError [errors]="errors" errorField="ai_llm_provider_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="ai_llm_provider_id"></oitc-form-feedback>
+                </div>
+
+                <div class="mb-3">
+                    <label cLabel for="ai_mcp_server_id">
+                        {{ t('MCP server') }}
+                        <oitc-required-icon></oitc-required-icon>
+                    </label>
+                    <oitc-select
+                        name="ai_mcp_server_id"
+                        id="ai_mcp_server_id"
+                        optionValue="id"
+                        optionLabel="label"
+                        [options]="mcpServerOptions"
+                        [(ngModel)]="post.ai_mcp_server_id"
+                        (onChange)="onMcpServerChange()"
+                        oitcFormError [errors]="errors" errorField="ai_mcp_server_id">
+                    </oitc-select>
+                    <oitc-form-feedback [errors]="errors" errorField="ai_mcp_server_id"></oitc-form-feedback>
+
+                    @if (selectedMcpServer) {
+                        <!-- Shown at the moment of the decision: choosing an
+                             instance chooses the account this agent uses. -->
+                        <div class="alert alert-info mt-2 mb-0">
+                            <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                            <strong>{{ t('This agent will see everything this service account can see.') }}</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>
+                                    {{ t('Service account') }}:
+                                    <code>{{ selectedMcpServer.service_account_label || t('not documented') }}</code>
+                                </li>
+                                <li>{{ t('Toolsets') }}: <code>{{ selectedMcpServer.toolsets }}</code></li>
+                                <li>
+                                    {{ t('Write tools') }}:
+                                    @if (selectedMcpServer.write_tools_enabled) {
+                                        <span class="text-warning fw-bold">{{ t('registered on this instance') }}</span>
+                                    } @else {
+                                        <span class="text-success">{{ t('not registered') }}</span>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+
+                <hr>
+
+                <!-- 3. Behaviour, read from the instance -->
+                <h6 class="fw-bold mb-3">{{ t('How it behaves') }}</h6>
+
+                <div class="mb-3">
+                    <label cLabel for="system_prompt_mode">{{ t('System prompt') }}</label>
+                    <oitc-select
+                        name="system_prompt_mode"
+                        id="system_prompt_mode"
+                        optionValue="key"
+                        optionLabel="value"
+                        [options]="promptModes"
+                        [(ngModel)]="post.system_prompt_mode">
+                    </oitc-select>
+                    <span class="help-block">
+                        {{ t('The MCP server ships a prompt per toolset, written by the same people who wrote the tools. Keeping a copy here would drift from it on every upgrade, so it is read from the server and cached.') }}
+                    </span>
+                </div>
+
+                @if (post.system_prompt_mode !== 'custom') {
+                    <div class="mb-3">
+                        <label cLabel for="system_prompt_language">{{ t('Prompt language') }}</label>
+                        <oitc-select
+                            name="system_prompt_language"
+                            id="system_prompt_language"
+                            optionValue="key"
+                            optionLabel="value"
+                            [options]="languages"
+                            [(ngModel)]="post.system_prompt_language">
+                        </oitc-select>
+                    </div>
+                }
+
+                @if (post.system_prompt_mode !== 'mcp') {
+                    <div class="mb-3">
+                        <label cLabel for="system_prompt_custom">{{ t('Your own instructions') }}</label>
+                        <textarea cFormControl id="system_prompt_custom" name="system_prompt_custom" rows="6"
+                                  [(ngModel)]="post.system_prompt_custom"></textarea>
+                        <span class="help-block">
+                            {{ t('Tenant specifics: escalation policy, naming conventions, who to name in an answer.') }}
+                        </span>
+                    </div>
+                }
+
+                @if (post.ai_mcp_server_id) {
+                    <div class="mb-3">
+                        <label cLabel>{{ t('Tools available to this agent') }}</label>
+
+                        @if (isLoadingTools) {
+                            <div class="text-muted">
+                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                {{ t('Reading the catalogue...') }}
+                            </div>
+                        } @else if (tools.length === 0) {
+                            <div class="alert alert-warning mb-0">
+                                {{ t('This MCP server has no catalogue yet. Open it and run "Sync" so the module knows what it can do.') }}
+                            </div>
+                        } @else {
+                            <div class="text-muted mb-2">
+                                {{ enabledToolCount }} / {{ tools.length }} {{ t('tools enabled') }}
+                                @if (writeToolCount > 0) {
+                                    &middot; <span class="text-warning">{{ writeToolCount }} {{ t('of them change the configuration') }}</span>
+                                }
+                                @if (toolsSyncedAt) {
+                                    &middot; {{ t('read') }} {{ toolsSyncedAt }}
+                                }
+                            </div>
+                            <div class="border rounded p-2 ai-tool-list">
+                                @for (tool of tools; track tool.id) {
+                                    <div class="d-flex align-items-start mb-1"
+                                         [ngClass]="{'opacity-50': !tool.is_enabled}">
+                                        <span class="badge me-2"
+                                              [ngClass]="tool.read_only ? 'bg-success' : (tool.destructive ? 'bg-danger' : 'bg-warning')">
+                                            {{ tool.read_only ? t('read') : (tool.destructive ? t('destructive') : t('write')) }}
+                                        </span>
+                                        <div>
+                                            <code>{{ tool.name }}</code>
+                                            @if (tool.requires_confirmation) {
+                                                <fa-icon class="ms-1 text-warning" [icon]="['fas', 'user-check']"
+                                                         [title]="t('Needs approval before it runs')"></fa-icon>
+                                            }
+                                            <div class="small text-muted">{{ tool.title }}</div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <span class="help-block">
+                                {{ t('Individual tools can be switched off on the MCP server page. A tool that is not offered cannot be called.') }}
+                            </span>
+                        }
+                    </div>
+
+                    @if (selectedMcpServer?.write_tools_enabled) {
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input cFormCheckInput type="checkbox" id="allow_write_tools" name="allow_write_tools"
+                                       [(ngModel)]="post.allow_write_tools"/>
+                                <label cLabel class="form-check-label" for="allow_write_tools">
+                                    {{ t('Let this agent propose configuration changes') }}
+                                </label>
+                            </div>
+                            <span class="help-block">
+                                {{ t('Nothing is ever carried out without a person approving the exact call first. Leave this off for an agent that should only answer questions.') }}
+                            </span>
+                        </div>
+                    }
+                }
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label cLabel for="max_steps">{{ t('Tool rounds per question') }}</label>
+                        <input cFormControl id="max_steps" name="max_steps" type="number" min="1" max="30"
+                               [(ngModel)]="post.max_steps"
+                               oitcFormError [errors]="errors" errorField="max_steps"/>
+                        <span class="help-block">
+                            {{ t('Stops a question that is going nowhere instead of letting it run up a bill.') }}
+                        </span>
+                        <oitc-form-feedback [errors]="errors" errorField="max_steps"></oitc-form-feedback>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label cLabel for="max_history_messages">{{ t('Messages kept as context') }}</label>
+                        <input cFormControl id="max_history_messages" name="max_history_messages" type="number"
+                               min="2" max="500"
+                               [(ngModel)]="post.max_history_messages"
+                               oitcFormError [errors]="errors" errorField="max_history_messages"/>
+                        <oitc-form-feedback [errors]="errors" errorField="max_history_messages"></oitc-form-feedback>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label cLabel for="confirmation_ttl_minutes">{{ t('Approval expires after (minutes)') }}</label>
+                        <input cFormControl id="confirmation_ttl_minutes" name="confirmation_ttl_minutes" type="number"
+                               min="1"
+                               [(ngModel)]="post.confirmation_ttl_minutes"
+                               oitcFormError [errors]="errors" errorField="confirmation_ttl_minutes"/>
+                        <oitc-form-feedback [errors]="errors" errorField="confirmation_ttl_minutes"></oitc-form-feedback>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input cFormCheckInput type="checkbox" id="is_enabled" name="is_enabled"
+                               [(ngModel)]="post.is_enabled"/>
+                        <label cLabel class="form-check-label" for="is_enabled">{{ t('Enabled') }}</label>
+                    </div>
+                </div>
+
+            </form>
+        </c-card-body>
+        <c-card-footer>
+            <button cButton type="submit" class="ripple" color="primary" (click)="submit()">
+                <fa-icon [icon]="['fas', 'save']"></fa-icon>
+                {{ t('Save') }}
+            </button>
+            <button cButton class="ripple ms-1" color="secondary" oitcBackButton>
+                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+                {{ t('Cancel') }}
+            </button>
+        </c-card-footer>
+    </c-card>
+</ng-container>

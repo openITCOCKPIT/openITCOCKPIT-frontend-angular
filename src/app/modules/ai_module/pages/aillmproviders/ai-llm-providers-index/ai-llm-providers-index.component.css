@@ -1,0 +1,5 @@
+/* A fixed column for the test outcome. The message goes to a toast - showing
+   it in the cell made the whole table reflow on every press. */
+.ai-status-col {
+    width: 5rem;
+}
