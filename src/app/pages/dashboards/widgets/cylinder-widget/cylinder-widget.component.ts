@@ -349,7 +349,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
                 topEllipseY += ry;
             }
             if (currentVal < 1 || percentage < 4) {
-                if (percentage > 0 && percentage < 98) {
+                if (percentage > 0 && percentage < 99) {
                     topEllipseY -= 10;
                 }
                 rectY -= 5;
