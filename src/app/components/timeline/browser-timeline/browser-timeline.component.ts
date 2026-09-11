@@ -34,6 +34,7 @@ import { GenericUnixtimerange } from '../../../generic.interfaces';
     styleUrl: './browser-timeline.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() type: 'Host' | 'Service' = 'Host';
     @Input() objectId: number = 0;
@@ -124,10 +125,14 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                 items.add(result.downtimes);
                 items.add(result.notifications);
                 items.add(result.acknowledgements);
+                items.add(result.notifications_contact);
                 items.add(result.timeranges);
 
+                if (result.notification_timeranges) {
+                    items.add(result.notification_timeranges);
+                }
                 let groups = new DataSet<TimelineGroup>(result.groups);
-
+                console.log('result.groups',result.groups)
                 // Save the timerange of the total available data in the timeline
                 this.visTimelineStart = result.start;
                 this.visTimelineEnd = result.end;
@@ -144,7 +149,8 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                         filterOptions: {
                             whiteList: {
                                 i: ['class', 'not-xss-filtered-html'],
-                                b: ['class', 'not-xss-filtered-html']
+                                b: ['class', 'not-xss-filtered-html'],
+                                br:[]
                             },
                         },
                     },
@@ -212,13 +218,18 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                     return;
                 }
 
-
+                console.log('result.servicestatehistory',result.servicestatehistory)
                 let items = new DataSet<DataItem>(result.servicestatehistory);
                 items.add(result.statehistory);
                 items.add(result.downtimes);
                 items.add(result.notifications);
+                items.add(result.notifications_contact);
                 items.add(result.acknowledgements);
                 items.add(result.timeranges);
+                if (result.notification_timeranges){
+                    items.add(result.notification_timeranges);
+                }
+
 
                 let groups = new DataSet<TimelineGroup>(result.groups);
 
@@ -241,7 +252,8 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                         filterOptions: {
                             whiteList: {
                                 i: ['class', 'not-xss-filtered-html'],
-                                b: ['class', 'not-xss-filtered-html']
+                                b: ['class', 'not-xss-filtered-html'],
+                                br:[]
                             },
                         },
                     },

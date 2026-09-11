@@ -1,0 +1,22 @@
+::ng-deep .vis-item.bg-notification-period {
+    background-color: rgb(52 219 149 / 0.25) !important;
+    border-left: 2px solid #29b92b !important;
+    border-right: 2px solid #29b92b !important;
+}
+
+::ng-deep .timeline-contact-badge {
+    font-size: 11px;
+    padding-bottom: 2px;
+}
+
+::ng-deep .badge-micro {
+    font-size: 9px;
+    padding: 2px 4px ;
+    font-weight: normal;
+}
+
+::ng-deep .badge-nano {
+    font-size:  9px;
+    padding: 2px 3px ;
+    font-weight: normal;
+}
