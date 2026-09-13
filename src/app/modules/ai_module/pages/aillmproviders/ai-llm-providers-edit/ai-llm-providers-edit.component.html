@@ -77,6 +77,15 @@
                     <input cFormControl id="api_key" name="api_key" type="password" autocomplete="new-password"
                            [(ngModel)]="post.api_key"
                            oitcFormError [errors]="errors" errorField="api_key"/>
+                    @if (keyUnreadable) {
+                        <!-- Not a warning about what might happen - it has
+                             happened, and leaving the field empty would keep the
+                             unusable value. -->
+                        <div class="alert alert-danger mt-2 mb-0 py-2">
+                            <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                            {{ t('The stored key can no longer be decrypted, because the application salt changed. Enter the key again - leaving this empty keeps the unusable one.') }}
+                        </div>
+                    }
                     <span class="help-block">
                         @if (hasStoredKey) {
                             {{ t('A key is stored. Leave this empty to keep it, or type a new one to replace it. The stored key is never sent back to the browser.') }}
@@ -87,38 +96,121 @@
                     <oitc-form-feedback [errors]="errors" errorField="api_key"></oitc-form-feedback>
                 </div>
 
+
+                <!-- How the key is put on the request. Not every endpoint takes
+                     "Authorization: Bearer": Azure expects "api-key" with no
+                     prefix, Anthropic "x-api-key". -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label cLabel for="auth_header">
+                            {{ t('Header') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="auth_header" name="auth_header" type="text"
+                               [(ngModel)]="post.auth_header"
+                               oitcFormError [errors]="errors" errorField="auth_header"/>
+                        <span class="help-block">
+                            {{ t('Usually Authorization. Azure OpenAI uses api-key, Anthropic x-api-key.') }}
+                        </span>
+                        <oitc-form-feedback [errors]="errors" errorField="auth_header"></oitc-form-feedback>
+                    </div>
+                    <div class="col-md-6">
+                        <label cLabel for="auth_prefix">{{ t('Prefix') }}</label>
+                        <input cFormControl id="auth_prefix" name="auth_prefix" type="text"
+                               [(ngModel)]="post.auth_prefix"
+                               oitcFormError [errors]="errors" errorField="auth_prefix"/>
+                        <span class="help-block">
+                            {{ t('Put in front of the key, separated by a space. Leave empty to send the key on its own.') }}
+                        </span>
+                        <oitc-form-feedback [errors]="errors" errorField="auth_prefix"></oitc-form-feedback>
+                    </div>
+                </div>
                 <div class="mb-3">
                     <label cLabel for="model">
                         {{ t('Model') }}
                         <oitc-required-icon></oitc-required-icon>
                     </label>
-                    <c-input-group>
+                    <!-- One field in one place: after the endpoint has been
+                         asked what it serves, the same field becomes the list.
+                         The check that a value must exist in the options is
+                         switched off, so a name typed before the list arrived
+                         survives it - a key is often scoped to fewer models
+                         than the endpoint names. -->
+                    @if (models.length > 0) {
+                        <oitc-select name="model" id="model"
+                                     [options]="models"
+                                     [(ngModel)]="post.model"
+                                     optionValue="key" optionLabel="value"
+                                     [disableCheckThatEnsuresSelectedValueExistsInOptions]="true"
+                                     [placeholder]="t('Pick a model')"
+                                     oitcFormError [errors]="errors" errorField="model">
+                        </oitc-select>
+                    } @else {
                         <input cFormControl id="model" name="model" type="text" [(ngModel)]="post.model"
                                oitcFormError [errors]="errors" errorField="model"/>
-                        <button cButton color="secondary" variant="outline" type="button"
-                                [disabled]="isLoadingModels" (click)="loadModels()">
-                            <fa-icon [icon]="['fas', 'list']"
-                                     [animation]="isLoadingModels ? 'spin' : undefined"></fa-icon>
-                            {{ t('List models') }}
-                        </button>
-                    </c-input-group>
-
-                    @if (models.length > 0) {
-                        <!-- Beside the field rather than instead of it: /models
-                             is optional in the protocol, and a key is often
-                             scoped to fewer models than the endpoint serves, so
-                             the name has to stay typeable. -->
-                        <div class="mt-2">
-                            <oitc-select name="model_pick" id="model_pick"
-                                         [options]="models"
-                                         [(ngModel)]="selectedModel"
-                                         (ngModelChange)="pickModel($event)"
-                                         optionValue="key" optionLabel="value"
-                                         [placeholder]="t('Pick one of the offered models')">
-                            </oitc-select>
-                        </div>
                     }
 
+                    <!-- Below the field, not wedged into it: both are actions on
+                         what was typed, and in an input group they crowd it. -->
+                    <div class="mt-2 d-flex flex-wrap align-items-center gap-2">
+                        @if (models.length > 0) {
+                            <!-- Back to a plain field: /models is optional in the
+                                 protocol and never guaranteed to be complete. -->
+                            <button cButton color="secondary" variant="outline" size="sm" type="button"
+                                    (click)="typeModel()">
+                                <fa-icon [icon]="['fas', 'keyboard']"></fa-icon>
+                                {{ t('Type the name instead') }}
+                            </button>
+                        } @else {
+                            <button cButton color="secondary" variant="outline" size="sm" type="button"
+                                    [disabled]="isLoadingModels" (click)="loadModels()">
+                                <fa-icon [icon]="['fas', 'list']"
+                                         [animation]="isLoadingModels ? 'spin' : undefined"></fa-icon>
+                                {{ t('List models') }}
+                            </button>
+                        }
+                        <button cButton color="secondary" variant="outline" size="sm" type="button"
+                                [disabled]="isTesting" (click)="testModel()">
+                            <fa-icon [icon]="['fas', 'plug-circle-check']"
+                                     [animation]="isTesting ? 'spin' : undefined"></fa-icon>
+                            {{ t('Test this model') }}
+                        </button>
+                        <button cButton color="secondary" size="sm" type="button"
+                                [variant]="testRequest ? undefined : 'outline'"
+                                (click)="showRequest()">
+                            <fa-icon [icon]="['fas', 'code']"></fa-icon>
+                            {{ testRequest ? t('Hide the request') : t('Show the request') }}
+                        </button>
+                        @if (testMessage) {
+                            <!-- The message says whether it worked; echoing the
+                                 word the model was asked to say adds nothing. -->
+                            <span [ngClass]="testOk ? 'text-success' : 'text-danger'">
+                                <fa-icon [icon]="['fas', testOk ? 'circle-check' : 'circle-exclamation']"></fa-icon>
+                                {{ testMessage }}
+                            </span>
+                        }
+                    </div>
+
+
+
+
+                    @if (testRequest) {
+                        <!-- What the endpoint receives, from the same builder that
+                             sends it. Closed by default: it is for the moment
+                             something does not work. -->
+                        <div class="mt-2 ai-request-preview">
+                            <div class="small text-muted">
+                                {{ t('This is what would be sent to the endpoint. The key is masked.') }}
+                            </div>
+                            <div class="small text-muted mt-2">{{ t('Address') }}</div>
+                            <pre class="mb-1">{{ testRequest.url }}</pre>
+                            <div class="small text-muted">{{ t('Headers') }}</div>
+                            <pre class="mb-1">@for (name of headerNames(); track name) {{{ name }}: {{ testRequest.headers[name] }}
+}</pre>
+                            <div class="small text-muted">{{ t('Body') }}</div>
+                            <pre class="mb-0">{{ testRequest.body }}</pre>
+                        </div>
+                    }
                     <span class="help-block">
                         {{ t('Type the name, or ask the endpoint what it serves and pick one.') }}
                     </span>

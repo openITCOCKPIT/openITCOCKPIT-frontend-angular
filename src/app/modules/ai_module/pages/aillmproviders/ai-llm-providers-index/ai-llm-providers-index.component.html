@@ -73,7 +73,17 @@
                                     <!-- The key itself is never sent to the
                                          browser, only whether one is stored. -->
                                     @if (provider.has_api_key) {
-                                        <fa-icon class="text-success" [icon]="['fas', 'key']"></fa-icon>
+                                        @if (provider.api_key_unreadable) {
+                                            <!-- Only shown when it actually happened:
+                                                 the stored key no longer decrypts. -->
+                                            <span class="text-danger"
+                                                  [title]="t('The stored key can no longer be read. Enter it again.')">
+                                                <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                                                <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                                            </span>
+                                        } @else {
+                                            <fa-icon class="text-success" [icon]="['fas', 'key']"></fa-icon>
+                                        }
                                         {{ t('stored') }}
                                     } @else {
                                         <span class="text-muted">{{ t('none') }}</span>
@@ -107,17 +117,25 @@
                                 </td>
                                 <td class="text-end text-nowrap">
                                     <button cButton size="sm" color="secondary" variant="ghost"
-                                            (click)="test(provider)">
+                                            [title]="t('Test the connection')" (click)="test(provider)">
                                         <fa-icon [icon]="['fas', 'plug-circle-check']"></fa-icon>
-                                        {{ t('Test') }}
+                                    </button>
+                                    <!-- Endpoints usually come in families: same URL,
+                                         same header, a different model. Copying one
+                                         opens the form filled in, without the key -
+                                         that never leaves the server. -->
+                                    <button cButton size="sm" color="secondary" variant="ghost"
+                                            [title]="t('Copy to a new provider')" (click)="copy(provider)">
+                                        <fa-icon [icon]="['fas', 'clone']"></fa-icon>
                                     </button>
                                     @if (provider.allow_edit) {
                                         <a cButton size="sm" color="primary" variant="ghost"
+                                           [title]="t('Edit')"
                                            [routerLink]="['/ai_module/llmproviders/edit', provider.id]">
                                             <fa-icon [icon]="['fas', 'pen']"></fa-icon>
                                         </a>
                                         <button cButton size="sm" color="danger" variant="ghost"
-                                                (click)="delete(provider)">
+                                                [title]="t('Delete')" (click)="delete(provider)">
                                             <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         </button>
                                     }

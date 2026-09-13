@@ -75,7 +75,12 @@ export class AiChatService {
             params: {
                 angular: true,
                 session_id: sessionId,
-                since_message_id: sinceMessageId
+                since_message_id: sinceMessageId,
+                // Suppresses the global loading indicator, which the loader
+                // interceptor skips for a GET carrying this. A conversation
+                // polls every two seconds while it waits, and the indicator
+                // would flash for the whole wait.
+                disableGlobalLoader: true
             }
         }).pipe(
             map(data => {

@@ -58,7 +58,7 @@
                         <th>{{ t('Container') }}</th>
                         <th>{{ t('Writes') }}</th>
                         <th>{{ t('Enabled') }}</th>
-                        <th></th>
+                        <th class="text-end">{{ t('Actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -87,11 +87,12 @@
                                 <td class="text-end">
                                     @if (agent.allow_edit) {
                                         <a cButton size="sm" color="primary" variant="ghost"
+                                           [title]="t('Edit')"
                                            [routerLink]="['/ai_module/agents/edit', agent.id]">
                                             <fa-icon [icon]="['fas', 'pen']"></fa-icon>
                                         </a>
                                         <button cButton size="sm" color="danger" variant="ghost"
-                                                (click)="delete(agent)">
+                                                [title]="t('Delete')" (click)="delete(agent)">
                                             <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                         </button>
                                     }

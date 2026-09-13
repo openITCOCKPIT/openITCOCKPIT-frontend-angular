@@ -56,6 +56,8 @@ export class AiLlmProvidersIndexComponent implements OnInit, OnDestroy {
      */
     public testState: { [id: number]: 'ok' | 'failed' | 'running' } = {};
 
+    private readonly router = inject(Router);
+
     private readonly AiLlmProvidersService = inject(AiLlmProvidersService);
     private readonly notyService = inject(NotyService);
     private readonly cdr = inject(ChangeDetectorRef);
@@ -94,6 +96,23 @@ export class AiLlmProvidersIndexComponent implements OnInit, OnDestroy {
 
             this.cdr.markForCheck();
         }));
+    }
+
+    /**
+     * Opens the add form filled in from an existing provider.
+     *
+     * The values travel in the router state rather than being fetched again:
+     * the list already holds every field the form needs, and the one field it
+     * does not hold is the key, which is never sent to the browser and has to
+     * be typed for the copy anyway.
+     *
+     * @param provider
+     * @return void
+     */
+    public copy(provider: AiLlmProvider): void {
+        this.router.navigate(['/ai_module/llmproviders/add'], {
+            state: {copyFrom: provider}
+        });
     }
 
     public delete(provider: AiLlmProvider): void {

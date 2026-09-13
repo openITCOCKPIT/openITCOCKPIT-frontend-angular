@@ -57,6 +57,7 @@
                         <th>{{ t('Name') }}</th>
                         <th>{{ t('Endpoint') }}</th>
                         <th>{{ t('Toolsets') }}</th>
+                        <th>{{ t('Write tools') }}</th>
                         <th>{{ t('Service account') }}</th>
                         <th class="ai-tools-col text-end">{{ t('Tools') }}</th>
                         <!-- Fixed width, so a test result cannot reflow the row. -->
@@ -74,13 +75,25 @@
                                              [title]="server.is_enabled ? t('enabled') : t('disabled')"
                                              size="xs"></fa-icon>
                                     {{ server.name }}
-                                    <div class="small text-muted"><code>{{ server.slug }}</code></div>
                                 </td>
                                 <td><code class="small">{{ server.url }}</code></td>
                                 <td>
                                     <code>{{ server.toolsets }}</code>
+                                </td>
+                                <td class="text-nowrap">
+                                    <!-- Its own column: whether an instance can change
+                                         anything is the first thing to know about it,
+                                         and a line under the toolset buried it. -->
                                     @if (server.write_tools_enabled) {
-                                        <div class="small text-warning">{{ t('writes') }}</div>
+                                        <span class="badge bg-warning">
+                                            <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
+                                            {{ t('registered') }}
+                                        </span>
+                                    } @else {
+                                        <span class="badge bg-success">
+                                            <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                                            {{ t('read only') }}
+                                        </span>
                                     }
                                 </td>
                                 <td class="small">
@@ -134,11 +147,11 @@
                                 </td>
                                 <td class="text-end text-nowrap">
                                     <button cButton size="sm" color="secondary" variant="ghost"
-                                            [title]="t('Test')" (click)="test(server)">
+                                            [title]="t('Test the connection')" (click)="test(server)">
                                         <fa-icon [icon]="['fas', 'plug-circle-check']"></fa-icon>
                                     </button>
                                     <button cButton size="sm" color="info" variant="ghost"
-                                            [title]="t('Sync')" (click)="sync(server)">
+                                            [title]="t('Read the catalogue again')" (click)="sync(server)">
                                         <fa-icon [icon]="['fas', 'rotate']"></fa-icon>
                                     </button>
                                     @if (server.allow_edit) {

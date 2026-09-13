@@ -22,6 +22,10 @@ export interface AiChatSessionHeader {
     agent_id: number
     agent_name: string | null
     allow_write_tools: boolean
+    total_prompt_tokens: number
+    total_completion_tokens: number
+    /** The tools this agent can reach. Sent once, when the conversation opens. */
+    tools: string[] | null
 }
 
 export interface AiChatAgent {
@@ -67,11 +71,48 @@ export interface AiChatMessage {
     id: number
     role: AiMessageRole
     content: string | null
+    /** What a reasoning model worked out first. Null unless one was used. */
+    reasoning: string | null
     tool_name: string | null
     is_error: boolean
     has_tool_calls: boolean
+    /** What an assistant message asked for; empty on every other role. */
+    tool_calls: AiChatToolCall[]
+    /** Which call a tool result answers. */
+    tool_call_id: string | null
     created: string
 }
+
+export interface AiChatToolCall {
+    id: string
+    name: string
+    /** Pretty-printed for reading. Empty when the tool takes no arguments. */
+    arguments: string
+}
+
+/**
+ * One tool call and the result it produced, paired for display.
+ *
+ * The two arrive as separate messages - the call is stored before it runs -
+ * and are put back together here so the transcript can show a round of tool
+ * work as one thing instead of as a stream of fragments.
+ */
+export interface AiChatToolStep {
+    name: string
+    arguments: string
+    result: string | null
+    is_error: boolean
+    /** No result yet: this is the call currently running. */
+    pending: boolean
+}
+
+/**
+ * The transcript is rendered from these rather than from messages directly,
+ * so that a round of tool work collapses into a single entry.
+ */
+export type AiChatEntry =
+    { kind: 'message', id: number, message: AiChatMessage }
+    | { kind: 'tools', id: number, steps: AiChatToolStep[], reasoning: string | null };
 
 export interface AiChatTurnStatus {
     id: number

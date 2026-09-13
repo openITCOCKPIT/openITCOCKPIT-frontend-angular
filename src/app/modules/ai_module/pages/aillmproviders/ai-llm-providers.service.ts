@@ -7,6 +7,7 @@ import {
     AiLlmProviderPost,
     AiLlmProvidersIndex,
     AiLlmProviderModelsResponse,
+    AiLlmProviderRequestPreview,
     AiLlmProviderTestResponse
 } from './ai-llm-providers.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
@@ -87,6 +88,61 @@ export class AiLlmProvidersService {
                 }
             }
         ).pipe(catchError((error: any) => of(error.error as AiLlmProviderModelsResponse)));
+    }
+
+    /**
+     * Asks the endpoint one question with the values on the form.
+     *
+     * test() checks a saved row; this one answers the question somebody has
+     * while typing, before there is a row to save.
+     */
+    public testForm(post: AiLlmProviderPost, id: number = 0): Observable<AiLlmProviderTestResponse> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<AiLlmProviderTestResponse>(
+            `${proxyPath}/ai_module/llmproviders/testForm.json?angular=true`,
+            {
+                AiLlmProvider: {
+                    id: id,
+                    base_url: post.base_url,
+                    api_key: post.api_key,
+                    auth_header: post.auth_header,
+                    auth_prefix: post.auth_prefix,
+                    model: post.model,
+                    temperature: post.temperature,
+                    max_tokens: post.max_tokens,
+                    extra_headers: post.extra_headers,
+                    extra_body: post.extra_body,
+                    ignore_ssl_certificate: post.ignore_ssl_certificate
+                }
+            }
+        ).pipe(catchError((error: any) => of(error.error as AiLlmProviderTestResponse)));
+    }
+
+    /**
+     * Renders the request the current form values would produce.
+     *
+     * Nothing is sent anywhere: the server assembles it with the same code
+     * that would send it and hands it back with the key masked.
+     */
+    public preview(post: AiLlmProviderPost, id: number = 0): Observable<{ request: AiLlmProviderRequestPreview }> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<{ request: AiLlmProviderRequestPreview }>(
+            `${proxyPath}/ai_module/llmproviders/preview.json?angular=true`,
+            {
+                AiLlmProvider: {
+                    id: id,
+                    base_url: post.base_url,
+                    api_key: post.api_key,
+                    auth_header: post.auth_header,
+                    auth_prefix: post.auth_prefix,
+                    model: post.model,
+                    temperature: post.temperature,
+                    max_tokens: post.max_tokens,
+                    extra_headers: post.extra_headers,
+                    extra_body: post.extra_body
+                }
+            }
+        );
     }
 
     public loadContainers(): Observable<SelectKeyValue[]> {
