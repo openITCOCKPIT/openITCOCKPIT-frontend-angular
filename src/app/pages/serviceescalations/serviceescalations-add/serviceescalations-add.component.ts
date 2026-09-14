@@ -209,7 +209,6 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
 
                 this.services = result.services;
-                console.log(this.services);
                 this.services.map(obj => {
                     obj.items.map(service => {
                         if (service.disabled === true) {
