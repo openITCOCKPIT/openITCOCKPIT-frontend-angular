@@ -95,60 +95,60 @@
                             </c-input-group>
                             <oitc-form-feedback [errors]="errors"
                                                 errorField="hosts"></oitc-form-feedback>
-                            @if (post.hosts._ids.length && hostsCheckValues && Object.keys(hostsCheckValues).length) {
-                                <div>
-                                    <label cLabel>
-                                        {{ t('Notification time delay') }}
-                                    </label>
-                                    <div class="form-text">
-                                        {{ t('Worst case time delay until notification command gets executed after state hits a non ok state: ') }}
-                                    </div>
-                                </div>
-                                <table bordered cTable class="mt-2 mb-2 table table-fit" hover striped>
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">
-                                            {{ t('Host') }}
-                                        </th>
-                                        <th scope="col">
-                                            {{ t('Check interval') }}
-                                        </th>
-                                        <th scope="col">
-                                            {{ t('Retry interval') }}
-                                        </th>
-                                        <th scope="col">
-                                            {{ t('Max. number of check attempts') }}
-                                        </th>
-                                        <th scope="col">
-                                            {{ t('Notification time delay') }}
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for (hostWithCheckValues of hostsCheckValues | keyvalue; track hostWithCheckValues) {
-                                            @if (post.hosts._ids.includes(Number(hostWithCheckValues.key))) {
-                                                <tr>
-                                                    <td class="word-break">{{ hostWithCheckValues.value.name }}</td>
-                                                    <td>
-                                                        <oitc-human-time
-                                                                [seconds]="hostWithCheckValues.value.check_interval"></oitc-human-time>
-                                                    </td>
-                                                    <td>
-                                                        <oitc-human-time
-                                                                [seconds]="hostWithCheckValues.value.retry_interval"></oitc-human-time>
-                                                    </td>
-                                                    <td>{{ hostWithCheckValues.value.max_check_attempts }}</td>
-                                                    <td class="bold">
-                                                        <oitc-human-time
-                                                                [seconds]="(hostWithCheckValues.value.check_interval + (hostWithCheckValues.value.max_check_attempts -1) * hostWithCheckValues.value.retry_interval)"></oitc-human-time>
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                            }
                         </div>
+                        @if (post.hosts._ids.length && hostsCheckValues && Object.keys(hostsCheckValues).length) {
+                            <div>
+                                <label cLabel>
+                                    {{ t('Notification time delay') }}
+                                </label>
+                                <div class="form-text">
+                                    {{ t('Worst case time delay until notification command gets executed after state hits a non ok state: ') }}
+                                </div>
+                            </div>
+                            <table bordered cTable class="mt-2 mb-2 table table-fit" hover striped>
+                                <thead>
+                                <tr>
+                                    <th scope="col">
+                                        {{ t('Host') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ t('Check interval') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ t('Retry interval') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ t('Max. number of check attempts') }}
+                                    </th>
+                                    <th scope="col">
+                                        {{ t('Notification time delay') }}
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @for (hostWithCheckValues of hostsCheckValues | keyvalue; track hostWithCheckValues) {
+                                        @if (post.hosts._ids.includes(Number(hostWithCheckValues.key))) {
+                                            <tr>
+                                                <td class="word-break">{{ hostWithCheckValues.value.name }}</td>
+                                                <td>
+                                                    <oitc-human-time
+                                                            [seconds]="hostWithCheckValues.value.check_interval"></oitc-human-time>
+                                                </td>
+                                                <td>
+                                                    <oitc-human-time
+                                                            [seconds]="hostWithCheckValues.value.retry_interval"></oitc-human-time>
+                                                </td>
+                                                <td>{{ hostWithCheckValues.value.max_check_attempts }}</td>
+                                                <td class="bold">
+                                                    <oitc-human-time
+                                                            [seconds]="(hostWithCheckValues.value.check_interval + (hostWithCheckValues.value.max_check_attempts -1) * hostWithCheckValues.value.retry_interval)"></oitc-human-time>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        }
                         <div class="mb-3 arrowd-vertical-on-right">
                             <label cLabel for="HostescalationExcludeHostgroups">
                                 <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
