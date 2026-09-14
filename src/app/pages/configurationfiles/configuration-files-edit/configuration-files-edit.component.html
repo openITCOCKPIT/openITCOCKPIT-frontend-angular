@@ -71,39 +71,44 @@
                     this.dbKey === ConfigurationFilesDbKeys.PrometheusCfgs_prometheus) {
                         <!-- Generate the form on the fly using the dynamic-configuration-file component -->
                         <oitc-dynamic-configuration-file
-                            [dbKey]="dbKey"
-                            [moduleUrl]="ConfigFile.moduleUrl"
-                            [submit$]="submit$"></oitc-dynamic-configuration-file>
+                                [dbKey]="dbKey"
+                                [moduleUrl]="ConfigFile.moduleUrl"
+                                [submit$]="submit$"></oitc-dynamic-configuration-file>
                     } @else if (this.dbKey === ConfigurationFilesDbKeys.DbBackend) {
                         <!-- Use a specialized config file component for the database backend -->
                         <oitc-configuration-file-db-backend
-                            [dbKey]="dbKey"
-                            [submit$]="submit$"></oitc-configuration-file-db-backend>
+                                [dbKey]="dbKey"
+                                [submit$]="submit$"></oitc-configuration-file-db-backend>
                     } @else if (this.dbKey === ConfigurationFilesDbKeys.PerfdataBackend) {
                         <oitc-configuration-file-perfdata-backend
-                            [dbKey]="dbKey"
-                            [submit$]="submit$"
+                                [dbKey]="dbKey"
+                                [submit$]="submit$"
                         ></oitc-configuration-file-perfdata-backend>
                     } @else if (this.dbKey === ConfigurationFilesDbKeys.NagiosCfg) {
                         <oitc-configuration-file-nagios-cfg
-                            [dbKey]="dbKey"
-                            [submit$]="submit$"
+                                [dbKey]="dbKey"
+                                [submit$]="submit$"
                         ></oitc-configuration-file-nagios-cfg>
                     } @else if (this.dbKey === ConfigurationFilesDbKeys.ModGearmanModule) {
                         <oitc-configuration-file-mod-gearman-module
-                            [dbKey]="dbKey"
-                            [submit$]="submit$"
+                                [dbKey]="dbKey"
+                                [submit$]="submit$"
                         ></oitc-configuration-file-mod-gearman-module>
                     } @else if (this.dbKey === ConfigurationFilesDbKeys.NSTAMaster) {
                         <oitc-configuration-file-nsta-master
-                            [dbKey]="dbKey"
-                            [submit$]="submit$"
+                                [dbKey]="dbKey"
+                                [submit$]="submit$"
                         ></oitc-configuration-file-nsta-master>
                     } @else if (this.dbKey === ConfigurationFilesDbKeys.GraphingDocker) {
                         <oitc-configuration-file-graphing-docker
-                            [dbKey]="dbKey"
-                            [submit$]="submit$"
+                                [dbKey]="dbKey"
+                                [submit$]="submit$"
                         ></oitc-configuration-file-graphing-docker>
+                    } @else if (this.dbKey === ConfigurationFilesDbKeys.Statusengine4Cfg) {
+                        <oitc-configuration-file-statusengine4
+                                [dbKey]="dbKey"
+                                [submit$]="submit$"
+                        ></oitc-configuration-file-statusengine4>
                     } @else {
                         <c-alert color="danger" class="d-flex align-items-center">
                             <fa-icon [icon]="['fas', 'exclamation-triangle']" class="me-2"></fa-icon>
@@ -127,10 +132,10 @@
 
     <!-- Confirm restore default modal -->
     <c-modal
-        #modal='cModal'
-        [keyboard]="true"
-        id="angularConfirmRestoreDefault"
-        size="lg"
+            #modal='cModal'
+            [keyboard]="true"
+            id="angularConfirmRestoreDefault"
+            size="lg"
     >
         <c-modal-header class="bg-primary">
             <h5 cModalTitle class="text-white">

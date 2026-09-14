@@ -11,6 +11,7 @@ export enum ConfigurationFilesDbKeys {
     GraphingDocker = 'GraphingDocker',
     StatusengineCfg = 'StatusengineCfg',
     Statusengine3Cfg = 'Statusengine3Cfg',
+    Statusengine4Cfg = 'Statusengine4Cfg',
     GraphiteWeb = 'GraphiteWeb',
     NSTAMaster = 'NSTAMaster',
     PhpFpmOitc = 'PhpFpmOitc',
@@ -27,5 +28,6 @@ export enum ConfigurationFilesFieldTypes {
     int = 'int',
     bool = 'bool',
     string = 'string',
-    text = 'text'
+    text = 'text',
+    string_array = 'string_array'
 }
