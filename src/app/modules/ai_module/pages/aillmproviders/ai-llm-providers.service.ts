@@ -84,6 +84,10 @@ export class AiLlmProvidersService {
                     id: id,
                     base_url: post.base_url,
                     api_key: post.api_key,
+                    // /models is authenticated like any other call, so a
+                    // header changed on the form has to travel with it.
+                    auth_header: post.auth_header,
+                    auth_prefix: post.auth_prefix,
                     ignore_ssl_certificate: post.ignore_ssl_certificate
                 }
             }
