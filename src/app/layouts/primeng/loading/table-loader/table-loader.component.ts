@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TableModule } from 'primeng/table';
-import { SkeletonModule } from 'primeng/skeleton';
+import { TableModule } from '@openng/optimus-ui/table';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 
 import { TableDirective } from '@coreui/angular';
 

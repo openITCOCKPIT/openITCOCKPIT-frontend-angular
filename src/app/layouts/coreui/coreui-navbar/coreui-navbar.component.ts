@@ -23,7 +23,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NavbarSearchComponent } from './navbar-search/navbar-search.component';
 import { SystemnameService } from '../../../services/systemname.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { Skeleton } from 'primeng/skeleton';
+import { Skeleton } from '@openng/optimus-ui/skeleton';
 
 @Component({
     selector: 'oitc-coreui-navbar',

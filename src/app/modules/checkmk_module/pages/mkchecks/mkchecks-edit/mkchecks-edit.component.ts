@@ -26,7 +26,7 @@ import { BackButtonDirective } from '../../../../../directives/back-button.direc
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';

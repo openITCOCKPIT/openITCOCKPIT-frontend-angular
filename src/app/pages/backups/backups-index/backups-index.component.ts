@@ -30,7 +30,7 @@ import { StartBackupResponse } from '../backups.interface';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
-import { ProgressBar } from 'primeng/progressbar';
+import { ProgressBar } from '@openng/optimus-ui/progressbar';
 
 
 @Component({

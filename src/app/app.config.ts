@@ -39,7 +39,7 @@ import { DropdownService } from '@coreui/angular';
 import { loaderInterceptor } from './interceptors/loader.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideToastr } from 'ngx-toastr';
-import { providePrimeNG } from 'primeng/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 //import Aura from '@primeng/themes/aura';
 import OItcPrimeNGPreset from './layouts/primeng/primeng.preset';
@@ -81,7 +81,7 @@ export const appConfig: ApplicationConfig = {
         }),
         provideAnimationsAsync(),
         DropdownService,
-        providePrimeNG({
+        provideOptimus({
             theme: {
                 preset: OItcPrimeNGPreset,
                 options: {
