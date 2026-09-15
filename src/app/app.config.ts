@@ -38,7 +38,7 @@ import { provideTransloco } from '@jsverse/transloco';
 import { DropdownService } from '@coreui/angular';
 import { loaderInterceptor } from './interceptors/loader.interceptor';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideToastr } from 'ngx-toastr';
+import { provideToastr } from '@openng/ngx-toastr';
 import { provideOptimus } from '@openng/optimus-ui/config';
 
 //import Aura from '@primeng/themes/aura';
