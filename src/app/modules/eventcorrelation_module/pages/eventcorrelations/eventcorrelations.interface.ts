@@ -181,7 +181,7 @@ export interface EvcSummaryService {
     score_critical?: number | null
     score_unknown?: number | null
     isUsedInScoringOperator?: boolean
-    currentStateConsiderDowntimeOrDisabled?: number | null
+    currentStateConsiderDowntimeOrAcknowledgedOrDisabled?: number | null
 }
 
 export interface EvcHostUsedBy extends HostEntity {

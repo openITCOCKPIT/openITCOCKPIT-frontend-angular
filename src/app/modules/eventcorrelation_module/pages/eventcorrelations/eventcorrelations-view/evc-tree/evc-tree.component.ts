@@ -365,7 +365,7 @@ export class EvcTreeComponent {
                             score_warning: vService.score_warning,
                             score_critical: vService.score_critical,
                             score_unknown: vService.score_unknown,
-                            currentStateConsiderDowntimeOrDisabled: currentState
+                            currentStateConsiderDowntimeOrAcknowledgedOrDisabled: currentState
                         };
                     }
 
