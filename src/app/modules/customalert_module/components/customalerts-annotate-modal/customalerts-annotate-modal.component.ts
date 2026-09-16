@@ -85,7 +85,7 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
     protected result?: CheckHoststatusForAcknowledgementsResponse;
     protected loadingHoststate: boolean = false;
     protected comment: string = '';
-    protected acknowledge: boolean = true;
+    protected acknowledge: boolean = false;
     protected isProcessing: boolean = false;
     protected percentage: number = 0;
     protected hasErrors: boolean = false;
@@ -189,7 +189,7 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
 
     private reset(): void {
         // All records have been deleted successfully. Reset the modal
-        this.acknowledge = true;
+        this.acknowledge = false;
         this.isProcessing = false;
         this.percentage = 0;
         this.hasErrors = false;
