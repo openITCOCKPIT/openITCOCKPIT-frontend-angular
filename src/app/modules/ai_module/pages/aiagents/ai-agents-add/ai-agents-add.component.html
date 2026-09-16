@@ -116,16 +116,16 @@
                     <oitc-form-feedback [errors]="errors" errorField="ai_mcp_server_id"></oitc-form-feedback>
 
                     @if (selectedMcpServer) {
-                        <!-- Shown at the moment of the decision: choosing an
-                             instance chooses the account this agent uses. -->
+                        <!-- Shown at the moment of the decision: the instance
+                             decides what this agent reaches. -->
                         <div class="alert alert-info mt-2 mb-0">
                             <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
-                            <strong>{{ t('This agent will see everything this service account can see.') }}</strong>
+                            @if (selectedMcpServer.kind === 'external') {
+                                <strong>{{ t('An external MCP server. It receives nothing that opens openITCOCKPIT.') }}</strong>
+                            } @else {
+                                <strong>{{ t('This agent sees and changes exactly what the person asking may.') }}</strong>
+                            }
                             <ul class="mb-0 mt-2">
-                                <li>
-                                    {{ t('Service account') }}:
-                                    <code>{{ selectedMcpServer.service_account_label || t('not documented') }}</code>
-                                </li>
                                 <li>{{ t('Toolsets') }}: <code>{{ selectedMcpServer.toolsets }}</code></li>
                                 <li>
                                     {{ t('Write tools') }}:

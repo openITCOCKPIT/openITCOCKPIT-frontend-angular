@@ -1,5 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 
+export type AiMcpServerKind = 'openitcockpit' | 'external';
+
 export interface AiMcpServersIndex extends PaginateOrScroll {
     all_mcp_servers: AiMcpServer[]
     _csrfToken: string
@@ -17,9 +19,9 @@ export interface AiMcpServer {
     url: string
     toolsets: string
     write_tools_enabled: boolean
-    // Documents whose reach the agents pointed at this instance borrow.
-    service_account_user_id: number | null
-    service_account_label: string | null
+    // This system's own server acts as the user who asks; an external one never
+    // receives that user's token.
+    kind: AiMcpServerKind
     ignore_ssl_certificate: boolean
     timeout_seconds: number
     is_enabled: boolean
@@ -43,7 +45,7 @@ export interface AiMcpServerPost {
     auth_token: string
     toolsets: string
     write_tools_enabled: boolean
-    service_account_label: string
+    kind: AiMcpServerKind
     ignore_ssl_certificate: boolean
     timeout_seconds: number
     is_enabled: boolean
@@ -59,7 +61,7 @@ export function getDefaultAiMcpServerPost(): AiMcpServerPost {
         auth_token: '',
         toolsets: 'all',
         write_tools_enabled: false,
-        service_account_label: '',
+        kind: 'openitcockpit',
         ignore_ssl_certificate: false,
         timeout_seconds: 60,
         is_enabled: true

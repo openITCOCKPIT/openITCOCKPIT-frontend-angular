@@ -1,3 +1,4 @@
+import { AiMcpServerKind } from '../aimcpservers/ai-mcp-servers.interface';
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 
 /**
@@ -100,7 +101,7 @@ export interface AiMcpServerOption {
     slug: string
     toolsets: string
     write_tools_enabled: boolean
-    service_account_label: string | null
+    kind: AiMcpServerKind
     tools_synced_at: string | null
 }
 
@@ -133,7 +134,7 @@ export interface AiMcpToolsServer {
     url: string
     toolsets: string
     write_tools_enabled: boolean
-    service_account_label: string | null
+    kind: AiMcpServerKind
     is_enabled: boolean
     allow_edit: boolean
 }

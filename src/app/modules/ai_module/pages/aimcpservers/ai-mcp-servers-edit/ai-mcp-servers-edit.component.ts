@@ -89,7 +89,7 @@ export class AiMcpServersEditComponent implements OnInit, OnDestroy {
                 auth_token: '',
                 toolsets: server.toolsets,
                 write_tools_enabled: server.write_tools_enabled,
-                service_account_label: server.service_account_label ?? '',
+                kind: server.kind,
                 ignore_ssl_certificate: server.ignore_ssl_certificate,
                 timeout_seconds: server.timeout_seconds,
                 is_enabled: server.is_enabled

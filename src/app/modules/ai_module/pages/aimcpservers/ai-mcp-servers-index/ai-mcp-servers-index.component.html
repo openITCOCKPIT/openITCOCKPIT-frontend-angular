@@ -58,7 +58,7 @@
                         <th>{{ t('Endpoint') }}</th>
                         <th>{{ t('Toolsets') }}</th>
                         <th>{{ t('Write tools') }}</th>
-                        <th>{{ t('Service account') }}</th>
+                        <th>{{ t('Kind') }}</th>
                         <th class="ai-tools-col text-end">{{ t('Tools') }}</th>
                         <!-- Fixed width, so a test result cannot reflow the row. -->
                         <th class="ai-status-col">{{ t('Status') }}</th>
@@ -97,7 +97,11 @@
                                     }
                                 </td>
                                 <td class="small">
-                                    {{ server.service_account_label || '&ndash;' }}
+                                    @if (server.kind === 'external') {
+                                        {{ t('external') }}
+                                    } @else {
+                                        {{ t('openITCOCKPIT') }}
+                                    }
                                 </td>
                                 <td class="ai-tools-col text-end">
                                     <!-- The catalogue size, linking to it. -->

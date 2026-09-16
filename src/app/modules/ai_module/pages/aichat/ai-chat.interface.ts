@@ -34,9 +34,6 @@ export interface AiChatAgent {
     description: string | null
     icon: string
     allow_write_tools: boolean
-    // Named so the person choosing an agent can see whose reach they borrow:
-    // an agent can only see what its MCP instance's service account can see.
-    service_account_label: string | null
     toolsets: string
 }
 

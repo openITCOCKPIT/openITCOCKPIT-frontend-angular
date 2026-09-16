@@ -5322,5 +5322,12 @@
   "Hide the request": "Ocultar la petición",
   "What this agent can reach": "A qué puede acceder este agente",
   "Pick a model": "Elige un modelo",
-  "Type the name instead": "Escribir el nombre"
+  "Type the name instead": "Escribir el nombre",
+  "External MCP server": "Servidor MCP externo",
+  "openITCOCKPIT MCP server": "Servidor MCP de openITCOCKPIT",
+  "openITCOCKPIT MCP server, acts as the user who asks": "Servidor MCP de openITCOCKPIT, actúa como el usuario que pregunta",
+  "The MCP server of this openITCOCKPIT. It acts as the user who asks: an agent sees and changes exactly what that user may.": "El servidor MCP de este openITCOCKPIT. Actúa como el usuario que pregunta: un agente ve y cambia exactamente lo que ese usuario puede.",
+  "Any other MCP server. It receives only its own token, never anything that opens openITCOCKPIT.": "Cualquier otro servidor MCP. Recibe solo su propio token, nunca nada que abra openITCOCKPIT.",
+  "An external MCP server. It receives nothing that opens openITCOCKPIT.": "Un servidor MCP externo. No recibe nada que abra openITCOCKPIT.",
+  "This agent sees and changes exactly what the person asking may.": "Este agente ve y cambia exactamente lo que puede la persona que pregunta."
 }

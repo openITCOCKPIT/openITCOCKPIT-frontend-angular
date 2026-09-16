@@ -120,15 +120,22 @@
                 </div>
 
                 <div class="mb-3">
-                    <label cLabel for="service_account_label">{{ t('Service account') }}</label>
-                    <input cFormControl id="service_account_label" name="service_account_label" type="text"
-                           [(ngModel)]="post.service_account_label"
-                           placeholder="oitc-ai-triage (read)"
-                           oitcFormError [errors]="errors" errorField="service_account_label"/>
+                    <label cLabel for="kind">{{ t('Kind') }}</label>
+                    <select cSelect id="kind" name="kind" [(ngModel)]="post.kind"
+                            oitcFormError [errors]="errors" errorField="kind">
+                        <option value="openitcockpit">{{ t('openITCOCKPIT MCP server') }}</option>
+                        <option value="external">{{ t('External MCP server') }}</option>
+                    </select>
+                    <!-- Said at the moment of the choice, because it decides what the
+                         server is handed with every request. -->
                     <span class="help-block">
-                        {{ t('Which openITCOCKPIT account this instance uses. Written down here because it is the permission boundary for every agent pointed at it, and it is shown next to the agent form.') }}
+                        @if (post.kind === 'external') {
+                            {{ t('Any other MCP server. It receives only its own token, never anything that opens openITCOCKPIT.') }}
+                        } @else {
+                            {{ t('The MCP server of this openITCOCKPIT. It acts as the user who asks: an agent sees and changes exactly what that user may.') }}
+                        }
                     </span>
-                    <oitc-form-feedback [errors]="errors" errorField="service_account_label"></oitc-form-feedback>
+                    <oitc-form-feedback [errors]="errors" errorField="kind"></oitc-form-feedback>
                 </div>
 
                 <div class="row">

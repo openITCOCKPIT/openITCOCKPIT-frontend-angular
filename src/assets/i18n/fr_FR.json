@@ -5544,5 +5544,12 @@
   "Hide the request": "Masquer la requête",
   "What this agent can reach": "Ce que cet agent peut atteindre",
   "Pick a model": "Choisir un modèle",
-  "Type the name instead": "Saisir le nom à la place"
+  "Type the name instead": "Saisir le nom à la place",
+  "External MCP server": "Serveur MCP externe",
+  "openITCOCKPIT MCP server": "Serveur MCP d'openITCOCKPIT",
+  "openITCOCKPIT MCP server, acts as the user who asks": "Serveur MCP d'openITCOCKPIT, agit en tant qu'utilisateur qui pose la question",
+  "The MCP server of this openITCOCKPIT. It acts as the user who asks: an agent sees and changes exactly what that user may.": "Le serveur MCP de cet openITCOCKPIT. Il agit en tant qu'utilisateur qui pose la question : un agent voit et modifie exactement ce que cet utilisateur peut.",
+  "Any other MCP server. It receives only its own token, never anything that opens openITCOCKPIT.": "Tout autre serveur MCP. Il ne reçoit que son propre jeton, jamais rien qui ouvre openITCOCKPIT.",
+  "An external MCP server. It receives nothing that opens openITCOCKPIT.": "Un serveur MCP externe. Il ne reçoit rien qui ouvre openITCOCKPIT.",
+  "This agent sees and changes exactly what the person asking may.": "Cet agent voit et modifie exactement ce que la personne qui pose la question peut."
 }

@@ -6270,5 +6270,12 @@
   "Hide the request": "Сховати запит",
   "What this agent can reach": "До чого має доступ цей агент",
   "Pick a model": "Виберіть модель",
-  "Type the name instead": "Ввести назву вручну"
+  "Type the name instead": "Ввести назву вручну",
+  "External MCP server": "Зовнішній MCP-сервер",
+  "openITCOCKPIT MCP server": "MCP-сервер openITCOCKPIT",
+  "openITCOCKPIT MCP server, acts as the user who asks": "MCP-сервер openITCOCKPIT, діє від імені користувача, що запитує",
+  "The MCP server of this openITCOCKPIT. It acts as the user who asks: an agent sees and changes exactly what that user may.": "MCP-сервер цього openITCOCKPIT. Діє від імені користувача, що запитує: агент бачить і змінює саме те, що дозволено цьому користувачу.",
+  "Any other MCP server. It receives only its own token, never anything that opens openITCOCKPIT.": "Будь-який інший MCP-сервер. Він отримує лише власний токен і нічого, що відкриває доступ до openITCOCKPIT.",
+  "An external MCP server. It receives nothing that opens openITCOCKPIT.": "Зовнішній MCP-сервер. Він не отримує нічого, що відкриває доступ до openITCOCKPIT.",
+  "This agent sees and changes exactly what the person asking may.": "Цей агент бачить і змінює саме те, що дозволено тому, хто запитує."
 }

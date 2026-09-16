@@ -52,9 +52,13 @@
                         }
                     </dd>
 
-                    <dt class="col-sm-3">{{ t('Service account') }}</dt>
+                    <dt class="col-sm-3">{{ t('Kind') }}</dt>
                     <dd class="col-sm-9">
-                        {{ server.service_account_label || t('not documented') }}
+                        @if (server.kind === 'external') {
+                            {{ t('External MCP server') }}
+                        } @else {
+                            {{ t('openITCOCKPIT MCP server, acts as the user who asks') }}
+                        }
                     </dd>
 
                     <dt class="col-sm-3">{{ t('Catalogue') }}</dt>
