@@ -132,7 +132,7 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                     items.add(result.notification_timeranges);
                 }
                 let groups = new DataSet<TimelineGroup>(result.groups);
-                console.log('result.groups',result.groups)
+
                 // Save the timerange of the total available data in the timeline
                 this.visTimelineStart = result.start;
                 this.visTimelineEnd = result.end;

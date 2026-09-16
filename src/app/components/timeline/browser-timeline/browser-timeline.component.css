@@ -1,22 +1,47 @@
 ::ng-deep .vis-item.bg-notification-period {
-    background-color: rgb(52 219 149 / 0.25) !important;
-    border-left: 2px solid #29b92b !important;
-    border-right: 2px solid #29b92b !important;
+    background-color: rgb(52 219 149 / 0.25) ;
+    border-left: 2px solid #29b92b ;
+    border-right: 2px solid #29b92b ;
 }
 
-::ng-deep .timeline-contact-badge {
+::ng-deep .vis-item .badge{
+    position: relative;
+}
+::ng-deep .vis-item-contact-title {
     font-size: 11px;
     padding-bottom: 2px;
+    font-width: normal;
 }
 
-::ng-deep .badge-micro {
-    font-size: 9px;
-    padding: 2px 4px ;
-    font-weight: normal;
+::ng-deep .vis-item .item-title {
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+::ng-deep .vis-item.vis-items {
+    background: rgb(37 36 36 / 69%);
+    color: #FFFFFF;
+    border-radius: 5px;
+    border:1px solid rgb(107, 119, 133);
 }
 
-::ng-deep .badge-nano {
-    font-size:  9px;
-    padding: 2px 3px ;
-    font-weight: normal;
+::ng-deep .vis-item.vis-items-disabled {
+    filter: grayscale(100%);
+    opacity: 0.4;
+}
+
+::ng-deep .vis-item .badge-envelope{
+    position: relative;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+::ng-deep .vis-item .badge-disabled {
+    filter: grayscale(100%);
+    opacity: 0.25;
+    background: rgb(35 34 34 / 69%);
+    border:1px solid rgb(35 34 34 / 69%);
+}
+
+::ng-deep body.dark-theme .vis-item.vis-items {
+    border-color:#a7a5a5;
 }
