@@ -1,9 +1,9 @@
 <ng-container *transloco="let t">
     <c-modal
-        #modal='cModal'
-        [keyboard]="true"
-        id="customalertsAnnotateModal"
-        size="lg"
+            #modal='cModal'
+            [keyboard]="true"
+            id="customalertsAnnotateModal"
+            size="lg"
     >
         <c-modal-header class="bg-primary">
             <h5 cModalTitle class="text-white">
@@ -56,8 +56,8 @@
             <c-form-check class="mb-3">
                 <input cFormCheckInput id="acknowledgement" type="checkbox"
                        class="checkbox-lg custom-check-default"
-                       [(ngModel)]="acknowlage"
-                       name="acknowlage"
+                       [(ngModel)]="acknowledge"
+                       name="acknowledge"
                        oitcDebounce/>
                 <label cFormCheckLabel class="ms-1 mt-1" for="acknowledgement">
                     {{ t('Set annotation comment as service acknowledgement') }}

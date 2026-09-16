@@ -85,7 +85,7 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
     protected result?: CheckHoststatusForAcknowledgementsResponse;
     protected loadingHoststate: boolean = false;
     protected comment: string = '';
-    protected acknowlage: boolean = true;
+    protected acknowledge: boolean = true;
     protected isProcessing: boolean = false;
     protected percentage: number = 0;
     protected hasErrors: boolean = false;
@@ -146,7 +146,7 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
         for (let i in this.items) {
             const item = this.items[i];
 
-            this.CustomAlertsService.annotate(item.id, this.comment, true, this.acknowlage).subscribe({
+            this.CustomAlertsService.annotate(item.id, this.comment, true, this.acknowledge).subscribe({
                 next: (value: any) => {
                     responseCount++
                     this.percentage = Math.round((responseCount / count) * 100);
@@ -189,7 +189,7 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
 
     private reset(): void {
         // All records have been deleted successfully. Reset the modal
-        this.acknowlage = true;
+        this.acknowledge = true;
         this.isProcessing = false;
         this.percentage = 0;
         this.hasErrors = false;
