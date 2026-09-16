@@ -286,6 +286,15 @@
     overflow-y: auto;
 }
 
+/* The default focus ring is a .25rem shadow drawn outwards, and an input
+   group raises the focused control above its neighbours - so it covers the
+   icon on one side and the button on the other. Drawn inwards it marks the
+   field just as clearly and stays inside it. */
+.ai-draft:focus {
+    box-shadow: inset 0 0 0 2px var(--cui-primary);
+    border-color: var(--cui-primary);
+}
+
 /* The copy sits in the corner of the answer and appears for the message under
    the cursor, so a transcript at rest stays free of buttons. */
 .ai-msg-body {
