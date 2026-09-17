@@ -72,25 +72,21 @@
                          (mouseenter)="toggleToaster(Number(node.evcNode.service?.id))"
                          (mouseleave)="cancelToaster()">
                         <!-- vService container -->
-
-                        @if (stateForDowntimedService() > -1 && stateForAcknowledgedService() === -1) {
-                            <!-- Downtime overwrites current state badge -->
-                            @if (Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0 && downtimedServices() > 0 && !node.evcNode.service?.disabled && stateForDowntimedService() != node.evcNode.service?.servicestatus?.currentState) {
-                                <span
-                                        class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
-                                        [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
-                                        [cTooltip]="downtimeStateTitle"
-                                        cTooltipPlacement="top">
-                                    &nbsp; <!-- important be not empty -->
-                                </span>
-                            }
-                        } @else if (stateForAcknowledgedService() > -1) {
-                            <!-- Acknowledge overwrites current state badge -->
-                            @if (node.evcNode.service?.servicestatus?.problemHasBeenAcknowledged && acknowledgedServices() > 0 && !node.evcNode.service?.disabled && stateForAcknowledgedService() != node.evcNode.service?.servicestatus?.currentState) {
+                        @if (stateForDowntimedService() > -1 || stateForAcknowledgedService() > -1) {
+                            <!-- Acknowledgement or Downtime overwrites current state badge -->
+                            @if (stateForAcknowledgedService() > -1 && node.evcNode.service?.servicestatus?.problemHasBeenAcknowledged && !node.evcNode.service?.disabled && stateForAcknowledgedService() != node.evcNode.service?.servicestatus?.currentState) {
                                 <span
                                         class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
                                         [ngClass]="{'bg-ok':stateForAcknowledgedService() == 0,'bg-warning':stateForAcknowledgedService() == 1,'bg-critical':stateForAcknowledgedService() == 2,'bg-unknown':stateForAcknowledgedService() == 3}"
                                         [cTooltip]="acknowledgedStateTitle"
+                                        cTooltipPlacement="top">
+                                    &nbsp; <!-- important be not empty -->
+                                </span>
+                            } @else if (stateForDowntimedService() > -1 && Number(node.evcNode.service?.servicestatus?.scheduledDowntimeDepth) > 0 && downtimedServices() > 0 && !node.evcNode.service?.disabled && stateForDowntimedService() != node.evcNode.service?.servicestatus?.currentState) {
+                                <span
+                                        class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
+                                        [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
+                                        [cTooltip]="downtimeStateTitle"
                                         cTooltipPlacement="top">
                                     &nbsp; <!-- important be not empty -->
                                 </span>
