@@ -31,7 +31,7 @@ import { ConfigurationFileInformation } from '../configuration-files.interface';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { DynamicConfigurationFileComponent } from './configuration-files/dynamic-configuration-file/dynamic-configuration-file.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ConfigurationFileDbBackendComponent } from './configuration-files/static/configuration-file-db-backend/configuration-file-db-backend.component';

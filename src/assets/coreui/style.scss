@@ -5,7 +5,7 @@
 
 @use "animate.css";
 @use "uplot/dist/uPlot.min.css";
-@use 'ngx-toastr/toastr';
+@use '@openng/ngx-toastr/toastr';
 
 // Import vis-network css required for the tooltip
 // https://github.com/almende/vis/issues/3192#issuecomment-309995797

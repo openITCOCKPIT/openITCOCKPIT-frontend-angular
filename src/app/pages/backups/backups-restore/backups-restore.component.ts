@@ -21,7 +21,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../components/alert/alert.component';
-import { ProgressBar } from 'primeng/progressbar';
+import { ProgressBar } from '@openng/optimus-ui/progressbar';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { SelectKeyValueString } from '../../../layouts/primeng/select.interface';
 import { Subscription } from 'rxjs';

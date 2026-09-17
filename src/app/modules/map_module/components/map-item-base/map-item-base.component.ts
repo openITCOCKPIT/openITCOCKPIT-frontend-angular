@@ -15,8 +15,8 @@ import {
 import { ContextAction, MapitemBase, MapitemBaseActionObject, ResizedEvent } from './map-item-base.interface';
 import { CdkDrag, CdkDragEnd, CdkDragMove } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MenuItem } from 'primeng/api';
+import { ContextMenuModule } from '@openng/optimus-ui/contextmenu';
+import { MenuItem } from '@openng/optimus-ui/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { Mapitem, Mapline } from '../../pages/mapeditors/mapeditors.interface';
 import { ContextActionType, MapItemType } from './map-item-base.enum';

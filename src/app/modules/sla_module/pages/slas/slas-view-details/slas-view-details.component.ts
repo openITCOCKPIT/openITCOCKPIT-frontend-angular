@@ -54,7 +54,7 @@ import {
 import {
     SlaHostsOverviewBarEchartComponent
 } from '../../../components/charts/sla-hosts-overview-bar-echart/sla-hosts-overview-bar-echart.component';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { ContainersService } from '../../../../../pages/containers/containers.service';
 
 @Component({
