@@ -371,12 +371,14 @@ export class EvcTreeComponent {
                     if (vService.isUsedInScoringOperator) {
                         // true, if this service is used in a scoring operator in the next level.
                         let currentState: number | undefined = vService.service.servicestatus.currentState;
-                        if (vService.service.servicestatus.scheduledDowntimeDepth && vService.service.servicestatus.scheduledDowntimeDepth > 0) {
-                            if (this.stateForDowntimedService() !== -1) {
+                        if ((vService.service.servicestatus.scheduledDowntimeDepth && vService.service.servicestatus.scheduledDowntimeDepth > 0) || vService.service.servicestatus.problemHasBeenAcknowledged) {
+                            if (this.stateForDowntimedService() !== -1 && this.stateForAcknowledgedService() === -1) {
                                 // -1 == actual service state
                                 currentState = this.stateForDowntimedService();
+                            } else if (this.stateForAcknowledgedService() !== -1) {
+                                // -1 == actual service state
+                                currentState = this.stateForAcknowledgedService();
                             }
-
                         }
                         if (vService.service.disabled) {
                             currentState = this.stateForDisabledService();
