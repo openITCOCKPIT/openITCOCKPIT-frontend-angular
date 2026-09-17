@@ -45,7 +45,7 @@ import { MacrosComponent } from '../../../components/macros/macros.component';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { PriorityComponent } from '../../../layouts/coreui/priority/priority.component';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';

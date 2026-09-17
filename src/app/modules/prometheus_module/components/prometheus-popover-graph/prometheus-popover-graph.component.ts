@@ -23,8 +23,8 @@ import { TimezoneObject } from '../../../../pages/services/timezone.interface';
 import { debounce } from '../../../../components/debounce.decorator';
 import { PopoverConfigBuilder } from '../../../../components/popover-graph/popover-config-builder';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
-import { Popover } from 'primeng/popover';
-import { PrimeTemplate } from 'primeng/api';
+import { Popover } from '@openng/optimus-ui/popover';
+import { PrimeTemplate } from '@openng/optimus-ui/api';
 
 const uPlot: any = (_uPlot as any)?.default;
 

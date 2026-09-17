@@ -11,8 +11,8 @@ import {
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgClass } from '@angular/common';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { MenuItem } from 'primeng/api';
+import { ContextMenuModule } from '@openng/optimus-ui/contextmenu';
+import { MenuItem } from '@openng/optimus-ui/api';
 import { MapItemBaseComponent } from '../map-item-base/map-item-base.component';
 import { interval, Subscription } from 'rxjs';
 import { Mapitem } from '../../pages/mapeditors/mapeditors.interface';

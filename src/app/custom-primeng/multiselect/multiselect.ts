@@ -48,7 +48,7 @@ import {
     resolveFieldData,
     unblockBodyScroll,
     uuid
-} from '@primeuix/utils';
+}  from '@openng/optimus-ui-utils';
 import {
     FilterService,
     Footer,
@@ -59,22 +59,22 @@ import {
     ScrollerOptions,
     SharedModule,
     TranslationKeys
-} from 'primeng/api';
-import { AutoFocus } from 'primeng/autofocus';
-import { BaseComponent } from 'primeng/basecomponent';
-import { Checkbox } from 'primeng/checkbox';
-import { Chip } from 'primeng/chip';
-import { DomHandler } from 'primeng/dom';
-import { IconField } from 'primeng/iconfield';
-import { CheckIcon, ChevronDownIcon, SearchIcon, TimesIcon } from 'primeng/icons';
-import { InputIcon } from 'primeng/inputicon';
-import { InputText } from 'primeng/inputtext';
-import { Overlay } from 'primeng/overlay';
-import { Ripple } from 'primeng/ripple';
-import { Scroller } from 'primeng/scroller';
-import { Tooltip } from 'primeng/tooltip';
-import { Nullable } from 'primeng/ts-helpers';
-import { ObjectUtils } from 'primeng/utils';
+} from '@openng/optimus-ui/api';
+import { AutoFocus } from '@openng/optimus-ui/autofocus';
+import { BaseComponent } from '@openng/optimus-ui/basecomponent';
+import { Checkbox } from '@openng/optimus-ui/checkbox';
+import { Chip } from '@openng/optimus-ui/chip';
+import { DomHandler } from '@openng/optimus-ui/dom';
+import { IconField } from '@openng/optimus-ui/iconfield';
+import { CheckIcon, ChevronDownIcon, SearchIcon, TimesIcon } from '@openng/optimus-ui/icons';
+import { InputIcon } from '@openng/optimus-ui/inputicon';
+import { InputText } from '@openng/optimus-ui/inputtext';
+import { Overlay } from '@openng/optimus-ui/overlay';
+import { Ripple } from '@openng/optimus-ui/ripple';
+import { Scroller } from '@openng/optimus-ui/scroller';
+import { Tooltip } from '@openng/optimus-ui/tooltip';
+import { Nullable } from '@openng/optimus-ui/ts-helpers';
+import { ObjectUtils } from '@openng/optimus-ui/utils';
 import {
     MultiSelectBlurEvent,
     MultiSelectChangeEvent,
@@ -86,7 +86,7 @@ import {
     MultiSelectSelectAllChangeEvent
 } from './multiselect.interface';
 import { MultiSelectStyle } from './style/multiselectstyle';
-import { StyleClass } from "primeng/styleclass";
+import { StyleClass } from "@openng/optimus-ui/styleclass";
 
 export const MULTISELECT_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,

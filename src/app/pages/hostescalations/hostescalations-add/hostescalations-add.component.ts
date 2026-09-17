@@ -23,7 +23,7 @@ import {
     NavItemComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HostescalationContainerResult, HostescalationPost } from '../hostescalations.interface';
 import { HostescalationsService } from '../hostescalations.service';

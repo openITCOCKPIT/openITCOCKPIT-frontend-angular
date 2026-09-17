@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, 
 import { Subscription } from 'rxjs';
 import { SatellitesService } from '../../pages/satellites/satellites.service';
 import { SatelliteEntityCake2 } from '../../pages/satellites/satellites.interface';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 

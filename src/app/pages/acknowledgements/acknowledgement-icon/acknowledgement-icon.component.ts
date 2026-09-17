@@ -8,7 +8,7 @@ import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { ColComponent, PopoverDirective, RowComponent, TooltipDirective } from '@coreui/angular';
 import { AcknowledgementsService } from '../acknowledgements.service';
 import { Subscription } from 'rxjs';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 
 @Component({
     selector: 'oitc-acknowledgement-icon',

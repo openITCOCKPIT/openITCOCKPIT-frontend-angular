@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import { AsyncPipe, KeyValuePipe, NgClass, SlicePipe } from '@angular/common';
 
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { SlaHostInformationElementService } from './sla-host-information-element.service';
 import { PermissionsService } from '../../../../permissions/permissions.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';

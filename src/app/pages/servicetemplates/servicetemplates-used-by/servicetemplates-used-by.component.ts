@@ -46,7 +46,7 @@ import { SelectionServiceService } from '../../../layouts/coreui/select-all/sele
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
 import { ServicesService } from '../../services/services.service';
 import { DebounceDirective } from '../../../directives/debounce.directive';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { FormsModule } from '@angular/forms';
 

@@ -19,7 +19,7 @@ import * as _uPlot from 'uplot';
 import { debounce } from '../debounce.decorator';
 import { ChartLoaderComponent } from './chart-loader/chart-loader.component';
 import { TimezoneObject } from '../../pages/services/timezone.interface';
-import { Popover, PopoverModule } from 'primeng/popover';
+import { Popover, PopoverModule } from '@openng/optimus-ui/popover';
 
 const uPlot: any = (_uPlot as any)?.default;
 
