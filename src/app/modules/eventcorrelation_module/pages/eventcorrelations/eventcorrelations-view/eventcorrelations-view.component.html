@@ -165,19 +165,21 @@
                 @if (show) {
                     <div class="d-flex h-100">
                         <oitc-evc-tree
-                            class="flex-1 w-100 h-100"
-                            [evcId]="id"
-                            [evcTree]="evcTree"
-                            [downtimedServices]="downtimedServices"
-                            [stateForDowntimedService]="stateForDowntimedService"
-                            [stateForDisabledService]="stateForDisabledService"
-                            [animated]="animated"
-                            [connectionLine]="connectionLine"
-                            [evcDirection]="evcTreeDirection"
-                            (resetEvent)="resetHandler($event)"
-                            [isWidget]="false"
-                            [highlightHostId]="highlightHostId"
-                            [highlightServiceId]="highlightServiceId">
+                                class="flex-1 w-100 h-100"
+                                [evcId]="id"
+                                [evcTree]="evcTree"
+                                [downtimedServices]="downtimedServices"
+                                [acknowledgedServices]="acknowledgedServices"
+                                [stateForDowntimedService]="stateForDowntimedService"
+                                [stateForAcknowledgedService]="stateForAcknowledgedService"
+                                [stateForDisabledService]="stateForDisabledService"
+                                [animated]="animated"
+                                [connectionLine]="connectionLine"
+                                [evcDirection]="evcTreeDirection"
+                                (resetEvent)="resetHandler($event)"
+                                [isWidget]="false"
+                                [highlightHostId]="highlightHostId"
+                                [highlightServiceId]="highlightServiceId">
                         </oitc-evc-tree>
                     </div>
                 }

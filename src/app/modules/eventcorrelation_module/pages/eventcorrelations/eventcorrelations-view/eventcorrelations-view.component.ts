@@ -79,7 +79,9 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     public connectionLine: string = 'bezier'; // bezier, straight, segment
 
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
+    public acknowledgedServices: number = 0; //number of acknowledged services in the EVC
     public stateForDowntimedService: number = 3; // Unknown
+    public stateForAcknowledgedService: number = 3; // Unknown
 
     private subscriptions: Subscription = new Subscription();
     private readonly EventcorrelationsService = inject(EventcorrelationsService);
@@ -140,7 +142,9 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
             this.connectionLine = result.connectionLine;
 
             this.downtimedServices = result.downtimedServices;
+            this.acknowledgedServices = result.acknowledgedServices;
             this.stateForDowntimedService = result.stateForDowntimedService;
+            this.stateForAcknowledgedService = result.stateForAcknowledgedService;
 
         }));
     }

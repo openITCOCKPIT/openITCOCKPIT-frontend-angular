@@ -11,19 +11,32 @@
                             (mouseenter)="toggleToaster(column.serviceId)"
                             (mouseleave)="cancelToaster()">
 
-                            @if (Number(column.scheduledDowntimeDepth) > 0 && stateForDowntimedService() !== column.current_state && stateForDowntimedService() !== -1) {
-                                <span
-                                    class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
-                                    [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
-                                    [cTooltip]="downtimeStateTitle"
-                                    cTooltipPlacement="top">
-                                    &nbsp; <!-- important be not empty -->
-                                </span>
+                            @if (stateForDowntimedService() > -1 && stateForAcknowledgedService() === -1) {
+                                @if (Number(column.scheduledDowntimeDepth) > 0 && stateForDowntimedService() !== column.current_state) {
+                                    <span
+                                            class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
+                                            [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
+                                            [cTooltip]="downtimeStateTitle"
+                                            cTooltipPlacement="top">
+                                        &nbsp; <!-- important be not empty -->
+                                    </span>
+                                }
+                            } @else if (stateForAcknowledgedService() > -1) {
+                                @if (column.problemHasBeenAcknowledged && stateForAcknowledgedService() !== column.current_state) {
+                                    <span
+                                            class="position-absolute top-0 start-0 translate-middle badge rounded-circle"
+                                            [ngClass]="{'bg-ok':stateForAcknowledgedService() == 0,'bg-warning':stateForAcknowledgedService() == 1,'bg-critical':stateForAcknowledgedService() == 2,'bg-unknown':stateForAcknowledgedService() == 3}"
+                                            [cTooltip]="acknowledgedStateTitle"
+                                            cTooltipPlacement="top">
+                                        &nbsp; <!-- important be not empty -->
+                                    </span>
+                                }
                             }
+
 
                             @if (Number(column.scheduledDowntimeDepth) > 0 || column.problemHasBeenAcknowledged) {
                                 <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary z-1">
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary z-1">
                                     @if (Number(column.scheduledDowntimeDepth) > 0) {
                                         <fa-icon [icon]="['fas', 'power-off']" size="lg" class="me-1"></fa-icon>
                                     }
@@ -36,25 +49,25 @@
                             @if (column.isUsedInScoringOperator) {
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 0) {
                                     <span
-                                        class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-ok z-1">
+                                            class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-ok z-1">
                                         0
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 1) {
                                     <span
-                                        class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-warning z-1">
+                                            class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-warning z-1">
                                         {{ column.score_warning | localNumber }}
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 2) {
                                     <span
-                                        class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-critical z-1">
+                                            class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-critical z-1">
                                         {{ column.score_critical | localNumber }}
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 3) {
                                     <span
-                                        class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-unknown z-1">
+                                            class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-unknown z-1">
                                         {{ column.score_unknown | localNumber }}
                                     </span>
                                 }
@@ -83,8 +96,8 @@
                             (mouseleave)="cancelToaster()">
 
                             <span
-                                class="position-absolute top-0 start-0 translate-middle badge rounded-pill"
-                                [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
+                                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill"
+                                    [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
                                 <fa-icon [icon]="['fas', 'plug']" size="lg"
                                          [cTooltip]="disabledStateTitle"
                                          cTooltipPlacement="top"></fa-icon>
@@ -96,25 +109,25 @@
                             @if (column.isUsedInScoringOperator) {
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 0) {
                                     <span
-                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-ok z-1">
+                                            class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-ok z-1">
                                         0
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 1) {
                                     <span
-                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-warning z-1">
+                                            class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-warning z-1">
                                         {{ column.score_warning | localNumber }}
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 2) {
                                     <span
-                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-critical z-1">
+                                            class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-critical z-1">
                                         {{ column.score_critical | localNumber }}
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 3) {
                                     <span
-                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-unknown z-1">
+                                            class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-unknown z-1">
                                         {{ column.score_unknown | localNumber }}
                                     </span>
                                 }
@@ -130,29 +143,43 @@
                             <!-- Disabled vService -->
                             @if (column.disabled) {
                                 <span
-                                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill z-2"
-                                    [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
+                                        class="position-absolute top-0 start-0 translate-middle badge rounded-pill z-2"
+                                        [ngClass]="{'bg-ok':stateForDisabledService() == 0,'bg-warning':stateForDisabledService() == 1,'bg-critical':stateForDisabledService() == 2,'bg-unknown':stateForDisabledService() == 3}">
                                     <fa-icon [icon]="['fas', 'plug']" size="lg"
                                              [cTooltip]="disabledStateTitle"
                                              cTooltipPlacement="top"></fa-icon>
                                 </span>
                             }
 
-                            <!-- vService in Downtime -->
-                            @if (Number(column.scheduledDowntimeDepth) > 0 && stateForDowntimedService() !== column.current_state && stateForDowntimedService() !== -1) {
-                                <span
-                                    class="position-absolute top-0 start-0 translate-middle badge rounded-circle z-2"
-                                    [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
-                                    [cTooltip]="downtimeStateTitle"
-                                    cTooltipPlacement="top">
-                                    &nbsp; <!-- important be not empty -->
-                                </span>
+                            @if (stateForDowntimedService() !== -1 && stateForAcknowledgedService() === -1) {
+                                <!-- vService in Downtime -->
+                                @if (Number(column.scheduledDowntimeDepth) > 0 && stateForDowntimedService() !== column.current_state) {
+                                    <span
+                                            class="position-absolute top-0 start-0 translate-middle badge rounded-circle z-2"
+                                            [ngClass]="{'bg-ok':stateForDowntimedService() == 0,'bg-warning':stateForDowntimedService() == 1,'bg-critical':stateForDowntimedService() == 2,'bg-unknown':stateForDowntimedService() == 3}"
+                                            [cTooltip]="downtimeStateTitle"
+                                            cTooltipPlacement="top">
+                                        &nbsp; <!-- important be not empty -->
+                                    </span>
+                                }
+                            } @else if (stateForAcknowledgedService() > -1) {
+                                <!-- acknowledged vService -->
+                                @if (column.problemHasBeenAcknowledged && stateForAcknowledgedService() !== column.current_state) {
+                                    <span
+                                            class="position-absolute top-0 start-0 translate-middle badge rounded-circle z-2"
+                                            [ngClass]="{'bg-ok':stateForAcknowledgedService() == 0,'bg-warning':stateForAcknowledgedService() == 1,'bg-critical':stateForAcknowledgedService() == 2,'bg-unknown':stateForAcknowledgedService() == 3}"
+                                            [cTooltip]="downtimeStateTitle"
+                                            cTooltipPlacement="top">
+                                        &nbsp; <!-- important be not empty -->
+                                    </span>
+                                }
                             }
+
 
                             <!-- vService in Downtime or Acknowledged problem -->
                             @if (Number(column.scheduledDowntimeDepth) > 0 || column.problemHasBeenAcknowledged) {
                                 <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary z-1">
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary z-1">
                                     @if (Number(column.scheduledDowntimeDepth) > 0) {
                                         <fa-icon [icon]="['fas', 'power-off']" size="lg" class="me-1"></fa-icon>
                                     }
@@ -177,36 +204,34 @@
                             @if (column.isUsedInScoringOperator) {
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 0) {
                                     <span
-                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-dark ok z-1">
+                                            class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-dark ok z-1">
                                         0
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 1) {
                                     <span
-                                        class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-dark warning z-1">
+                                            class="position-absolute bottom-0 start-100  translate-middle badge rounded-pill bg-dark warning z-1">
                                         {{ column.score_warning | localNumber }}
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 2) {
                                     <span
-                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-dark critical z-1">
+                                            class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-dark critical z-1">
                                         {{ column.score_critical | localNumber }}
                                     </span>
                                 }
                                 @if (column.currentStateConsiderDowntimeOrAcknowledgedOrDisabled === 3) {
                                     <span
-                                        class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-dark text-white z-1">
+                                            class="position-absolute bottom-0 start-100 translate-middle badge rounded-pill bg-dark text-white z-1">
                                         {{ column.score_unknown | localNumber }}
                                     </span>
                                 }
                             }
                         </td>
                     }
-
                 }
             </tr>
         }
-
     </tbody>
 </table>
 

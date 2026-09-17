@@ -132,7 +132,9 @@ export class EvcTreeComponent {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
     public downtimedServices = input<number>(0);
+    public acknowledgedServices = input<number>(0);
     public stateForDowntimedService = input<number>(3);
+    public stateForAcknowledgedService = input<number>(3);
     public stateForDisabledService = input<number>(3);
     public connectionLine = input<string>('bezier');
     public animated = input<number>(0);
@@ -140,6 +142,7 @@ export class EvcTreeComponent {
     public isWidget = input<boolean>(false);
 
     public downtimeStateTitle: string = '';
+    public acknowledgedStateTitle: string = '';
     public disabledStateTitle: string = '';
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
@@ -169,6 +172,7 @@ export class EvcTreeComponent {
 
     constructor() {
         this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
+        this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered unknown');
         this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
 
         effect(() => {
@@ -194,6 +198,24 @@ export class EvcTreeComponent {
 
                 case 3:
                     this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
+                    break;
+            }
+
+            switch (this.stateForAcknowledgedService()) {
+                case 0:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered ok');
+                    break;
+
+                case 1:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered warning');
+                    break;
+
+                case 2:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered critical');
+                    break;
+
+                case 3:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered unknown');
                     break;
             }
 

@@ -76,9 +76,11 @@ export interface EventcorrelationsViewRoot {
     evcSummaryTree: EvcSummaryService[][],  // used to render the table based summary
     stateForDisabledService: number
     stateForDowntimedService: number
+    stateForAcknowledgedService: number
     showInfoForDisabledService: number
     disabledServices: number
     downtimedServices: number
+    acknowledgedServices: number
     hasWritePermission: boolean
     animated: number
     connectionLine: string
@@ -242,15 +244,17 @@ export interface EvcUsedByEntity {
  ********************************/
 export interface EventcorrelationsEditCorrelationRoot {
     evcTree: EvcTree[] // Used to render the tree chart
-    rootElement: EventcorrelationRootElement,
-    servicetemplates: SelectKeyValue[],
-    stateForDisabledService: number,
-    stateForDowntimedService: number,
-    showInfoForDisabledService: number,
-    animated: number,
-    connectionLine: string,
-    disabledServices: number,
-    downtimedServices: number,
+    rootElement: EventcorrelationRootElement
+    servicetemplates: SelectKeyValue[]
+    stateForDisabledService: number
+    stateForDowntimedService: number
+    stateForAcknowledgedService: number
+    showInfoForDisabledService: number
+    animated: number
+    connectionLine: string
+    disabledServices: number
+    downtimedServices: number
+    acknowledgedServices: number
     _csrfToken: string | null
 }
 
