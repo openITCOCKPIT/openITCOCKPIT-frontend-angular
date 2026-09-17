@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Skeleton } from 'primeng/skeleton';
+import { Skeleton } from '@openng/optimus-ui/skeleton';
 
 @Component({
     selector: 'oitc-word-loader',

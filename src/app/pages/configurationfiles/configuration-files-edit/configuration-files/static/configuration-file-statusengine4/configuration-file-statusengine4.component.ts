@@ -1,51 +1,62 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    effect,
-    inject,
-    input,
-    OnDestroy,
-    OnInit
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from "@angular/core";
 import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from '../../../../configuration-files.enum';
 import { Observable, Subscription } from 'rxjs';
 import { GenericValidationError } from '../../../../../../generic-responses';
 import { ConfigurationEditorConfig, ConfigurationEditorField } from '../../../../configuration-files.interface';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NotyService } from '../../../../../../layouts/coreui/noty.service';
-import { ConfigurationFilesService } from '../../../../configuration-files.service';
-import { FormSelectDirective } from '@coreui/angular';
+import {
+    ColComponent,
+    FormCheckComponent,
+    FormCheckInputDirective,
+    FormCheckLabelDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    RowComponent
+} from '@coreui/angular';
+import { TrueFalseDirective } from '../../../../../../directives/true-false.directive';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
-
-import { TranslocoDirective } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { ConfigurationFilesService } from '../../../../configuration-files.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NotyService } from '../../../../../../layouts/coreui/noty.service';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { XsButtonDirective } from '../../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
-    selector: 'oitc-configuration-file-db-backend',
+    selector: "oitc-configuration-file-statusengine4",
     imports: [
+        FormCheckComponent,
+        FormCheckInputDirective,
+        TrueFalseDirective,
+        FormCheckLabelDirective,
         FormErrorDirective,
         FormFeedbackComponent,
-        PaginatorModule,
         RequiredIconComponent,
-        FormSelectDirective,
+        FormsModule,
+        FormControlDirective,
+        FormLabelDirective,
         TranslocoDirective,
-        FormsModule
+        FaIconComponent,
+        XsButtonDirective,
+        RowComponent,
+        RowComponent,
+        ColComponent
     ],
-    templateUrl: './configuration-file-db-backend.component.html',
-    styleUrl: './configuration-file-db-backend.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    templateUrl: "./configuration-file-statusengine4.component.html",
+    styleUrl: "./configuration-file-statusengine4.component.css",
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfigurationFileDbBackendComponent implements OnInit, OnDestroy {
+export class ConfigurationFileStatusengine4Component {
 
     public dbKey = input.required<ConfigurationFilesDbKeys>();
     public submit$ = input.required<Observable<void>>();
 
     public errors: GenericValidationError | null = null;
     public fields: ConfigurationEditorField[] = [];
+
+    protected readonly ConfigurationFilesFieldTypes = ConfigurationFilesFieldTypes;
 
     /**
      * The server returns the current configuration.
@@ -57,6 +68,9 @@ export class ConfigurationFileDbBackendComponent implements OnInit, OnDestroy {
      * @public
      */
     public config?: ConfigurationEditorConfig;
+
+    public apiKeys: string[] = [];
+    public commndApiKeys: string[] = [];
 
     private subscriptions: Subscription = new Subscription();
     private readonly ConfigurationFilesService = inject(ConfigurationFilesService);
@@ -90,6 +104,18 @@ export class ConfigurationFileDbBackendComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
                 this.config = result.config;
                 this.fields = result.fields;
+
+                for (const field of this.fields) {
+                    if (field.type === ConfigurationFilesFieldTypes.string_array) {
+                        if (field.field === 'api_keys' || field.field === 'command_api_keys') {
+                            // Ensure we have an array
+                            if (!Array.isArray(field.value)) {
+                                field.value = [];
+                            }
+                        }
+                    }
+                }
+
             }));
 
         }
@@ -132,5 +158,27 @@ export class ConfigurationFileDbBackendComponent implements OnInit, OnDestroy {
 
     }
 
-    protected readonly ConfigurationFilesFieldTypes = ConfigurationFilesFieldTypes;
+    public pushApiKey(field: ConfigurationEditorField) {
+        const arr = new Uint8Array(32);
+        window.crypto.getRandomValues(arr);
+
+        // Convert the byte array to a hex string
+        const newApiKey = Array.from(arr)
+            .map(byte => byte.toString(16).padStart(2, '0'))
+            .join('');
+
+        if (Array.isArray(field.value)) {
+            field.value.push(newApiKey);
+            this.cdr.markForCheck();
+        }
+    }
+
+    public removeApiKey(field: ConfigurationEditorField, index: number) {
+        if (Array.isArray(field.value)) {
+            field.value.splice(index, 1);
+            this.cdr.markForCheck();
+        }
+    }
+
+    protected readonly Array = Array;
 }

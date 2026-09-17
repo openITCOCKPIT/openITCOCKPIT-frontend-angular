@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { Injectable } from '@angular/core';
-import { BaseStyle } from 'primeng/base';
+import { BaseStyle } from '@openng/optimus-ui/base';
 
 const theme = ({dt}) => `
 .p-multiselect {

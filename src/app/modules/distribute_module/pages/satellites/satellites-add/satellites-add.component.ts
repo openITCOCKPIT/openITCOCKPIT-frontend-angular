@@ -219,7 +219,7 @@ export class SatellitesAddComponent implements OnDestroy, OnInit {
                 login: 'nagios',
                 name: '',
                 port: 22,
-                private_key_path: '/var/lib/nagios/.ssh/id_rsa',
+                private_key_path: '/var/lib/nagios/.ssh/id_ed25519',
                 proxy_url: '',
                 remote_port: 4730,
                 sync_method: 'https_pull',

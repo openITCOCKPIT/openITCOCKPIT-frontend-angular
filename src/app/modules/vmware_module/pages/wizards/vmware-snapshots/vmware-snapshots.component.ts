@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { VmwareSnapshotsWizardGet, VmwareSnapshotsWizardPost } from './vmware-snapshots-wizard.interface';
 import { VmwareSnapshotsWizardService } from './vmware-snapshots-wizard.service';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { FormsModule } from '@angular/forms';
 import {
     AccordionButtonDirective,
