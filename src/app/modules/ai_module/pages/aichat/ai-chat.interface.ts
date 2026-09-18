@@ -111,6 +111,16 @@ export type AiChatEntry =
     { kind: 'message', id: number, message: AiChatMessage }
     | { kind: 'tools', id: number, steps: AiChatToolStep[], reasoning: string | null };
 
+export type AiChatToolsEntry = Extract<AiChatEntry, { kind: 'tools' }>;
+
+/**
+ * What the transcript renders: a question, or an answer with the tool rounds
+ * that led to it. An answer still being worked on has rounds but no message yet.
+ */
+export type AiChatBlock =
+    { kind: 'user', id: number, message: AiChatMessage }
+    | { kind: 'answer', id: number, rounds: AiChatToolsEntry[], message: AiChatMessage | null };
+
 export interface AiChatTurnStatus {
     id: number
     state: AiTurnState

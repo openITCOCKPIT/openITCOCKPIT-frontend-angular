@@ -40,7 +40,9 @@ import {
     AiChatSessionHeader,
     AiChatToolStep,
     AiChatTurnStatus,
-    AiPendingConfirmation
+    AiPendingConfirmation,
+    AiChatBlock,
+    AiChatToolsEntry
 } from '../ai-chat.interface';
 import { AiChatSessionsService } from '../../aichatsessions/ai-chat-sessions.service';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
@@ -106,6 +108,7 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
     public messages: AiChatMessage[] = [];
     /** What the transcript renders: messages, with tool work folded together. */
     public entries: AiChatEntry[] = [];
+    public blocks: AiChatBlock[] = [];
     public turn: AiChatTurnStatus | null = null;
     public pendingConfirmations: AiPendingConfirmation[] = [];
 
@@ -657,9 +660,6 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
         return steps.some(step => step.is_error);
     }
 
-    public trackByEntryId(index: number, entry: AiChatEntry): number {
-        return entry.id;
-    }
 
     public trackByMessageId(index: number, message: AiChatMessage): number {
         return message.id;
@@ -702,6 +702,7 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
         this.showTools = false;
         this.messages = [];
         this.entries = [];
+        this.blocks = [];
         this.lastMessageId = 0;
         this.turn = null;
         this.pendingConfirmations = [];
@@ -745,6 +746,7 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
         this.sessionHeader = null;
         this.messages = [];
         this.entries = [];
+        this.blocks = [];
         this.lastMessageId = 0;
         this.turn = null;
         this.pendingConfirmations = [];
@@ -779,6 +781,7 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
             this.messages = this.messages.concat(messages);
             this.lastMessageId = messages[messages.length - 1].id;
             this.entries = this.buildEntries(this.messages);
+            this.blocks = this.buildBlocks(this.entries);
             this.shouldScroll = true;
         }
 
@@ -868,6 +871,71 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
         }
 
         return entries;
+    }
+
+    /**
+     * Groups the entries into questions and answers.
+     *
+     * The tool rounds before an answer are the way it was reached, so they
+     * belong under it rather than beside it. Rounds that no answer follows
+     * yet form an open block, which the next answer closes.
+     *
+     * @param entries
+     * @return AiChatBlock[]
+     */
+    private buildBlocks(entries: AiChatEntry[]): AiChatBlock[] {
+        const blocks: AiChatBlock[] = [];
+        let open: Extract<AiChatBlock, { kind: 'answer' }> | null = null;
+
+        for (const entry of entries) {
+            if (entry.kind === 'tools') {
+                if (open === null) {
+                    open = {kind: 'answer', id: entry.id, rounds: [], message: null};
+                    blocks.push(open);
+                }
+                open.rounds.push(entry);
+                continue;
+            }
+
+            if (entry.message.role === 'user') {
+                open = null;
+                blocks.push({kind: 'user', id: entry.id, message: entry.message});
+                continue;
+            }
+
+            if (!entry.message.content) {
+                continue;
+            }
+
+            if (open === null) {
+                blocks.push({kind: 'answer', id: entry.id, rounds: [], message: entry.message});
+            } else {
+                open.message = entry.message;
+            }
+            open = null;
+        }
+
+        return blocks;
+    }
+
+    /**
+     * How many tools the rounds of one answer used.
+     *
+     * @param rounds
+     * @return number
+     */
+    public toolCount(rounds: AiChatToolsEntry[]): number {
+        return rounds.reduce((sum, round) => sum + round.steps.length, 0);
+    }
+
+    /**
+     * Whether any tool on the way to an answer failed, shown on the closed block.
+     *
+     * @param rounds
+     * @return boolean
+     */
+    public anyRoundFailed(rounds: AiChatToolsEntry[]): boolean {
+        return rounds.some(round => this.hasFailed(round.steps));
     }
 
     /**

@@ -233,101 +233,116 @@
                                     </div>
                                 }
 
-                                @for (entry of entries; track trackByEntryId($index, entry)) {
-                                    @if (entry.kind === 'message') {
-                                        @if (entry.message.role === 'user') {
-                                            <div class="ai-msg ai-msg-user">
-                                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                                <span class="ai-msg-body">{{ entry.message.content }}</span>
-                                            </div>
-                                        } @else if (entry.message.content) {
-                                            <!-- Only a reasoning model sends this, so
-                                                 nothing is rendered where there is none. -->
-                                            @if (entry.message.reasoning) {
-                                                <details class="ai-msg ai-msg-reasoning">
-                                                    <summary>
-                                                        <fa-icon [icon]="['fas', 'lightbulb']"></fa-icon>
-                                                        {{ t('How it got there') }}
-                                                    </summary>
-                                                    <div class="ai-reasoning-text">{{ entry.message.reasoning }}</div>
-                                                </details>
-                                            }
+                                @for (block of blocks; track block.id) {
+                                    @if (block.kind === 'user') {
+                                        <div class="ai-msg ai-msg-user">
+                                            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                            <span class="ai-msg-body">{{ block.message.content }}</span>
+                                        </div>
+                                    } @else {
+                                        <!-- The way to the answer: the model's reasoning and the tool
+                                             rounds it ran. Evidence, wanted on demand and in the way
+                                             otherwise, so closed. A failed tool shows on the closed
+                                             block, not only two levels down. -->
+                                        @if (block.rounds.length || block.message?.reasoning) {
+                                            <details class="ai-msg ai-msg-reasoning">
+                                                <summary>
+                                                    <fa-icon [icon]="['fas', 'lightbulb']"></fa-icon>
+                                                    {{ t('How it got there') }}
+                                                    @if (block.rounds.length) {
+                                                        <span class="text-muted ms-1">
+                                                            &middot;
+                                                            @if (toolCount(block.rounds) === 1) {
+                                                                {{ t('Used one tool') }}
+                                                            } @else {
+                                                                {{ t('Used {{count}} tools', {count: toolCount(block.rounds)}) }}
+                                                            }
+                                                        </span>
+                                                    }
+                                                    @if (anyRoundFailed(block.rounds)) {
+                                                        <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
+                                                    }
+                                                </summary>
+                                                @if (block.message?.reasoning) {
+                                                    <div class="ai-reasoning-text">{{ block.message?.reasoning }}</div>
+                                                }
+                                                @for (round of block.rounds; track round.id) {
+                                                    <details class="ai-msg ai-msg-tool">
+                                                        <summary>
+                                                            <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                                                            @if (round.steps.length === 1) {
+                                                                {{ t('Used one tool') }}
+                                                            } @else {
+                                                                {{ t('Used {{count}} tools', {count: round.steps.length}) }}
+                                                            }
+                                                            <!-- The names stay inside. Naming them here
+                                                                 would put the detail back on the page
+                                                                 that collapsing was meant to take off it. -->
+                                                            @if (round.steps.length && hasFailed(round.steps)) {
+                                                                <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
+                                                            }
+                                                        </summary>
+                                                        @if (round.reasoning) {
+                                                            <div class="ai-reasoning-inline">
+                                                                <div class="small text-muted">
+                                                                    <fa-icon [icon]="['fas', 'lightbulb']"></fa-icon>
+                                                                    {{ t('Why these calls') }}
+                                                                </div>
+                                                                <div class="ai-reasoning-text">{{ round.reasoning }}</div>
+                                                            </div>
+                                                        }
+                                                        @for (step of round.steps; track $index) {
+                                                            <div class="ai-tool-step">
+                                                                <div class="ai-tool-step-head">
+                                                                    <code>{{ step.name }}</code>
+                                                                    @if (step.is_error) {
+                                                                        <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
+                                                                    } @else if (step.pending) {
+                                                                        <span class="badge bg-secondary ms-1">{{ t('running') }}</span>
+                                                                    }
+                                                                </div>
+                                                                @if (step.arguments) {
+                                                                    <div class="small text-muted">{{ t('Called with') }}</div>
+                                                                    <pre class="ai-tool-args mb-1">{{ step.arguments }}</pre>
+                                                                }
+                                                                @if (step.result !== null) {
+                                                                    <div class="small text-muted">
+                                                                        {{ t('Answered') }}
+                                                                        <span class="ai-tool-copy">
+                                                                            <oitc-copy-to-clipboard [data]="step.result">
+                                                                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                                                            </oitc-copy-to-clipboard>
+                                                                        </span>
+                                                                    </div>
+                                                                    <pre class="mb-0">{{ step.result }}</pre>
+                                                                }
+                                                            </div>
+                                                        }
+                                                    </details>
+                                                }
+                                            </details>
+                                        }
+                                        @if (block.message) {
                                             <div class="ai-msg ai-msg-assistant"
-                                                 [ngClass]="{'ai-msg-error': entry.message.is_error}">
+                                                 [ngClass]="{'ai-msg-error': block.message.is_error}">
                                                 <fa-icon [icon]="['fas', 'robot']"></fa-icon>
                                                 <div class="ai-msg-body">
                                                     <!-- A model answers in Markdown. Rendered
                                                          with sanitizing left on: the text
                                                          carries monitoring data, so it is not
                                                          trusted input. -->
-                                                    <markdown [data]="entry.message.content"></markdown>
+                                                    <markdown [data]="block.message.content"></markdown>
                                                     <!-- Copies the Markdown the model wrote,
                                                          not the rendered page: that is what
                                                          pastes usefully into a ticket. -->
                                                     <span class="ai-msg-actions">
-                                                        <oitc-copy-to-clipboard [data]="entry.message.content || ''">
+                                                        <oitc-copy-to-clipboard [data]="block.message.content || ''">
                                                             <fa-icon [icon]="['fas', 'copy']"></fa-icon>
                                                         </oitc-copy-to-clipboard>
                                                     </span>
                                                 </div>
                                             </div>
                                         }
-                                    } @else {
-                                        <!-- One round of tool work, closed. It is the
-                                             evidence behind the answer, wanted on demand
-                                             and in the way otherwise. -->
-                                        <details class="ai-msg ai-msg-tool">
-                                            <summary>
-                                                <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
-                                                @if (entry.steps.length === 1) {
-                                                    {{ t('Used one tool') }}
-                                                } @else {
-                                                    {{ t('Used {{count}} tools', {count: entry.steps.length}) }}
-                                                }
-                                                <!-- The names stay inside. Naming them here
-                                                     would put the detail back on the page
-                                                     that collapsing was meant to take off it. -->
-                                                @if (entry.steps.length && hasFailed(entry.steps)) {
-                                                    <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
-                                                }
-                                            </summary>
-                                            @if (entry.reasoning) {
-                                                <div class="ai-reasoning-inline">
-                                                    <div class="small text-muted">
-                                                        <fa-icon [icon]="['fas', 'lightbulb']"></fa-icon>
-                                                        {{ t('Why these calls') }}
-                                                    </div>
-                                                    <div class="ai-reasoning-text">{{ entry.reasoning }}</div>
-                                                </div>
-                                            }
-                                            @for (step of entry.steps; track $index) {
-                                                <div class="ai-tool-step">
-                                                    <div class="ai-tool-step-head">
-                                                        <code>{{ step.name }}</code>
-                                                        @if (step.is_error) {
-                                                            <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
-                                                        } @else if (step.pending) {
-                                                            <span class="badge bg-secondary ms-1">{{ t('running') }}</span>
-                                                        }
-                                                    </div>
-                                                    @if (step.arguments) {
-                                                        <div class="small text-muted">{{ t('Called with') }}</div>
-                                                        <pre class="ai-tool-args mb-1">{{ step.arguments }}</pre>
-                                                    }
-                                                    @if (step.result !== null) {
-                                                        <div class="small text-muted">
-                                                            {{ t('Answered') }}
-                                                            <span class="ai-tool-copy">
-                                                                <oitc-copy-to-clipboard [data]="step.result">
-                                                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                                                </oitc-copy-to-clipboard>
-                                                            </span>
-                                                        </div>
-                                                        <pre class="mb-0">{{ step.result }}</pre>
-                                                    }
-                                                </div>
-                                            }
-                                        </details>
                                     }
                                 }
 
