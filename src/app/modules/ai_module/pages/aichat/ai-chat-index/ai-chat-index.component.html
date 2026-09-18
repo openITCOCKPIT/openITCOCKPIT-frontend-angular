@@ -263,63 +263,67 @@
                                                         <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
                                                     }
                                                 </summary>
-                                                @if (block.message?.reasoning) {
-                                                    <div class="ai-reasoning-text">{{ block.message?.reasoning }}</div>
-                                                }
-                                                @for (round of block.rounds; track round.id) {
-                                                    <details class="ai-msg ai-msg-tool">
-                                                        <summary>
-                                                            <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
-                                                            @if (round.steps.length === 1) {
-                                                                {{ t('Used one tool') }}
-                                                            } @else {
-                                                                {{ t('Used {{count}} tools', {count: round.steps.length}) }}
-                                                            }
-                                                            <!-- The names stay inside. Naming them here
-                                                                 would put the detail back on the page
-                                                                 that collapsing was meant to take off it. -->
-                                                            @if (round.steps.length && hasFailed(round.steps)) {
-                                                                <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
-                                                            }
-                                                        </summary>
-                                                        @if (round.reasoning) {
-                                                            <div class="ai-reasoning-inline">
-                                                                <div class="small text-muted">
-                                                                    <fa-icon [icon]="['fas', 'lightbulb']"></fa-icon>
-                                                                    {{ t('Why these calls') }}
+                                                <!-- One box for the way to the answer: the reasoning and the
+                                                     tool rounds it ran, rather than separate cards. -->
+                                                <div class="ai-reasoning-box">
+                                                    @if (block.message?.reasoning) {
+                                                        <div class="ai-reasoning-text">{{ block.message?.reasoning }}</div>
+                                                    }
+                                                    @for (round of block.rounds; track round.id) {
+                                                        <details class="ai-msg ai-msg-tool">
+                                                            <summary>
+                                                                <fa-icon [icon]="['fas', 'wrench']"></fa-icon>
+                                                                @if (round.steps.length === 1) {
+                                                                    {{ t('Used one tool') }}
+                                                                } @else {
+                                                                    {{ t('Used {{count}} tools', {count: round.steps.length}) }}
+                                                                }
+                                                                <!-- The names stay inside. Naming them here
+                                                                     would put the detail back on the page
+                                                                     that collapsing was meant to take off it. -->
+                                                                @if (round.steps.length && hasFailed(round.steps)) {
+                                                                    <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
+                                                                }
+                                                            </summary>
+                                                            @if (round.reasoning) {
+                                                                <div class="ai-reasoning-inline">
+                                                                    <div class="small text-muted">
+                                                                        <fa-icon [icon]="['fas', 'lightbulb']"></fa-icon>
+                                                                        {{ t('Why these calls') }}
+                                                                    </div>
+                                                                    <div class="ai-reasoning-text">{{ round.reasoning }}</div>
                                                                 </div>
-                                                                <div class="ai-reasoning-text">{{ round.reasoning }}</div>
-                                                            </div>
-                                                        }
-                                                        @for (step of round.steps; track $index) {
-                                                            <div class="ai-tool-step">
-                                                                <div class="ai-tool-step-head">
-                                                                    <code>{{ step.name }}</code>
-                                                                    @if (step.is_error) {
-                                                                        <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
-                                                                    } @else if (step.pending) {
-                                                                        <span class="badge bg-secondary ms-1">{{ t('running') }}</span>
+                                                            }
+                                                            @for (step of round.steps; track $index) {
+                                                                <div class="ai-tool-step">
+                                                                    <div class="ai-tool-step-head">
+                                                                        <code>{{ step.name }}</code>
+                                                                        @if (step.is_error) {
+                                                                            <span class="badge bg-danger ms-1">{{ t('failed') }}</span>
+                                                                        } @else if (step.pending) {
+                                                                            <span class="badge bg-secondary ms-1">{{ t('running') }}</span>
+                                                                        }
+                                                                    </div>
+                                                                    @if (step.arguments) {
+                                                                        <div class="small text-muted">{{ t('Called with') }}</div>
+                                                                        <pre class="ai-tool-args mb-1">{{ step.arguments }}</pre>
+                                                                    }
+                                                                    @if (step.result !== null) {
+                                                                        <div class="small text-muted">
+                                                                            {{ t('Answered') }}
+                                                                            <span class="ai-tool-copy">
+                                                                                <oitc-copy-to-clipboard [data]="step.result">
+                                                                                    <fa-icon [icon]="['fas', 'copy']"></fa-icon>
+                                                                                </oitc-copy-to-clipboard>
+                                                                            </span>
+                                                                        </div>
+                                                                        <pre class="mb-0">{{ step.result }}</pre>
                                                                     }
                                                                 </div>
-                                                                @if (step.arguments) {
-                                                                    <div class="small text-muted">{{ t('Called with') }}</div>
-                                                                    <pre class="ai-tool-args mb-1">{{ step.arguments }}</pre>
-                                                                }
-                                                                @if (step.result !== null) {
-                                                                    <div class="small text-muted">
-                                                                        {{ t('Answered') }}
-                                                                        <span class="ai-tool-copy">
-                                                                            <oitc-copy-to-clipboard [data]="step.result">
-                                                                                <fa-icon [icon]="['fas', 'copy']"></fa-icon>
-                                                                            </oitc-copy-to-clipboard>
-                                                                        </span>
-                                                                    </div>
-                                                                    <pre class="mb-0">{{ step.result }}</pre>
-                                                                }
-                                                            </div>
-                                                        }
-                                                    </details>
-                                                }
+                                                            }
+                                                        </details>
+                                                    }
+                                                </div>
                                             </details>
                                         }
                                         @if (block.message) {

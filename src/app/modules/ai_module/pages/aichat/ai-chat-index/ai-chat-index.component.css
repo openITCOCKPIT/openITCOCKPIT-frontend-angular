@@ -391,3 +391,27 @@
 .ai-send-button {
     min-width: 8.5rem;
 }
+
+/* The reasoning and the tool rounds it ran share one box: together they are
+   the way to the answer. The reasoning text and the rounds give up their own
+   frames inside it, the reasoning keeps its scroll height. */
+.ai-reasoning-box {
+    margin-top: .35rem;
+    padding: .5rem .6rem;
+    border-left: 3px solid var(--cui-warning);
+    background: var(--cui-tertiary-bg);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.ai-reasoning-box > .ai-reasoning-text {
+    margin-top: 0;
+    padding: 0;
+    border-left: 0;
+    background: transparent;
+}
+
+.ai-reasoning-box > .ai-msg-tool {
+    margin: 0;
+}
