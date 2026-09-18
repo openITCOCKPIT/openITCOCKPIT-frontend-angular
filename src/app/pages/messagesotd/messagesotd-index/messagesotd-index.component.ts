@@ -95,7 +95,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     ],
     templateUrl: './messagesotd-index.component.html',
     styleUrl: './messagesotd-index.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ]

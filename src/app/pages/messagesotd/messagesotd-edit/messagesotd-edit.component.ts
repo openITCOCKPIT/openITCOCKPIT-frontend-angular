@@ -94,7 +94,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
     ],
     templateUrl: './messagesotd-edit.component.html',
     styleUrl: './messagesotd-edit.component.css',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.Eager
 })
 export class MessagesotdEditComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
