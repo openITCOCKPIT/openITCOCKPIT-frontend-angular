@@ -169,15 +169,18 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
     private shouldScroll: boolean = false;
     /** Set once after opening a conversation, to put the cursor in the box. */
     private shouldFocusDraft: boolean = false;
+    @ViewChild('transcriptContent') private transcriptContent?: ElementRef<HTMLElement>;
     /**
-     * Until when the transcript is held at the newest message.
+     * Keeps the transcript at the newest message while the reader is there.
      *
-     * One scroll on open is not enough: answers render as Markdown and the
-     * height keeps growing for a few frames afterwards, which leaves the view
-     * short of the end. Held briefly instead, and released as soon as the
-     * reader scrolls themselves.
+     * Answers render as Markdown and keep growing for a few frames after they
+     * arrive, and the card itself is resized to the window. Following every
+     * change in size catches all of that, where one scroll or a fixed time
+     * falls short. It stops as soon as the reader scrolls up, because only
+     * then does isScrolledUp turn true.
      */
-    private holdAtBottomUntil: number = 0;
+    private sizeObserver?: ResizeObserver;
+    private observedContent?: HTMLElement;
 
     private readonly AiChatService = inject(AiChatService);
     private readonly AiChatSessionsService = inject(AiChatSessionsService);
@@ -205,6 +208,7 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
     }
 
     public ngOnDestroy(): void {
+        this.sizeObserver?.disconnect();
         this.holdTools();
         this.stopPolling();
         this.subscriptions.unsubscribe();
@@ -256,12 +260,7 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
             this.draftInput.nativeElement.focus();
         }
 
-        if (Date.now() < this.holdAtBottomUntil) {
-            this.shouldScroll = false;
-            this.scrollToLatest();
-
-            return;
-        }
+        this.observeTranscript();
 
         if (!this.shouldScroll || !this.transcript) {
             return;
@@ -333,6 +332,32 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
         }, 4000);
     }
 
+    /**
+     * Follows changes in size to the newest message, unless the reader has
+     * scrolled away from it.
+     *
+     * The content element comes and goes with the conversation, so the
+     * observer moves to a new one whenever the element changes.
+     *
+     * @return void
+     */
+    private observeTranscript(): void {
+        const content = this.transcriptContent?.nativeElement;
+        if (!content || content === this.observedContent || !this.transcript) {
+            return;
+        }
+
+        this.sizeObserver?.disconnect();
+        this.sizeObserver = new ResizeObserver(() => {
+            if (!this.isScrolledUp) {
+                this.scrollToLatest();
+            }
+        });
+        this.sizeObserver.observe(content);
+        this.sizeObserver.observe(this.transcript.nativeElement);
+        this.observedContent = content;
+    }
+
     public scrollToLatest(): void {
         if (!this.transcript) {
             return;
@@ -356,10 +381,6 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
         if (!this.transcript) {
             return;
         }
-
-        // Scrolling by hand ends the hold: whoever does it means to look
-        // somewhere other than the end.
-        this.holdAtBottomUntil = 0;
 
         const element = this.transcript.nativeElement;
         const distance = element.scrollHeight - element.scrollTop - element.clientHeight;
@@ -681,7 +702,10 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
                 this.applyPollResult(result.session, result.messages, result.turn, result.pending_confirmations);
                 this.isLoadingConversation = false;
                 this.shouldFocusDraft = true;
-                this.holdAtBottomUntil = Date.now() + 1200;
+                // Opened at the newest message. The size observer keeps it
+                // there while the answers finish rendering.
+                this.isScrolledUp = false;
+                this.shouldScroll = true;
 
                 // A conversation reopened while an answer is still being
                 // worked on has to keep watching.

@@ -224,6 +224,8 @@
                                  window does not change size when it appears. -->
                             <div class="ai-transcript-wrap mb-3">
                             <div class="ai-transcript" #transcript (scroll)="onTranscriptScroll()">
+                                <!-- Measured to keep the view at the newest message while it grows. -->
+                                <div #transcriptContent>
                                 @if (isLoadingConversation) {
                                     <div class="text-muted">
                                         <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
@@ -354,6 +356,7 @@
                                         </span>
                                     </div>
                                 }
+                                </div>
                             </div>
 
                             @if (isScrolledUp) {
