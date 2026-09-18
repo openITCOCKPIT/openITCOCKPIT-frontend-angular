@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -95,6 +95,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     ],
     templateUrl: './messagesotd-index.component.html',
     styleUrl: './messagesotd-index.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ]
