@@ -44,13 +44,21 @@ import { RouterLink } from '@angular/router';
 import { ServicegroupsService } from '../../../servicegroups/servicegroups.service';
 import { ServicegroupsLoadServicegroupsByStringParams } from '../../../servicegroups/servicegroups.interface';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
-import { RegexHelperTooltipComponent } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { ServiceSummaryEchartComponent } from '../../../../components/charts/service-summary-echart/service-summary-echart.component';
+import {
+    ServiceSummaryEchartComponent
+} from '../../../../components/charts/service-summary-echart/service-summary-echart.component';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
-import { ServiceHeatmapEchartComponent } from '../../../../components/charts/service-heatmap-echart/service-heatmap-echart.component';
-import { ServiceStatusScatterEchartComponent } from '../../../../components/charts/service-status-scatter-echart/service-status-scatter-echart.component';
+import {
+    ServiceHeatmapEchartComponent
+} from '../../../../components/charts/service-heatmap-echart/service-heatmap-echart.component';
+import {
+    ServiceStatusScatterEchartComponent
+} from '../../../../components/charts/service-status-scatter-echart/service-status-scatter-echart.component';
 import { IntervalPickerComponent } from '../../../../components/interval-picker/interval-picker.component';
 
 echarts.use([
@@ -159,6 +167,11 @@ export class ServiceOperationsSummaryWidgetComponent extends BaseWidgetComponent
                 this.loadHostgroups('');
                 this.loadServicegroups('');
                 this.loadContainers('');
+                this.stopRefreshInterval();
+            } else {
+                if (this.selectedAutoRefresh.key > 0) {
+                    this.startRefreshInterval(this.selectedAutoRefresh.key);
+                }
             }
             this.cdr.markForCheck();
         });

@@ -34,7 +34,9 @@ import {
 import { FormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { DebounceDirective } from '../../../../directives/debounce.directive';
-import { RegexHelperTooltipComponent } from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
+import {
+    RegexHelperTooltipComponent
+} from '../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { TrueFalseDirective } from '../../../../directives/true-false.directive';
@@ -44,13 +46,19 @@ import { GridComponent, LegendComponent, TooltipComponent, VisualMapComponent } 
 import 'echarts/theme/dark.js';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { CanvasRenderer } from 'echarts/renderers';
-import { HostSummaryEchartComponent } from '../../../../components/charts/host-summary-echart/host-summary-echart.component';
-import { SummaryStateHostsExtended } from '../../../hosts/summary_state.interface';
+import {
+    HostSummaryEchartComponent
+} from '../../../../components/charts/host-summary-echart/host-summary-echart.component';
 import { PermissionDirective } from '../../../../permissions/permission.directive';
 import { RouterLink } from '@angular/router';
-import { HostHeatmapEchartComponent } from '../../../../components/charts/host-heatmap-echart/host-heatmap-echart.component';
-import { HostStatusScatterEchartComponent } from '../../../../components/charts/host-status-scatter-echart/host-status-scatter-echart.component';
+import {
+    HostHeatmapEchartComponent
+} from '../../../../components/charts/host-heatmap-echart/host-heatmap-echart.component';
+import {
+    HostStatusScatterEchartComponent
+} from '../../../../components/charts/host-status-scatter-echart/host-status-scatter-echart.component';
 import { IntervalPickerComponent } from '../../../../components/interval-picker/interval-picker.component';
+import { SummaryStateHostsExtended } from '../../../hosts/summary_state.interface';
 
 echarts.use([
     TooltipComponent,
@@ -148,6 +156,11 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent im
             if (this.flipped()) {
                 this.loadHostgroups('');
                 this.loadContainers('');
+                this.stopRefreshInterval();
+            } else {
+                if (this.selectedAutoRefresh.key > 0) {
+                    this.startRefreshInterval(this.selectedAutoRefresh.key);
+                }
             }
             this.cdr.markForCheck();
         });
