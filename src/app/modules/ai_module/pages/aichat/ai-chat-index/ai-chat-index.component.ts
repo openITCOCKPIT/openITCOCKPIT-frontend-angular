@@ -148,6 +148,8 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
     public draft: string = '';
     public isStarting: boolean = false;
     public isSending: boolean = false;
+    /** Set while a cancel request is on its way, so a second click does not send another. */
+    public isCancelling: boolean = false;
     public isLoadingConversation: boolean = false;
 
     /** Comment typed alongside an approval or a rejection, per confirmation. */
@@ -488,13 +490,22 @@ export class AiChatIndexComponent implements OnInit, OnDestroy, AfterViewChecked
     }
 
     public cancel(): void {
-        if (this.turn === null) {
+        if (this.turn === null || this.isCancelling) {
             return;
         }
 
-        this.subscriptions.add(this.AiChatService.cancel(this.turn.id).subscribe(() => {
-            this.startPolling();
-            this.cdr.markForCheck();
+        this.isCancelling = true;
+        this.subscriptions.add(this.AiChatService.cancel(this.turn.id).subscribe({
+            next: () => {
+                this.isCancelling = false;
+                this.startPolling();
+                this.cdr.markForCheck();
+            },
+            error: () => {
+                this.isCancelling = false;
+                this.notyService.genericError();
+                this.cdr.markForCheck();
+            }
         }));
     }
 

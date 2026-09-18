@@ -385,3 +385,9 @@
     margin-right: .4rem;
     white-space: nowrap;
 }
+
+/* Send and cancel take turns in the same place; a fixed width keeps the input
+   from shifting when one replaces the other. */
+.ai-send-button {
+    min-width: 8.5rem;
+}

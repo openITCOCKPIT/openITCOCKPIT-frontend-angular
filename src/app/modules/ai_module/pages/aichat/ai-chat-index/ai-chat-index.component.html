@@ -428,25 +428,25 @@
                                           (keydown)="onDraftKeydown($event)"
                                           (input)="autoGrow(draftInput)"
                                           [placeholder]="t('Ask about your monitoring...')"></textarea>
-                                <button cButton class="ripple" color="primary" type="button"
-                                        [disabled]="isBusy() || isSending" (click)="send()">
-                                    <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
-                                    {{ t('Send') }}
-                                </button>
+                                <!-- One place for the one thing that can be done: send while
+                                     nothing runs, cancel while a request does. -->
+                                @if (isBusy()) {
+                                    <button cButton class="ripple ai-send-button" color="danger" variant="outline" type="button"
+                                            [title]="t('Cancel this request')"
+                                            [disabled]="isCancelling" (click)="cancel()">
+                                        <fa-icon [icon]="['fas', 'stop']"></fa-icon>
+                                        {{ t('Cancel') }}
+                                    </button>
+                                } @else {
+                                    <button cButton class="ripple ai-send-button" color="primary" type="button"
+                                            [disabled]="isSending" (click)="send()">
+                                        <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
+                                        {{ t('Send') }}
+                                    </button>
+                                }
                             </c-input-group>
                             <div class="form-text">{{ t('Enter sends, Shift and Enter start a new line.') }}</div>
 
-                            @if (isBusy()) {
-                                <!-- Outside the input group: it is not part of
-                                     composing a message. -->
-                                <div class="mt-2 text-end">
-                                    <button cButton class="ripple" color="secondary" variant="outline"
-                                            size="sm" type="button" (click)="cancel()">
-                                        <fa-icon [icon]="['fas', 'times']"></fa-icon>
-                                        {{ t('Cancel this request') }}
-                                    </button>
-                                </div>
-                            }
                         </c-card-body>
                     </c-card>
                 }
