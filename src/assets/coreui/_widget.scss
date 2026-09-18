@@ -115,6 +115,9 @@ for chrome-browsers  the backface-visibility must not be set to hidden to access
 .box-x {
     grid-row: 1;
     grid-column: 1;
+    /* Grid items default to min-width: auto which prevents them from shrinking
+       below the min-content width of their children (e.g. charts). */
+    min-width: 0;
 
     &:first-child {
         z-index: 1;

@@ -18,7 +18,6 @@ import { formatDate } from '@angular/common';
 import { WidgetGetForRender } from '../../../../pages/dashboards/dashboards.interface';
 import { GenericResponseWrapper } from '../../../../generic-responses';
 import { getUserDate } from '../../../../services/timezone.service';
-import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { LoadContainersRoot } from '../../../../pages/containers/containers.interface';
 
 @Injectable({
@@ -69,10 +68,16 @@ export class CustomAlertsService {
     }
 
     public annotate(customAlertId: number, comment: string, setAnnotationAsHostAcknowledgement: boolean, setServiceAcknowledgement: boolean): Observable<void> {
-        let a: string = '&setAnnotationAsHostAcknowledgement=true&setAnnotationAsServiceAcknowledgement=' + (setServiceAcknowledgement ? 'true' : 'false');
-        return this.http.post<void>(`${this.proxyPath}/customalert_module/customalerts/annotate/${customAlertId}.json?angular=true${a}`, {
-            comment
-        });
+        return this.http.post<void>(`${this.proxyPath}/customalert_module/customalerts/annotate/${customAlertId}.json`, {
+                comment
+            },
+            {
+                params: {
+                    angular: true,
+                    setAnnotationAsHostAcknowledgement: setAnnotationAsHostAcknowledgement,
+                    setAnnotationAsServiceAcknowledgement: setServiceAcknowledgement
+                }
+            });
     }
 
     public closeManually(customAlertId: number, comment: string): Observable<void> {
