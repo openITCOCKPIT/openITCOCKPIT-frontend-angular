@@ -15,7 +15,7 @@ import {
     NavComponent,
     NavItemComponent
 } from '@coreui/angular';
-import { ColorPicker } from 'primeng/colorpicker';
+import { ColorPicker } from '@openng/optimus-ui/colorpicker';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';

@@ -17,7 +17,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import {

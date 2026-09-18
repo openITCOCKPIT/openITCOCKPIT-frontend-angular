@@ -43,7 +43,7 @@ import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { TranslocoDirective } from "@jsverse/transloco";
 
 
-import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 
 
 @Component({

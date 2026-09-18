@@ -17,7 +17,7 @@ import { NotyService } from '../../../../../../layouts/coreui/noty.service';
 import { FormSelectDirective } from '@coreui/angular';
 import { FormErrorDirective } from '../../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../../components/required-icon/required-icon.component';
 
 import { TranslocoDirective } from '@jsverse/transloco';

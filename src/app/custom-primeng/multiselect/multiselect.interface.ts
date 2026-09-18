@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { TemplateRef } from '@angular/core';
-import { ScrollerOptions } from 'primeng/api';
+import { ScrollerOptions } from '@openng/optimus-ui/api';
 import { MultiSelect, MultiSelectItem } from './multiselect';
 
 /**

@@ -51,7 +51,7 @@ import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginato
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 
