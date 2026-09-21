@@ -36,8 +36,8 @@ import { Subscription } from 'rxjs';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AgentconnectorService } from '../agentconnector.service';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { DividerModule } from 'primeng/divider';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
+import { DividerModule } from '@openng/optimus-ui/divider';
 import { FormsModule } from '@angular/forms';
 
 

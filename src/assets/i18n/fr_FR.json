@@ -5337,5 +5337,6 @@
   "Gracefully reboots the Container by sending a ACPI shutdown signal. This will also apply pending hardware changes.": "Le conteneur sera redémarré proprement en envoyant un signal d'arrêt ACPI. Les modifications matérielles en attente seront également appliquées.",
   "Are you sure you want to reset the VM?": "Êtes-vous sûr de vouloir réinitialiser la VM ?",
   "Forces the VM to reset immediately, which may lead to data loss. Use this if the VM is not responding to the reboot command.": "La VM sera réinitialisée immédiatement, ce qui peut entraîner une perte de données. Utilisez ceci si la VM ne répond pas à la commande de redémarrage.",
-  "Please confirm that you want to perform this action": "Veuillez confirmer que vous souhaitez effectuer cette action."
+  "Please confirm that you want to perform this action": "Veuillez confirmer que vous souhaitez effectuer cette action.",
+  "Future openITCOCKPIT releases will require at least PHP version {0}": "Les futures versions d'openITCOCKPIT nécessiteront au minimum la version {{0}} de PHP."
 }

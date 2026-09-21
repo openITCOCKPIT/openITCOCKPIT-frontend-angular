@@ -840,7 +840,8 @@ export interface HostBrowserResult {
     mapModule: boolean,
     username: string,
     blurryCommandLine: boolean,
-    masterInstanceName: string
+    masterInstanceName: string,
+    hasHostDependencies: boolean
 }
 
 export interface HostBrowserSlaOverview {

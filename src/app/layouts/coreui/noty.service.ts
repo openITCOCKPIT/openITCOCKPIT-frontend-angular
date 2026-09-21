@@ -1,5 +1,5 @@
 import { DOCUMENT, inject, Injectable } from '@angular/core';
-import { ActiveToast, ToastrService } from 'ngx-toastr';
+import { ActiveToast, ToastrService } from '@openng/ngx-toastr';
 import { TranslocoService } from '@jsverse/transloco';
 import { LocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';

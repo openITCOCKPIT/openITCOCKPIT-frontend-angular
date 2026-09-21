@@ -34,7 +34,7 @@ import { PermissionDirective } from '../../../../../permissions/permission.direc
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
-import { ProgressBar } from 'primeng/progressbar';
+import { ProgressBar } from '@openng/optimus-ui/progressbar';
 import { Map } from '../../maps/maps.interface';
 import { MapgeneratorTypes } from '../mapgenerator-types';
 

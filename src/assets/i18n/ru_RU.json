@@ -6067,5 +6067,6 @@
   "Gracefully reboots the Container by sending a ACPI shutdown signal. This will also apply pending hardware changes.": "Контейнер будет корректно перезагружен с помощью сигнала ACPI. Также будут применены ожидающие изменения оборудования.",
   "Are you sure you want to reset the VM?": "Вы уверены, что хотите сбросить VM?",
   "Forces the VM to reset immediately, which may lead to data loss. Use this if the VM is not responding to the reboot command.": "VM будет немедленно сброшена, что может привести к потере данных. Используйте это, если VM не реагирует на команду перезагрузки.",
-  "Please confirm that you want to perform this action": "Пожалуйста, подтвердите выполнение этого действия."
+  "Please confirm that you want to perform this action": "Пожалуйста, подтвердите выполнение этого действия.",
+  "Future openITCOCKPIT releases will require at least PHP version {0}": "Для будущих версий openITCOCKPIT потребуется как минимум PHP версии {{0}}"
 }

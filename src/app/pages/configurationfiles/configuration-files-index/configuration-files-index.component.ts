@@ -22,7 +22,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { AsyncPipe } from '@angular/common';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { PermissionsService } from '../../../permissions/permissions.service';
 
 @Component({

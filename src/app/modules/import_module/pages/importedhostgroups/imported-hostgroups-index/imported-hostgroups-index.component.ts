@@ -54,7 +54,7 @@ import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-
 import {
     PaginateOrScrollComponent
 } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/select-all.component';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';

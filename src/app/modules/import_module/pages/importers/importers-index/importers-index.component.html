@@ -158,6 +158,15 @@
                         <th scope="col">
                             {{ t('Container') }}
                         </th>
+                        <th scope="col" mat-sort-header="Importers.start_time">
+                            {{ t('Last start time') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Importers.end_time">
+                            {{ t('Last end time') }}
+                        </th>
+                        <th scope="col" mat-sort-header="Importers.status">
+                            {{ t('Importer status') }}
+                        </th>
                         <th class="text-center width-50" scope="col">
                             <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                         </th>
@@ -187,7 +196,40 @@
                                     </span>
                                 </td>
                                 <td>{{ importer.description }}</td>
-                                <td> {{ importer.container }}</td>
+                                <td>{{ importer.container }}</td>
+                                <td>
+                                    @if (importer.start_time) {
+                                        {{ importer.start_time }}
+                                    } @else {
+                                        <span class="help-block italic">
+                                            {{ t('Never') }}
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (importer.end_time) {
+                                        {{ importer.end_time }}
+                                    }
+                                </td>
+                                <td>
+                                    @switch (importer.status) {
+                                        @case (ImporterStatusEnum.STATUS_RUNNING) {
+                                            <oitc-badge-outline color="primary">
+                                                {{ t('Currently running') }}
+                                            </oitc-badge-outline>
+                                        }
+                                        @case (ImporterStatusEnum.STATUS_FINISHED_SUCCESSFUL) {
+                                            <oitc-badge-outline color="success">
+                                                {{ t('Finished successful') }}
+                                            </oitc-badge-outline>
+                                        }
+                                        @case (ImporterStatusEnum.STATUS_FAILED) {
+                                            <oitc-badge-outline color="danger">
+                                                {{ t('Failed') }}
+                                            </oitc-badge-outline>
+                                        }
+                                    }
+                                </td>
                                 <td class="width-50">
                                     <oitc-actions-button [permission]="'ImportModule.importers.edit'"
                                                          [icon]="['fas', 'cog']"

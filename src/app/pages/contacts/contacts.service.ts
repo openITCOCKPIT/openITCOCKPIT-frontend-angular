@@ -12,7 +12,6 @@ import {
     ContactsIndexRoot,
     ContactUsedBy,
     LdapConfigRoot,
-    LoadContainersRoot,
     LoadLdapUserByStringRoot,
     LoadTimeperiodsPost,
     LoadTimeperiodsRoot,
@@ -20,6 +19,7 @@ import {
     LoadUsersByContainerIdRequest
 } from './contacts.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
+import { LoadContainersRoot } from '../containers/containers.interface';
 
 @Injectable({
     providedIn: 'root',

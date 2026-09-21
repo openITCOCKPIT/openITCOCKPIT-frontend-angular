@@ -14,13 +14,13 @@ import {
     ViewChild
 } from '@angular/core';
 import { HighlightSearchPipe } from '../../../../pipes/highlight-search.pipe';
-import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent } from 'primeng/multiselect';
-import { SharedModule } from 'primeng/api';
+import { MultiSelect, MultiSelectChangeEvent, MultiSelectFilterEvent } from '@openng/optimus-ui/multiselect';
+import { SharedModule } from '@openng/optimus-ui/api';
 import { TranslocoService } from '@jsverse/transloco';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { distinctUntilChanged, Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { CheckboxModule } from 'primeng/checkbox';
+import { CheckboxModule } from '@openng/optimus-ui/checkbox';
 import _ from 'lodash';
 
 

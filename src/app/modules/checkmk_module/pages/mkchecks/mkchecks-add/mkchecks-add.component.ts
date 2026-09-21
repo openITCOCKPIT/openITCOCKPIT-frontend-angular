@@ -27,7 +27,7 @@ import { HistoryService } from '../../../../../history.service';
 import { MkcheckPost } from '../mkchecks.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';

@@ -34,7 +34,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { AsyncPipe, NgClass } from '@angular/common';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { Skeleton } from 'primeng/skeleton';
+import { Skeleton } from '@openng/optimus-ui/skeleton';
 import { Subscription } from 'rxjs';
 import { NotyService } from '../../../../layouts/coreui/noty.service';
 import { DashboardsService } from '../../dashboards.service';

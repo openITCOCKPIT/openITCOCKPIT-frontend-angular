@@ -52,6 +52,8 @@ import { SelectAllComponent } from '../../../../../layouts/coreui/select-all/sel
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { IndexPage } from '../../../../../pages.interface';
 import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
+import { ImporterStatusEnum } from '../importer-status.enum';
+import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outline/badge-outline.component';
 
 @Component({
     selector: 'oitc-importers-index',
@@ -89,7 +91,8 @@ import { Hostdefault } from '../../hostdefaults/hostdefaults.interface';
         NoRecordsComponent,
         PaginateOrScrollComponent,
         SelectAllComponent,
-        TableDirective
+        TableDirective,
+        BadgeOutlineComponent
     ],
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: ImportersService} // Inject the ImportersService into the DeleteAllModalComponent
@@ -205,4 +208,6 @@ export class ImportersIndexComponent implements OnInit, OnDestroy, IndexPage {
             this.load();
         }
     }
+
+    protected readonly ImporterStatusEnum = ImporterStatusEnum;
 }

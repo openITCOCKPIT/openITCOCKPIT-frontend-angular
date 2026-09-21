@@ -73,7 +73,6 @@ export class StatuspagesViewComponent implements OnInit, OnDestroy {
     public load(): void {
         this.subscriptions.add(this.StatuspagesService.getStatuspageViewData(this.id)
             .subscribe((result) => {
-                //console.log(result);
                 this.statuspage = result;
                 this.cdr.detectChanges();
             }));

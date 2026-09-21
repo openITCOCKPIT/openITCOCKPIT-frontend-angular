@@ -76,7 +76,7 @@ import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { FormsModule } from '@angular/forms';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { DeleteAllItem } from '../../../layouts/coreui/delete-all-modal/delete-all.interface';

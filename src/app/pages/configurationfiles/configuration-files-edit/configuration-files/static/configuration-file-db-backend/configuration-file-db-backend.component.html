@@ -9,12 +9,12 @@
                 <oitc-required-icon/>
             </label>
             <select
-                cSelect
-                [attr.id]="fields[0].field"
-                [name]="fields[0].field"
-                oitcFormError [errors]="errors" errorField="Configfile.{{fields[0].field}}"
-                [(ngModel)]="fields[0].value"
-            >
+                    cSelect
+                    [attr.id]="fields[0].field"
+                    [name]="fields[0].field"
+                    oitcFormError [errors]="errors" errorField="Configfile.{{fields[0].field}}"
+                    [(ngModel)]="fields[0].value">
+                <option [ngValue]="'Statusengine4'">{{ t('Statusengine 4 - MySQL') }}</option>
                 <option [ngValue]="'Statusengine3'">{{ t('Statusengine 3 - MySQL') }}</option>
                 <option [ngValue]="'Crate'">{{ t('Statusengine 3 - CrateDB') }}</option>
                 <option [ngValue]="'Nagios'">{{ t('Statusengine 2 / NDOUtils - MySQL') }}</option>

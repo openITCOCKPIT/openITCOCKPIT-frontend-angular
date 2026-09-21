@@ -51,7 +51,6 @@ export interface MapContainerJoinData {
 
 
 export interface MapsIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,
@@ -140,7 +139,3 @@ export interface MapCopyPostMap {
     title: string
     refresh_interval: number
 }
-
-
-
-

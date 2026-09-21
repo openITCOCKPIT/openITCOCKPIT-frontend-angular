@@ -1,33 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import {
-    AccordionButtonDirective,
-    AccordionComponent,
-    AccordionItemComponent,
-    ButtonGroupComponent,
-    CardBodyComponent,
-    CardComponent,
-    CardFooterComponent,
-    CardHeaderComponent,
-    ColComponent,
-    FormControlDirective,
-    InputGroupComponent,
-    InputGroupTextDirective,
-    NavComponent,
-    NavItemComponent,
-    RowComponent,
-    TemplateIdDirective,
-    TooltipDirective
-} from '@coreui/angular';
-import { WizardsService } from '../wizards.service';
-import { DeprecatedWizards, WizardElement, WizardsIndex } from '../wizards.interface';
-import { KeyValuePipe, NgClass } from '@angular/common';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import { BadgeOutlineComponent } from '../../../layouts/coreui/badge-outline/badge-outline.component';
-import { FormsModule } from '@angular/forms';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {AccordionButtonDirective, AccordionComponent, AccordionItemComponent, ButtonGroupComponent, CardBodyComponent, CardComponent, CardFooterComponent, CardHeaderComponent, ColComponent, FormControlDirective, InputGroupComponent, InputGroupTextDirective, NavComponent, NavItemComponent, RowComponent, TemplateIdDirective, TooltipDirective} from '@coreui/angular';
+import {WizardsService} from '../wizards.service';
+import {DeprecatedWizards, WizardElement, WizardsIndex} from '../wizards.interface';
+import {KeyValuePipe, NgClass} from '@angular/common';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {TranslocoDirective} from '@jsverse/transloco';
+import {RouterLink} from '@angular/router';
+import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import {BadgeOutlineComponent} from '../../../layouts/coreui/badge-outline/badge-outline.component';
+import {FormsModule} from '@angular/forms';
 
 @Component({
     selector: 'oitc-wizards-index',

@@ -86,12 +86,6 @@ export interface ChangecalendarEvent {
     user_id: number
 }
 
-export interface ChangecalendarEventMove {
-    id: number
-    start: string
-    end: string
-}
-
 export interface Updatechangecalendar {
     changeCalendar: EditableChangecalendar,
     events: ChangecalendarEvent[]

@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../../../auth/auth.service';
 import { ProfileService } from '../../../../pages/profile/profile.service';
 import initials from 'initials';
-import { Avatar } from 'primeng/avatar';
+import { Avatar } from '@openng/optimus-ui/avatar';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TooltipDirective } from '@coreui/angular';
 import { TranslocoPipe } from '@jsverse/transloco';

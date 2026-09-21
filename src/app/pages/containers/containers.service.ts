@@ -4,6 +4,7 @@ import {
     ContainerShowDetailsTreeRootResult,
     ContainersIndexNested,
     ContainersLoadContainersByStringParams,
+    LoadContainersRoot,
     NodePost
 } from './containers.interface';
 import { catchError, map, Observable, of } from 'rxjs';
@@ -154,4 +155,19 @@ export class ContainersService {
             })
         )
     }
+
+    public loadContainersByContainerIds(containerIds: number[]): Observable<LoadContainersRoot> {
+        const proxyPath: string = this.proxyPath;
+        return this.http.get<LoadContainersRoot>(`${proxyPath}/containers/loadContainersByContainerIds.json`, {
+            params: {
+                'angular': true,
+                'containerIds[]': containerIds
+            }
+        }).pipe(
+            map((data: LoadContainersRoot) => {
+                return data;
+            })
+        )
+    }
+
 }

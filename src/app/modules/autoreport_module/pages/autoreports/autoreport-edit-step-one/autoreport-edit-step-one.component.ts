@@ -248,7 +248,9 @@ export class AutoreportEditStepOneComponent implements OnInit, OnDestroy {
             };
 
             if (this.post.Autoreport.report_start_date !== null) {
-                this.post.Autoreport.report_start_date = formatDate(this.post.Autoreport.report_start_date, 'yyyy-dd-MM', 'en-US');
+                this.post.Autoreport.report_start_date = formatDate(
+                    new Date(this.post.Autoreport.report_start_date.replace(/(.*)\.(.*)\.(.*)/, '$3-$2-$1')),
+                    'yyyy-MM-dd', 'en-US');
             }
 
             //think itis an issue that calendar_id comes with 0 an d not null whenn not set

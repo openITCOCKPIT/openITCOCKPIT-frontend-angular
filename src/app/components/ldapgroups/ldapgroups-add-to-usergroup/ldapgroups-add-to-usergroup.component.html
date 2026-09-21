@@ -1,0 +1,38 @@
+<ng-container *transloco="let t">
+    <c-modal
+        #modal='cModal'
+        [keyboard]="true"
+        id="ldapgroupAddToUsergroupModal"
+        size="lg"
+    >
+        <c-modal-header class="text-bg-gray bg-primary text-white">
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'chain']"></fa-icon>
+                {{ t('Add LDAP group/s to user role') }}
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            {{ t('Selected LDAP group') }}
+            <ul>
+                @for (item of items; track item) {
+                    <li>{{ item.value }}</li>
+                }
+            </ul>
+        </c-modal-body>
+        <c-modal-footer>
+            <button [disabled]="isSend" cButton class="ripple" color="success"
+                    [routerLink]="['/', 'usergroups', 'add', joinedLdapgroupsIds]">
+                {{ t('Create new user role') }}
+            </button>
+            <button [disabled]="isSend" cButton class="ripple" color="primary"
+                    [routerLink]="['/', 'usergroups', 'append', joinedLdapgroupsIds]">
+                {{ t('Append existing user role') }}
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
+

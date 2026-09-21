@@ -63,6 +63,7 @@ export interface AdministratorsDebugBackgroundProcesses {
     isGearmanWorkerRunning: boolean
     isPushNotificationRunning: boolean
     isNodeJsServerRunning: boolean
+    isWebsocketServerRunning: boolean
 }
 
 export interface AdministratorsDebugCurrentCpuLoad {

@@ -251,9 +251,6 @@ export class UsersAddComponent implements OnInit, OnDestroy {
     }
 
     public onSelectedContainerIdsChange(values: number[]) {
-        console.log('onSelectedContainerIdsChange', values);
-        console.log(this.selectedUserContainers);
-
         // Called when a container is selected or unselected
         if (this.selectedUserContainers.length === 0) {
             // No user containers selected

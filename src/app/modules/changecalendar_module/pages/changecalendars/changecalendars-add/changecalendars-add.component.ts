@@ -33,7 +33,7 @@ import { RequiredIconComponent } from '../../../../../components/required-icon/r
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { RouterLink } from '@angular/router';
-import { ColorPicker } from 'primeng/colorpicker';
+import { ColorPicker } from '@openng/optimus-ui/colorpicker';
 
 @Component({
     selector: 'oitc-changecalendars-add',
@@ -136,7 +136,7 @@ export class ChangecalendarsAddComponent implements OnInit, OnDestroy {
     private getDefaultPost(): AddChangeCalendar {
         return {
             Changecalendar: {
-                colour: '',
+                colour: '#FF0000',
                 container_id: 0,
                 description: '',
                 name: '',

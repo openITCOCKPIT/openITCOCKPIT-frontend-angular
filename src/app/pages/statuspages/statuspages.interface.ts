@@ -66,6 +66,7 @@ export interface ServicegroupJoinData {
     statuspage_id: number
     servicegroup_id: number
     display_alias: string
+    group_tags: string | null
 }
 
 export interface HostgroupObject {
@@ -82,6 +83,7 @@ export interface HostgroupJoinData {
     statuspage_id: number
     hostgroup_id: number
     display_alias: string
+    group_tags: string | null
 }
 
 export interface ServiceObject {
@@ -143,6 +145,7 @@ export interface ServiceJoinData {
     statuspage_id: number
     service_id: number
     display_alias: string
+    group_tags: string | null
 }
 
 export interface HostObject {
@@ -205,6 +208,7 @@ export interface HostJoinData {
     statuspage_id: number
     host_id: number
     display_alias: string
+    group_tags: string | null
 }
 
 

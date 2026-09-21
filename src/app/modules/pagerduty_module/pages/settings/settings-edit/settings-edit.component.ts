@@ -27,7 +27,7 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { FormsModule } from '@angular/forms';
 
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';

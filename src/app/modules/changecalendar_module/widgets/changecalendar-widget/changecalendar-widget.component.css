@@ -1,0 +1,10 @@
+:host ::ng-deep .fc-h-event {
+    --fc-event-border-color: transparent;
+
+    border-top: 1px solid var(--cui-body-bg);
+    border-bottom: 1px solid var(--cui-body-bg);
+}
+
+:host ::ng-deep .fc-event-title {
+    padding-left: 2px !important;
+}

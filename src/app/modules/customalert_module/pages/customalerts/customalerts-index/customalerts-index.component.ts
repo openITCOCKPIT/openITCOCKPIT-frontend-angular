@@ -67,11 +67,10 @@ import { FilterBookmarkComponent } from '../../../../../components/filter-bookma
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
 import { FormsModule } from '@angular/forms';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectKeyValue } from '../../../../../layouts/primeng/select.interface';
-import { LoadContainersRoot } from '../../../../../pages/contactgroups/contactgroups.interface';
 
 import {
     CustomalertsAnnotateModalComponent
@@ -85,6 +84,7 @@ import { BadgeOutlineComponent } from '../../../../../layouts/coreui/badge-outli
 
 import { IntervalPickerComponent } from '../../../../../components/interval-picker/interval-picker.component';
 import _ from 'lodash';
+import { LoadContainersRoot } from '../../../../../pages/containers/containers.interface';
 
 @Component({
     selector: 'oitc-customalerts-index',

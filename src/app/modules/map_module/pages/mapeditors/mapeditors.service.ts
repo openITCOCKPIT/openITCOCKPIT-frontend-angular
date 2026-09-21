@@ -22,7 +22,9 @@ import {
     PerformanceDataMetricsRoot,
     SaveBackgroundPost,
     ServicesByStringParams,
-    ServicesByStringRoot
+    ServicesByStringRoot, StatuspagegroupsByStringParams, StatuspagegroupsByStringRoot,
+    StatuspagesByStringParams,
+    StatuspagesByStringRoot
 } from './mapeditors.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 
@@ -448,6 +450,28 @@ export class MapeditorsService {
     public loadMapsByString(params: MapsByStringParams): Observable<MapsByStringRoot> {
         const proxyPath = this.proxyPath;
         return this.http.get<any>(`${proxyPath}/map_module/mapeditors/loadMapsByString.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadStatuspagesByString(params: StatuspagesByStringParams): Observable<StatuspagesByStringRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/loadStatuspagesByString.json`, {
+            params: params as {}
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        )
+    }
+
+    public loadStatuspagegroupsByString(params: StatuspagegroupsByStringParams): Observable<StatuspagegroupsByStringRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<any>(`${proxyPath}/map_module/mapeditors/loadStatuspagegroupsByString.json`, {
             params: params as {}
         }).pipe(
             map(data => {

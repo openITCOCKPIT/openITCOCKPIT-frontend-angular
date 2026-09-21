@@ -12,7 +12,6 @@ export interface Exporter extends PrometheusExporter {
 }
 
 export interface PrometheusExportersIndexParams {
-    // Same again? Maybe create an intermediate class? OOP FTW :-P
     angular: true,
     scroll: boolean,
     sort: string,

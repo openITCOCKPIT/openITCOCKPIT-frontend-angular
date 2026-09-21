@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WizardsAbstractComponent } from '../../../../../pages/wizards/wizards-abstract/wizards-abstract.component';
 import { AgentlessWindowsWizardGet, AgentlessWindowsWizardPost } from './agentless-windows-wizard.interface';
 import { AgentlessWindowsWizardService } from './agentless-windows-wizard.service';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { FormsModule } from '@angular/forms';
 import {
     AccordionButtonDirective,

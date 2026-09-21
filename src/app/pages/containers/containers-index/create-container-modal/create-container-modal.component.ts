@@ -36,7 +36,7 @@ import { LocationsService } from '../../../locations/locations.service';
 import { UsersService } from '../../../users/users.service';
 import { FormErrorDirective } from '../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { TenantPost } from '../../../tenants/tenant.interface';
 import { GenericIdResponse, GenericValidationError } from '../../../../generic-responses';
 import { TenantsService } from '../../../tenants/tenants.service';

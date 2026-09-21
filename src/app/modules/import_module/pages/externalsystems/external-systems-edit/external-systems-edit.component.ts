@@ -35,7 +35,7 @@ import { FormsModule } from '@angular/forms';
 import {
     MultiSelectOptgroupComponent
 } from '../../../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../../../permissions/permission.directive';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
@@ -65,7 +65,7 @@ import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ExternalSystems } from '../external-systems.enum';
-import { MultiSelectChangeEvent } from 'primeng/multiselect';
+import { MultiSelectChangeEvent } from '@openng/optimus-ui/multiselect';
 
 @Component({
     selector: 'oitc-external-systems-edit',

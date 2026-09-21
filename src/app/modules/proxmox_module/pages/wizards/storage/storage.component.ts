@@ -76,6 +76,8 @@ export class StorageComponent extends WizardsAbstractComponent {
         pveUsername: '',
         pveApiTokenName: '',
         pveApiTokenSecret: '',
+        pveNodeName: '',
+        pvePort: 0,
 // Default fields from the base wizard
         host_id: 0,
         services: [],
@@ -84,11 +86,12 @@ export class StorageComponent extends WizardsAbstractComponent {
     protected storageServicetemplate: ServicetemplateForWizard = {} as ServicetemplateForWizard;
 
     protected override wizardLoad(result: ProxmoxStorageWizardGet): void {
-        this.cdr.markForCheck();
         this.post.services = [];
         this.post.pveUsername = result.pveUsername;
         this.post.pveApiTokenName = result.pveApiTokenName;
         this.post.pveApiTokenSecret = result.pveApiTokenSecret;
+        this.post.pveNodeName = result.pveNodeName;
+        this.post.pvePort = result.pvePort;
         this.storageServicetemplate = result.servicetemplates[0];
         super.wizardLoad(result);
     }

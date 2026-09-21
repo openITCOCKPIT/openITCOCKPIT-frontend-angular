@@ -41,7 +41,7 @@ import { SelectionServiceService } from '../../../../../layouts/coreui/select-al
 import { ImportedhostsService } from '../importedhosts.service';
 import { FormsModule } from '@angular/forms';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
 import { DELETE_SERVICE_TOKEN } from '../../../../../tokens/delete-injection.token';
 import { ExternalSystemEntity } from '../../externalsystems/external-systems.interface';

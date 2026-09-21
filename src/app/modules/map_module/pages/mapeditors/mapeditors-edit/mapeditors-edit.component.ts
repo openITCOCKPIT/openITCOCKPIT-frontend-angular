@@ -67,6 +67,8 @@ import {
     MapsByStringParams,
     MaxUploadLimit,
     ServicesByStringParams,
+    StatuspagegroupsByStringParams,
+    StatuspagesByStringParams,
     VisibleLayers
 } from '../mapeditors.interface';
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
@@ -92,9 +94,7 @@ import { HostsService } from '../../../../../pages/hosts/hosts.service';
 import { HostsLoadHostsByStringParams } from '../../../../../pages/hosts/hosts.interface';
 import { HostgroupsService } from '../../../../../pages/hostgroups/hostgroups.service';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../../../pages/hostgroups/hostgroups.interface';
-import {
-    ServicegroupsLoadServicegroupsByStringParams
-} from '../../../../../pages/servicegroups/servicegroups.interface';
+import { ServicegroupsLoadServicegroupsByStringParams } from '../../../../../pages/servicegroups/servicegroups.interface';
 import { ServicegroupsService } from '../../../../../pages/servicegroups/servicegroups.service';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
@@ -396,14 +396,43 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                 });
             }
         }));
-        selectItemObjectTypes.push({
-            key: 'map',
-            value: this.TranslocoService.translate('Map')
-        });
-        selectLineObjectTypes.push({
-            key: 'map',
-            value: this.TranslocoService.translate('Map')
-        });
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['mapmodule', 'maps', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'map',
+                    value: this.TranslocoService.translate('Map')
+                });
+                selectLineObjectTypes.push({
+                    key: 'map',
+                    value: this.TranslocoService.translate('Map')
+                });
+            }
+        }));
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['statuspages', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'statuspage',
+                    value: this.TranslocoService.translate('Status page')
+                });
+                selectLineObjectTypes.push({
+                    key: 'statuspage',
+                    value: this.TranslocoService.translate('Status page')
+                });
+            }
+        }));
+        this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['statuspagegroups', 'index']).subscribe(hasPermission => {
+            if (hasPermission) {
+                selectItemObjectTypes.push({
+                    key: 'statuspagegroup',
+                    value: this.TranslocoService.translate('Status page group')
+                });
+                selectLineObjectTypes.push({
+                    key: 'statuspagegroup',
+                    value: this.TranslocoService.translate('Status page group')
+                });
+            }
+        }));
+
         selectLineObjectTypes.push({
             key: 'stateless',
             value: this.TranslocoService.translate('Stateless line')
@@ -2312,10 +2341,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         }
     };
 
-    private loadHosts(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadHosts(searchString: string, selected: number[] = []) {
 
         const params: HostsLoadHostsByStringParams = {
             angular: true,
@@ -2334,10 +2360,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadServices(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadServices(searchString: string, selected: number[] = []) {
 
         const params: ServicesByStringParams = {
             'angular': true,
@@ -2373,10 +2396,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadHostgroups(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadHostgroups(searchString: string, selected: number[] = []) {
 
         const params: HostgroupsLoadHostgroupsByStringParams = {
             'angular': true,
@@ -2393,10 +2413,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadServicegroups(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadServicegroups(searchString: string, selected: number[] = []) {
 
         const params: ServicegroupsLoadServicegroupsByStringParams = {
             'angular': true,
@@ -2413,10 +2430,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             }));
     };
 
-    private loadMaps(searchString: string, selected: number[]) {
-        if (typeof selected === "undefined") {
-            selected = [];
-        }
+    private loadMaps(searchString: string, selected: number[] = []) {
 
         const params: MapsByStringParams = {
             'angular': true,
@@ -2430,6 +2444,36 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
 
                 this.itemObjects = result.maps;
 
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private loadStatuspages(searchString: string, selected: number[] = []) {
+
+        const params: StatuspagesByStringParams = {
+            'angular': true,
+            'filter[Statuspages.name]': searchString,
+            'selected[]': selected
+        }
+
+        this.subscriptions.add(this.MapeditorsService.loadStatuspagesByString(params)
+            .subscribe((result) => {
+                this.itemObjects = result.statuspages;
+                this.cdr.markForCheck();
+            }));
+    };
+
+    private loadStatuspagegroups(searchString: string, selected: number[] = []) {
+
+        const params: StatuspagegroupsByStringParams = {
+            'angular': true,
+            'filter[Statuspagegroups.name]': searchString,
+            'selected[]': selected
+        }
+
+        this.subscriptions.add(this.MapeditorsService.loadStatuspagegroupsByString(params)
+            .subscribe((result) => {
+                this.itemObjects = result.statuspagegroups;
                 this.cdr.markForCheck();
             }));
     };
@@ -2718,6 +2762,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             if (this.currentItem.type === 'map') {
                 this.loadMaps('', objectId);
             }
+
+            if (this.currentItem.type === 'statuspage') {
+                this.loadStatuspages('', objectId);
+            }
+
+            if (this.currentItem.type === 'statuspagegroup') {
+                this.loadStatuspagegroups('', objectId);
+            }
         }
 
         if (this.currentItem.hasOwnProperty('gadget') && typeof objectId !== "undefined") {
@@ -2774,6 +2826,4 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
             size_y: this.map.Map.background_size_y!,
         }
     }
-
-    protected readonly parseInt = parseInt;
 }

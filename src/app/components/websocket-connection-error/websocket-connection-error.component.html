@@ -1,0 +1,10 @@
+@if (showError) {
+    <div class="nav-item nav-link">
+        <button class="btn btn-xs pulse-danger btn-outline-danger"
+                type="button"
+                [cTooltip]="'Could not connect to WebSocket backend' | transloco"
+                cTooltipPlacement="bottom">
+            <fa-icon [icon]="['fas', 'bolt']"></fa-icon>
+        </button>
+    </div>
+}
