@@ -94,7 +94,7 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
     ],
     templateUrl: './messagesotd-add.component.html',
     styleUrl: './messagesotd-add.component.css',
-    changeDetection: ChangeDetectionStrategy.Eager
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessagesotdAddComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -208,7 +208,8 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
                         value: value.name,
                         key: value.id
                     });
-                })
+                });
+                this.cdr.markForCheck();
             }))
     }
 

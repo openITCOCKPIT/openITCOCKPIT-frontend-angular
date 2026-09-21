@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActionsButtonComponent } from '../../../components/actions-button/actions-button.component';
 import {
     ActionsButtonElementComponent
@@ -95,7 +95,7 @@ import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
     ],
     templateUrl: './messagesotd-index.component.html',
     styleUrl: './messagesotd-index.component.css',
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         {provide: DELETE_SERVICE_TOKEN, useClass: MessagesOfTheDayService} // Inject the ServicetemplategroupsService into the DeleteAllModalComponent
     ]
@@ -109,6 +109,7 @@ export class MessagesotdIndexComponent implements IndexPage, OnInit, OnDestroy {
     private readonly router: Router = inject(Router);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly notyService: NotyService = inject(NotyService);
+    private readonly cdr = inject(ChangeDetectorRef);
 
     protected params: MessagesOtdIndexParams = {} as MessagesOtdIndexParams;
     protected messagesOfTheDay?: MessagesOtdIndexGet;
@@ -167,6 +168,7 @@ export class MessagesotdIndexComponent implements IndexPage, OnInit, OnDestroy {
         this.subscriptions.add(this.MessageOfTheDayService.getIndex(this.params)
             .subscribe((result: MessagesOtdIndexGet) => {
                 this.messagesOfTheDay = result;
+                this.cdr.markForCheck();
             }));
     }
 
