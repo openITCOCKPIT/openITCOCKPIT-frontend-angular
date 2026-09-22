@@ -7,6 +7,9 @@ export interface SelectItem<T = any> {
     icon?: string;
     title?: string;
     disabled?: boolean;
+    check_interval?: number
+    retry_interval?: number
+    max_check_attempts?: number
 }
 
 export interface SelectKeyValue {

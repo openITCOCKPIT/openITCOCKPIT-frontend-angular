@@ -69,8 +69,8 @@ function isAllowedLicense(license, allowedLicenses) {
  */
 function deepLicenseCheck(packageName, licenseText) {
     switch(packageName) {
-        case "primeng":
-        case "@primeng/themes":
+        case "@openng/optimus-ui":
+        case "@openng/optimus-ui-themes":
             return licenseText.includes("The MIT License (MIT)");
 
         // FontAwesome special cases

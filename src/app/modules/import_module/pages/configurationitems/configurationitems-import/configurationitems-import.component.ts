@@ -48,7 +48,7 @@ import {
     RelevantObjectChanges,
 } from '../configurationitems.interface';
 import { SystemnameService } from '../../../../../services/systemname.service';
-import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { ConfigurationItemsExportImport } from '../configurationitems.enum';
 import { LabelLinkComponent } from '../../../../../layouts/coreui/label-link/label-link.component';
 
