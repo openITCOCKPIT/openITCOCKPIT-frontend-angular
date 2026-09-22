@@ -128,7 +128,7 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                 items.add(result.notifications_contact);
                 items.add(result.timeranges);
 
-                if (result.notification_timeranges) {
+                if (result.notification_timeranges){
                     items.add(result.notification_timeranges);
                 }
                 let groups = new DataSet<TimelineGroup>(result.groups);

@@ -1,7 +1,6 @@
 ::ng-deep .vis-item.bg-notification-period {
     background-color: rgb(52 219 149 / 0.25) ;
-    border-left: 2px solid #29b92b ;
-    border-right: 2px solid #29b92b ;
+
 }
 
 ::ng-deep .vis-item .badge{
