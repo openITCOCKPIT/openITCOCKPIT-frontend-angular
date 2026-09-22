@@ -48,9 +48,11 @@ export interface Downtime {
     commentData: string
     entryTime: string
     scheduledStartTime: string
+    actualStartTime: string
     scheduledEndTime: string
     actualEndTime: string
     duration: number
+    actualDuration: string
     wasStarted: boolean
     internalDowntimeId: number
     downtimehistoryId: any

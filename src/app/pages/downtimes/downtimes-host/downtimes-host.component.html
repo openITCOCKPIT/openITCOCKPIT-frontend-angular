@@ -368,12 +368,30 @@
                                 </td>
                                 <td>
                                     {{ hostDowntime.DowntimeHost.scheduledStartTime }}
+                                    @if (hostDowntime.DowntimeHost.scheduledStartTime !== hostDowntime.DowntimeHost.actualStartTime) {
+                                        <br/>
+                                        <small class="text-danger" [cTooltip]="t('Actual start time')">
+                                            {{ hostDowntime.DowntimeHost.actualStartTime }}
+                                        </small>
+                                    }
                                 </td>
                                 <td>
                                     {{ hostDowntime.DowntimeHost.scheduledEndTime }}
+                                    @if (hostDowntime.DowntimeHost.scheduledEndTime !== hostDowntime.DowntimeHost.actualEndTime) {
+                                        <br/>
+                                        <small class="text-danger" [cTooltip]="t('Actual end time')">
+                                            {{ hostDowntime.DowntimeHost.actualEndTime }}
+                                        </small>
+                                    }
                                 </td>
                                 <td>
                                     {{ hostDowntime.DowntimeHost.durationHuman }}
+                                    @if (hostDowntime.DowntimeHost.actualDuration !== hostDowntime.DowntimeHost.durationHuman) {
+                                        <br/>
+                                        <small class="text-danger" [cTooltip]="t('Actual duration')">
+                                            {{ hostDowntime.DowntimeHost.actualDuration }}
+                                        </small>
+                                    }
                                 </td>
                                 <td class="text-center">
                                     @if (hostDowntime.DowntimeHost.wasCancelled) {
