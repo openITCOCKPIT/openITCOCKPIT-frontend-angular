@@ -125,12 +125,15 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                 items.add(result.downtimes);
                 items.add(result.notifications);
                 items.add(result.acknowledgements);
-                items.add(result.notifications_contact);
                 items.add(result.timeranges);
 
+                if (result.notifications_contact){
+                    items.add(result.notifications_contact);
+                }
                 if (result.notification_timeranges){
                     items.add(result.notification_timeranges);
                 }
+
                 let groups = new DataSet<TimelineGroup>(result.groups);
 
                 // Save the timerange of the total available data in the timeline
@@ -223,9 +226,12 @@ export class BrowserTimelineComponent implements OnInit, OnDestroy, AfterViewIni
                 items.add(result.statehistory);
                 items.add(result.downtimes);
                 items.add(result.notifications);
-                items.add(result.notifications_contact);
                 items.add(result.acknowledgements);
                 items.add(result.timeranges);
+
+                if (result.notifications_contact){
+                    items.add(result.notifications_contact);
+                }
                 if (result.notification_timeranges){
                     items.add(result.notification_timeranges);
                 }
