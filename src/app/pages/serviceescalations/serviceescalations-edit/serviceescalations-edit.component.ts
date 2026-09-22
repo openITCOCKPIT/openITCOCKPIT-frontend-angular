@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
@@ -20,7 +19,8 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
@@ -49,12 +49,11 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { MultiSelectOptgroupComponent } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { HistoryService } from '../../../history.service';
 import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-uuid.component';
+import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human-time/human-time.component';
 
 @Component({
     selector: 'oitc-serviceescalations-edit',
@@ -91,7 +90,9 @@ import { ObjectUuidComponent } from '../../../layouts/coreui/object-uuid/object-
         CardFooterComponent,
         MultiSelectOptgroupComponent,
         FormLoaderComponent,
-        ObjectUuidComponent
+        ObjectUuidComponent,
+        HumanTimeComponent,
+        TableDirective
     ],
     templateUrl: './serviceescalations-edit.component.html',
     styleUrl: './serviceescalations-edit.component.css',

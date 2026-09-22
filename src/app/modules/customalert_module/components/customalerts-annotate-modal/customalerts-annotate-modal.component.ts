@@ -2,10 +2,11 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    effect,
     EventEmitter,
     inject,
-    Input,
-    OnInit,
+    input,
+    OnDestroy,
     Output
 } from '@angular/core';
 import {
@@ -43,6 +44,7 @@ import {
     CustomAlertsState
 } from '../../pages/customalerts/customalerts.interface';
 import { Subscription } from 'rxjs';
+import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 
 @Component({
     selector: 'oitc-customalerts-annotate-modal',
@@ -69,54 +71,63 @@ import { Subscription } from 'rxjs';
         ProgressComponent,
         FormFeedbackComponent,
         FormCheckLabelDirective,
-        NgClass
+        NgClass,
+        BlockLoaderComponent
     ],
     templateUrl: './customalerts-annotate-modal.component.html',
     styleUrl: './customalerts-annotate-modal.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CustomalertsAnnotateModalComponent implements OnInit {
+export class CustomalertsAnnotateModalComponent implements OnDestroy {
     private readonly modalService = inject(ModalService);
     private readonly CustomAlertsService = inject(CustomAlertsService);
     private readonly subscriptions: Subscription = new Subscription();
     private readonly TranslocoService = inject(TranslocoService);
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
-    protected result?: CheckHoststatusForAcknowledgementsResponse;
+    protected nonUpHosts?: CheckHoststatusForAcknowledgementsResponse;
+    protected allHostsUp: boolean = false;
     protected loadingHoststate: boolean = false;
     protected comment: string = '';
-    protected acknowlage: boolean = true;
+    protected setAnnotationAsHostAcknowledgement: boolean = false; // ITC-3191 -> ITC-3863
+    protected setAnnotationAsServiceAcknowledgement: boolean = false; // ITC-3191 -> ITC-3863
     protected isProcessing: boolean = false;
     protected percentage: number = 0;
     protected hasErrors: boolean = false;
     protected errors: GenericValidationError | null = null;
 
-    @Input({required: true}) public items: Customalert[] = [];
+    public items = input<Customalert[]>([]);
     @Output() completed = new EventEmitter<boolean>();
 
     constructor() {
-    }
-
-    public ngOnInit(): void {
-        this.subscriptions.add(this.modalService.modalState$.subscribe((state) => {
-            if (state.id === 'customalertsAnnotateModal' && state.show === true) {
-                this.cdr.markForCheck();
+        effect(() => {
+            // Access the inputs to register the signals as a dependency to make sure effect will re-run when the inputs change
+            const items = this.items();
+            if (items.length > 0) {
                 this.checkHoststatusForAcknowledgements();
             }
-        }));
+
+        });
     }
 
-//
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
     protected checkHoststatusForAcknowledgements = () => {
         this.loadingHoststate = true;
+        this.allHostsUp = false;
+        this.nonUpHosts = undefined;
         this.cdr.markForCheck();
+
         let params: CheckHoststatusForAcknowledgementsRequest = {
-            hostIds: this.items.map(item => item.service.host.id as unknown as string)
+            hostIds: this.items().map(item => item.service.host.id as unknown as string)
         };
 
         this.subscriptions.add(this.CustomAlertsService.checkHoststatusForAcknowledgements(params)
             .subscribe((result: CheckHoststatusForAcknowledgementsResponse) => {
-                this.result = result;
+                this.nonUpHosts = result;
+                this.allHostsUp = result.all_hosts.length === 0;
                 this.loadingHoststate = false;
                 this.cdr.markForCheck();
             })
@@ -139,14 +150,13 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
         }
         this.isProcessing = true;
 
-        let count = this.items.length;
+        let count = this.items().length;
         let responseCount = 0;
         let issueCount = 0;
 
-        for (let i in this.items) {
-            const item = this.items[i];
+        for (let item of this.items()) {
 
-            this.CustomAlertsService.annotate(item.id, this.comment, true, this.acknowlage).subscribe({
+            this.CustomAlertsService.annotate(item.id, this.comment, this.setAnnotationAsHostAcknowledgement, this.setAnnotationAsServiceAcknowledgement).subscribe({
                 next: (value: any) => {
                     responseCount++
                     this.percentage = Math.round((responseCount / count) * 100);
@@ -189,13 +199,13 @@ export class CustomalertsAnnotateModalComponent implements OnInit {
 
     private reset(): void {
         // All records have been deleted successfully. Reset the modal
-        this.acknowlage = true;
+        this.setAnnotationAsHostAcknowledgement = false;
+        this.setAnnotationAsServiceAcknowledgement = false;
         this.isProcessing = false;
         this.percentage = 0;
         this.hasErrors = false;
         this.comment = '';
         this.errors = null;
-        this.items = [];
     }
 
     protected readonly CustomAlertsState = CustomAlertsState;

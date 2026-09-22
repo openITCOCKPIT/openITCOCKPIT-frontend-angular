@@ -43,14 +43,14 @@
                     </label>
 
                     <oitc-select
-                        name="container"
-                        id="container"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.container_id"
-                        [options]="containers?.containers"
-                        (onChange)="onContainerChange()"
-                        oitcFormError [errors]="errors" errorField="container_id">
+                            name="container"
+                            id="container"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.container_id"
+                            [options]="containers?.containers"
+                            (onChange)="onContainerChange()"
+                            oitcFormError [errors]="errors" errorField="container_id">
                     </oitc-select>
 
                     @if (!post.container_id) {
@@ -63,7 +63,7 @@
                 <div class="form-text">
                     {{
                         t('Notification escalations could be used to notify a certain user group in case of an emergency.\n' +
-                            'Once a service or service escalated, contacts, contact group and notification options will be overwritten by the escalation.')
+                                'Once a service or service escalated, contacts, contact group and notification options will be overwritten by the escalation.')
                     }}
                 </div>
                 <div class="border-start border-primary border-4 rounded-top rounded-bottom px-2 py-1 my-2">
@@ -78,22 +78,77 @@
                                 <fa-icon [icon]="['fas', 'cog']" class="text-white"></fa-icon>
                             </span>
                             <oitc-multi-select-optgroup
-                                name="ServiceescalationIncludeServices"
-                                id="ServiceescalationIncludeServices"
-                                optionLabel="label"
-                                optionValue="value"
-                                [(ngModel)]="post.services._ids"
-                                [options]="services"
-                                [searchCallback]="loadServices"
-                                (onChange)="loadExcludedServicegroups('');processChosenExcludedServices()"
-                                [group]="true"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="services">
+                                    name="ServiceescalationIncludeServices"
+                                    id="ServiceescalationIncludeServices"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    [(ngModel)]="post.services._ids"
+                                    [options]="services"
+                                    [searchCallback]="loadServices"
+                                    (onChange)="loadExcludedServicegroups('');processChosenExcludedServices()"
+                                    [group]="true"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="services">
                             </oitc-multi-select-optgroup>
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors"
                                             errorField="services"></oitc-form-feedback>
                     </div>
+                    @if (post.services._ids.length && services) {
+                        <div>
+                            <label cLabel>
+                                {{ t('Notification time delay') }}
+                            </label>
+                            <div class="form-text">
+                                {{ t('Worst case time delay until notification command gets executed after state hits a non ok state: ') }}
+                            </div>
+                        </div>
+                        <table bordered cTable class="mt-2 mb-2 table table-fit" hover striped>
+                            <thead>
+                            <tr>
+                                <th scope="col">
+                                    {{ t('Service') }}
+                                </th>
+                                <th scope="col">
+                                    {{ t('Check interval') }}
+                                </th>
+                                <th scope="col">
+                                    {{ t('Retry interval') }}
+                                </th>
+                                <th scope="col">
+                                    {{ t('Max. number of check attempts') }}
+                                </th>
+                                <th scope="col">
+                                    {{ t('Notification time delay') }}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @for (service of services; track service) {
+                                    @for (item of service.items; track item) {
+                                        @if (post.services._ids.includes(item.value) && item.check_interval && item.retry_interval && item.max_check_attempts) {
+                                            <tr>
+                                                <td class="word-break">{{ item.label }}</td>
+                                                <td>
+                                                    <oitc-human-time
+                                                            [seconds]="item.check_interval"></oitc-human-time>
+                                                </td>
+                                                <td>
+                                                    <oitc-human-time
+                                                            [seconds]="item.retry_interval"></oitc-human-time>
+                                                </td>
+                                                <td>{{ item.max_check_attempts }}</td>
+                                                <td class="bold">
+                                                    <oitc-human-time
+                                                            [seconds]="(item.check_interval + (item.max_check_attempts -1) * item.retry_interval)"></oitc-human-time>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    }
                     <div class="mb-3 arrowd-vertical-on-right">
                         <label cLabel for="ServiceescalationExcludeServicegroups">
                             <fa-icon [icon]="['fas', 'minus']" class="text-danger"></fa-icon>
@@ -104,16 +159,16 @@
                                 <fa-icon [icon]="['fas', 'cogs']" class="text-white"></fa-icon>
                             </span>
                             <oitc-multi-select
-                                name="ServiceescalationExcludeServicegroups"
-                                id="ServiceescalationExcludeServicegroups"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.servicegroups_excluded._ids"
-                                [options]="servicegroups_excluded"
-                                [disabled]="post.services._ids.length == 0"
-                                (ngModelChange)="processChosenServicegroups()"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="services">
+                                    name="ServiceescalationExcludeServicegroups"
+                                    id="ServiceescalationExcludeServicegroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.servicegroups_excluded._ids"
+                                    [options]="servicegroups_excluded"
+                                    [disabled]="post.services._ids.length == 0"
+                                    (ngModelChange)="processChosenServicegroups()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="services">
                             </oitc-multi-select>
                         </c-input-group>
                     </div>
@@ -130,16 +185,16 @@
                                 <fa-icon [icon]="['fas', 'cog']" class="text-white"></fa-icon>
                             </span>
                             <oitc-multi-select
-                                name="ServiceescalationIncludeServicegroups"
-                                id="ServiceescalationIncludeServicegroups"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.servicegroups._ids"
-                                [options]="servicegroups"
-                                (onChange)="loadExcludedServices('')"
-                                (ngModelChange)="processChosenExcludedServicegroups()"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="servicegroups">
+                                    name="ServiceescalationIncludeServicegroups"
+                                    id="ServiceescalationIncludeServicegroups"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.servicegroups._ids"
+                                    [options]="servicegroups"
+                                    (onChange)="loadExcludedServices('')"
+                                    (ngModelChange)="processChosenExcludedServicegroups()"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="servicegroups">
                             </oitc-multi-select>
                         </c-input-group>
                         <oitc-form-feedback [errors]="errors"
@@ -155,18 +210,18 @@
                                 <fa-icon [icon]="['fas', 'cogs']" class="text-white"></fa-icon>
                             </span>
                             <oitc-multi-select-optgroup
-                                name="ServiceescalationExcludeServices"
-                                id="ServiceescalationExcludeServices"
-                                optionLabel="label"
-                                optionValue="value"
-                                [(ngModel)]="post.services_excluded._ids"
-                                [options]="services_excluded"
-                                [disabled]="post.servicegroups._ids.length == 0"
-                                [searchCallback]="loadExcludedServices"
-                                (onChange)="processChosenServices()"
-                                [group]="true"
-                                class="flex-1"
-                                oitcFormError [errors]="errors" errorField="services_excluded">
+                                    name="ServiceescalationExcludeServices"
+                                    id="ServiceescalationExcludeServices"
+                                    optionLabel="label"
+                                    optionValue="value"
+                                    [(ngModel)]="post.services_excluded._ids"
+                                    [options]="services_excluded"
+                                    [disabled]="post.servicegroups._ids.length == 0"
+                                    [searchCallback]="loadExcludedServices"
+                                    (onChange)="processChosenServices()"
+                                    [group]="true"
+                                    class="flex-1"
+                                    oitcFormError [errors]="errors" errorField="services_excluded">
                             </oitc-multi-select-optgroup>
                         </c-input-group>
                     </div>
@@ -211,10 +266,10 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-interval-input
-                        id="notification_interval"
-                        name="notification_interval"
-                        [selectedInterval]="post.notification_interval"
-                        (selectedIntervalChange)="post.notification_interval = $event"
+                            id="notification_interval"
+                            name="notification_interval"
+                            [selectedInterval]="post.notification_interval"
+                            (selectedIntervalChange)="post.notification_interval = $event"
                     ></oitc-interval-input>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="notification_interval"></oitc-form-feedback>
@@ -223,22 +278,22 @@
                 <div class="mb-3">
                     <label cLabel for="ServiceescalationTimeperiod">
                         <oitc-label-link
-                            [objectId]="post.timeperiod_id"
-                            [route]="'/timeperiods/edit'"
-                            [permissions]="'timeperiods.edit'">
+                                [objectId]="post.timeperiod_id"
+                                [route]="'/timeperiods/edit'"
+                                [permissions]="'timeperiods.edit'">
                             {{ t('Escalation period') }}
                         </oitc-label-link>
                     </label>
 
                     <oitc-select
-                        name="ServiceescalationTimeperiod"
-                        id="ServiceescalationTimeperiod"
-                        optionValue="key"
-                        optionLabel="value"
-                        [showClear]="true"
-                        [(ngModel)]="post.timeperiod_id"
-                        [options]="timeperiods"
-                        oitcFormError [errors]="errors" errorField="timeperiod_id">
+                            name="ServiceescalationTimeperiod"
+                            id="ServiceescalationTimeperiod"
+                            optionValue="key"
+                            optionLabel="value"
+                            [showClear]="true"
+                            [(ngModel)]="post.timeperiod_id"
+                            [options]="timeperiods"
+                            oitcFormError [errors]="errors" errorField="timeperiod_id">
                     </oitc-select>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="timeperiod_id"></oitc-form-feedback>
@@ -250,13 +305,13 @@
                     </label>
 
                     <oitc-multi-select
-                        name="ServiceescalationContacts"
-                        id="ServiceescalationContacts"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.contacts._ids"
-                        [options]="contacts"
-                        oitcFormError [errors]="errors" errorField="contacts">
+                            name="ServiceescalationContacts"
+                            id="ServiceescalationContacts"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.contacts._ids"
+                            [options]="contacts"
+                            oitcFormError [errors]="errors" errorField="contacts">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="contacts"></oitc-form-feedback>
@@ -268,13 +323,13 @@
                     </label>
 
                     <oitc-multi-select
-                        name="ServiceescalationContactgroups"
-                        id="ServiceescalationContactgroups"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="post.contactgroups._ids"
-                        [options]="contactgroups"
-                        oitcFormError [errors]="errors" errorField="contactgroups">
+                            name="ServiceescalationContactgroups"
+                            id="ServiceescalationContactgroups"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="post.contactgroups._ids"
+                            [options]="contactgroups"
+                            oitcFormError [errors]="errors" errorField="contactgroups">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors"
                                         errorField="contactgroups"></oitc-form-feedback>
@@ -295,15 +350,15 @@
                     <div class="input-group mx-1">
                         <span class="input-group-text">
                             <input
-                                cFormCheckInput
-                                class="checkbox-success"
-                                name="escalate_on_recovery"
-                                id="escalate_on_recovery"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.escalate_on_recovery"/>
+                                    cFormCheckInput
+                                    class="checkbox-success"
+                                    name="escalate_on_recovery"
+                                    id="escalate_on_recovery"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.escalate_on_recovery"/>
                         </span>
                         <div class="form-control bg-success text-white text-center">
                             <label for="escalate_on_recovery">
@@ -315,15 +370,15 @@
                     <div class="input-group mx-1">
                         <span class="input-group-text">
                             <input
-                                cFormCheckInput
-                                class="checkbox-warning"
-                                name="escalate_on_warning"
-                                id="escalate_on_warning"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.escalate_on_warning"/>
+                                    cFormCheckInput
+                                    class="checkbox-warning"
+                                    name="escalate_on_warning"
+                                    id="escalate_on_warning"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.escalate_on_warning"/>
                         </span>
                         <div class="form-control bg-warning text-white text-center">
                             <label for="escalate_on_warning">
@@ -335,15 +390,15 @@
                     <div class="input-group mx-1">
                         <span class="input-group-text">
                             <input
-                                cFormCheckInput
-                                class="checkbox-danger"
-                                name="escalate_on_critical"
-                                id="escalate_on_critical"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.escalate_on_critical"/>
+                                    cFormCheckInput
+                                    class="checkbox-danger"
+                                    name="escalate_on_critical"
+                                    id="escalate_on_critical"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.escalate_on_critical"/>
                         </span>
                         <div class="form-control bg-danger text-white text-center">
                             <label for="escalate_on_critical">
@@ -355,15 +410,15 @@
                     <div class="input-group mx-1">
                         <span class="input-group-text">
                             <input
-                                cFormCheckInput
-                                class="checkbox-secondary"
-                                name="escalate_on_unknown"
-                                id="escalate_on_unknown"
-                                type="checkbox"
-                                trueFalseValue
-                                [falseValue]="0"
-                                [trueValue]="1"
-                                [(ngModel)]="post.escalate_on_unknown"/>
+                                    cFormCheckInput
+                                    class="checkbox-secondary"
+                                    name="escalate_on_unknown"
+                                    id="escalate_on_unknown"
+                                    type="checkbox"
+                                    trueFalseValue
+                                    [falseValue]="0"
+                                    [trueValue]="1"
+                                    [(ngModel)]="post.escalate_on_unknown"/>
                         </span>
                         <div class="form-control bg-unknown text-white text-center">
                             <label for="escalate_on_unknown">
