@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
@@ -20,7 +19,8 @@ import {
     InputGroupComponent,
     InputGroupTextDirective,
     NavComponent,
-    NavItemComponent
+    NavItemComponent,
+    TableDirective
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
@@ -45,10 +45,9 @@ import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/mult
 import { IntervalInputComponent } from '../../../layouts/coreui/interval-input/interval-input.component';
 import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
-import {
-    MultiSelectOptgroupComponent
-} from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
+import { MultiSelectOptgroupComponent } from '../../../layouts/primeng/multi-select/multi-select-optgroup/multi-select-optgroup.component';
 import { HistoryService } from '../../../history.service';
+import { HumanTimeComponent } from '../../../layouts/coreui/interval-input/human-time/human-time.component';
 
 @Component({
     selector: 'oitc-serviceescalations-add',
@@ -83,7 +82,9 @@ import { HistoryService } from '../../../history.service';
         FormCheckInputDirective,
         TrueFalseDirective,
         CardFooterComponent,
-        MultiSelectOptgroupComponent
+        MultiSelectOptgroupComponent,
+        HumanTimeComponent,
+        TableDirective
     ],
     templateUrl: './serviceescalations-add.component.html',
     styleUrl: './serviceescalations-add.component.css',
@@ -208,7 +209,6 @@ export class ServiceescalationsAddComponent implements OnInit, OnDestroy {
                 this.cdr.markForCheck();
 
                 this.services = result.services;
-                console.log(this.services);
                 this.services.map(obj => {
                     obj.items.map(service => {
                         if (service.disabled === true) {

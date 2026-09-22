@@ -1,9 +1,9 @@
 <ng-container *transloco="let t">
     <c-modal
-        #modal='cModal'
-        [keyboard]="true"
-        id="customalertsAnnotateModal"
-        size="lg"
+            #modal='cModal'
+            [keyboard]="true"
+            id="customalertsAnnotateModal"
+            size="lg"
     >
         <c-modal-header class="bg-primary">
             <h5 cModalTitle class="text-white">
@@ -18,8 +18,8 @@
                 <c-row class="pt-2">
                     <c-col sm="12">
                         <ul class="mb-3">
-                            @for (item of items; track item) {
-                                <li>
+                            @for (item of items(); track item) {
+                                <li class="word-break">
                                     {{ item.service.host.name }} / {{ item.servicename }}
                                 </li>
                             }
@@ -46,23 +46,59 @@
                 </div>
             }
 
-            @if (result && result.all_hosts.length === 0) {
+            @if (loadingHoststate) {
+                <oitc-block-loader [height]="'5rem'"></oitc-block-loader>
+            }
+
+            @if (nonUpHosts && allHostsUp) {
                 <div class="mb-3" [cTextColor]="'success'">
                     <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
                     {{ t('All hosts are Up.') }}
                 </div>
+
+                <c-form-check class="mb-3 ms-2">
+                    <input cFormCheckInput id="setAnnotationAsServiceAcknowledgement" type="checkbox"
+                           class="checkbox-lg custom-check-default"
+                           [(ngModel)]="setAnnotationAsServiceAcknowledgement"
+                           name="setAnnotationAsServiceAcknowledgement"
+                           oitcDebounce/>
+                    <label cFormCheckLabel class="ms-1 mt-1" for="setAnnotationAsServiceAcknowledgement">
+                        {{ t('Set annotation comment as service acknowledgement') }}
+                    </label>
+                </c-form-check>
             }
 
-            <c-form-check class="mb-3">
-                <input cFormCheckInput id="acknowledgement" type="checkbox"
-                       class="checkbox-lg custom-check-default"
-                       [(ngModel)]="acknowlage"
-                       name="acknowlage"
-                       oitcDebounce/>
-                <label cFormCheckLabel class="ms-1 mt-1" for="acknowledgement">
-                    {{ t('Set annotation comment as service acknowledgement') }}
-                </label>
-            </c-form-check>
+            @if (nonUpHosts && !allHostsUp) {
+                <div class="mb-3" [cTextColor]="'danger'">
+                    <fa-icon [icon]="['fas', 'circle-exclamation']"></fa-icon>
+                    {{ t('At least one host is down or unreachable.') }}
+                </div>
+
+                <c-form-check class="mb-3 ms-2">
+                    <input cFormCheckInput id="setAnnotationAsHostAcknowledgement" type="checkbox"
+                           class="checkbox-lg custom-check-default"
+                           [(ngModel)]="setAnnotationAsHostAcknowledgement"
+                           name="setAnnotationAsHostAcknowledgement"
+                           oitcDebounce/>
+                    <label cFormCheckLabel class="ms-1 mt-1" for="setAnnotationAsHostAcknowledgement">
+                        {{ t('Set annotation comment as host acknowledgement') }}
+                    </label>
+                    <div class="help-block">
+                        {{ t('An host acknowledgement will not affect new opened alerts.') }}
+                    </div>
+                </c-form-check>
+
+                <c-form-check class="mb-3 ms-2">
+                    <input cFormCheckInput id="setAnnotationAsServiceAcknowledgement" type="checkbox"
+                           class="checkbox-lg custom-check-default"
+                           [(ngModel)]="setAnnotationAsServiceAcknowledgement"
+                           name="setAnnotationAsServiceAcknowledgement"
+                           oitcDebounce/>
+                    <label cFormCheckLabel class="ms-1 mt-1" for="setAnnotationAsServiceAcknowledgement">
+                        {{ t('Set annotation comment as service acknowledgement') }}
+                    </label>
+                </c-form-check>
+            }
 
             <c-alert color="light">
                 <div class="d-flex align-items-center">

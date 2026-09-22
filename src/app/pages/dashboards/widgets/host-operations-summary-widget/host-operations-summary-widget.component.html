@@ -1,0 +1,597 @@
+<ng-container *transloco="let t">
+    @if (widget) {
+        <div class="d-flex h-100 flex-column">
+            <c-row>
+
+                @if (!isReadonly()) {
+                    <c-col [xs]="12" [md]="1">
+                        <button class="btn btn-default ripple mb-2 btn-xs px-2" type="button"
+                                (click)="flipped.set(!flipped())">
+                            @if (flipped()) {
+                                <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                            }
+                        </button>
+                    </c-col>
+                    <c-col [xs]="12" [md]="11">
+                        <c-row>
+                            @if (widget && config && !flipped()) {
+                                <c-col [xs]="12" class="text-end">
+                                    <oitc-interval-picker (change)="onRefreshChange($event)"
+                                                          [useLocalStorage]="false"
+                                                          [initialInterval]="config.refresh_key"></oitc-interval-picker>
+                                </c-col>
+                            }
+                        </c-row>
+                    </c-col>
+                }
+            </c-row>
+            <div [@flip]="flipped()" (@flip.done)="onAnimationDone($event)" (@flip.start)="onAnimationStart($event)"
+                 class="box-container">
+                <div class="box-x">
+                    @if (animationStateShowContent) {
+                        <div>
+                            @if (hoststatusSummary) {
+                                <c-row class="py-1">
+                                    <c-col [xs]="12" [sm]="12" [md]="12" [lg]="3">
+                                        <oitc-host-summary-echart [chartData]="hoststatusSummary">
+                                        </oitc-host-summary-echart>
+                                    </c-col>
+                                    <c-col [xs]="12" [lg]="6">
+                                        <div class="card h-100 border-0 border-start border-4 rounded-0 border-primary shadow-sm">
+                                            <div class="card-body d-flex flex-column justify-content-between p-4">
+                                                <div>
+                                                    <c-row class="m-0">
+                                                        <c-col>
+                                                            <div class="fs-2 fw-semibold text-primary lh-1 mb-1">
+                                                                <span *oitcPermission="['hosts', 'index']">
+                                                                    <a [routerLink]="['/', 'hosts', 'index']"
+                                                                       [queryParams]="{'id': hoststatusSummary.totalHostIds}">
+                                                                        {{ hoststatusSummary.total }}
+                                                                    </a>
+                                                                </span>
+                                                                <span *oitcPermission="['hosts', 'index']; negate: true">
+                                                                    {{ hoststatusSummary.total }}
+                                                                </span>
+                                                            </div>
+                                                            <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                {{ t('Total hosts') }}
+                                                            </div>
+                                                        </c-col>
+                                                        <c-col>
+                                                            <div class="fs-2 fw-semibold lh-1 mb-1">
+                                                                @if (hoststatusSummary.failed.count > 0) {
+                                                                    <span *oitcPermission="['hosts', 'index']">
+                                                                        <a [routerLink]="['/', 'hosts', 'index']"
+                                                                           class="text-danger"
+                                                                           [queryParams]="{'id': hoststatusSummary.failed.ids}">
+                                                                            <fa-icon
+                                                                                    [icon]="['fas', 'caret-down']"></fa-icon>
+                                                                            {{ hoststatusSummary.failed.count }}
+                                                                        </a>
+                                                                    </span>
+                                                                    <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                          class="text-danger">
+                                                                        <fa-icon
+                                                                                [icon]="['fas', 'caret-down']"></fa-icon>
+                                                                        {{ hoststatusSummary.failed.count }}
+                                                                    </span>
+                                                                } @else {
+                                                                    <span class="text-muted">
+                                                                        <fa-icon
+                                                                                [icon]="['fas', 'caret-down']"></fa-icon>
+                                                                        {{ hoststatusSummary.failed.count }}
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                            <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                {{ t('Failed') }}
+                                                            </div>
+                                                        </c-col>
+                                                        <c-col>
+                                                            <div class="fs-2 fw-semibold lh-1 mb-1">
+                                                                @if (hoststatusSummary.recovered.count > 0) {
+                                                                    <span *oitcPermission="['hosts', 'index']">
+                                                                        <a [routerLink]="['/', 'hosts', 'index']"
+                                                                           class="text-success"
+                                                                           [queryParams]="{'id': hoststatusSummary.recovered.ids}">
+                                                                            <fa-icon
+                                                                                    [icon]="['fas', 'caret-up']"></fa-icon>
+                                                                            {{ hoststatusSummary.recovered.count }}
+                                                                        </a>
+                                                                    </span>
+                                                                    <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                          class="text-success">
+                                                                        <fa-icon [icon]="['fas', 'caret-up']"></fa-icon>
+                                                                        {{ hoststatusSummary.recovered.count }}
+                                                                    </span>
+                                                                } @else {
+                                                                    <span class="text-muted">
+                                                                        <fa-icon [icon]="['fas', 'caret-up']"></fa-icon>
+                                                                        {{ hoststatusSummary.recovered.count }}
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                            <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                {{ t('Recovered') }}
+                                                            </div>
+                                                        </c-col>
+                                                    </c-row>
+                                                    <div class="mt-3 pt-2 border-top border-primary-subtle small text-danger-emphasis">
+                                                        <oitc-host-status-scatter-echart
+                                                                [fromTimestamp]="hoststatusSummary.from"
+                                                                [toTimestamp]="hoststatusSummary.to"
+                                                                [timezone]="hoststatusSummary.userTimezone"
+                                                                [statusBuckets]="hoststatusSummary.buckets">
+                                                        </oitc-host-status-scatter-echart>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c-col>
+                                    <c-col [xs]="12" [lg]="3">
+                                        <c-row class="h-100">
+                                            <c-col [xs]="12" [lg]="12">
+                                                <div class="d-flex flex-column h-100 gap-3">
+                                                    <div class="flex-fill h-50 d-flex">
+                                                        <div class="card h-100 w-100 border-0 border-start border-4 border-danger shadow-sm">
+                                                            <div class="card-body d-flex flex-column justify-content-between  p-4">
+                                                                <div class="fs-2 fw-semibold text-danger lh-1 mb-1">
+                                                                    <span *oitcPermission="['hosts', 'index']">
+                                                                        <a [routerLink]="['/', 'hosts', 'index']"
+                                                                           [queryParams]="{'id': hoststatusSummary.lastTimeAlwaysDown.ids}"
+                                                                           class="text-danger">
+                                                                            {{ hoststatusSummary.lastTimeAlwaysDown.count }}
+                                                                        </a>
+                                                                    </span>
+                                                                    <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                          class="text-danger">
+                                                                        {{ hoststatusSummary.lastTimeAlwaysDown.count }}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                    {{ t('Complete Outages (Last 24h)') }}
+                                                                </div>
+                                                                <div class="mt-3 pt-2 border-top border-danger-subtle small">
+                                                                    <c-row>
+                                                                        @if (hoststatusSummary.state['1'] > 0) {
+                                                                            <c-col>
+                                                                                {{ t('Problems') }}
+                                                                            </c-col>
+                                                                            <c-col class="text-end">
+                                                                                <span *oitcPermission="['hosts', 'index']">
+                                                                                    <a [routerLink]="['/', 'hosts', 'index']"
+                                                                                       [queryParams]="{'id': [...hoststatusSummary.state.hostIds['1'], ...hoststatusSummary.state.hostIds['2']] }"
+                                                                                       class="text-danger">
+                                                                                        {{ hoststatusSummary.state['1'] + hoststatusSummary.state['2'] }}
+                                                                                    </a>
+                                                                                </span>
+                                                                                <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                                      class="text-danger">
+                                                                                    {{ hoststatusSummary.state['1'] + hoststatusSummary.state['2'] }}
+                                                                                </span>
+                                                                                @if (hoststatusSummary.not_handled['1'] > 0 || hoststatusSummary.not_handled['2'] > 0) {
+                                                                                    <span class="ps-2">
+                                                                                        [{{ t('Not handled') }}:
+                                                                                        <span *oitcPermission="['hosts', 'index']">
+                                                                                            <a [routerLink]="['/', 'hosts', 'index']"
+                                                                                               [queryParams]="{'id': hoststatusSummary.not_handled.totalHostIds }"
+                                                                                               class="text-danger">
+                                                                                                {{ hoststatusSummary.not_handled['1'] + hoststatusSummary.not_handled['2'] }}
+                                                                                            </a>
+                                                                                        </span>
+                                                                                        <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                                              class="text-danger">
+                                                                                            {{ hoststatusSummary.not_handled['1'] + hoststatusSummary.not_handled['2'] }}
+                                                                                        </span>
+                                                                                        ]
+                                                                                    </span>
+
+                                                                                }
+                                                                            </c-col>
+                                                                        } @else {
+                                                                            <c-col class="text-muted">
+                                                                                {{ t('No problems detected') }}
+                                                                            </c-col>
+                                                                        }
+                                                                    </c-row>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-fill h-50 d-flex">
+                                                        <div class="card h-100 w-100 border-0 border-start border-4 border-success shadow-sm">
+                                                            <div class="card-body d-flex flex-column justify-content-between  p-4">
+                                                                <div class="fs-2 fw-semibold text-success lh-1 mb-1">
+                                                                    <span *oitcPermission="['hosts', 'index']">
+                                                                        <a [routerLink]="['/', 'hosts', 'index']"
+                                                                           [queryParams]="{'id': hoststatusSummary.lastTimeAlwaysUp.ids}"
+                                                                           class="text-success">
+                                                                            {{ hoststatusSummary.lastTimeAlwaysUp.count }}
+                                                                        </a>
+                                                                    </span>
+                                                                    <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                          class="text-success">
+                                                                        {{ hoststatusSummary.lastTimeAlwaysUp.count }}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">
+                                                                    {{ t('Stable Hosts (Last 24h)') }}
+                                                                </div>
+                                                                <div class="mt-3 pt-2 border-top border-success-subtle small text-success">
+                                                                    <c-row>
+                                                                        @if (hoststatusSummary.state['1'] > 0) {
+                                                                            <c-col>
+                                                                                {{ t('UP') }}
+                                                                            </c-col>
+                                                                            <c-col class="text-end">
+                                                                                <span *oitcPermission="['hosts', 'index']">
+                                                                                    <a [routerLink]="['/', 'hosts', 'index']"
+                                                                                       [queryParams]="{'id': hoststatusSummary.state.hostIds['0']}"
+                                                                                       class="text-success">
+                                                                                        {{ hoststatusSummary.state['0'] }}
+                                                                                    </a>
+                                                                                </span>
+                                                                                <span *oitcPermission="['hosts', 'index']; negate: true"
+                                                                                      class="text-success">
+                                                                                    {{ hoststatusSummary.state['0'] }}
+                                                                                </span>
+                                                                            </c-col>
+                                                                        } @else {
+                                                                            <c-col class="text-muted">
+                                                                                {{ t('All hosts are up') }}
+                                                                            </c-col>
+                                                                        }
+                                                                    </c-row>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c-col>
+                                        </c-row>
+
+                                    </c-col>
+
+                                </c-row>
+
+                                @if (hoststatusSummary.tagsOverview !== undefined) {
+                                    <c-row class="mt-2">
+                                        <c-col>
+                                            <fieldset>
+                                                <legend class="small fieldset-legend-border-bottom">
+                                                    <h5>
+                                                        <fa-icon [icon]="['fas', 'tags']"></fa-icon>
+                                                        {{ t('Tags overview') }}
+                                                    </h5>
+                                                </legend>
+                                                <oitc-host-heatmap-echart
+                                                        [chartData]="hoststatusSummary.tagsOverview"></oitc-host-heatmap-echart>
+                                                <div #heatmapContainer class="chart-container-heatmap"></div>
+                                            </fieldset>
+                                        </c-col>
+                                    </c-row>
+
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="box-x">
+                    @if (animationStateShowConfig && config) {
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                    </span>
+                                    <input [(ngModel)]="config['Host']['name']"
+                                           [placeholder]="'Filter by host name' | transloco"
+                                           cFormControl
+                                           [id]="'Hosts.name-'+widget.id"
+                                           [name]="'Hosts.name-'+widget.id"
+                                           oitcDebounce
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   cFormCheckInput
+                                                   [id]="'filter.Host.name_regex-'+widget.id"
+                                                   [name]="'filter.Host.name_regex-'+widget.id"
+                                                   [(ngModel)]="config['Host']['name_regex']"
+                                            />
+                                            <oitc-regex-helper-tooltip/>
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
+                                    <input [(ngModel)]="config['Host']['address']"
+                                           [placeholder]="'Filter by IP address' | transloco"
+                                           cFormControl
+                                           [id]="'Hosts.address-'+widget.id"
+                                           [name]="'Hosts.address-'+widget.id"
+                                           type="text"
+                                    />
+                                    <span cInputGroupText>
+                                        <label>
+                                            {{ t('Enable RegEx') }}
+                                            <input type="checkbox"
+                                                   cFormCheckInput
+                                                   [id]="'Hosts.address_regex-'+widget.id"
+                                                   [name]="'Hosts.address_regex-'+widget.id"
+                                                   [(ngModel)]="config['Host']['address_regex']"
+                                            />
+                                            <oitc-regex-helper-tooltip/>
+                                        </label>
+                                    </span>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-success cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                            [id]="'HostKeywordsInput-'+widget.id"
+                                            [name]="'HostKeywordsInput-'+widget.id"
+                                            [items]="[]"
+                                            [(ngModel)]="keywords"
+                                            [addTag]="true"
+                                            [multiple]="true"
+                                            [selectOnTab]="true"
+                                            [placeholder]="'Filter by tags'|transloco"
+                                            [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-1">
+                            <c-col [xs]="12" [lg]="12">
+                                <c-input-group>
+                                    <span cInputGroupText>
+                                        <div class="icon-stack">
+                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'tags']"
+                                                     class="text-danger cornered cornered-lr"></fa-icon>
+                                        </div>
+                                    </span>
+                                    <ng-select
+                                            [id]="'HostNotKeywordsInput-'+widget.id"
+                                            [name]="'HostNotKeywordsInput-'+widget.id"
+                                            [items]="[]"
+                                            [(ngModel)]="notKeywords"
+                                            [addTag]="true"
+                                            [multiple]="true"
+                                            [selectOnTab]="true"
+                                            [placeholder]="'Filter by excluded tags'|transloco"
+                                            [isOpen]="false">
+                                    </ng-select>
+                                </c-input-group>
+                            </c-col>
+                        </c-row>
+                        <c-row>
+                            <c-col [xs]="12" [lg]="12">
+                                <fieldset class="mt-2">
+                                    <legend class="fs-5">
+                                        {{ t('Containers') }}
+                                    </legend>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                                [id]="'Containers-'+widget.id"
+                                                [name]="'Containers-'+widget.id"
+                                                optionValue="key"
+                                                optionLabel="value"
+                                                [options]="containers"
+                                                [(ngModel)]="config['Container']['_ids']"
+                                                [searchCallback]="loadContainers"
+                                                [appendTo]="'body'"
+                                                class="flex-1">
+                                        </oitc-multi-select>
+                                    </c-input-group>
+                                </fieldset>
+                            </c-col>
+                            <c-col>
+                                <fieldset class="mt-2">
+                                    <legend class="fs-5">
+                                        {{ t('Host groups') }}
+                                    </legend>
+                                    <c-input-group>
+                                        <oitc-multi-select
+                                                [id]="'Hostgroups-'+widget.id"
+                                                [name]="'Hostgroups-'+widget.id"
+                                                optionValue="key"
+                                                optionLabel="value"
+                                                [options]="hostgroups"
+                                                [(ngModel)]="config['Hostgroup']['_ids']"
+                                                [searchCallback]="loadHostgroups"
+                                                [appendTo]="'body'"
+                                                class="flex-1">
+                                        </oitc-multi-select>
+                                    </c-input-group>
+                                    <c-row class="my-1">
+                                        <c-col [xs]="12" [lg]="12">
+                                            <c-input-group>
+                                                <span cInputGroupText class="pe-0 ps-2">
+                                                    <fa-stack>
+                                                        <fa-icon [icon]="['fas', 'server']"
+                                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']" class="text-success"
+                                                                 stackItemSize="1x"
+                                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                                    </fa-stack>
+                                                </span>
+                                                <ng-select
+                                                        [id]="'HostgroupKeywordsInput-'+widget.id"
+                                                        [name]="'HostgroupKeywordsInput-'+widget.id"
+                                                        [items]="[]"
+                                                        [(ngModel)]="hostgroupKeywords"
+                                                        [addTag]="true"
+                                                        [multiple]="true"
+                                                        [selectOnTab]="true"
+                                                        [placeholder]="'Filter by host group tags'|transloco"
+                                                        [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                    <c-row>
+                                        <c-col [xs]="12" [lg]="12">
+                                            <c-input-group>
+                                                <span cInputGroupText class="pe-0 ps-2">
+                                                    <fa-stack>
+                                                        <fa-icon [icon]="['fas', 'server']"
+                                                                 stackItemSize="1x" pull="right"></fa-icon>
+                                                        <fa-icon [icon]="['fas', 'tags']" class="text-danger"
+                                                                 stackItemSize="1x"
+                                                                 transform="shrink-5 right-10 down-7"></fa-icon>
+                                                    </fa-stack>
+                                                </span>
+                                                <ng-select
+                                                        [id]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                        [name]="'HostgroupNotKeywordsInput-'+widget.id"
+                                                        [items]="[]"
+                                                        [(ngModel)]="hostgroupNotKeywords"
+                                                        [addTag]="true"
+                                                        [multiple]="true"
+                                                        [selectOnTab]="true"
+                                                        [placeholder]="'Filter by excluded host group tags'|transloco"
+                                                        [isOpen]="false">
+                                                </ng-select>
+                                            </c-input-group>
+                                        </c-col>
+                                    </c-row>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row class="mb-2">
+                            <c-col [xs]="12" [lg]="12">
+                                <fieldset>
+                                    <legend class="fs-5">
+                                        {{ t('Priority') }}
+                                    </legend>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_1-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_1-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['1']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_1'+widget.id"
+                                               class="ms-1 mt-1 ok-soft">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_2-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_2-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['2']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_2-'+widget.id" class="ms-1 mt-1 ok">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_3-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_3-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['3']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_3-'+widget.id"
+                                               class="ms-1 mt-1 warning">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_4-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_4-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['4']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_4-'+widget.id"
+                                               class="ms-1 mt-1 critical-soft">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                    <c-form-check>
+                                        <input
+                                                cFormCheckInput
+                                                class="checkbox-lg checkbox-primary"
+                                                [name]="'Hosts.Priority_5-'+widget.id"
+                                                [attr.id]="'Hosts.Priority_5-'+widget.id"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                oitcDebounce
+                                                [(ngModel)]="priorityFilter['5']"/>
+
+                                        <label cFormCheckLabel
+                                               [for]="'Hosts.Priority_5-'+widget.id"
+                                               class="ms-1 mt-1 critical">
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                            <fa-icon [icon]="['fas', 'fire']"></fa-icon>
+                                        </label>
+                                    </c-form-check>
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                        <c-row class="my-2">
+                            <c-col class="text-end">
+                                <button cButton class="ripple" color="primary" (click)="submit()">
+                                    {{ t('Save') }}
+                                </button>
+                            </c-col>
+                        </c-row>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</ng-container>

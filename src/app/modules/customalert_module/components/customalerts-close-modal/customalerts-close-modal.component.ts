@@ -62,7 +62,6 @@ export class CustomalertsCloseModalComponent {
     private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
     protected comment: string = '';
-    protected acknowlage: boolean = true;
     protected isProcessing: boolean = false;
     protected percentage: number = 0;
     protected hasErrors: boolean = false;
@@ -140,7 +139,6 @@ export class CustomalertsCloseModalComponent {
 
     private reset(): void {
         // All records have been deleted successfully. Reset the modal
-        this.acknowlage = true;
         this.isProcessing = false;
         this.percentage = 0;
         this.hasErrors = false;

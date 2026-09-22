@@ -189,6 +189,7 @@ export interface HostescalationElements {
     timeperiods: SelectKeyValue[]
     contacts: SelectKeyValue[]
     contactgroups: SelectKeyValue[]
+    hostsWithCheckValues: HostsWithCheckValues
 }
 
 export interface HostescalationHosts {
@@ -205,4 +206,14 @@ export interface HostescalationExcludedHostgroups {
 
 export interface HostescalationEditApiResult {
     hostescalation: HostescalationGet
+}
+
+export interface HostsWithCheckValues {
+    [key: string]: {
+        id: number
+        name: string
+        check_interval: number
+        retry_interval: number
+        max_check_attempts: number
+    }
 }
