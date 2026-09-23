@@ -11,6 +11,10 @@
     padding-bottom: 2px;
     font-width: normal;
 }
+::ng-deep .vis-item-contact-username{
+    font-size: 12px;
+    font-width: normal;
+}
 
 ::ng-deep .vis-item .item-title {
     font-weight: 500;
@@ -31,7 +35,13 @@
 ::ng-deep .vis-item .badge-envelope{
     font-size: 6px;
     border-radius: 5px;
-    color:#7883da;
+    color:#333;
+}
+
+::ng-deep .vis-item .badge-marke{
+    font-size: 6px;
+    top:6px;
+    left:10px;
 }
 
 ::ng-deep .vis-item .badge-envelope .fa-check{
