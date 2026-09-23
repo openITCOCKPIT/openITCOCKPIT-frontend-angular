@@ -35,7 +35,7 @@ import { Subscription } from 'rxjs';
 import { ProfileMaxUploadLimit } from '../../../../../pages/profile/profile.interface';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { ConfigurationitemsService } from '../configurationitems.service';
-import Dropzone from 'dropzone';
+import { Dropzone,  DropzoneFile } from 'dropzone';
 import { AuthService } from '../../../../../auth/auth.service';
 import {
     ConfigurationitemsImportFileInformation,
@@ -150,15 +150,15 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
                 url: "/import_module/configurationitems/import.json?angular=true",
-                removedfile: (file: Dropzone.DropzoneFile) => {
+                removedfile: (file: DropzoneFile) => {
                     this.removeFile(file);
                 },
-                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                sending: (file?: DropzoneFile, xhr?: XMLHttpRequest, formData?: FormData) => {
                     this.hasRelevantChanges = false;
                     this.relevantChanges = [];
                     this.cdr.markForCheck();
                 },
-                success: (file: Dropzone.DropzoneFile) => {
+                success: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
 
                     const response = file.xhr;
@@ -196,7 +196,7 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
                     this.notyService.genericError(errorMessage);
 
                 },
-                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                error: (file: DropzoneFile, error: string | any, xhr?: XMLHttpRequest) => {
                     this.cdr.markForCheck();
                     this.importSuccessful = false;
 
@@ -234,11 +234,13 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
         }
     }
 
-    private removeFile(file: Dropzone.DropzoneFile) {
+    private removeFile(file: DropzoneFile) {
         this.cdr.markForCheck();
 
         // Remove uploaded file from dropzone preview
-        file.previewElement.parentNode?.removeChild(file.previewElement);
+        if (file.previewElement?.parentNode) {
+            file.previewElement.parentNode.removeChild(file.previewElement);
+        }
 
         return;
 
@@ -269,8 +271,12 @@ export class ConfigurationitemsImportComponent implements OnDestroy, AfterViewIn
 
     }
 
-    private updatePreviewElement(file: Dropzone.DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
+    private updatePreviewElement(file: DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
         const previewElement = file.previewElement;
+
+        if (!previewElement) {
+            return;
+        }
 
         previewElement.classList.remove('dz-processing');
         previewElement.classList.add(`dz-${state}`); // dz-error or dz-success

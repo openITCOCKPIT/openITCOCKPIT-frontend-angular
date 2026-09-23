@@ -46,7 +46,7 @@ import { NgOptionHighlightDirective } from '@ng-select/ng-option-highlight';
 import { TimezoneConfiguration, TimezoneService } from '../../../services/timezone.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
-import Dropzone from 'dropzone';
+import { Dropzone,  DropzoneFile } from 'dropzone';
 import { AuthService } from '../../../auth/auth.service';
 
 
@@ -116,10 +116,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     public constructor() {
-        // disable dropzone auto discover
-        // https://github.com/zefoy/ngx-dropzone-wrapper/blob/fb39139147f3a6d72bcaff51c3c32e2a54e31c9d/src/lib/dropzone.directive.ts#L60
-        const dz = Dropzone;
-        dz.autoDiscover = false;
     }
 
     public ngOnInit() {
@@ -216,13 +212,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
                 url: "/profile/upload_profile_icon.json?angular=true",
-                success: (file: Dropzone.DropzoneFile) => {
+                success: (file: DropzoneFile) => {
                     this.notyService.genericSuccess();
                     this.loadUser();
                     // Notify the avatar component that the image has changed
                     this.ProfileService.notifyProfileImageChanged();
                 },
-                error: (file: Dropzone.DropzoneFile, message: string, xhr: XMLHttpRequest) => {
+                error: (file: DropzoneFile, message: string, xhr?: XMLHttpRequest) => {
                     if (typeof xhr === 'undefined') {
                         // User tried to upload illegal file types such as .pdf or so
                         this.notyService.genericError(message);

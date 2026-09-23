@@ -6,7 +6,7 @@ import {
 
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { NgScrollbarModule } from 'ngx-scrollbar';
+//import { NgScrollbarModule } from 'ngx-scrollbar';
 
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -18,7 +18,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
         FormsModule,
         FontAwesomeModule,
         ReactiveFormsModule,
-        NgScrollbarModule,
+        //NgScrollbarModule,
         SidebarModule
     ],
     templateUrl: './coreui.component.html',

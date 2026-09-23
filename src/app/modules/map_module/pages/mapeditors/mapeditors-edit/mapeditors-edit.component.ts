@@ -102,7 +102,7 @@ import { SelectComponent } from '../../../../../layouts/primeng/select/select/se
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
-import Dropzone from 'dropzone';
+import { Dropzone,  DropzoneFile } from 'dropzone';
 import { AuthService } from '../../../../../auth/auth.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { BbCodeEditorComponent } from '../../../../../pages/documentations/bb-code-editor/bb-code-editor.component';
@@ -2491,14 +2491,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
                 url: '/map_module/backgroundUploads/upload/' + this.mapId + '.json',
-                removedfile: (file: Dropzone.DropzoneFile) => {
+                removedfile: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
-                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
-                    formData.append('map_id', String(this.mapId));
+                sending: (file?: DropzoneFile, xhr?: XMLHttpRequest, formData?: FormData) => {
+                    formData?.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
-                success: (file: Dropzone.DropzoneFile) => {
+                success: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
 
                     const response = file.xhr;
@@ -2528,7 +2528,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericError(errorMessage);
 
                 },
-                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                error: (file: DropzoneFile, error: string | any, xhr?: XMLHttpRequest) => {
                     this.cdr.markForCheck();
 
                     let message = '';
@@ -2570,14 +2570,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
                 url: '/map_module/backgroundUploads/icon/' + this.mapId + '.json',
-                removedfile: (file: Dropzone.DropzoneFile) => {
+                removedfile: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
-                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
-                    formData.append('map_id', String(this.mapId));
+                sending: (file?: DropzoneFile, xhr?: XMLHttpRequest, formData?: FormData) => {
+                    formData?.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
-                success: (file: Dropzone.DropzoneFile) => {
+                success: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
 
                     const response = file.xhr;
@@ -2607,7 +2607,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericError(errorMessage);
 
                 },
-                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                error: (file: DropzoneFile, error: string | any, xhr?: XMLHttpRequest) => {
                     this.cdr.markForCheck();
 
                     let message = '';
@@ -2649,14 +2649,14 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
                 url: '/map_module/backgroundUploads/iconset/' + this.mapId + '.json',
-                removedfile: (file: Dropzone.DropzoneFile) => {
+                removedfile: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
-                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
-                    formData.append('map_id', String(this.mapId));
+                sending: (file?: DropzoneFile, xhr?: XMLHttpRequest, formData?: FormData) => {
+                    formData?.append('map_id', String(this.mapId));
                     this.cdr.markForCheck();
                 },
-                success: (file: Dropzone.DropzoneFile) => {
+                success: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
 
                     const response = file.xhr;
@@ -2687,7 +2687,7 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericError(errorMessage);
 
                 },
-                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                error: (file: DropzoneFile, error: string | any, xhr?: XMLHttpRequest) => {
                     this.cdr.markForCheck();
 
                     let message = '';
@@ -2720,8 +2720,12 @@ export class MapeditorsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
-    private updatePreviewElement(file: Dropzone.DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
+    private updatePreviewElement(file: DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
         const previewElement = file.previewElement;
+
+        if (!previewElement) {
+            return;
+        }
 
         previewElement.classList.remove('dz-processing');
         previewElement.classList.add(`dz-${state}`); // dz-error or dz-success
