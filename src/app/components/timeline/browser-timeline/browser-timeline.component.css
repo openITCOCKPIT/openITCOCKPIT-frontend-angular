@@ -59,33 +59,3 @@
 ::ng-deep body.dark-theme .vis-item.vis-items {
     border-color:#a7a5a5;
 }
-
-
-
-.icon-container {
-    position: relative;
-    display: inline-block;
-    font-size: 20px; /* حجم الأيقونة الرئيسية */
-}
-
-.main-icon {
-    color: #000;
-}
-
-.badge-icon {
-    position: absolute;
-    bottom: -4px;
-    right: -6px;
-    font-size: 0.6em; /* حجم الشارة أصغر من الأيقونة الرئيسية */
-    font-weight: bold;
-    background: #fff; /* خلفية بيضاء اختيارية لفصل الأيقونتين */
-    border-radius: 50%;
-}
-
-.badge-icon.success {
-    color: #28a745; /* لون أخضر */
-}
-
-.badge-icon.danger {
-    color: #dc3545; /* لون أحمر */
-}
