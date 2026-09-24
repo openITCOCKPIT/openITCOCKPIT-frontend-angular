@@ -100,7 +100,7 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
                 return 'bg-down';
 
             default:
-                return 'bg-primary';
+                return 'bg-not-monitored';
         }
     }
 
