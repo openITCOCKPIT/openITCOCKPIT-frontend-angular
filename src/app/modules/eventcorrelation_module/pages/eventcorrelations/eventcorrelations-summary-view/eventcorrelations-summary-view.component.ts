@@ -65,6 +65,9 @@ export class EventcorrelationsSummaryViewComponent implements OnInit, OnDestroy 
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
     public stateForDowntimedService: number = 3; // Unknown
 
+    public acknowledgedServices: number = 0; //number of acknowledged services in the EVC
+    public stateForAcknowledgedService: number = 3; // Unknown
+
     private subscriptions: Subscription = new Subscription();
     private readonly EventcorrelationsService = inject(EventcorrelationsService);
     private readonly router: Router = inject(Router);
@@ -96,7 +99,9 @@ export class EventcorrelationsSummaryViewComponent implements OnInit, OnDestroy 
 
             this.downtimedServices = result.downtimedServices;
             this.stateForDowntimedService = result.stateForDowntimedService;
+
+            this.acknowledgedServices = result.acknowledgedServices;
+            this.stateForAcknowledgedService = result.stateForAcknowledgedService;
         }));
     }
-
 }

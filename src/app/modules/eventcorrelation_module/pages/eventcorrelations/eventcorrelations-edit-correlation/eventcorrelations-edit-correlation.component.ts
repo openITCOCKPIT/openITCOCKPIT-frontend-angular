@@ -140,6 +140,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
     public stateForDowntimedService: number = 3; // Unknown
 
+    public acknowledgedServices: number = 0; //number of acknowledged services in the EVC
+    public stateForAcknowledgedService: number = 3; // Unknown
+
     public animated: number = 0; // not animated
     public connectionLine: string = 'bezier'; // bezier, straight, segment
 
@@ -233,7 +236,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.disabledServices = result.disabledServices;
 
             this.downtimedServices = result.downtimedServices;
+            this.acknowledgedServices = result.acknowledgedServices;
             this.stateForDowntimedService = result.stateForDowntimedService;
+            this.stateForAcknowledgedService = result.stateForAcknowledgedService;
 
             this.isLoading = false;
         }));
