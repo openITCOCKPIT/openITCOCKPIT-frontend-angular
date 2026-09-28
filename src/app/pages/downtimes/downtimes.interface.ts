@@ -52,13 +52,14 @@ export interface Downtime {
     scheduledEndTime: string
     actualEndTime: string
     duration: number
-    actualDuration: string
+    actualDuration: number
     wasStarted: boolean
     internalDowntimeId: number
     downtimehistoryId: any
     wasCancelled: boolean
     allowEdit: boolean
     durationHuman: string
+    actualDurationHuman: string
     isCancellable: boolean
     isRunning: boolean
     isExpired: boolean

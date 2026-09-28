@@ -227,65 +227,65 @@
                                 </h5>
                                 <c-form-check>
                                     <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="filter.isRunning"
-                                        id="filter.isRunning"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [trueValue]="true"
-                                        [falseValue]="''"
-                                        [(ngModel)]="params['filter[isRunning]']"/>
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="filter.isRunning"
+                                            id="filter.isRunning"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="true"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[isRunning]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.isRunning">{{ t('Is running') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="filter.DowntimeServices.was_not_cancelled"
-                                        id="filter.DowntimeServices.was_not_cancelled"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [trueValue]="true"
-                                        [falseValue]="''"
-                                        [(ngModel)]="params['filter[DowntimeServices.was_not_cancelled]']"/>
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="filter.DowntimeServices.was_not_cancelled"
+                                            id="filter.DowntimeServices.was_not_cancelled"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="true"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[DowntimeServices.was_not_cancelled]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.DowntimeServices.was_not_cancelled">{{ t('Was not cancelled') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="filter.DowntimeServices.was_cancelled"
-                                        id="filter.DowntimeServices.was_cancelled"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [trueValue]="true"
-                                        [falseValue]="''"
-                                        [(ngModel)]="params['filter[DowntimeServices.was_cancelled]']"/>
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="filter.DowntimeServices.was_cancelled"
+                                            id="filter.DowntimeServices.was_cancelled"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="true"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[DowntimeServices.was_cancelled]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.DowntimeServices.was_cancelled">{{ t('Was cancelled') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="filter.hideExpired"
-                                        id="filter.hideExpired"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [trueValue]="true"
-                                        [falseValue]="''"
-                                        [(ngModel)]="params['filter[hideExpired]']"/>
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="filter.hideExpired"
+                                            id="filter.hideExpired"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="true"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[hideExpired]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.hideExpired">{{ t('Hide expired') }}</label>
                                 </c-form-check>
@@ -358,15 +358,15 @@
                                         <div
                                         >
                                             <oitc-item-select
-                                                *oitcPermission="['downtimes', 'delete']"
-                                                [disabled]="false"
-                                                [item]="serviceDowntime.DowntimeService.internalDowntimeId"></oitc-item-select>
+                                                    *oitcPermission="['downtimes', 'delete']"
+                                                    [disabled]="false"
+                                                    [item]="serviceDowntime.DowntimeService.internalDowntimeId"></oitc-item-select>
                                         </div>
                                     }
                                 </td>
                                 <td class="text-center">
                                     <oitc-downtime-simple-icon
-                                        [downtime]="serviceDowntime.DowntimeService"></oitc-downtime-simple-icon>
+                                            [downtime]="serviceDowntime.DowntimeService"></oitc-downtime-simple-icon>
                                 </td>
                                 <td class="word-break">
                                     <a *oitcPermission="['hosts', 'browser']"
@@ -397,12 +397,30 @@
                                 </td>
                                 <td>
                                     {{ serviceDowntime.DowntimeService.scheduledStartTime }}
+                                    @if (serviceDowntime.DowntimeService.scheduledStartTime !== serviceDowntime.DowntimeService.actualStartTime) {
+                                        <br/>
+                                        <small class="text-danger" [cTooltip]="t('Actual start time')">
+                                            {{ serviceDowntime.DowntimeService.actualStartTime }}
+                                        </small>
+                                    }
                                 </td>
                                 <td>
                                     {{ serviceDowntime.DowntimeService.scheduledEndTime }}
+                                    @if (serviceDowntime.DowntimeService.scheduledEndTime !== serviceDowntime.DowntimeService.actualEndTime) {
+                                        <br/>
+                                        <small class="text-danger" [cTooltip]="t('Actual end time')">
+                                            {{ serviceDowntime.DowntimeService.actualEndTime }}
+                                        </small>
+                                    }
                                 </td>
                                 <td>
                                     {{ serviceDowntime.DowntimeService.durationHuman }}
+                                    @if (serviceDowntime.DowntimeService.actualDurationHuman !== serviceDowntime.DowntimeService.durationHuman) {
+                                        <br/>
+                                        <small class="text-danger" [cTooltip]="t('Actual duration')">
+                                            {{ serviceDowntime.DowntimeService.actualDurationHuman }}
+                                        </small>
+                                    }
                                 </td>
                                 <td class="text-center">
                                     @if (serviceDowntime.DowntimeService.wasCancelled) {
@@ -446,7 +464,7 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="serviceDowntimes.all_service_downtimes.length"></oitc-select-all>
+                                    [itemsCount]="serviceDowntimes.all_service_downtimes.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div *oitcPermission="['downtimes', 'delete']"
@@ -463,13 +481,13 @@
                 </c-container>
             }
             <c-container
-                [fluid]="true" class="mb-3 py-3">
+                    [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
                         @if (serviceDowntimes) {
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="serviceDowntimes"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="serviceDowntimes"></oitc-paginate-or-scroll>
                         }
                     </c-col>
                 </c-row>
