@@ -370,7 +370,7 @@
                                     {{ hostDowntime.DowntimeHost.scheduledStartTime }}
                                     @if (hostDowntime.DowntimeHost.scheduledStartTime !== hostDowntime.DowntimeHost.actualStartTime) {
                                         <br/>
-                                        <small class="text-danger" [cTooltip]="t('Actual start time')">
+                                        <small class="text-muted" [cTooltip]="t('Actual start time')">
                                             {{ hostDowntime.DowntimeHost.actualStartTime }}
                                         </small>
                                     }
@@ -379,7 +379,7 @@
                                     {{ hostDowntime.DowntimeHost.scheduledEndTime }}
                                     @if (hostDowntime.DowntimeHost.scheduledEndTime !== hostDowntime.DowntimeHost.actualEndTime) {
                                         <br/>
-                                        <small class="text-danger" [cTooltip]="t('Actual end time')">
+                                        <small class="text-muted" [cTooltip]="t('Actual end time')">
                                             {{ hostDowntime.DowntimeHost.actualEndTime }}
                                         </small>
                                     }
@@ -388,7 +388,7 @@
                                     {{ hostDowntime.DowntimeHost.durationHuman }}
                                     @if (hostDowntime.DowntimeHost.actualDuration && hostDowntime.DowntimeHost.actualDurationHuman !== hostDowntime.DowntimeHost.durationHuman) {
                                         <br/>
-                                        <small class="text-danger" [cTooltip]="t('Actual duration')">
+                                        <small class="text-muted" [cTooltip]="t('Actual duration')">
                                             {{ hostDowntime.DowntimeHost.actualDurationHuman }}
                                         </small>
                                     }
