@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
 import { TooltipDirective } from '@coreui/angular';
 import { NgClass } from '@angular/common';
 import { EvcSummaryService } from '../../eventcorrelations.interface';
@@ -7,12 +7,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { AcknowledgementTypes } from '../../../../../../pages/acknowledgements/acknowledgement-types.enum';
-import {
-    EvcServicestatusToasterComponent
-} from '../evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.component';
-import {
-    EvcServicestatusToasterService
-} from '../evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.service';
+import { EvcServicestatusToasterComponent } from '../evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.component';
+import { EvcServicestatusToasterService } from '../evc-tree/evc-servicestatus-toaster/evc-servicestatus-toaster.service';
 import { EventcorrelationOperators } from '../../eventcorrelations.enum';
 import { LocalNumberPipe } from '../../../../../../pipes/local-number.pipe';
 
@@ -38,31 +34,31 @@ export class EvcTableComponent {
 
     public evcSummaryTree = input<EvcSummaryService[][]>([]);
     public stateForDowntimedService = input<number>(3);
+    public stateForAcknowledgedService = input<number>(3);
     public stateForDisabledService = input<number>(3);
 
     public downtimeStateTitle: string = '';
+    public acknowledgedStateTitle: string = '';
     public disabledStateTitle: string = '';
 
-    public evcSummaryTreeForView: EvcSummaryService[][] = [];
 
     private readonly TranslocoService = inject(TranslocoService);
     private readonly EvcServicestatusToasterService = inject(EvcServicestatusToasterService);
-    private cdr = inject(ChangeDetectorRef);
 
     private toasterTimeout: any = null;
 
     constructor() {
         this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
+        this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered unknown');
         this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
 
         effect(() => {
-            // ITC-3587 we need to patch in the currentStateConsiderDowntimeOrDisabled field for the score operator
+            // ITC-3587 we need to patch in the currentStateConsiderDowntimeOrAcknowledgedOrDisabled field for the score operator
             const evcTree = this.evcSummaryTree();
             for (let layerNumber in evcTree) {
                 for (let parentId in evcTree[layerNumber]) {
                     let vService = evcTree[layerNumber][parentId];
                     if (vService.isUsedInScoringOperator) {
-                        vService.scheduledDowntimeDepth
                         // true, if this service is used in a scoring operator in the next level.
                         let currentState: number | null = vService.current_state;
                         if (vService.scheduledDowntimeDepth && vService.scheduledDowntimeDepth > 0) {
@@ -70,12 +66,17 @@ export class EvcTableComponent {
                                 // -1 == actual service state
                                 currentState = this.stateForDowntimedService();
                             }
-
+                        }
+                        if (vService.problemHasBeenAcknowledged) {
+                            if (this.stateForAcknowledgedService() !== -1) {
+                                // -1 == actual service state
+                                currentState = this.stateForAcknowledgedService();
+                            }
                         }
                         if (vService.disabled) {
                             currentState = this.stateForDisabledService();
                         }
-                        evcTree[layerNumber][parentId].currentStateConsiderDowntimeOrDisabled = currentState;
+                        evcTree[layerNumber][parentId].currentStateConsiderDowntimeOrAcknowledgedOrDisabled = currentState;
                     }
                 }
 
@@ -96,6 +97,24 @@ export class EvcTableComponent {
 
                 case 3:
                     this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
+                    break;
+            }
+
+            switch (this.stateForAcknowledgedService()) {
+                case 0:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered ok');
+                    break;
+
+                case 1:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered warning');
+                    break;
+
+                case 2:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered critical');
+                    break;
+
+                case 3:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered unknown');
                     break;
             }
 
