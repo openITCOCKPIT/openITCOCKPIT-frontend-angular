@@ -399,7 +399,7 @@
                                     {{ serviceDowntime.DowntimeService.scheduledStartTime }}
                                     @if (serviceDowntime.DowntimeService.scheduledStartTime !== serviceDowntime.DowntimeService.actualStartTime) {
                                         <br/>
-                                        <small class="text-danger" [cTooltip]="t('Actual start time')">
+                                        <small class="text-muted" [cTooltip]="t('Actual start time')">
                                             {{ serviceDowntime.DowntimeService.actualStartTime }}
                                         </small>
                                     }
@@ -408,16 +408,16 @@
                                     {{ serviceDowntime.DowntimeService.scheduledEndTime }}
                                     @if (serviceDowntime.DowntimeService.scheduledEndTime !== serviceDowntime.DowntimeService.actualEndTime) {
                                         <br/>
-                                        <small class="text-danger" [cTooltip]="t('Actual end time')">
+                                        <small class="text-muted" [cTooltip]="t('Actual end time')">
                                             {{ serviceDowntime.DowntimeService.actualEndTime }}
                                         </small>
                                     }
                                 </td>
                                 <td>
                                     {{ serviceDowntime.DowntimeService.durationHuman }}
-                                    @if (serviceDowntime.DowntimeService.actualDurationHuman !== serviceDowntime.DowntimeService.durationHuman) {
+                                    @if (serviceDowntime.DowntimeService.actualDuration && serviceDowntime.DowntimeService.actualDurationHuman !== serviceDowntime.DowntimeService.durationHuman) {
                                         <br/>
-                                        <small class="text-danger" [cTooltip]="t('Actual duration')">
+                                        <small class="text-muted" [cTooltip]="t('Actual duration')">
                                             {{ serviceDowntime.DowntimeService.actualDurationHuman }}
                                         </small>
                                     }
