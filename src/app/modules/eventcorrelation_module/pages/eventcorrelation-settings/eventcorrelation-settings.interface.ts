@@ -19,6 +19,7 @@ export interface EventcorrelationSettingsPost {
     configuration_option: number
     status_disabled_service: number
     status_downtime_service: number
+    status_acknowledged_service: number
     connection_line: string
     subject_length_limit: number
     EVC_CONSIDER_STATETYPE: boolean

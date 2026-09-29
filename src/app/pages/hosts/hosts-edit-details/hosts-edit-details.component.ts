@@ -22,7 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { MultiSelectComponent } from '../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { AsyncPipe, NgClass } from '@angular/common';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 
 import { SelectComponent } from '../../../layouts/primeng/select/select/select.component';

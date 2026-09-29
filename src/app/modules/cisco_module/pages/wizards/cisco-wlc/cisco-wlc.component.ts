@@ -23,7 +23,7 @@ import { FormsModule } from '@angular/forms';
 import {
     WizardsDynamicfieldsComponent
 } from '../../../../../components/wizards/wizards-dynamicfields/wizards-dynamicfields.component';
-import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 
 @Component({

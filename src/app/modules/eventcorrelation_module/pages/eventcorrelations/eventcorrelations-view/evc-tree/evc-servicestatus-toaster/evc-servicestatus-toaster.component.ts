@@ -18,7 +18,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 
 import { TranslocoDirective } from '@jsverse/transloco';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import {
     ToasterLoaderComponent
 } from '../../../../../../../layouts/primeng/loading/toaster-loader/toaster-loader.component';

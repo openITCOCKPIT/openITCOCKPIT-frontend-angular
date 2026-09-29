@@ -34,7 +34,7 @@ import { BlockLoaderComponent } from '../../../layouts/primeng/loading/block-loa
 import { NgClass } from '@angular/common';
 import { HostEntity } from '../../hosts/hosts.interface';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../components/required-icon/required-icon.component';
 import { FormErrorDirective } from '../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../layouts/coreui/form-feedback/form-feedback.component';

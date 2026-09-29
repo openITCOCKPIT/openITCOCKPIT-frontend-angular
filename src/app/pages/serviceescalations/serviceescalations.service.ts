@@ -76,6 +76,7 @@ export class ServiceescalationsService {
         return this.http.get<ServiceescalationServices>(`${proxyPath}/services/loadServicesByStringForOptionGroup.json`, {
             params: {
                 angular: true,
+                'withCheckValues': true,
                 'containerId': containerId,
                 'filter[servicename]': searchString,
                 'selected[]': servicesIds

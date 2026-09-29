@@ -31,7 +31,7 @@ import {
     AgentconnectorAutoTlsSatelliteTaskResponse,
     AgentModes
 } from '../agentconnector.interface';
-import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({

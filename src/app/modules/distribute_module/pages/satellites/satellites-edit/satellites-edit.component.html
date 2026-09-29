@@ -56,13 +56,13 @@
                             <oitc-required-icon/>
                         </label>
                         <oitc-select
-                            name="post.Satellite.container_id"
-                            id="post.Satellite.container_id"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.Satellite.container_id"
-                            [options]="containers"
-                            oitcFormError [errors]="errors" errorField="container_id">
+                                name="post.Satellite.container_id"
+                                id="post.Satellite.container_id"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.Satellite.container_id"
+                                [options]="containers"
+                                oitcFormError [errors]="errors" errorField="container_id">
                         </oitc-select>
                         <oitc-form-feedback [errors]="errors" errorField="container_id"></oitc-form-feedback>
                     </div>
@@ -120,12 +120,12 @@
                             <oitc-required-icon/>
                         </label>
                         <oitc-select
-                            name="post.Satellite.sync_method"
-                            id="post.Satellite.sync_method"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.Satellite.sync_method"
-                            [options]="syncMethods"
+                                name="post.Satellite.sync_method"
+                                id="post.Satellite.sync_method"
+                                optionValue="key"
+                                optionLabel="value"
+                                [(ngModel)]="post.Satellite.sync_method"
+                                [options]="syncMethods"
                         >
                         </oitc-select>
                         <div class="help-block">
@@ -145,14 +145,14 @@
                                 <c-dropdown variant="btn-group">
                                     @if (post.protocol === 'http') {
                                         <button
-                                            cButton cDropdownToggle color="primary">
+                                                cButton cDropdownToggle color="primary">
                                             <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
                                             {{ t('HTTP') }}
                                         </button>
                                     }
                                     @if (post.protocol === 'https') {
                                         <button
-                                            cButton cDropdownToggle color="primary">
+                                                cButton cDropdownToggle color="primary">
                                             <fa-icon [icon]="['fas', 'lock']"></fa-icon>
                                             {{ t('HTTPS') }}
                                         </button>
@@ -241,14 +241,14 @@
                                 <c-dropdown>
                                     @if (post.proxyProtocol === 'http') {
                                         <button
-                                            cButton cDropdownToggle color="primary">
+                                                cButton cDropdownToggle color="primary">
                                             <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
                                             {{ t('HTTP') }}
                                         </button>
                                     }
                                     @if (post.proxyProtocol === 'https') {
                                         <button
-                                            cButton cDropdownToggle color="primary">
+                                                cButton cDropdownToggle color="primary">
                                             <fa-icon [icon]="['fas', 'lock']"></fa-icon>
                                             {{ t('HTTPS') }}
                                         </button>
@@ -389,7 +389,7 @@
                                    id="post.Satellite.private_key_path"
                                    type="text"
                                    name="post.Satellite.private_key_path"
-                                   placeholder="/var/lib/nagios/.ssh/id_rsa"
+                                   placeholder="/var/lib/nagios/.ssh/id_ed25519"
                                    [(ngModel)]="post.Satellite.private_key_path"
                                    oitcFormError [errors]="errors" errorField="private_key_path">
                             <oitc-form-feedback [errors]="errors" errorField="private_key_path"></oitc-form-feedback>

@@ -57,7 +57,7 @@ import {
 import { EventcorrelationOperators } from '../eventcorrelations.enum';
 import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedback/form-feedback.component';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { GenericSuccessResponse, GenericValidationError } from '../../../../../generic-responses';
 
@@ -139,6 +139,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
 
     public downtimedServices: number = 0; //number of services in a downtime in the EVC
     public stateForDowntimedService: number = 3; // Unknown
+
+    public acknowledgedServices: number = 0; //number of acknowledged services in the EVC
+    public stateForAcknowledgedService: number = 3; // Unknown
 
     public animated: number = 0; // not animated
     public connectionLine: string = 'bezier'; // bezier, straight, segment
@@ -233,7 +236,9 @@ export class EventcorrelationsEditCorrelationComponent implements OnInit, OnDest
             this.disabledServices = result.disabledServices;
 
             this.downtimedServices = result.downtimedServices;
+            this.acknowledgedServices = result.acknowledgedServices;
             this.stateForDowntimedService = result.stateForDowntimedService;
+            this.stateForAcknowledgedService = result.stateForAcknowledgedService;
 
             this.isLoading = false;
         }));

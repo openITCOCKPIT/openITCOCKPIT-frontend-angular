@@ -43,7 +43,7 @@ import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/tab
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { IndexPage } from '../../../../../pages.interface';
 import { SlaAvailabilityStatusHostsLogService } from '../sla-availability-status-hosts-log.service';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { CopyToClipboardComponent } from '../../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { FilterPipe } from '../../../../../pipes/filter.pipe';

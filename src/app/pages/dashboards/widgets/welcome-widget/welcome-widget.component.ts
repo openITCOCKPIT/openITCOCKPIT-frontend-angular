@@ -7,7 +7,7 @@ import { StatuscountResponse } from '../../../browsers/browsers.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { AsyncPipe } from '@angular/common';
 import { SystemnameService } from '../../../../services/systemname.service';
-import { Avatar } from 'primeng/avatar';
+import { Avatar } from '@openng/optimus-ui/avatar';
 import initials from 'initials';
 import { LocalNumberPipe } from '../../../../pipes/local-number.pipe';
 import { WordLoaderComponent } from '../../../../layouts/primeng/loading/word-loader/word-loader.component';

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { BaseWidgetComponent } from '../base-widget/base-widget.component';
-import { SummaryStateServices } from '../../../hosts/summary_state.interface';
 import { HostgroupsLoadHostgroupsByStringParams } from '../../../hostgroups/hostgroups.interface';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,6 +32,7 @@ import { MultiSelectComponent } from '../../../../layouts/primeng/multi-select/m
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { HostgroupsService } from '../../../hostgroups/hostgroups.service';
 import _ from 'lodash';
+import { SummaryStateServices } from '../../../services/summary_state.interface';
 
 @Component({
     selector: 'oitc-tactical-overview-services-widget',

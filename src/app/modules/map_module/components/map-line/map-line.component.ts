@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, effect, input, InputSignal, OnDestr
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { MapCanvasComponent } from '../map-canvas/map-canvas.component';
 import { NgClass } from '@angular/common';
-import { ContextMenuModule } from 'primeng/contextmenu';
+import { ContextMenuModule } from '@openng/optimus-ui/contextmenu';
 import { interval, Subscription } from 'rxjs';
 import { Mapline } from '../../pages/mapeditors/mapeditors.interface';
 import { MapItemType } from '../map-item-base/map-item-base.enum';

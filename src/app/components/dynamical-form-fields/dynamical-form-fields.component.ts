@@ -20,7 +20,7 @@ import {
 import { FormErrorDirective } from '../../layouts/coreui/form-error.directive';
 import { FormFeedbackComponent } from '../../layouts/coreui/form-feedback/form-feedback.component';
 
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { RequiredIconComponent } from '../required-icon/required-icon.component';
 import { TrueFalseDirective } from '../../directives/true-false.directive';
 import { GenericValidationError } from '../../generic-responses';

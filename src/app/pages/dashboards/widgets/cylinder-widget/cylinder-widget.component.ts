@@ -337,9 +337,6 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
         let leftLineLength = 6;
         const fontSize = currentText.length > 15 ? '12px' : '14px';
 
-        //inner Cylinder (the value)
-        this.createEllipse(cylinderGroup, ellipseCx, ellipseBottomCy - ry, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
-
         if (currentVal > 0) {
             if (max > 0) {
                 rectY -= ry;
@@ -351,7 +348,7 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
             } else {
                 topEllipseY += ry;
             }
-            if (currentVal < 1) {
+            if (currentVal < 1 || percentage < 4) {
                 if (percentage > 0 && percentage < 99) {
                     topEllipseY -= 10;
                 }
@@ -363,17 +360,22 @@ export class CylinderWidgetComponent extends BaseWidgetComponent implements Afte
 
         topEllipseY = Math.min(Math.max(topEllipseY, y), ellipseBottomCy - ry);
 
+        //inner Cylinder (the value)
         this.createRect(cylinderGroup, x, rectY, cylinderWidth, pxValue, rx, ry, `url(#fade${stateColor}_${this.widgetID})`, 0.9);
         //top ellipse
         const innerTopEllipse = this.createEllipse(cylinderGroup, ellipseCx, topEllipseY, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
         if (innerTopEllipse) {
-            if (percentage > 5) {
+            if (percentage > 4) {
                 this.renderer.setAttribute(innerTopEllipse, 'class', 'fluid-top-surface');
             } else if (percentage > 0) {
                 this.renderer.setAttribute(innerTopEllipse, 'class', 'fluid-top-surface-light');
             }
         }
-        //current value inner cylinder
+
+        //bottom Cylinder (the value)
+        this.createEllipse(cylinderGroup, ellipseCx, ellipseBottomCy - ry, rx, ry, `url(#fadeDark${stateColor}_${this.widgetID})`, 0.8);
+
+        //Outer Cylinder - inner value
         this.createRect(cylinderGroup, x, 0, cylinderWidth, this.height, rx, ry, `url(#fadeGray_${this.widgetID})`, 0.5, 2, '#CECECE', 0.3, 'background_' + this.widgetID);
 
         //Outer Cylinder - center rect

@@ -21,11 +21,9 @@ import {
     RowComponent,
     TableDirective
 } from '@coreui/angular';
-import { NgForOf, NgIf } from '@angular/common';
-
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { Subscription } from 'rxjs';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { ExportsService } from '../exports.service';
 import { FormLoaderComponent } from '../../../layouts/primeng/loading/form-loader/form-loader.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
@@ -56,7 +54,6 @@ import { FormsModule } from '@angular/forms';
         TranslocoDirective,
         RouterLink,
         AlertComponent,
-        NgIf,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
@@ -69,7 +66,6 @@ import { FormsModule } from '@angular/forms';
         RowComponent,
         ColComponent,
         BorderDirective,
-        NgForOf,
         TableDirective,
         ItemSelectComponent,
         ContainerComponent,

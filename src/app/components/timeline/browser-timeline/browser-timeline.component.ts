@@ -21,7 +21,7 @@ import { DataItem, Timeline, TimelineGroup, TimelineItem, TimelineOptions } from
 
 import "vis-timeline/styles/vis-timeline-graph2d.css";
 import { TranslocoDirective } from '@jsverse/transloco';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { GenericUnixtimerange } from '../../../generic.interfaces';
 
 @Component({

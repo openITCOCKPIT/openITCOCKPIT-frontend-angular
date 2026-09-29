@@ -32,7 +32,7 @@ import { FormErrorDirective } from '../../../../../layouts/coreui/form-error.dir
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
-import { ProgressBarModule } from 'primeng/progressbar';
+import { ProgressBarModule } from '@openng/optimus-ui/progressbar';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { GenericResponseWrapper, GenericValidationError } from '../../../../../generic-responses';
 import { NgSelectComponent } from '@ng-select/ng-select';

@@ -61,7 +61,7 @@ import {
     RegexHelperTooltipComponent
 } from '../../../../../layouts/coreui/regex-helper-tooltip/regex-helper-tooltip.component';
 import { ExternalSystems } from '../external-systems.enum';
-import { MultiSelectChangeEvent } from 'primeng/multiselect';
+import { MultiSelectChangeEvent } from '@openng/optimus-ui/multiselect';
 
 @Component({
     selector: 'oitc-external-systems-add',

@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { NgStyle } from '@angular/common';
 
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { SkeletonModule } from 'primeng/skeleton';
+import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { SlaHostgroupHostsStatusOverviewService } from './sla-hostgroup-hosts-status-overview.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
