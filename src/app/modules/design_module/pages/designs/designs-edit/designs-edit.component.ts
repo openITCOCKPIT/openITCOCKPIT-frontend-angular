@@ -17,7 +17,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import { PermissionsService } from '../../../../../permissions/permissions.service';
 import { DesignsService } from '../designs.service';
 import { Design, DesignsEditRoot, Manipulations, MaxUploadLimit } from '../designs.interface';
-import Dropzone from 'dropzone';
+import { Dropzone,  DropzoneFile } from 'dropzone';
 import { KeyValuePipe } from '@angular/common';
 import { AuthService } from '../../../../../auth/auth.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -217,13 +217,13 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
                 url: '/design_module/designs/import.json?angular=true',
-                removedfile: (file: Dropzone.DropzoneFile) => {
+                removedfile: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
-                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                sending: (file?: DropzoneFile, xhr?: XMLHttpRequest, formData?: FormData) => {
                     this.cdr.markForCheck();
                 },
-                success: (file: Dropzone.DropzoneFile) => {
+                success: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
 
                     const response = file.xhr;
@@ -258,7 +258,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericError(errorMessage);
 
                 },
-                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                error: (file: DropzoneFile, error: string | any, xhr?: XMLHttpRequest) => {
                     this.cdr.markForCheck();
 
                     let message = '';
@@ -304,13 +304,13 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
                 url: '/design_module/uploads/uploadLogo.json?angular=true',
-                removedfile: (file: Dropzone.DropzoneFile) => {
+                removedfile: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
                 },
-                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                sending: (file?: DropzoneFile, xhr?: XMLHttpRequest, formData?: FormData) => {
                     this.cdr.markForCheck();
                 },
-                success: (file: Dropzone.DropzoneFile) => {
+                success: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
 
                     const response = file.xhr;
@@ -345,7 +345,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                     this.notyService.genericError(errorMessage);
 
                 },
-                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                error: (file: DropzoneFile, error: string | any, xhr?: XMLHttpRequest) => {
                     this.cdr.markForCheck();
 
                     let message = '';
@@ -378,15 +378,19 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     };
 
-    private updatePreviewElement(file: Dropzone.DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
+    private updatePreviewElement(file: DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
         const previewElement = file.previewElement;
 
-        previewElement.classList.remove('dz-processing');
-        previewElement.classList.add(`dz-${state}`); // dz-error or dz-success
+        if (!previewElement) {
+            return;
+        }
 
-        const errorMessageElement = previewElement.children.item(3);  // .dz-error-message
+        previewElement.classList.remove('dz-processing');
+        previewElement.classList.add(`dz-${state}`);
+
+        const errorMessageElement = previewElement.children.item(3);
         if (errorMessageElement && tooltipMessage) {
-            errorMessageElement.children[0].innerHTML = tooltipMessage; // .dz-error-message span
+            errorMessageElement.children[0].innerHTML = tooltipMessage;
         }
     }
 
