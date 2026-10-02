@@ -21,9 +21,9 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -47,15 +47,11 @@ import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { ItemSelectComponent } from '../../../layouts/coreui/select-all/item-select/item-select.component';
 import { DowntimeSimpleIconComponent } from '../downtime-simple-icon/downtime-simple-icon.component';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
-import {
-    PaginateOrScrollComponent
-} from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { SelectAllComponent } from '../../../layouts/coreui/select-all/select-all.component';
 import { SelectionServiceService } from '../../../layouts/coreui/select-all/selection-service.service';
 import { DELETE_SERVICE_TOKEN } from '../../../tokens/delete-injection.token';
-import {
-    CancelServicedowntimeModalComponent
-} from '../cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
+import { CancelServicedowntimeModalComponent } from '../cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
 import { CancelAllItem } from '../cancel-servicedowntime-modal/cancel-servicedowntime.interface';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
@@ -104,7 +100,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         DropdownToggleDirective,
         DropdownItemDirective,
         TableLoaderComponent,
-        AsyncPipe
+        AsyncPipe,
+        TooltipDirective
     ],
     templateUrl: './downtimes-service.component.html',
     styleUrl: './downtimes-service.component.css',
