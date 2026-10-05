@@ -127,7 +127,7 @@ export class EventcorrelationSettingsIndexComponent implements OnInit, OnDestroy
         }
     ];
 
-    protected readonly StatusForServiceInDowntime = [
+    protected readonly StatusForService = [
         {
             key: -1,
             value: this.TranslocoService.translate('Actual service state')

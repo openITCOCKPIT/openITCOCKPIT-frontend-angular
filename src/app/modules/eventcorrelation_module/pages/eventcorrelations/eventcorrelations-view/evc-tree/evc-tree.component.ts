@@ -132,7 +132,9 @@ export class EvcTreeComponent {
     public evcId = input<number>(0);
     public evcTree = input<EvcTree[]>([]);
     public downtimedServices = input<number>(0);
+    public acknowledgedServices = input<number>(0);
     public stateForDowntimedService = input<number>(3);
+    public stateForAcknowledgedService = input<number>(3);
     public stateForDisabledService = input<number>(3);
     public connectionLine = input<string>('bezier');
     public animated = input<number>(0);
@@ -140,6 +142,7 @@ export class EvcTreeComponent {
     public isWidget = input<boolean>(false);
 
     public downtimeStateTitle: string = '';
+    public acknowledgedStateTitle: string = '';
     public disabledStateTitle: string = '';
 
     public readonly PermissionsService: PermissionsService = inject(PermissionsService);
@@ -169,6 +172,7 @@ export class EvcTreeComponent {
 
     constructor() {
         this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
+        this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered unknown');
         this.disabledStateTitle = this.TranslocoService.translate('Disabled, considered unknown');
 
         effect(() => {
@@ -194,6 +198,24 @@ export class EvcTreeComponent {
 
                 case 3:
                     this.downtimeStateTitle = this.TranslocoService.translate('In Downtime, considered unknown');
+                    break;
+            }
+
+            switch (this.stateForAcknowledgedService()) {
+                case 0:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered ok');
+                    break;
+
+                case 1:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered warning');
+                    break;
+
+                case 2:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered critical');
+                    break;
+
+                case 3:
+                    this.acknowledgedStateTitle = this.TranslocoService.translate('Acknowledged, considered unknown');
                     break;
             }
 
@@ -349,12 +371,16 @@ export class EvcTreeComponent {
                     if (vService.isUsedInScoringOperator) {
                         // true, if this service is used in a scoring operator in the next level.
                         let currentState: number | undefined = vService.service.servicestatus.currentState;
-                        if (vService.service.servicestatus.scheduledDowntimeDepth && vService.service.servicestatus.scheduledDowntimeDepth > 0) {
-                            if (this.stateForDowntimedService() !== -1) {
-                                // -1 == actual service state
-                                currentState = this.stateForDowntimedService();
+                        if ((vService.service.servicestatus.scheduledDowntimeDepth && vService.service.servicestatus.scheduledDowntimeDepth > 0) || vService.service.servicestatus.problemHasBeenAcknowledged) {
+                            if (this.stateForDowntimedService() !== -1 || this.stateForAcknowledgedService() !== -1) {
+                                if (this.stateForAcknowledgedService() !== -1 && vService.service.servicestatus.problemHasBeenAcknowledged) {
+                                    // -1 == actual service state
+                                    currentState = this.stateForAcknowledgedService();
+                                } else if ((this.stateForDowntimedService() !== -1 && vService.service.servicestatus.scheduledDowntimeDepth && vService.service.servicestatus.scheduledDowntimeDepth > 0)) {
+                                    // -1 == actual service state
+                                    currentState = this.stateForDowntimedService();
+                                }
                             }
-
                         }
                         if (vService.service.disabled) {
                             currentState = this.stateForDisabledService();
@@ -365,7 +391,7 @@ export class EvcTreeComponent {
                             score_warning: vService.score_warning,
                             score_critical: vService.score_critical,
                             score_unknown: vService.score_unknown,
-                            currentStateConsiderDowntimeOrDisabled: currentState
+                            currentStateConsiderDowntimeOrAcknowledgedOrDisabled: currentState
                         };
                     }
 
