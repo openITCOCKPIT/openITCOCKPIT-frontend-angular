@@ -1620,7 +1620,7 @@
   "Hide expired": "Сховати термін дії закінчився",
   "Filter by host output": "Фільтрувати за виходом хоста",
   "Downtime was set by": "Час простою встановлено",
-  "with an duration of": "тривалістю",
+  "with a duration of": "тривалістю",
   "Start time:": "Час початку:",
   "End time:": "Час закінчення:",
   "Comment: ": "Коментар:",
