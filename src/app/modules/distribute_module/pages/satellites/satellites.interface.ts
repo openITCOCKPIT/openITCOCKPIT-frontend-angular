@@ -361,7 +361,7 @@ export interface AllSatelliteInformation {
     created: string
     satellite: Satellite
     last_update: string
-    system_health_json: SatelliteSystemHealthJson
+    system_health_json: SatelliteSystemHealthJson | null
     allow_edit: boolean
 }
 
@@ -422,5 +422,5 @@ export interface SatelliteSystemHealthJson {
 
 export interface SatelliteInformation {
     satellite_id: number
-    system_health: SatelliteSystemHealthJson
+    system_health: SatelliteSystemHealthJson | null
 }
