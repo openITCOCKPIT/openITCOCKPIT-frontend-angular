@@ -94,19 +94,21 @@
                     <div class="npo-name">
                         <fa-icon [icon]="config().icon"></fa-icon>
                         {{ h.name }}
-                        @for (o of h.options; track o) {
-                            <span class="npo-badge npo-badge--{{ o }}"
-                                  [title]="stateLabels[o] | transloco">@if (o === 'flapping') {
-                                <span class="npo-flap">
-                                    <fa-icon [icon]="['fas', 'circle']"></fa-icon>
-                                    <fa-icon [icon]="['far', 'circle']"></fa-icon>
-                                </span>
-                            } @else if (stateIcon[o]; as icon) {
-                                <fa-icon [icon]="icon"></fa-icon>
-                            } @else {
-                                {{ stateShort[o] }}
-                            }</span>
-                        }
+                        <span class="npo-badges">
+                            @for (o of h.options; track o) {
+                                <span class="npo-badge npo-badge--{{ o }}"
+                                      [title]="stateLabels[o] | transloco">@if (o === 'flapping') {
+                                    <span class="npo-flap">
+                                        <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+                                        <fa-icon [icon]="['far', 'circle']"></fa-icon>
+                                    </span>
+                                } @else if (stateIcon[o]; as icon) {
+                                    <fa-icon [icon]="icon"></fa-icon>
+                                } @else {
+                                    {{ stateShort[o] }}
+                                }</span>
+                            }
+                        </span>
                     </div>
                     @if (h.hostname) {
                         <div class="npo-sub" [title]="'Host' | transloco">
@@ -181,19 +183,21 @@
                                 </span>
                             }
                             {{ row.name }}
-                            @for (o of row.options; track o) {
-                                <span class="npo-badge npo-badge--{{ o }}"
-                                      [title]="stateLabels[o] | transloco">@if (o === 'flapping') {
-                                    <span class="npo-flap">
-                                        <fa-icon [icon]="['fas', 'circle']"></fa-icon>
-                                        <fa-icon [icon]="['far', 'circle']"></fa-icon>
-                                    </span>
-                                } @else if (stateIcon[o]; as icon) {
-                                    <fa-icon [icon]="icon"></fa-icon>
-                                } @else {
-                                    {{ stateShort[o] }}
-                                }</span>
-                            }
+                            <span class="npo-badges">
+                                @for (o of row.options; track o) {
+                                    <span class="npo-badge npo-badge--{{ o }}"
+                                          [title]="stateLabels[o] | transloco">@if (o === 'flapping') {
+                                        <span class="npo-flap">
+                                            <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+                                            <fa-icon [icon]="['far', 'circle']"></fa-icon>
+                                        </span>
+                                    } @else if (stateIcon[o]; as icon) {
+                                        <fa-icon [icon]="icon"></fa-icon>
+                                    } @else {
+                                        {{ stateShort[o] }}
+                                    }</span>
+                                }
+                            </span>
                         </div>
                         <div class="npo-sub" [class.npo-sub--exclude]="!row.notificationsEnabled" [title]="'Notification period' | transloco">
                             <span><fa-icon [icon]="['fas', 'clock']"></fa-icon></span>
@@ -272,6 +276,45 @@
                         <div class="npo-now" [style.left.%]="now"></div>
                     }
                 </div>
+
+                <!-- Coverage per configured event type -->
+                @for (sc of stateCoverage(); track sc.state) {
+                    <div class="npo-label npo-label--state">
+                        <div class="npo-name">
+                            <fa-icon [icon]="['fas', sc.hasGaps ? 'triangle-exclamation' : 'shield-halved']"
+                                     [class.text-danger]="sc.hasGaps"></fa-icon>
+                            <span class="npo-badge npo-badge--{{ sc.state }}">@if (sc.state === 'flapping') {
+                                <span class="npo-flap">
+                                    <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+                                    <fa-icon [icon]="['far', 'circle']"></fa-icon>
+                                </span>
+                            } @else if (stateIcon[sc.state]; as icon) {
+                                <fa-icon [icon]="icon"></fa-icon>
+                            } @else {
+                                {{ stateShort[sc.state] }}
+                            }</span>
+                            {{ stateLabels[sc.state] | transloco }}
+                        </div>
+                    </div>
+                    <div class="npo-track npo-track--coverage npo-track--state">
+                        @for (s of separators(); track s.left) {
+                            <div class="npo-sep" [class.npo-sep--dashed]="s.dashed" [style.left.%]="s.left"></div>
+                        }
+                        @for (q of sc.quiet; track q.left) {
+                            <div class="npo-fill npo-fill--quiet" [style.left.%]="q.left" [style.width.%]="q.width"
+                                 [title]="q.title" (mouseenter)="hoverText.set(q.title)"></div>
+                        }
+                        @for (g of sc.gaps; track g.left) {
+                            <div class="npo-fill npo-fill--gap" [style.left.%]="g.left" [style.width.%]="g.width"
+                                 [title]="g.title" (mouseenter)="hoverText.set(g.title)">@if (showLabel(g.width)) {
+                                <span class="npo-bar__label">{{ g.label }}</span>
+                            }</div>
+                        }
+                        @if (nowLeft(); as now) {
+                            <div class="npo-now" [style.left.%]="now"></div>
+                        }
+                    </div>
+                }
 
                 <!-- Axis (bottom) -->
                 <div></div>

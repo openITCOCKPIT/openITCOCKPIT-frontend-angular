@@ -108,6 +108,16 @@
         border-top: 2px solid var(--npo-border);
     }
 
+    // Coverage per event type: compact rows below the overall coverage
+    &--state {
+        padding: 0.125rem 0;
+
+        .npo-name {
+            font-size: 0.8125rem;
+            font-weight: 400;
+        }
+    }
+
     &--muted {
         opacity: 0.55;
     }
@@ -125,20 +135,22 @@
     min-width: 0;
 }
 
+/* Long names wrap instead of being cut off, so the badges always stay visible */
 .npo-name {
     font-size: 0.875rem;
     font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+/* The badges always wrap as a group */
+.npo-badges {
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .npo-sub {
     font-size: 0.75rem;
     color: var(--npo-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-wrap: anywhere;
 
     &--exclude {
         color: var(--npo-exclude);
@@ -199,6 +211,11 @@
 
     &--coverage {
         background: var(--npo-covered);
+    }
+
+    &--state {
+        height: 20px;
+        margin: 0.125rem 0;
     }
 }
 

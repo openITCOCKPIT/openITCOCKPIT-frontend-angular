@@ -70,7 +70,7 @@ interface ObjectTexts {
 interface ObjectTypeConfig {
     icon: IconProp;
     states: NotificationStateKey[];
-    /** States that are selected in the toolbar by default */
+    /** States that are selected in the toolbar if the host / service has no event types configured */
     defaultStates: NotificationStateKey[];
     texts: ObjectTexts;
 }
@@ -115,6 +115,14 @@ const OBJECT_TYPES: Record<NotificationObjectType, ObjectTypeConfig> = {
         }
     }
 };
+
+/** Coverage of a single notification event type that is configured at the host / service */
+interface StateCoverageRow {
+    state: NotificationStateKey;
+    hasGaps: boolean;
+    gaps: Bar[];
+    quiet: Bar[];
+}
 
 interface ContactRow {
     id: number;
@@ -204,7 +212,6 @@ export class NotificationPeriodOverviewComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         //timer is used for the red now line
         this.clockTimer = setInterval(() => this.clock.set(weekMinuteOf(new Date())), 60_000);
-        this.enabledStates.set(new Set(this.config().defaultStates));
         this.loadData();
     }
 
@@ -217,6 +224,9 @@ export class NotificationPeriodOverviewComponent implements OnInit, OnDestroy {
     public loadData() {
         this.subscriptions.add(this.NotificationPeriodOverviewService.getNotificationsOverview(this.objectType(), this.objectId())
             .subscribe((data: NotificationPeriodOverviewData) => {
+                // Preselect the event types the host / service is configured for
+                const configured = this.states().filter((s) => data.object.options[s]);
+                this.enabledStates.set(new Set(configured.length ? configured : this.config().defaultStates));
                 this.data.set(data);
             }));
     }
@@ -343,6 +353,25 @@ export class NotificationPeriodOverviewComponent implements OnInit, OnDestroy {
     });
 
     protected readonly hasGaps = computed(() => this.overview().gaps.length > 0);
+
+    /** One coverage row per event type the host / service notifies on – independent of the toolbar selection */
+    protected readonly stateCoverage = computed<StateCoverageRow[]>(() => {
+        const object = this.object();
+        const contacts = this.contacts();
+        const texts = this.texts();
+        return this.states()
+            .filter((state) => object.options[state])
+            .map((state) => {
+                const o = computeOverview(object, contacts, new Set([state]));
+                const label = this.t(this.stateLabels[state]);
+                return {
+                    state,
+                    hasGaps: o.gaps.length > 0,
+                    gaps: this.bars(o.gaps, (from, to) => `${label}: ${this.t(texts.gap, {from, to})}`),
+                    quiet: this.bars(o.quiet, (from, to) => `${label}: ${this.t(texts.quiet, {from, to})}`)
+                };
+            });
+    });
 
     protected toggleState(state: NotificationStateKey): void {
         this.enabledStates.update((current) => {

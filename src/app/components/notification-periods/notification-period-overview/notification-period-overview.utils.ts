@@ -1,20 +1,18 @@
 import {
+    Interval,
     NotificationOptions,
     NotificationPeriodContact,
     NotificationPeriodObject,
-    NotificationPeriodTimeRange,
-    NotificationStateKey
+    NotificationPeriodTimeperiod,
+    NotificationStateKey,
+    ResolvedTimeperiod,
+    TimeperiodTimerange
 } from './notification-period-overview.interfaces';
+
+export type { Interval } from './notification-period-overview.interfaces';
 
 export const MINUTES_PER_DAY = 1440;
 export const MINUTES_PER_WEEK = 7 * MINUTES_PER_DAY;
-
-/** Half-open interval [start, end) in minutes since Monday 00:00 */
-export interface Interval {
-    start: number;
-    end: number;
-    source: string;
-}
 
 export interface ContactCoverage {
     contact: NotificationPeriodContact;
@@ -43,11 +41,12 @@ export function parseTime(value: string): number {
     return (h || 0) * 60 + (m || 0);
 }
 
-export function toIntervals(ranges: NotificationPeriodTimeRange[]): Interval[] {
+/** Converts the time ranges of a timeperiod into intervals, all with the given source (timeperiod name) */
+export function toIntervals(ranges: TimeperiodTimerange[], source: string): Interval[] {
     return ranges
         .map((r) => {
             const offset = (r.day - 1) * MINUTES_PER_DAY;
-            return {start: offset + parseTime(r.start), end: offset + parseTime(r.end), source: r.timeperiod};
+            return {start: offset + parseTime(r.start), end: offset + parseTime(r.end), source};
         })
         .filter((i) => i.end > i.start)
         .sort((a, b) => a.start - b.start || a.end - b.end);
@@ -111,6 +110,58 @@ export function intersect(a: Interval[], b: Interval[]): Interval[] {
     return result;
 }
 
+/**
+ * Time ranges in which the timeperiod is active, incl. its recursive excludes (like Naemon does:
+ * an exclude timeperiod is only active during its own time ranges minus its own exclude, and so on).
+ *
+ * @param visited ids of the timeperiods already on the exclude chain (loop protection)
+ */
+function activeIntervals(id: number, timeperiods: Map<number, NotificationPeriodTimeperiod>, visited: ReadonlySet<number>): Interval[] {
+    const timeperiod = timeperiods.get(id);
+    if (!timeperiod || visited.has(id)) {
+        return [];
+    }
+
+    const intervals = toIntervals(timeperiod.timeranges, timeperiod.name);
+    if (timeperiod.excludeTimeperiodId === null) {
+        return intervals;
+    }
+
+    const excludeActive = activeIntervals(timeperiod.excludeTimeperiodId, timeperiods, new Set([...visited, id]));
+    return subtract(intervals, excludeActive);
+}
+
+/** Resolves a timeperiod incl. its recursive excludes into effective and excluded intervals */
+export function resolveTimeperiod(id: number, timeperiods: Map<number, NotificationPeriodTimeperiod>): ResolvedTimeperiod {
+    const timeperiod = timeperiods.get(id);
+    if (!timeperiod) {
+        return {id, name: '', excludes: [], effective: [], excluded: []};
+    }
+
+    const base = toIntervals(timeperiod.timeranges, timeperiod.name);
+    const excludeId = timeperiod.excludeTimeperiodId;
+    const exclude = excludeId !== null ? timeperiods.get(excludeId) : undefined;
+    if (excludeId === null || !exclude) {
+        return {id, name: timeperiod.name, excludes: [], effective: base, excluded: []};
+    }
+
+    const excludeActive = activeIntervals(excludeId, timeperiods, new Set([id]));
+    return {
+        id,
+        name: timeperiod.name,
+        excludes: [exclude.name],
+        effective: subtract(base, excludeActive),
+        // intersect keeps the source of the first argument → the excluded ranges carry the exclude's name
+        excluded: intersect(excludeActive, base)
+    };
+}
+
+/** Resolves all timeperiods delivered by the backend, indexed by id */
+export function resolveTimeperiods(timeperiods: NotificationPeriodTimeperiod[]): Map<number, ResolvedTimeperiod> {
+    const byId = new Map(timeperiods.map((t) => [t.id, t]));
+    return new Map(timeperiods.map((t) => [t.id, resolveTimeperiod(t.id, byId)]));
+}
+
 function isSubscribed(options: NotificationOptions, states: ReadonlySet<NotificationStateKey>): boolean {
     for (const s of states) {
         if (options[s]) {
@@ -126,21 +177,21 @@ export function computeOverview(
     states: ReadonlySet<NotificationStateKey>
 ): NotificationPeriodOverview {
     const fullWeek: Interval[] = [{start: 0, end: MINUTES_PER_WEEK, source: ''}];
-    const objectEffective = toIntervals(object.notificationPeriod.effective);
-    const objectExcluded = toIntervals(object.notificationPeriod.excluded);
+    const objectEffective = object.notificationPeriod.effective;
+    const objectExcluded = object.notificationPeriod.excluded;
     const objectOff = subtract(fullWeek, objectEffective);
 
     // Only states the object (host or service) itself notifies about are relevant (none, if the object has notifications disabled)
     const objectStates = new Set([...states].filter((s) => object.notificationsEnabled && object.options[s]));
 
     const contactCoverage: ContactCoverage[] = contacts.map((contact) => {
-        const effective = toIntervals(contact.notificationPeriod.effective);
+        const effective = contact.notificationPeriod.effective;
         return {
             contact,
             subscribed: contact.notificationsEnabled && isSubscribed(contact.options, objectStates),
             notified: intersect(effective, objectEffective),
             blockedByObject: intersect(effective, objectOff),
-            excluded: toIntervals(contact.notificationPeriod.excluded)
+            excluded: contact.notificationPeriod.excluded
         };
     });
 
