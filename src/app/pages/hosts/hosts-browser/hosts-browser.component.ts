@@ -98,6 +98,9 @@ import {
     HostTimelineLegendComponent
 } from '../../../components/timeline/host-timeline-legend/host-timeline-legend.component';
 import {
+    NotificationPeriodOverviewComponent
+} from '../../../components/notification-periods/notification-period-overview/notification-period-overview.component';
+import {
     HostsBrowserServicesListComponent
 } from '../hosts-browser-services-list/hosts-browser-services-list.component';
 import { IframeComponent } from '../../../components/iframe/iframe.component';
@@ -209,7 +212,8 @@ import {
         HostParentsChildrenTreeComponent,
         IconDirective,
         ProxmoxHostBrowserTabComponent,
-        HostdependenciesTreeComponent
+        HostdependenciesTreeComponent,
+        NotificationPeriodOverviewComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',

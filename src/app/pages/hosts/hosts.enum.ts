@@ -18,6 +18,7 @@ export enum HostBrowserTabs {
     StatusInformation = 'StatusInformation',
     DeviceInformation = 'DeviceInformation',
     Timeline = 'Timeline',
+    NotificationPeriods = 'NotificationPeriods',
     ServiceNow = 'ServiceNow',
     Grafana = 'Grafana',
     CMDB = 'CMDB',

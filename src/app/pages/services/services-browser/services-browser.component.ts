@@ -102,6 +102,9 @@ import {
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { HostBrowserTabs } from '../../hosts/hosts.enum';
 import { BrowserTimelineComponent } from '../../../components/timeline/browser-timeline/browser-timeline.component';
+import {
+    NotificationPeriodOverviewComponent
+} from '../../../components/notification-periods/notification-period-overview/notification-period-overview.component';
 
 
 import {
@@ -178,6 +181,7 @@ import { TitleService } from '../../../services/title.service';
         HoststatusSimpleIconComponent,
         BrowserTimelineComponent,
         ServiceTimelineLegendComponent,
+        NotificationPeriodOverviewComponent,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
