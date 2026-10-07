@@ -44,7 +44,7 @@ import {
     ImporterConfig
 } from '../../pages/importers/importers.interface';
 import { ImportedHostRawData, MaxUploadLimit } from '../../pages/importedhosts/importedhosts.interface';
-import Dropzone from 'dropzone';
+import { Dropzone,  DropzoneFile } from 'dropzone';
 import { AuthService } from '../../../../auth/auth.service';
 import { NotyService } from '../../../../layouts/coreui/noty.service';
 import { GenericKeyValue } from '../../../../generic.interfaces';
@@ -225,13 +225,13 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                     'X-CSRF-TOKEN': this.authService.csrfToken || ''
                 },
                 url: '/import_module/importedHosts/importCsv/' + this.importer.id + '.json',
-                removedfile: (file: Dropzone.DropzoneFile) => {
+                removedfile: (file: DropzoneFile) => {
                     this.removeFile(file);
                 },
-                sending: (file: Dropzone.DropzoneFile, xhr: XMLHttpRequest, formData: FormData) => {
+                sending: (file?: DropzoneFile, xhr?: XMLHttpRequest, formData?: FormData) => {
                     this.cdr.markForCheck();
                 },
-                success: (file: Dropzone.DropzoneFile) => {
+                success: (file: DropzoneFile) => {
                     this.cdr.markForCheck();
 
                     const response = file.xhr;
@@ -330,7 +330,7 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
                     this.notyService.genericError(errorMessage);
 
                 },
-                error: (file: Dropzone.DropzoneFile, error: string | any, xhr: XMLHttpRequest) => {
+                error: (file: DropzoneFile, error: string | any, xhr?: XMLHttpRequest) => {
                     this.cdr.markForCheck();
 
                     let message = '';
@@ -367,7 +367,7 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
         }
     }
 
-    private removeFile(file: Dropzone.DropzoneFile) {
+    private removeFile(file: DropzoneFile) {
         this.csvErrors = null;
         this.rawInvalidDataForTemplate = [];
         this.rawDataForTemplate = [];
@@ -376,7 +376,9 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
 
         this.cdr.markForCheck();
         // Remove uploaded file from dropzone preview
-        file.previewElement.parentNode?.removeChild(file.previewElement);
+        if (file.previewElement?.parentNode) {
+            file.previewElement.parentNode.removeChild(file.previewElement);
+        }
 
         return;
 
@@ -407,8 +409,12 @@ export class ImportCsvDataComponent implements OnInit, OnDestroy {
 
     }
 
-    private updatePreviewElement(file: Dropzone.DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
+    private updatePreviewElement(file: DropzoneFile, state: 'success' | 'error', tooltipMessage: string | undefined = undefined) {
         const previewElement = file.previewElement;
+
+        if (!previewElement) {
+            return;
+        }
 
         previewElement.classList.remove('dz-processing');
         previewElement.classList.add(`dz-${state}`); // dz-error or dz-success
