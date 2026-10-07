@@ -65,6 +65,15 @@
                             {{ t('Timeline') }}
                         </button>
                     </c-nav-item>
+                    <c-nav-item>
+                        <button
+                                *oitcPermission="['hosts', 'notificationsOverview']" class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.NotificationPeriods}"
+                                (click)="changeTab(HostBrowserTabs.NotificationPeriods)">
+                            <fa-icon [icon]="['fas', 'alarm-clock']"></fa-icon>
+                            {{ t('Notifications overview') }}
+                        </button>
+                    </c-nav-item>
                     @if (result.hasHostDependencies) {
                         <c-nav-item>
                             <button *oitcPermission="['hostdependencies', 'dependencyTree']" class="nav-link"
@@ -1232,6 +1241,16 @@
                     </div>
                 }
                 <!-- Timeline end -->
+                <!-- NotificationPeriods start -->
+                @if (selectedTab == HostBrowserTabs.NotificationPeriods && result && result.mergedHost) {
+                    <div>
+                        <oitc-notification-period-overview
+                            [objectType]="'host'"
+                            [objectId]="result.mergedHost.id">
+                        </oitc-notification-period-overview>
+                    </div>
+                }
+                <!-- NotificationPeriods end -->
                 <!-- DependencyTree start -->
                 @if (selectedTab == HostBrowserTabs.DependencyTree && result && result.mergedHost && result.hasHostDependencies) {
                     <div class="host-dependency-tree-container border">

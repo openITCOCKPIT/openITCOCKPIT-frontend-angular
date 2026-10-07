@@ -1,0 +1,343 @@
+:host {
+    display: block;
+
+    --npo-host: #1d9e75;
+    --npo-host-border: #0f6e56;
+    --npo-contact: #33b5e5;
+    --npo-contact-border: #534ab7;
+    --npo-blocked: #b4b2a9;
+    --npo-blocked-border: #888780;
+    --npo-exclude: #d85a30;
+    --npo-exclude-stripe: #f0997b;
+    --npo-gap: var(--cui-danger, #e55353);
+    --npo-quiet: #b4b2a9;
+    --npo-covered: var(--cui-success-bg-subtle, #d5f1de);
+    --npo-track-bg: var(--cui-tertiary-bg, #f3f4f7);
+    --npo-veil: rgba(0, 0, 0, 0.07);
+    --npo-border: var(--cui-border-color, #dbdfe6);
+    --npo-muted: var(--cui-secondary-color, #6b7785);
+    --npo-now: var(--cui-danger, #e55353);
+    --npo-disabled: var(--cui-danger, #e55353);
+    --npo-disabled-bg: var(--cui-danger-bg-subtle, #fadddd);
+}
+
+:host-context([data-coreui-theme='dark']) {
+    --npo-blocked: #5f5e5a;
+    --npo-blocked-border: #888780;
+    --npo-quiet: #5f5e5a;
+    --npo-veil: rgba(255, 255, 255, 0.06);
+}
+
+.npo-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.npo-events {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+
+    &__label {
+        font-weight: 500;
+    }
+}
+
+.npo-event {
+    white-space: nowrap;
+
+    .npo-badge {
+        margin-left: 0;
+        margin-right: 0.15rem;
+    }
+
+    &--off {
+        color: var(--npo-muted);
+        text-decoration: line-through;
+
+        .npo-badge {
+            background: var(--npo-muted);
+            opacity: 0.6;
+        }
+    }
+}
+
+.npo-grid {
+    display: grid;
+    grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
+    column-gap: 0.75rem;
+    align-items: center;
+}
+
+.npo-axis {
+    font-size: 0.75rem;
+    color: var(--npo-muted);
+
+    span {
+        position: absolute;
+        transform: translateX(-50%);
+        white-space: nowrap;
+    }
+
+    &__row {
+        position: relative;
+        height: 18px;
+
+        &--days {
+            font-weight: 500;
+            color: var(--cui-body-color, inherit);
+        }
+    }
+}
+
+.npo-label {
+    min-width: 0;
+    padding: 0.375rem 0;
+    border-top: 1px solid var(--npo-border);
+
+    &--host {
+        border-top: none;
+    }
+
+    &--coverage {
+        border-top: 2px solid var(--npo-border);
+    }
+
+    &--muted {
+        opacity: 0.55;
+    }
+
+    &--disabled .npo-name {
+        color: var(--npo-disabled);
+        text-decoration: line-through;
+    }
+}
+
+/* fa-stack is 2.5em wide (+ global min-width: 2rem in assets/coreui/fontawesome.scss) and centers
+   its items – use the width of a plain fa-icon so the stacked envelope lines up with the other icons */
+.npo-stack {
+    width: 1.25em;
+    min-width: 0;
+}
+
+.npo-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.npo-sub {
+    font-size: 0.75rem;
+    color: var(--npo-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &--exclude {
+        color: var(--npo-exclude);
+    }
+
+    &--disabled {
+        color: var(--npo-disabled);
+    }
+}
+
+.npo-badge {
+    display: inline-block;
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    padding: 0 0.3rem;
+    margin-left: 0.15rem;
+    border-radius: 0.25rem;
+    color: #fff;
+    vertical-align: 1px;
+
+    &--down { background: var(--cui-danger, #e55353); }
+    &--unreachable { background: var(--cui-secondary, #6b7785); }
+    &--warning { background: var(--cui-warning, #f9b115); }
+    &--critical { background: var(--cui-danger, #e55353); }
+    &--unknown { background: var(--cui-secondary, #6b7785); }
+    &--recovery { background: var(--cui-success, #1b9e3e); }
+    &--flapping { background: var(--cui-primary, #5856d6); }
+    &--downtime { background: var(--cui-primary, #5856d6); }
+}
+
+.npo-track {
+    position: relative;
+    height: 28px;
+    margin: 0.375rem 0;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--npo-track-bg);
+
+    &--host {
+        outline: 1px solid var(--npo-border);
+    }
+
+    // Contact has host notifications disabled: red hatched track, bars faded
+    &--disabled {
+        outline: 1px solid var(--npo-disabled);
+        background: repeating-linear-gradient(
+                -45deg,
+                var(--npo-disabled-bg),
+                var(--npo-disabled-bg) 6px,
+                transparent 6px,
+                transparent 12px
+        );
+
+        .npo-bar {
+            opacity: 0.35;
+        }
+    }
+
+    &--coverage {
+        background: var(--npo-covered);
+    }
+}
+
+.npo-sep {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid var(--npo-border);
+    z-index: 1;
+    pointer-events: none;
+
+    &--dashed {
+        border-left-style: dashed;
+    }
+}
+
+.npo-veil {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: var(--npo-veil);
+}
+
+.npo-bar {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    border-radius: 3px;
+    z-index: 2;
+
+    &--host {
+        background: var(--npo-host);
+        border: 1px solid var(--npo-host-border);
+    }
+
+    &--contact {
+        background: var(--npo-contact);
+        border: 1px solid var(--npo-contact-border);
+    }
+
+    &--unsubscribed {
+        background: transparent;
+        border: 1px dashed var(--npo-contact);
+    }
+
+    &--blocked {
+        background: var(--npo-blocked);
+        border: 1px solid var(--npo-blocked-border);
+    }
+
+    &--excluded {
+        border: 1px solid var(--npo-exclude);
+        background: repeating-linear-gradient(135deg, var(--npo-exclude-stripe) 0 2px, transparent 2px 6px);
+    }
+}
+
+.npo-bar__label {
+    display: block;
+    padding: 0 0.25rem;
+    font-size: 0.6875rem;
+    line-height: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    pointer-events: none;
+    color: #fff;
+
+    // Bars without a solid background: white would not be readable
+    .npo-bar--excluded & {
+        color: var(--npo-exclude);
+    }
+
+    .npo-bar--unsubscribed & {
+        color: var(--npo-contact);
+    }
+}
+
+.npo-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+
+    &--gap {
+        background: var(--npo-gap);
+    }
+
+    &--quiet {
+        background: var(--npo-quiet);
+    }
+}
+
+.npo-now {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 2px solid var(--npo-now);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.npo-empty {
+    padding: 0.75rem 0;
+    color: var(--npo-muted);
+    font-size: 0.875rem;
+}
+
+.npo-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--npo-muted);
+}
+
+.npo-swatch {
+    position: static;
+    display: inline-block;
+    width: 14px;
+    height: 10px;
+    margin-right: 0.3rem;
+    border-radius: 2px;
+    vertical-align: -1px;
+}
+
+.npo-hover {
+    min-height: 1.25rem;
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--npo-muted);
+}
+
+/* Two circles (solid + outline), same look as the flapping state of oitc-hoststatus-icon */
+.npo-flap {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.5rem;
+    vertical-align: 1px;
+}

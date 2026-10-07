@@ -1,0 +1,309 @@
+<ng-container>
+    @if (!loaded()) {
+        <oitc-table-loader/>
+    }
+    @if (loaded() && !objectNotificationsEnabled()) {
+        <c-alert color="danger" [dismissible]="false">
+            <fa-icon [icon]="['fas', 'bell-slash']"></fa-icon>
+            {{ texts().disabled | transloco }}
+        </c-alert>
+    } @else if (loaded()) {
+        <div class="npo">
+
+            <!-- Toolbar -->
+            <div class="npo-toolbar">
+                <div class="btn-group btn-group-sm" role="group" [attr.aria-label]="'View' | transloco">
+                    <button type="button" class="btn btn-outline-primary"
+                            [class.active]="selectedDay() === null"
+                            (click)="selectedDay.set(null)">
+                        {{ 'Week' | transloco }}
+                    </button>
+                    @for (day of days; track day; let i = $index) {
+                        <button type="button" class="btn btn-outline-primary"
+                                [class.active]="selectedDay() === i"
+                                (click)="selectedDay.set(i)">
+                            {{ day | transloco }}
+                        </button>
+                    }
+                </div>
+
+                <div class="btn-group btn-group-sm" role="group" [attr.aria-label]="'Notify on' | transloco">
+                    @for (state of states(); track state) {
+                        <button type="button" class="btn btn-outline-secondary"
+                                [class.active]="enabledStates().has(state)"
+                                [attr.aria-pressed]="enabledStates().has(state)"
+                                (click)="toggleState(state)">
+                            {{ stateLabels[state] | transloco }}
+                        </button>
+                    }
+                </div>
+
+                <button type="button" class="btn btn-sm btn-outline-secondary"
+                        [class.active]="showExcludes()"
+                        [attr.aria-pressed]="showExcludes()"
+                        (click)="toggleExcludes()">
+                    <fa-icon [icon]="['fas', 'scissors']"></fa-icon>
+                    {{ 'Show excludes' | transloco }}
+                </button>
+            </div>
+
+            <!-- Configured notification events of the host / service (read only) -->
+            <div class="npo-events">
+                <span class="npo-events__label">
+                    <fa-icon [icon]="['fas', 'bell']"></fa-icon>
+                    {{ texts().notifiesOn | transloco }}:
+                </span>
+                @for (e of objectEvents(); track e.key) {
+                    <span class="npo-event" [class.npo-event--off]="!e.enabled"
+                          [title]="(e.enabled ? 'Enabled' : 'Disabled') | transloco">
+                        <span class="npo-badge npo-badge--{{ e.key }}">@if (e.key === 'flapping') {
+                            <span class="npo-flap">
+                                <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+                                <fa-icon [icon]="['far', 'circle']"></fa-icon>
+                            </span>
+                        } @else if (stateIcon[e.key]; as icon) {
+                            <fa-icon [icon]="icon"></fa-icon>
+                        } @else {
+                            {{ stateShort[e.key] }}
+                        }</span>
+                        {{ stateLabels[e.key] | transloco }}
+                    </span>
+                }
+            </div>
+
+            <div class="npo-grid" (mouseleave)="hoverText.set('')">
+
+                <!-- Axis (top) -->
+                <div></div>
+                <div class="npo-axis" #axis>
+                    <div class="npo-axis__row npo-axis__row--days">
+                        @for (tick of dayTicks(); track tick.label) {
+                            <span [style.left.%]="tick.left">{{ tick.label }}</span>
+                        }
+                    </div>
+                    <div class="npo-axis__row">
+                        @for (tick of hourTicks(); track tick.left) {
+                            <span [style.left.%]="tick.left">{{ tick.label }}</span>
+                        }
+                    </div>
+                </div>
+
+                <!-- Host / service -->
+                @let h = objectRow();
+                <div class="npo-label npo-label--host">
+                    <div class="npo-name">
+                        <fa-icon [icon]="config().icon"></fa-icon>
+                        {{ h.name }}
+                        @for (o of h.options; track o) {
+                            <span class="npo-badge npo-badge--{{ o }}"
+                                  [title]="stateLabels[o] | transloco">@if (o === 'flapping') {
+                                <span class="npo-flap">
+                                    <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+                                    <fa-icon [icon]="['far', 'circle']"></fa-icon>
+                                </span>
+                            } @else if (stateIcon[o]; as icon) {
+                                <fa-icon [icon]="icon"></fa-icon>
+                            } @else {
+                                {{ stateShort[o] }}
+                            }</span>
+                        }
+                    </div>
+                    @if (h.hostname) {
+                        <div class="npo-sub" [title]="'Host' | transloco">
+                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                            {{ h.hostname }}
+                        </div>
+                    }
+                    <div class="npo-sub" [title]="'Notification period' | transloco">
+                        <fa-icon [icon]="['fas', 'clock']"></fa-icon>
+                        {{ h.timeperiod }}
+                    </div>
+                    @if (h.excludes.length) {
+                        <div class="npo-sub npo-sub--exclude" [title]="'Excludes' | transloco">
+                            <fa-icon [icon]="['fas', 'scissors']"></fa-icon>
+                            {{ h.excludes.join(', ') }}
+                        </div>
+                    }
+                </div>
+                <div class="npo-track npo-track--host">
+                    @for (s of separators(); track s.left) {
+                        <div class="npo-sep" [class.npo-sep--dashed]="s.dashed" [style.left.%]="s.left"></div>
+                    }
+                    @for (b of h.effective; track b.left) {
+                        <div class="npo-bar npo-bar--host" [style.left.%]="b.left" [style.width.%]="b.width"
+                             [title]="b.title" (mouseenter)="hoverText.set(b.title)">@if (showLabel(b.width)) {
+                            <span class="npo-bar__label">{{ b.label }}</span>
+                        }</div>
+                    }
+                    @if (showExcludes()) {
+                        @for (b of h.excluded; track b.left) {
+                            <div class="npo-bar npo-bar--excluded" [style.left.%]="b.left" [style.width.%]="b.width"
+                                 [title]="b.title" (mouseenter)="hoverText.set(b.title)">@if (showLabel(b.width)) {
+                                <span class="npo-bar__label">{{ b.label }}</span>
+                            }</div>
+                        }
+                    }
+                    @if (nowLeft(); as now) {
+                        <div class="npo-now" [style.left.%]="now"></div>
+                    }
+                </div>
+
+                <!-- Contacts -->
+                @for (row of contactRows(); track row.id) {
+                    <div class="npo-label" [class.npo-label--muted]="!row.subscribed && row.notificationsEnabled"
+                         [class.npo-label--disabled]="!row.notificationsEnabled">
+
+
+                        <div class="npo-name">
+                            <!--<fa-icon [icon]="['fas', 'user']"></fa-icon>-->
+                            @if (row.notificationsEnabled) {
+                                    <fa-stack class="npo-stack"
+                                            [cTooltip]="'Notifications enabled' | transloco"
+                                            cTooltipPlacement="right">
+                                        <fa-icon [icon]="['fas', 'envelope']"
+                                                 stackItemSize="1x"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'check']" pull="right" class="text-success"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-3 right-3 down-7"></fa-icon>
+                                    </fa-stack>
+                            }
+                            @if (!row.notificationsEnabled) {
+                                <span>
+                                    <fa-stack class="npo-stack"
+                                            [cTooltip]="'Notifications disabled' | transloco"
+                                            cTooltipPlacement="right">
+                                        <fa-icon [icon]="['fas', 'envelope']"
+                                                 stackItemSize="1x"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'times']" pull="right" class="text-danger"
+                                                 stackItemSize="1x"
+                                                 transform="shrink-3 right-3 down-7"></fa-icon>
+                                    </fa-stack>
+                                </span>
+                            }
+                            {{ row.name }}
+                            @for (o of row.options; track o) {
+                                <span class="npo-badge npo-badge--{{ o }}"
+                                      [title]="stateLabels[o] | transloco">@if (o === 'flapping') {
+                                    <span class="npo-flap">
+                                        <fa-icon [icon]="['fas', 'circle']"></fa-icon>
+                                        <fa-icon [icon]="['far', 'circle']"></fa-icon>
+                                    </span>
+                                } @else if (stateIcon[o]; as icon) {
+                                    <fa-icon [icon]="icon"></fa-icon>
+                                } @else {
+                                    {{ stateShort[o] }}
+                                }</span>
+                            }
+                        </div>
+                        <div class="npo-sub" [class.npo-sub--exclude]="!row.notificationsEnabled" [title]="'Notification period' | transloco">
+                            <span><fa-icon [icon]="['fas', 'clock']"></fa-icon></span>
+                            {{ row.timeperiod }}
+                        </div>
+                        @if (row.excludes.length) {
+                            <div class="npo-sub npo-sub--exclude" [title]="'Excludes' | transloco">
+                                <fa-icon [icon]="['fas', 'scissors']"></fa-icon>
+                                {{ row.excludes.join(', ') }}
+                            </div>
+                        }
+                    </div>
+                    <div class="npo-track" [class.npo-track--disabled]="!row.notificationsEnabled"
+                         [title]="!row.notificationsEnabled ? (texts().contactDisabled | transloco) : ''">
+                        @for (v of objectOffVeil(); track v.left) {
+                            <div class="npo-veil" [style.left.%]="v.left" [style.width.%]="v.width"></div>
+                        }
+                        @for (s of separators(); track s.left) {
+                            <div class="npo-sep" [class.npo-sep--dashed]="s.dashed" [style.left.%]="s.left"></div>
+                        }
+                        @for (b of row.notified; track b.left) {
+                            <div class="npo-bar npo-bar--contact" [class.npo-bar--unsubscribed]="!row.subscribed"
+                                 [style.left.%]="b.left" [style.width.%]="b.width"
+                                 [title]="b.title" (mouseenter)="hoverText.set(b.title)">@if (showLabel(b.width)) {
+                                <span class="npo-bar__label">{{ b.label }}</span>
+                            }</div>
+                        }
+                        @for (b of row.blocked; track b.left) {
+                            <div class="npo-bar npo-bar--blocked" [style.left.%]="b.left" [style.width.%]="b.width"
+                                 [title]="b.title" (mouseenter)="hoverText.set(b.title)">@if (showLabel(b.width)) {
+                                <span class="npo-bar__label">{{ b.label }}</span>
+                            }</div>
+                        }
+                        @if (showExcludes()) {
+                            @for (b of row.excluded; track b.left) {
+                                <div class="npo-bar npo-bar--excluded" [style.left.%]="b.left" [style.width.%]="b.width"
+                                     [title]="b.title" (mouseenter)="hoverText.set(b.title)">@if (showLabel(b.width)) {
+                                    <span class="npo-bar__label">{{ b.label }}</span>
+                                }</div>
+                            }
+                        }
+                        @if (nowLeft(); as now) {
+                            <div class="npo-now" [style.left.%]="now"></div>
+                        }
+                    </div>
+                } @empty {
+                    <div></div>
+                    <div class="npo-empty">{{ 'No contacts assigned' | transloco }}</div>
+                }
+
+                <!-- Coverage -->
+                @let cov = coverage();
+                <div class="npo-label npo-label--coverage">
+                    <div class="npo-name">
+                        <fa-icon [icon]="['fas', hasGaps() ? 'triangle-exclamation' : 'shield-halved']"
+                                 [class.text-danger]="hasGaps()"></fa-icon>
+                        {{ 'Coverage' | transloco }}
+                    </div>
+                    <div class="npo-sub">{{ texts().coverage | transloco }}</div>
+                </div>
+                <div class="npo-track npo-track--coverage">
+                    @for (s of separators(); track s.left) {
+                        <div class="npo-sep" [class.npo-sep--dashed]="s.dashed" [style.left.%]="s.left"></div>
+                    }
+                    @for (q of cov.quiet; track q.left) {
+                        <div class="npo-fill npo-fill--quiet" [style.left.%]="q.left" [style.width.%]="q.width"
+                             [title]="q.title" (mouseenter)="hoverText.set(q.title)"></div>
+                    }
+                    @for (g of cov.gaps; track g.left) {
+                        <div class="npo-fill npo-fill--gap" [style.left.%]="g.left" [style.width.%]="g.width"
+                             [title]="g.title" (mouseenter)="hoverText.set(g.title)">@if (showLabel(g.width)) {
+                            <span class="npo-bar__label">{{ g.label }}</span>
+                        }</div>
+                    }
+                    @if (nowLeft(); as now) {
+                        <div class="npo-now" [style.left.%]="now"></div>
+                    }
+                </div>
+
+                <!-- Axis (bottom) -->
+                <div></div>
+                <div class="npo-axis npo-axis--bottom">
+                    <div class="npo-axis__row">
+                        @for (tick of hourTicks(); track tick.left) {
+                            <span [style.left.%]="tick.left">{{ tick.label }}</span>
+                        }
+                    </div>
+                    <div class="npo-axis__row npo-axis__row--days">
+                        @for (tick of dayTicks(); track tick.label) {
+                            <span [style.left.%]="tick.left">{{ tick.label }}</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="npo-legend">
+                <span><i class="npo-swatch npo-bar--host"></i>{{ texts().legendNotifies | transloco }}</span>
+                <span><i class="npo-swatch npo-bar--contact"></i>{{ 'Contact gets notified' | transloco }}</span>
+                <span><i class="npo-swatch npo-bar--blocked"></i>{{ texts().legendBlocked | transloco }}</span>
+                <span><i class="npo-swatch npo-bar--excluded"></i>{{ 'Excluded' | transloco }}</span>
+                <span><i
+                        class="npo-swatch npo-bar--contact npo-bar--unsubscribed"></i>{{ 'State not subscribed' | transloco }}</span>
+                <span><i class="npo-swatch npo-fill--gap"></i>{{ 'Nobody gets notified' | transloco }}</span>
+                <span><i class="npo-swatch npo-fill--quiet"></i>{{ 'Intended silence' | transloco }}</span>
+            </div>
+
+            <div class="npo-hover" aria-live="polite">
+                {{ hoverText() || ( 'Hover a bar for details' | transloco ) }}
+            </div>
+        </div>
+    }
+</ng-container>
