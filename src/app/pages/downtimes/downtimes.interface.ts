@@ -8,6 +8,7 @@ export interface DowntimeObject {
     commentData: string
     entryTime: string
     scheduledStartTime: string
+    actualStartTime: string
     scheduledEndTime: string
     actualEndTime: string
     duration: number
@@ -17,6 +18,8 @@ export interface DowntimeObject {
     wasCancelled: boolean
     allowEdit: boolean
     durationHuman: string
+    actualDuration: string
+    actualDurationHuman: string
     isCancellable: boolean
     isRunning: boolean
     isExpired: boolean
@@ -48,15 +51,18 @@ export interface Downtime {
     commentData: string
     entryTime: string
     scheduledStartTime: string
+    actualStartTime: string
     scheduledEndTime: string
     actualEndTime: string
     duration: number
+    actualDuration: number
     wasStarted: boolean
     internalDowntimeId: number
     downtimehistoryId: any
     wasCancelled: boolean
     allowEdit: boolean
     durationHuman: string
+    actualDurationHuman: string
     isCancellable: boolean
     isRunning: boolean
     isExpired: boolean
