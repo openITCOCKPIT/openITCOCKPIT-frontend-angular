@@ -13,12 +13,12 @@
                 <c-nav-item class="px-1">
                     <c-form-check>
                         <input
-                            id="SmoothCheckbox"
-                            name="SmoothCheckbox"
-                            cFormCheckInput
-                            type="checkbox"
-                            [(ngModel)]="config.smooth"
-                            (change)="updateChart()"/>
+                                id="SmoothCheckbox"
+                                name="SmoothCheckbox"
+                                cFormCheckInput
+                                type="checkbox"
+                                [(ngModel)]="config.smooth"
+                                (change)="updateChart()"/>
                         <label cFormCheckLabel
                                for="SmoothCheckbox">{{ t('Smooth') }}</label>
                     </c-form-check>
@@ -27,12 +27,12 @@
                 <c-nav-item class="px-1">
                     <c-form-check>
                         <input
-                            id="ShowDataPointsCheckbox"
-                            name="ShowDataPointsCheckbox"
-                            cFormCheckInput
-                            type="checkbox"
-                            [(ngModel)]="config.showDataPoint"
-                            (change)="updateChart()"/>
+                                id="ShowDataPointsCheckbox"
+                                name="ShowDataPointsCheckbox"
+                                cFormCheckInput
+                                type="checkbox"
+                                [(ngModel)]="config.showDataPoint"
+                                (change)="updateChart()"/>
                         <label cFormCheckLabel
                                for="ShowDataPointsCheckbox">{{ t('Show data points') }}</label>
                     </c-form-check>
@@ -41,12 +41,12 @@
                 <c-nav-item class="px-1">
                     <c-form-check>
                         <input
-                            id="AutoRefreshCheckbox"
-                            name="AutoRefreshCheckbox"
-                            cFormCheckInput
-                            type="checkbox"
-                            [(ngModel)]="config.autoRefresh"
-                            (change)="onAutorefreshChange()"/>
+                                id="AutoRefreshCheckbox"
+                                name="AutoRefreshCheckbox"
+                                cFormCheckInput
+                                type="checkbox"
+                                [(ngModel)]="config.autoRefresh"
+                                (change)="onAutorefreshChange()"/>
                         <label cFormCheckLabel
                                for="AutoRefreshCheckbox">{{ t('Auto refresh') }}</label>
                     </c-form-check>
@@ -54,41 +54,41 @@
 
                 <c-nav-item class="px-1">
                     <oitc-select
-                        name="timerange"
-                        id="timerange"
-                        optionValue="key"
-                        optionLabel="value"
-                        [placeholder]="timerangePlaceholder"
-                        [(ngModel)]="selectedTimerange"
-                        [options]="availableTimeranges"
-                        (onChange)="reloadChart()"
-                        [appendTo]="''">
+                            name="timerange"
+                            id="timerange"
+                            optionValue="key"
+                            optionLabel="value"
+                            [placeholder]="timerangePlaceholder"
+                            [(ngModel)]="selectedTimerange"
+                            [options]="availableTimeranges"
+                            (onChange)="onTimeRangeChange()"
+                            [appendTo]="''">
                     </oitc-select>
                 </c-nav-item>
 
                 <c-nav-item class="px-1">
                     <oitc-select
-                        name="datasource"
-                        id="datasource"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="selectedDatasource"
-                        [options]="availableDataSources"
-                        (onChange)="reloadChart()"
-                        [appendTo]="''">
+                            name="datasource"
+                            id="datasource"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="selectedDatasource"
+                            [options]="availableDataSources"
+                            (onChange)="reloadChart()"
+                            [appendTo]="''">
                     </oitc-select>
                 </c-nav-item>
 
                 <c-nav-item class="px-1">
                     <oitc-select
-                        name="aggregation"
-                        id="aggregation"
-                        optionValue="key"
-                        optionLabel="value"
-                        [(ngModel)]="selectedAggregation"
-                        [options]="availableAggregation"
-                        (onChange)="reloadChart()"
-                        [appendTo]="''">
+                            name="aggregation"
+                            id="aggregation"
+                            optionValue="key"
+                            optionLabel="value"
+                            [(ngModel)]="selectedAggregation"
+                            [options]="availableAggregation"
+                            (onChange)="reloadChart()"
+                            [appendTo]="''">
                     </oitc-select>
                 </c-nav-item>
 
@@ -127,13 +127,22 @@
 
 
             <!-- isLoading animation has an issue on theme switch so for now I disabled it -->
-            <div echarts [options]="chartOption"
-                 [theme]="theme"
-                 (chartInit)="onChartInit($event)"
-                 (chartDataZoom)="onChartDataZoom($event)"
-                 (chartFinished)="onChartFinished($event)"
-                 class="w-100"></div>
-        </c-card-body>
+            <div class="chart-wrapper" style="position: relative;">
+                <div echarts [options]="chartOptionDetails" [theme]="theme"
+                     (chartInit)="onDetailChartInit($event)"
+                     (chartDataZoom)="onChartDataZoom($event)"
+                     (chartFinished)="onChartFinished($event)"
+                     class="w-100"></div>
 
+                <div echarts [options]="chartOption" [theme]="theme"
+                     (chartInit)="onOverviewChartInit($event)"
+                     (chartDataZoom)="onOverviewDataZoom($event)"
+                     style="height: 60px"
+                     class="w-100"></div>
+
+                <div class="text-muted text-center small mb-1">{{ detailRangeLabel }}</div>
+            </div>
+
+        </c-card-body>
     </c-card>
 </ng-container>
