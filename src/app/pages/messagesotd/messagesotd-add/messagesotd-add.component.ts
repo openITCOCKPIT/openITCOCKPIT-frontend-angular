@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MessageOfTheDay } from '../messagesotd.interface';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import {
@@ -93,7 +93,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         NgClass
     ],
     templateUrl: './messagesotd-add.component.html',
-    styleUrl: './messagesotd-add.component.css'
+    styleUrl: './messagesotd-add.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessagesotdAddComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -207,7 +208,8 @@ export class MessagesotdAddComponent implements OnInit, OnDestroy {
                         value: value.name,
                         key: value.id
                     });
-                })
+                });
+                this.cdr.markForCheck();
             }))
     }
 

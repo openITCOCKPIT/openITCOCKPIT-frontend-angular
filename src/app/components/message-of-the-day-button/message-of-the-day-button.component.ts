@@ -23,7 +23,7 @@
  *     confirmation.
  */
 
-import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 
 import {
     ModalService
@@ -48,7 +48,8 @@ type NewBookmark = {
         NgClass
     ],
     templateUrl: './message-of-the-day-button.component.html',
-    styleUrl: './message-of-the-day-button.component.css'
+    styleUrl: './message-of-the-day-button.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageOfTheDayButtonComponent {
     private readonly modalService = inject(ModalService);
