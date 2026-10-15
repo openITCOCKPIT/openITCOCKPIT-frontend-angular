@@ -16,7 +16,7 @@
                         </h4>
                     </div>
                     @if (systemHealth.state === 'ok') {
-                        <div class="dropdown-item">
+                        <div class="dropdown-item system-health-dropdown">
                             <div class="pt-2 pb-2 border-bottom health-item animated-fade-in">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <div class="d-flex align-items-center ">
@@ -42,7 +42,7 @@
                         </div>
                     }
                     @if (systemHealth.state === 'warning' || systemHealth.state === 'critical') {
-                        <div class="dropdown-item py-0"
+                        <div class="dropdown-item py-0 system-health-dropdown"
                         >
                             <div class="d-flex align-items-center" [routerLink]="['/', 'administrators', 'debug']">
                                 <ul class="pt-8 list-unstyled system-health-item fs-sm w-100 mb-1">
@@ -334,12 +334,12 @@
                                                     </span>
                                                 </div>
 
-                                                <div class="mb-1 d-flex flex-column  ">
-                                                    <span class="text-muted w-full">
-                                                        {{ t('Current CPU load is too high!') }}
+                                                <div class=" mb-1 text-lg ">
+                                                    <span class="text-muted">
+                                                        {{ t('High CPU usage') }}:
                                                     </span>
-                                                    <strong class="text-dark font-monospace">{{ systemHealth.load?.load1 }}
-                                                        , {{ systemHealth.load?.load5 }}, {{
+
+                                                    <strong class="font-monospace font-xs border border-secondary-subtle">{{ systemHealth.load?.load1 }}, {{ systemHealth.load?.load5 }}, {{
                                                             systemHealth.load?.load15
                                                         }}</strong>
                                                 </div>
@@ -372,8 +372,8 @@
                                                     <span> <span class="text-muted">
                                                         {{ t('High memory usage') }}:
                                                     </span>
-                                                        <strong class="border border-secondary-subtle font-monospace">Memory</strong></span>
-                                                    <span class="fw-bold font-monospace text-nowrap">
+                                                        <strong class="border border-secondary-subtle font-monospace font-xs">Memory</strong></span>
+                                                    <span class="fw-bold font-monospace text-nowrap fm-bg-value">
                                                         {{ systemHealth.memory_usage.memory.percentage }}%
                                                     </span>
                                                 </div>
@@ -412,8 +412,8 @@
                                                     <span> <span class="text-muted">
                                                         {{ t('High memory usage') }}:
                                                     </span>
-                                                        <strong class="border border-secondary-subtle font-monospace">Swap</strong></span>
-                                                    <span class="fw-bold font-monospace text-nowrap">
+                                                        <strong class="border border-secondary-subtle font-monospace font-xs">Swap</strong></span>
+                                                    <span class="fw-bold font-monospace text-nowrap fm-bg-value">
                                                         {{ systemHealth.memory_usage.swap.percentage }}%
                                                     </span>
                                                 </div>
@@ -452,16 +452,15 @@
 
 
                                                     <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
-                                                        <div class="d-flex align-items-center">
+                                                        <div class="align-items-center">
                                                             <span class="text-muted">
-                                                                {{ ( 'Low disk space left for mountpoint:' ) }}:
-                                                            </span>
-                                                            <strong class="ms-1 border border-secondary-subtle font-monospace txt-overflow-ellipsis">
+                                                                {{ ( 'Low disk space' ) }}: </span>
+                                                                <strong class="font-monospace border border-secondary-subtle font-xs txt-overflow-ellipsis">
                                                                 {{ disk?.mountpoint || disk?.disk }}
                                                             </strong>
                                                         </div>
 
-                                                        <span class="fw-bold font-monospace text-nowrap">
+                                                        <span class="fw-bold font-monospace text-nowrap fm-bg-value">
                                                             {{ disk?.use_percentage }}%
                                                         </span>
                                                     </div>
@@ -515,7 +514,7 @@
                     <!-- end ngIf: systemHealth.state == 'warning' || systemHealth.state == 'critical' -->
                     <!-- ngIf: systemHealth.state === 'unknown' -->
                     @if (systemHealth.state === 'unknown') {
-                        <div class="dropdown-item no-padding">
+                        <div class="dropdown-item no-padding system-health-dropdown">
                             <ul class="list-unstyled system-health-item notification-message fs-sm w-100">
                                 @if (!systemHealth.isNagiosRunning) {
                                     <li class="health-item animated-fade-in">
@@ -587,10 +586,10 @@
 
                         @if (systemHealth.satellites_state === 'warning' || systemHealth.satellites_state === 'critical') {
 
-                            <div class="dropdown-item py-0"
+                            <div class="dropdown-item py-0 system-health-dropdown"
                             >
                                 <div class="d-flex align-items-center"
-                                     [routerLink]="['/', 'distribute_module', 'satellites', 'index']">
+                                     [routerLink]="['/', 'distribute_module', 'satellites', 'info']">
                                     <ul class="pt-8 list-unstyled system-health-item fs-sm w-100 mb-0">
                                         @for (satellite of systemHealth.satellites; track satellite) {
                                             @if (satellite.satellite_status) {
@@ -621,11 +620,10 @@
                                                             </div>
 
                                                             @if (satellite.satellite_status.last_seen) {
-                                                                <div class=" mb-1 text-lg">
-                                                                    <span class="text-muted">{{ t('last seen') }}
-                                                                        : </span>
+                                                                <div class=" mb-1 text-xs">
+                                                                    <span class="text-muted">{{ t('last seen') }}: </span>
 
-                                                                    <strong>{{ satellite.satellite_status.last_seen }}</strong>
+                                                                    <strong class="font-monospace font-xs">{{ satellite.satellite_status.last_seen }}</strong>
 
                                                                 </div>
                                                             }
@@ -656,11 +654,13 @@
                                                                 </span>
                                                             </div>
 
-
-                                                            <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
+                                                            <div class=" mb-1 text-lg ">
                                                                 <span class="text-muted">
-                                                                    {{ t('High CPU usage') }}
+                                                                    {{ t('High CPU usage') }}:
                                                                 </span>
+                                                                <strong class="font-monospace font-xs border border-secondary-subtle">{{ satelliteSystemHealth.cpu_load1 }}, {{ satelliteSystemHealth.cpu_load5 }}, {{
+                                                                        satelliteSystemHealth.cpu_load15
+                                                                    }}</strong>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -693,10 +693,9 @@
                                                                 <span> <span class="text-muted">
                                                                     {{ t('High memory usage') }}:
                                                                 </span>
-                                                                    <strong class="border border-secondary-subtle font-monospace">Memory</strong></span>
-                                                                <span class="fw-bold font-monospace text-nowrap">
-                                                                    {{ satelliteSystemHealth?.memory?.memory?.percentage }}
-                                                                    %
+                                                                    <strong class="border border-secondary-subtle font-monospace font-xs">Memory</strong></span>
+                                                                <span class="fw-bold font-monospace text-nowrap fm-bg-value">
+                                                                    {{ satelliteSystemHealth?.memory?.memory?.percentage }}%
                                                                 </span>
                                                             </div>
                                                             <div class="custom-progress-wrapper">
@@ -734,11 +733,11 @@
                                                                 <span class="">
                                                                     <span class="text-muted">{{ t('High memory usage') }}
                                                                         :</span> <strong
-                                                                        class="ms-1 border border-secondary-subtle font-monospace ">Swap</strong>
+                                                                        class="ms-1 border border-secondary-subtle font-monospace font-xs">Swap</strong>
+
                                                                 </span>
-                                                                <span class="fw-bold font-monospace text-nowrap">
-                                                                    {{ satelliteSystemHealth?.memory?.swap?.percentage }}
-                                                                    %
+                                                                <span class="fw-bold font-monospace text-nowrap fm-bg-value">
+                                                                    {{ satelliteSystemHealth?.memory?.swap?.percentage }}%
                                                                 </span>
                                                             </div>
                                                             <div class="custom-progress-wrapper">
@@ -775,16 +774,15 @@
 
 
                                                                     <div class="d-flex justify-content-between align-items-center mb-1 text-xs">
-                                                                        <div class="d-flex align-items-center">
+                                                                        <div class="align-items-center">
                                                                             <span class="text-muted">
-                                                                                {{ t('Low disk space') }}:
-                                                                            </span>
-                                                                            <strong class="ms-1 border border-secondary-subtle font-monospace txt-overflow-ellipsis">
+                                                                                {{ t('Low disk space') }}:</span>
+                                                                            <strong class="font-monospace border border-secondary-subtle font-xs txt-overflow-ellipsis">
                                                                                 {{ disk?.mountpoint || disk?.disk }}
                                                                             </strong>
                                                                         </div>
 
-                                                                        <span class="fw-bold font-monospace text-nowrap">
+                                                                        <span class="fw-bold font-monospace text-nowrap fm-bg-value">
                                                                             {{ disk?.use_percentage }}%
                                                                         </span>
                                                                     </div>
@@ -806,7 +804,7 @@
                                 </div>
                             </div>
                         } @else if (systemHealth.satellites_state === 'ok') {
-                            <div class="dropdown-item">
+                            <div class="dropdown-item system-health-dropdown">
                                 <div class="pt-2 pb-2 border-bottom health-item animated-fade-in">
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <div class="d-flex align-items-center ">
@@ -834,7 +832,7 @@
                         <!-- end ngIf: systemHealth.satellites_state == 'warning' || systemHealth.satellites_state == 'critical' -->
                         <!-- ngIf: systemHealth.satellites_state === 'unknown' -->
                         @if (systemHealth.satellites_state === 'unknown') {
-                            <div class="dropdown-item no-padding">
+                            <div class="dropdown-item no-padding system-health-dropdown">
                                 <ul class="list-unstyled system-health-item notification-message fs-sm w-100">
                                     @if (!systemHealth.isNagiosRunning) {
                                         <li class="health-item animated-fade-in">

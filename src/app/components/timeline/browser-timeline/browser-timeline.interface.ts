@@ -9,8 +9,10 @@ export interface BrowserTimelineApiResult {
     servicestatehistory?: DataItem[]
     downtimes: DataItem[]
     notifications: DataItem[]
+    notifications_contact: DataItem[]
     acknowledgements: DataItem[]
     timeranges: DataItem[]
+    notification_timeranges?: DataItem[]
 }
 
 // Based on https://visjs.github.io/vis-timeline/docs/timeline/#Events
