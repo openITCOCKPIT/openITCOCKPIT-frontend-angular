@@ -6286,5 +6286,7 @@
   "ZFS, Ceph and LVM": "ZFS, Ceph i LVM",
   "LVM thin pools": "Pule LVM thin",
   "Network bonds": "Połączenia sieciowe (bond)",
-  "Listening ports": "Nasłuchujące porty"
+  "Listening ports": "Nasłuchujące porty",
+  "Hardware (IPMI)": "Sprzęt (IPMI)",
+  "IPMI sensors": "Czujniki IPMI"
 }

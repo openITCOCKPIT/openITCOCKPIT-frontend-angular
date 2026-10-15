@@ -361,6 +361,11 @@ export interface AgentServicesForCreate {
     redfish_storage: AgentServiceForCreate[]
     redfish_eventlog: AgentServiceForCreate[]
 
+    // IPMI (local BMC)
+    ipmi_health: AgentServiceForCreate
+    ipmi_sensors: AgentServiceForCreate[]
+    ipmi_sel: AgentServiceForCreate
+
     packagemanager: AgentServiceForCreate
 }
 
