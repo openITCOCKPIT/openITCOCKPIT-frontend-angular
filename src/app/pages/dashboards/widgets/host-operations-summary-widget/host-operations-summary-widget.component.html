@@ -32,6 +32,9 @@
                 <div class="box-x">
                     @if (animationStateShowContent) {
                         <div>
+                            @if (!hoststatusSummary) {
+                                <oitc-operations-summary-loader></oitc-operations-summary-loader>
+                            }
                             @if (hoststatusSummary) {
                                 <c-row class="py-1">
                                     <c-col [xs]="12" [sm]="12" [md]="12" [lg]="3">
