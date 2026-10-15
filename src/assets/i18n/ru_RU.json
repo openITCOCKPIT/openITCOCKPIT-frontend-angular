@@ -6092,5 +6092,6 @@
   "HTTP endpoints": "HTTP-эндпоинты",
   "ZFS, Ceph and LVM": "ZFS, Ceph и LVM",
   "LVM thin pools": "Thin-пулы LVM",
-  "Network bonds": "Сетевые агрегации (bond)"
+  "Network bonds": "Сетевые агрегации (bond)",
+  "Listening ports": "Прослушиваемые порты"
 }

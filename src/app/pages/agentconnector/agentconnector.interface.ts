@@ -348,6 +348,12 @@ export interface AgentServicesForCreate {
     lvm_thin_pools: AgentServiceForCreate[]
     mounts: AgentServiceForCreate
 
+    // Network ports
+    network_ports: AgentServiceForCreate[]
+    network_ports_tcp_states: AgentServiceForCreate
+    network_ports_ephemeral_ports: AgentServiceForCreate
+    network_ports_tcp_errors: AgentServiceForCreate
+
     // Redfish (one service per BMC of the redfish.ini of the agent)
     redfish_health: AgentServiceForCreate[]
     redfish_sensors: AgentServiceForCreate[]

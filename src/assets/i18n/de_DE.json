@@ -6305,5 +6305,6 @@
   "HTTP endpoints": "HTTP-Endpunkte",
   "ZFS, Ceph and LVM": "ZFS, Ceph und LVM",
   "LVM thin pools": "LVM-Thin-Pools",
-  "Network bonds": "Netzwerk-Bonds"
+  "Network bonds": "Netzwerk-Bonds",
+  "Listening ports": "Lauschende Ports"
 }

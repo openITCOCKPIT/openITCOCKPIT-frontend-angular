@@ -375,7 +375,7 @@
                                                     </c-col>
                                                 }
                                                 <!-- Network information -->
-                                                @if (newServicesAsSelect.net_stats || newServicesAsSelect.net_io || newServicesAsSelect.system_health_bonding) {
+                                                @if (newServicesAsSelect.net_stats || newServicesAsSelect.net_io || newServicesAsSelect.system_health_bonding || newServicesAsSelect.network_ports) {
                                                     <c-col [xs]="12"
                                                            class="mb-3">
                                                         <div class="hr-separator pt-3">
@@ -435,6 +435,24 @@
                                                                     optionLabel="value"
                                                                     [(ngModel)]="newServicesAsSelect.system_health_bonding.selectedIndicies"
                                                                     [options]="newServicesAsSelect.system_health_bonding.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.network_ports) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="network_ports">
+                                                                    {{ t('Listening ports') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.network_ports.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="network_ports"
+                                                                    id="network_ports"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.network_ports.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.network_ports.options">
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }

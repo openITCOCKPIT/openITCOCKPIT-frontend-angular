@@ -5362,5 +5362,6 @@
   "HTTP endpoints": "Points de terminaison HTTP",
   "ZFS, Ceph and LVM": "ZFS, Ceph et LVM",
   "LVM thin pools": "Pools LVM thin",
-  "Network bonds": "Agrégations réseau (bonds)"
+  "Network bonds": "Agrégations réseau (bonds)",
+  "Listening ports": "Ports en écoute"
 }

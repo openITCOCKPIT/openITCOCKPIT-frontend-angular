@@ -6090,5 +6090,6 @@
   "HTTP endpoints": "HTTP-кінцеві точки",
   "ZFS, Ceph and LVM": "ZFS, Ceph і LVM",
   "LVM thin pools": "Thin-пули LVM",
-  "Network bonds": "Мережеві агрегації (bond)"
+  "Network bonds": "Мережеві агрегації (bond)",
+  "Listening ports": "Порти, що прослуховуються"
 }
