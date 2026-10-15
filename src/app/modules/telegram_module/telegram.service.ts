@@ -32,7 +32,7 @@ export class TelegramService {
     setTelegramSettings(settings: TelegramSettings): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
 
-        return this.http.post<TelegramSettingsPostResponse>(`${proxyPath}/telegram_module/TelegramSettings/index.json?angular=true`,
+        return this.http.post<TelegramSettingsPostResponse>(`${proxyPath}/telegram_module/TelegramSettings/save.json?angular=true`,
             settings
         ).pipe(
             map((data: TelegramSettingsPostResponse): any => {
