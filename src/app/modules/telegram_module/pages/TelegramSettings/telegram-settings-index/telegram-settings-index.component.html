@@ -24,10 +24,11 @@
     </nav>
 
     <oitc-form-loader [isVisible]="!post"></oitc-form-loader>
-    
+
     <!-- Telegram Settings Form -->
     <form cForm (ngSubmit)="submitTelegramSettings()">
-        <c-card *ngIf="post">
+        @if(post) {
+            <c-card>
             <c-card-header>
                 <h5 cCardTitle>
                     {{ t('Telegram') }}
@@ -87,8 +88,8 @@
                         </div>
                     </c-form-check>
                 </div>
-
-                <c-card *ngIf="post.two_way" class="mb-3">
+                @if(post.two_way) {
+                    <c-card class="mb-3">
                     <c-card-body>
                         <div class="mb-3">
                             <label cLabel for="external_webhook_domain">
@@ -101,7 +102,8 @@
                                    placeholder="https://demo.openitcockpit.io"
                                    [(ngModel)]="post.external_webhook_domain"
                                    oitcFormError [errors]="errors" errorField="external_webhook_domain">
-                            <oitc-form-feedback [errors]="errors" errorField="external_webhook_domain"></oitc-form-feedback>
+                            <oitc-form-feedback [errors]="errors"
+                                                errorField="external_webhook_domain"></oitc-form-feedback>
                             <div class="help-block">
                                 {{ t('Enter the externally accessible domain name of this openITCOCKPIT instance.') }}
                                 <br>
@@ -127,6 +129,7 @@
                         </div>
                     </c-card-body>
                 </c-card>
+                }
 
                 <div class="mb-3">
                     <c-form-check>
@@ -154,15 +157,17 @@
 
             </c-card-body>
             <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit">
+                <button cButton class="ripple" color="primary" type="submit" *oitcPermission="['TelegramModule', 'TelegramSettings', 'save']">
                     {{ t('Save configuration') }}
                 </button>
             </c-card-footer>
         </c-card>
+        }
     </form>
 
     <!-- Authentication codes for Telegram notification contacts -->
-    <c-card class="mt-4" *ngIf="contacts.length > 0">
+    @if(contacts.length > 0) {
+        <c-card class="mt-4">
         <c-card-header class="flex-column">
             <h5 cCardTitle>
                 {{ t('Authentication codes for Telegram notification contacts') }}
@@ -174,76 +179,88 @@
             </div>
         </c-card-header>
         <c-card-body>
-            <c-card class="mt-2" *ngFor="let contact of contacts">
-                <c-card-body>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="me-3" style="min-width: 350px;">
-                            {{ contact.name }}
-                        </span>
-                        <div>
-                            <span *ngIf="!isContactAccessKeyGenerated(contact.uuid)">
-                                <button type="button" 
-                                        class="btn btn-xs btn-success me-1"
-                                        (click)="generateAccessKeyForContact(contact.uuid)">
-                                    {{ t('Generate key') }}
-                                </button>
+            @for (contact of contacts; track contact.uuid) {
+                <c-card class="mt-2">
+                    <c-card-body>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="me-3" style="min-width: 350px;">
+                                {{ contact.name }}
                             </span>
-                            <span *ngIf="isContactAccessKeyGenerated(contact.uuid)">
-                                <code>{{ isContactAccessKeyGenerated(contact.uuid) }}</code>
-                                <button type="button" 
-                                        class="btn btn-xs btn-danger ms-2"
-                                        (click)="removeAccessKeyForContact(contact.uuid)">
-                                    {{ t('Delete key') }}
-                                </button>
-                            </span>
+                            <div>
+                                @if (!isContactAccessKeyGenerated(contact.uuid)) {
+                                    <span *oitcPermission="['TelegramModule', 'TelegramSettings', 'genKey']">
+                                        <button type="button"
+                                                class="btn btn-xs btn-success me-1"
+                                                (click)="generateAccessKeyForContact(contact.uuid)">
+                                            {{ t('Generate key') }}
+                                        </button>
+                                    </span>
+                                }
+                                @if (isContactAccessKeyGenerated(contact.uuid)) {
+                                    <span>
+                                        <code>{{ isContactAccessKeyGenerated(contact.uuid) }}</code>
+                                        <button *oitcPermission="['TelegramModule', 'TelegramSettings', 'rmKey']"
+                                                type="button"
+                                                class="btn btn-xs btn-danger ms-2"
+                                                (click)="removeAccessKeyForContact(contact.uuid)">
+                                            {{ t('Delete key') }}
+                                        </button>
+                                    </span>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </c-card-body>
-            </c-card>
+                    </c-card-body>
+                </c-card>
+            }
         </c-card-body>
     </c-card>
+    }
 
     <!-- Registered Telegram chats -->
-    <c-card class="my-4" *ngIf="chats.length > 0">
-        <c-card-header>
-            <h5 cCardTitle>
-                {{ t('Registered Telegram chats') }}
-            </h5>
-        </c-card-header>
-        <c-card-body>
-            <c-card class="mt-2" *ngFor="let chat of chats">
-                <c-card-body>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="me-3" style="min-width: 350px;">
-                            {{ t('Contact') }}:
-                            <span *oitcPermission="['contacts', 'edit']">
-                                <a [routerLink]="['/contacts/edit', getContactForUuid(chat.contact_uuid)?.id]">
-                                    {{ getContactForUuid(chat.contact_uuid)?.name }}
-                                </a>
-                            </span>
-                            <span *oitcPermission="['contacts', 'edit']; negate: true">
-                                {{ getContactForUuid(chat.contact_uuid)?.name }}
-                            </span>
-                            &nbsp;| {{ t('Telegram user') }}: {{ chat.started_from_username }}
-                        </span>
-                        <div>
-                            <button type="button" 
-                                    class="btn btn-xs btn-success me-1"
-                                    (click)="sendTestChatMessage(chat.id)">
-                                <fa-icon [icon]="['fas', 'message']"></fa-icon>
-                                {{ t('Send test chat message') }}
-                            </button>
-                            <button type="button" 
-                                    class="btn btn-xs btn-danger"
-                                    (click)="deleteChat(chat.id)">
-                                {{ t('Delete chat connection / Revoke authorization') }}
-                            </button>
-                        </div>
-                    </div>
-                </c-card-body>
-            </c-card>
-        </c-card-body>
-    </c-card>
+    @if (chats.length > 0) {
+        <c-card class="my-4">
+            <c-card-header>
+                <h5 cCardTitle>
+                    {{ t('Registered Telegram chats') }}
+                </h5>
+            </c-card-header>
+            <c-card-body>
+                @for (chat of chats; track chat) {
+                    <c-card class="mt-2">
+                        <c-card-body>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="me-3" style="min-width: 350px;">
+                                    {{ t('Contact') }}:
+                                    <span *oitcPermission="['contacts', 'edit']">
+                                        <a [routerLink]="['/contacts/edit', getContactForUuid(chat.contact_uuid)?.id]">
+                                            {{ getContactForUuid(chat.contact_uuid)?.name }}
+                                        </a>
+                                    </span>
+                                    <span *oitcPermission="['contacts', 'edit']; negate: true">
+                                        {{ getContactForUuid(chat.contact_uuid)?.name }}
+                                    </span>
+                                    &nbsp;| {{ t('Telegram user') }}: {{ chat.started_from_username }}
+                                </span>
+                                <div>
+                                    <button type="button" *oitcPermission="['TelegramModule', 'TelegramSettings', 'sendTestChatMessage']"
+                                            class="btn btn-xs btn-success me-1"
+                                            (click)="sendTestChatMessage(chat.id)">
+                                        <fa-icon [icon]="['fas', 'message']"></fa-icon>
+                                        {{ t('Send test chat message') }}
+                                    </button>
+                                    <button type="button" *oitcPermission="['TelegramModule', 'TelegramSettings', 'rmChat']"
+                                            class="btn btn-xs btn-danger"
+                                            (click)="deleteChat(chat.id)">
+                                        {{ t('Delete chat connection / Revoke authorization') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </c-card-body>
+                    </c-card>
+                }
+            </c-card-body>
+        </c-card>
+    }
 
     <!-- HowTo Modal -->
     <c-modal [visible]="showHowToModal" (visibleChange)="showHowToModal = $event" size="lg">
@@ -261,7 +278,8 @@
                         <h4>{{ t('Configuration') }}</h4>
                         <ul>
                             <li>
-                                {{ t('Open') }} <a href="https://t.me/botfather" target="_blank">BotFather</a> {{ t('in Telegram.') }}
+                                {{ t('Open') }} <a href="https://t.me/botfather"
+                                                   target="_blank">BotFather</a> {{ t('in Telegram.') }}
                             </li>
                             <li>
                                 {{ t('Run') }} <code class="bg-secondary-subtle">/newbot</code>
@@ -271,7 +289,8 @@
                                 </ul>
                             </li>
                             <li>
-                                {{ t('Your new bot is now located at') }} <a href="https://t.me/oitcTGBot" target="_blank">t.me/oitcTGBot</a>.
+                                {{ t('Your new bot is now located at') }} <a href="https://t.me/oitcTGBot"
+                                                                             target="_blank">t.me/oitcTGBot</a>.
                             </li>
                             <li>
                                 {{ t('Copy the HTTP API token which was generated by the BotFather.') }}
@@ -325,10 +344,13 @@
                                 {{ t('To start the interaction, search the bot username in the Telegram global search field and start a chat with your bot.') }}
                             </li>
                             <li>
-                                {{ t('After starting the chat you need to authorize yourself with an authentication code for a openITCOCKPIT Contact, that can be manually generated in the openITCOCKPIT Telegram configuration for Contacts containing a Telegram notification command. (type') }} <code class="bg-secondary-subtle">/auth xxx</code> {{ t('in the chat with your key as xxx)') }}
+                                {{ t('After starting the chat you need to authorize yourself with an authentication code for a openITCOCKPIT Contact, that can be manually generated in the openITCOCKPIT Telegram configuration for Contacts containing a Telegram notification command. (type') }}
+                                <code class="bg-secondary-subtle">/auth
+                                    xxx</code> {{ t('in the chat with your key as xxx)') }}
                             </li>
                             <li>
-                                <strong>{{ t('If the authorization was successful, use the bot control command') }} <code class="bg-secondary-subtle">/start</code> {{ t('to enable openITCOCKPIT notifications. Otherwise you will not receive any notifications.') }}</strong>
+                                <strong>{{ t('If the authorization was successful, use the bot control command') }}
+                                    <code class="bg-secondary-subtle">/start</code> {{ t('to enable openITCOCKPIT notifications. Otherwise you will not receive any notifications.') }}</strong>
                             </li>
                             <li>
                                 {{ t('With enabled two-way integration issues can be acknowledged by simply clicking the button for an action provided by the bot message.') }}
@@ -340,7 +362,8 @@
                                 {{ t('If your openITCOCKPIT is not reachable from the Internet, the built-in basic one-way integration calls up interactions cached by Telegram and processes them every minute. (Therefore, interactions with the bot can take up to a minute to process!)') }}
                             </li>
                             <li>
-                                {{ t('Run') }} <code class="bg-secondary-subtle">/help</code> {{ t('in bot chat to get more information about how to control the bot.') }}
+                                {{ t('Run') }} <code
+                                    class="bg-secondary-subtle">/help</code> {{ t('in bot chat to get more information about how to control the bot.') }}
                             </li>
                         </ul>
                     </div>
@@ -351,7 +374,9 @@
                             <li>
                                 {{ t("If you aren't using the two-way integration or switching from two-way to one-way, it could happen that the cronjob is not going to be executed by openITCOCKPIT.") }}
                                 <ul>
-                                    <li>{{ t('That problem should be solved after running it once manually:') }} <code class="bg-secondary-subtle">oitc cronjobs -f -t TelegramProcessUpdates</code></li>
+                                    <li>{{ t('That problem should be solved after running it once manually:') }} <code
+                                            class="bg-secondary-subtle">oitc cronjobs -f -t
+                                        TelegramProcessUpdates</code></li>
                                     <li>{{ t('Note that the cron job is not needed if you use a two-way setup of this plugin') }}</li>
                                 </ul>
                             </li>

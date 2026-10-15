@@ -34,7 +34,6 @@ import { Subscription } from 'rxjs';
 import { ApikeyDocModalComponent } from '../../../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { FormLoaderComponent } from '../../../../../layouts/primeng/loading/form-loader/form-loader.component';
-import { NgFor, NgIf } from '@angular/common';
 import {
     Contact,
     ContactAccessKey,
@@ -56,8 +55,6 @@ import { TelegramService } from '../../../telegram.service';
         FormDirective,
         FormsModule,
         FormLoaderComponent,
-        NgIf,
-        NgFor,
         CardComponent,
         CardHeaderComponent,
         CardTitleDirective,
@@ -116,6 +113,7 @@ export class TelegramSettingsIndexComponent implements OnInit, OnDestroy {
                 this.contacts = data.contacts;
                 this.contactsAccessKeys = data.contactsAccessKeys;
                 this.chats = data.chats;
+                //console.log(this.contacts);
                 this.cdr.markForCheck();
             })
         );
