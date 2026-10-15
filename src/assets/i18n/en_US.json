@@ -4531,5 +4531,8 @@
   "Certificates": "Certificates",
   "Files": "Files",
   "Directories": "Directories",
-  "HTTP endpoints": "HTTP endpoints"
+  "HTTP endpoints": "HTTP endpoints",
+  "ZFS, Ceph and LVM": "ZFS, Ceph and LVM",
+  "LVM thin pools": "LVM thin pools",
+  "Network bonds": "Network bonds"
 }
