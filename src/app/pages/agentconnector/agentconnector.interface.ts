@@ -278,19 +278,76 @@ export interface AgentServicesForCreate {
     disk_io: AgentServiceForCreate[]
     disks: AgentServiceForCreate[]
     disks_free: AgentServiceForCreate[]
+    disks_inodes: AgentServiceForCreate[]
+    disks_readonly: AgentServiceForCreate
     net_io: AgentServiceForCreate[]
     net_stats: AgentServiceForCreate[]
     processes: AgentServiceForCreate[]
+    processes_zombies: AgentServiceForCreate
     systemd_services: AgentServiceForCreate[]
+    systemd_services_failed: AgentServiceForCreate
     launchd_services: AgentServiceForCreate[]
     windows_services: AgentServiceForCreate[]
+    windows_services_automatic: AgentServiceForCreate
     windows_eventlog: AgentServiceForCreate[]
     customchecks: AgentServiceForCreate[]
     docker_running: AgentServiceForCreate[]
     docker_cpu: AgentServiceForCreate[]
     docker_memory: AgentServiceForCreate[]
+    docker_health: AgentServiceForCreate[]
     libvirt: AgentServiceForCreate[]
     ntp: AgentServiceForCreate
+
+    // Linux system health
+    system_health_raid: AgentServiceForCreate
+    system_health_oom_kills: AgentServiceForCreate
+    system_health_file_descriptors: AgentServiceForCreate
+    system_health_conntrack: AgentServiceForCreate
+    system_health_pressure: AgentServiceForCreate[]
+
+    // Security
+    security_firewall: AgentServiceForCreate
+    security_apparmor: AgentServiceForCreate
+    security_filevault: AgentServiceForCreate
+    security_sip: AgentServiceForCreate
+    security_defender: AgentServiceForCreate
+    security_selinux: AgentServiceForCreate
+
+    // Definitions of the logfiles.ini, certificates.ini, http.ini, perfcounters.ini and files.ini of the agent
+    logfiles: AgentServiceForCreate[]
+    certificates: AgentServiceForCreate[]
+    http: AgentServiceForCreate[]
+    windows_perfcounters: AgentServiceForCreate[]
+    files_file: AgentServiceForCreate[]
+    files_directory: AgentServiceForCreate[]
+    windows_scheduled_tasks: AgentServiceForCreate[]
+
+    // ZFS and Ceph
+    zfs_pools: AgentServiceForCreate[]
+    zfs_arc: AgentServiceForCreate
+    ceph_health: AgentServiceForCreate
+    ceph_osds: AgentServiceForCreate
+    ceph_usage: AgentServiceForCreate[]
+
+    smart: AgentServiceForCreate
+
+    // Proxmox VE
+    proxmox_cluster: AgentServiceForCreate
+    proxmox_backups: AgentServiceForCreate
+    proxmox_replication: AgentServiceForCreate
+    proxmox_storages: AgentServiceForCreate[]
+    proxmox_guests: AgentServiceForCreate[]
+
+    postfix: AgentServiceForCreate
+
+    // Redfish (one service per BMC of the redfish.ini of the agent)
+    redfish_health: AgentServiceForCreate[]
+    redfish_sensors: AgentServiceForCreate[]
+    redfish_power: AgentServiceForCreate[]
+    redfish_storage: AgentServiceForCreate[]
+    redfish_eventlog: AgentServiceForCreate[]
+
+    packagemanager: AgentServiceForCreate
 }
 
 
