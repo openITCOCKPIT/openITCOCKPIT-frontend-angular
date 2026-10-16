@@ -211,65 +211,65 @@
                                 </h5>
                                 <c-form-check>
                                     <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="filter.isRunning"
-                                        id="filter.isRunning"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [trueValue]="true"
-                                        [falseValue]="''"
-                                        [(ngModel)]="params['filter[isRunning]']"/>
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="filter.isRunning"
+                                            id="filter.isRunning"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="true"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[isRunning]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.isRunning">{{ t('Is running') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="filter.DowntimeHosts.was_not_cancelled"
-                                        id="filter.DowntimeHosts.was_not_cancelled"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [trueValue]="true"
-                                        [falseValue]="''"
-                                        [(ngModel)]="params['filter[DowntimeHosts.was_not_cancelled]']"/>
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="filter.DowntimeHosts.was_not_cancelled"
+                                            id="filter.DowntimeHosts.was_not_cancelled"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="true"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[DowntimeHosts.was_not_cancelled]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.DowntimeHosts.was_not_cancelled">{{ t('Was not cancelled') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="filter.DowntimeHosts.was_cancelled"
-                                        id="filter.DowntimeHosts.was_cancelled"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [trueValue]="true"
-                                        [falseValue]="''"
-                                        [(ngModel)]="params['filter[DowntimeHosts.was_cancelled]']"/>
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="filter.DowntimeHosts.was_cancelled"
+                                            id="filter.DowntimeHosts.was_cancelled"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="true"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[DowntimeHosts.was_cancelled]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.DowntimeHosts.was_cancelled">{{ t('Was cancelled') }}</label>
                                 </c-form-check>
                                 <c-form-check>
                                     <input
-                                        (debouncedValue)="onFilterChange($event)"
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        name="filter.hideExpired"
-                                        id="filter.hideExpired"
-                                        type="checkbox"
-                                        trueFalseValue
-                                        oitcDebounce
-                                        [trueValue]="true"
-                                        [falseValue]="''"
-                                        [(ngModel)]="params['filter[hideExpired]']"/>
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            name="filter.hideExpired"
+                                            id="filter.hideExpired"
+                                            type="checkbox"
+                                            trueFalseValue
+                                            oitcDebounce
+                                            [trueValue]="true"
+                                            [falseValue]="''"
+                                            [(ngModel)]="params['filter[hideExpired]']"/>
                                     <label cFormCheckLabel class="ms-1 mt-1"
                                            for="filter.hideExpired">{{ t('Hide expired') }}</label>
                                 </c-form-check>
@@ -338,15 +338,15 @@
                                     @if (hostDowntime.DowntimeHost.allowEdit && hostDowntime.DowntimeHost.isCancellable) {
                                         <div>
                                             <oitc-item-select
-                                                *oitcPermission="['downtimes', 'delete']"
-                                                [disabled]="false"
-                                                [item]="hostDowntime.DowntimeHost.internalDowntimeId"></oitc-item-select>
+                                                    *oitcPermission="['downtimes', 'delete']"
+                                                    [disabled]="false"
+                                                    [item]="hostDowntime.DowntimeHost.internalDowntimeId"></oitc-item-select>
                                         </div>
                                     }
                                 </td>
                                 <td class="text-center">
                                     <oitc-downtime-simple-icon
-                                        [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
+                                            [downtime]="hostDowntime.DowntimeHost"></oitc-downtime-simple-icon>
                                 </td>
                                 <td class="word-break">
                                     <a *oitcPermission="['hosts', 'browser']"
@@ -368,12 +368,30 @@
                                 </td>
                                 <td>
                                     {{ hostDowntime.DowntimeHost.scheduledStartTime }}
+                                    @if (hostDowntime.DowntimeHost.scheduledStartTime !== hostDowntime.DowntimeHost.actualStartTime) {
+                                        <br/>
+                                        <small class="text-muted" [cTooltip]="t('Actual start time')">
+                                            {{ hostDowntime.DowntimeHost.actualStartTime }}
+                                        </small>
+                                    }
                                 </td>
                                 <td>
                                     {{ hostDowntime.DowntimeHost.scheduledEndTime }}
+                                    @if (hostDowntime.DowntimeHost.scheduledEndTime !== hostDowntime.DowntimeHost.actualEndTime) {
+                                        <br/>
+                                        <small class="text-muted" [cTooltip]="t('Actual end time')">
+                                            {{ hostDowntime.DowntimeHost.actualEndTime }}
+                                        </small>
+                                    }
                                 </td>
                                 <td>
                                     {{ hostDowntime.DowntimeHost.durationHuman }}
+                                    @if (hostDowntime.DowntimeHost.actualDuration && hostDowntime.DowntimeHost.actualDurationHuman !== hostDowntime.DowntimeHost.durationHuman) {
+                                        <br/>
+                                        <small class="text-muted" [cTooltip]="t('Actual duration')">
+                                            {{ hostDowntime.DowntimeHost.actualDurationHuman }}
+                                        </small>
+                                    }
                                 </td>
                                 <td class="text-center">
                                     @if (hostDowntime.DowntimeHost.wasCancelled) {
@@ -416,7 +434,7 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="hostDowntimes.all_host_downtimes.length"></oitc-select-all>
+                                    [itemsCount]="hostDowntimes.all_host_downtimes.length"></oitc-select-all>
                         </c-col>
                         <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                             <div *oitcPermission="['downtimes', 'delete']"
@@ -433,13 +451,13 @@
                 </c-container>
             }
             <c-container
-                [fluid]="true" class="mb-3 py-3">
+                    [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
                         @if (hostDowntimes) {
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="hostDowntimes"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="hostDowntimes"></oitc-paginate-or-scroll>
                         }
                     </c-col>
                 </c-row>

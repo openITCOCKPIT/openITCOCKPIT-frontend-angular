@@ -95,6 +95,7 @@ import {
     CancelServicedowntimeModalComponent
 } from '../../../downtimes/cancel-servicedowntime-modal/cancel-servicedowntime-modal.component';
 import { ServiceBrowserModalService } from './service-browser-modal.service';
+import { DowntimeComponent } from '../../../../components/downtimes/downtime-component/downtime-component.component';
 
 @Component({
     selector: 'oitc-service-browser-modal',
@@ -137,7 +138,8 @@ import { ServiceBrowserModalService } from './service-browser-modal.service';
         RouterLink,
         CancelHostdowntimeModalComponent,
         CancelServicedowntimeModalComponent,
-        AsyncPipe
+        AsyncPipe,
+        DowntimeComponent
     ],
     templateUrl: './service-browser-modal.component.html',
     styleUrl: './service-browser-modal.component.css',
