@@ -202,27 +202,30 @@
                                                                 {{ t('System') }}
                                                             </span>
                                                         </div>
-                                                        @for (service of newServicesAsCheckbox; track $index) {
-                                                            <div class="mt-3">
-                                                                <c-form-check>
-                                                                    <input
-                                                                        cFormCheckInput
-                                                                        [attr.id]="service.service_key+'_'+$index"
-                                                                        [name]="service.service_key+'_'+$index"
-                                                                        class="checkbox-lg checkbox-primary"
-                                                                        type="checkbox"
-                                                                        [(ngModel)]="service.checkboxValue"/>
-                                                                    <label cFormCheckLabel class="ms-1 mt-1"
-                                                                           [for]="service.service_key+'_'+$index">
-                                                                        {{ service.service.name }}
-                                                                    </label>
-                                                                </c-form-check>
-                                                            </div>
-                                                        }
+                                                        <!-- Two columns, as there are a lot of checks -->
+                                                        <c-row>
+                                                            @for (service of newServicesAsCheckbox; track $index) {
+                                                                <c-col [xs]="12" [md]="6" class="mt-3">
+                                                                    <c-form-check>
+                                                                        <input
+                                                                            cFormCheckInput
+                                                                            [attr.id]="service.service_key+'_'+$index"
+                                                                            [name]="service.service_key+'_'+$index"
+                                                                            class="checkbox-lg checkbox-primary"
+                                                                            type="checkbox"
+                                                                            [(ngModel)]="service.checkboxValue"/>
+                                                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                                                               [for]="service.service_key+'_'+$index">
+                                                                            {{ service.service.name }}
+                                                                        </label>
+                                                                    </c-form-check>
+                                                                </c-col>
+                                                            }
+                                                        </c-row>
                                                     </c-col>
                                                 }
                                                 <!-- Disk information -->
-                                                @if (newServicesAsSelect.disks || newServicesAsSelect.disks_free || newServicesAsSelect.disk_io) {
+                                                @if (newServicesAsSelect.disks || newServicesAsSelect.disks_free || newServicesAsSelect.disk_io || newServicesAsSelect.disks_inodes) {
                                                     <c-col [xs]="12"
                                                            class="mb-3">
                                                         <div class="hr-separator pt-3">
@@ -285,10 +288,94 @@
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }
+                                                        @if (newServicesAsSelect.disks_inodes) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="disks_inodes">
+                                                                    {{ t('Inode usage') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.disks_inodes.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="disks_inodes"
+                                                                    id="disks_inodes"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.disks_inodes.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.disks_inodes.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- ZFS, Ceph and LVM -->
+                                                @if (newServicesAsSelect.zfs_pools || newServicesAsSelect.ceph_usage || newServicesAsSelect.lvm_thin_pools) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'database']"></fa-icon>
+                                                                {{ t('ZFS, Ceph and LVM') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.zfs_pools) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="zfs_pools">
+                                                                    {{ t('ZFS pools') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.zfs_pools.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="zfs_pools"
+                                                                    id="zfs_pools"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.zfs_pools.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.zfs_pools.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.ceph_usage) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="ceph_usage">
+                                                                    {{ t('Ceph usage') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.ceph_usage.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="ceph_usage"
+                                                                    id="ceph_usage"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.ceph_usage.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.ceph_usage.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.lvm_thin_pools) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="lvm_thin_pools">
+                                                                    {{ t('LVM thin pools') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.lvm_thin_pools.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="lvm_thin_pools"
+                                                                    id="lvm_thin_pools"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.lvm_thin_pools.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.lvm_thin_pools.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
                                                     </c-col>
                                                 }
                                                 <!-- Network information -->
-                                                @if (newServicesAsSelect.net_stats || newServicesAsSelect.net_io) {
+                                                @if (newServicesAsSelect.net_stats || newServicesAsSelect.net_io || newServicesAsSelect.system_health_bonding || newServicesAsSelect.network_ports) {
                                                     <c-col [xs]="12"
                                                            class="mb-3">
                                                         <div class="hr-separator pt-3">
@@ -333,10 +420,46 @@
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }
+                                                        @if (newServicesAsSelect.system_health_bonding) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="system_health_bonding">
+                                                                    {{ t('Network bonds') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.system_health_bonding.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="system_health_bonding"
+                                                                    id="system_health_bonding"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.system_health_bonding.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.system_health_bonding.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.network_ports) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="network_ports">
+                                                                    {{ t('Listening ports') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.network_ports.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="network_ports"
+                                                                    id="network_ports"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.network_ports.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.network_ports.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
                                                     </c-col>
                                                 }
                                                 <!-- Docker information -->
-                                                @if (newServicesAsSelect.docker_running || newServicesAsSelect.docker_cpu || newServicesAsSelect.docker_memory) {
+                                                @if (newServicesAsSelect.docker_running || newServicesAsSelect.docker_cpu || newServicesAsSelect.docker_memory || newServicesAsSelect.docker_health) {
                                                     <c-col [xs]="12"
                                                            class="mb-3">
                                                         <div class="hr-separator pt-3">
@@ -400,6 +523,24 @@
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }
+                                                        @if (newServicesAsSelect.docker_health) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="docker_health">
+                                                                    {{ t('Container health') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.docker_health.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="docker_health"
+                                                                    id="docker_health"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.docker_health.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.docker_health.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
                                                     </c-col>
                                                 }
                                                 <!-- Process information -->
@@ -433,7 +574,7 @@
                                                     </c-col>
                                                 }
                                                 <!-- Windows -->
-                                                @if (newServicesAsSelect.windows_services || newServicesAsSelect.windows_eventlog) {
+                                                @if (newServicesAsSelect.windows_services || newServicesAsSelect.windows_eventlog || newServicesAsSelect.windows_scheduled_tasks || newServicesAsSelect.windows_perfcounters) {
                                                     <c-col [xs]="12"
                                                            class="mb-3">
                                                         <div class="hr-separator pt-3">
@@ -480,6 +621,42 @@
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }
+                                                        @if (newServicesAsSelect.windows_scheduled_tasks) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="windows_scheduled_tasks">
+                                                                    {{ t('Scheduled tasks') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.windows_scheduled_tasks.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="windows_scheduled_tasks"
+                                                                    id="windows_scheduled_tasks"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.windows_scheduled_tasks.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.windows_scheduled_tasks.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.windows_perfcounters) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="windows_perfcounters">
+                                                                    {{ t('Performance counters') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.windows_perfcounters.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="windows_perfcounters"
+                                                                    id="windows_perfcounters"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.windows_perfcounters.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.windows_perfcounters.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
                                                     </c-col>
                                                 }
                                                 <!-- macOS -->
@@ -514,7 +691,7 @@
                                                     </c-col>
                                                 }
                                                 <!-- Linux -->
-                                                @if (newServicesAsSelect.systemd_services) {
+                                                @if (newServicesAsSelect.systemd_services || newServicesAsSelect.system_health_pressure) {
                                                     <c-col [xs]="12"
                                                            class="mb-3">
                                                         <div class="hr-separator pt-3">
@@ -539,6 +716,24 @@
                                                                     optionLabel="value"
                                                                     [(ngModel)]="newServicesAsSelect.systemd_services.selectedIndicies"
                                                                     [options]="newServicesAsSelect.systemd_services.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.system_health_pressure) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="system_health_pressure">
+                                                                    {{ t('Pressure stall information') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.system_health_pressure.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="system_health_pressure"
+                                                                    id="system_health_pressure"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.system_health_pressure.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.system_health_pressure.options">
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }
@@ -574,6 +769,137 @@
                                                         }
                                                     </c-col>
                                                 }
+                                                <!-- IPMI -->
+                                                @if (newServicesAsSelect.ipmi_sensors) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                                {{ t('Hardware (IPMI)') }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label cLabel for="ipmi_sensors">
+                                                                {{ t('IPMI sensors') }}
+                                                                <span class="help-block">
+                                                                    ({{ newServicesAsSelect.ipmi_sensors.length }})
+                                                                </span>
+                                                            </label>
+                                                            <oitc-multi-select
+                                                                name="ipmi_sensors"
+                                                                id="ipmi_sensors"
+                                                                optionValue="key"
+                                                                optionLabel="value"
+                                                                [(ngModel)]="newServicesAsSelect.ipmi_sensors.selectedIndicies"
+                                                                [options]="newServicesAsSelect.ipmi_sensors.options">
+                                                            </oitc-multi-select>
+                                                        </div>
+                                                    </c-col>
+                                                }
+
+                                                <!-- Redfish -->
+                                                @if (newServicesAsSelect.redfish_health || newServicesAsSelect.redfish_sensors || newServicesAsSelect.redfish_power || newServicesAsSelect.redfish_storage || newServicesAsSelect.redfish_eventlog) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                                {{ t('Hardware (Redfish)') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.redfish_health) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="redfish_health">
+                                                                    {{ t('Health') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.redfish_health.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="redfish_health"
+                                                                    id="redfish_health"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.redfish_health.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.redfish_health.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.redfish_sensors) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="redfish_sensors">
+                                                                    {{ t('Temperatures and fans') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.redfish_sensors.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="redfish_sensors"
+                                                                    id="redfish_sensors"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.redfish_sensors.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.redfish_sensors.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.redfish_power) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="redfish_power">
+                                                                    {{ t('Power supplies') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.redfish_power.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="redfish_power"
+                                                                    id="redfish_power"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.redfish_power.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.redfish_power.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.redfish_storage) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="redfish_storage">
+                                                                    {{ t('Storage') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.redfish_storage.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="redfish_storage"
+                                                                    id="redfish_storage"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.redfish_storage.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.redfish_storage.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.redfish_eventlog) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="redfish_eventlog">
+                                                                    {{ t('Event log') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.redfish_eventlog.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="redfish_eventlog"
+                                                                    id="redfish_eventlog"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.redfish_eventlog.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.redfish_eventlog.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
                                                 <!-- libvirt / KVM -->
                                                 @if (newServicesAsSelect.libvirt) {
                                                     <c-col [xs]="12"
@@ -599,6 +925,156 @@
                                                                     optionLabel="value"
                                                                     [(ngModel)]="newServicesAsSelect.libvirt.selectedIndicies"
                                                                     [options]="newServicesAsSelect.libvirt.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- Proxmox VE -->
+                                                @if (newServicesAsSelect.proxmox_guests || newServicesAsSelect.proxmox_storages) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                                                                {{ t('Proxmox VE') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.proxmox_guests) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="proxmox_guests">
+                                                                    {{ t('Virtual machines and containers') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.proxmox_guests.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="proxmox_guests"
+                                                                    id="proxmox_guests"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.proxmox_guests.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.proxmox_guests.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.proxmox_storages) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="proxmox_storages">
+                                                                    {{ t('Storages') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.proxmox_storages.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="proxmox_storages"
+                                                                    id="proxmox_storages"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.proxmox_storages.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.proxmox_storages.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                    </c-col>
+                                                }
+                                                <!-- Logfiles, certificates, files and HTTP (ini files of the agent) -->
+                                                @if (newServicesAsSelect.logfiles || newServicesAsSelect.certificates || newServicesAsSelect.files_file || newServicesAsSelect.files_directory || newServicesAsSelect.http) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'file-lines']"></fa-icon>
+                                                                {{ t('Logfiles, certificates, files and HTTP') }}
+                                                            </span>
+                                                        </div>
+                                                        @if (newServicesAsSelect.logfiles) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="logfiles">
+                                                                    {{ t('Logfiles') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.logfiles.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="logfiles"
+                                                                    id="logfiles"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.logfiles.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.logfiles.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.certificates) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="certificates">
+                                                                    {{ t('Certificates') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.certificates.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="certificates"
+                                                                    id="certificates"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.certificates.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.certificates.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.files_file) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="files_file">
+                                                                    {{ t('Files') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.files_file.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="files_file"
+                                                                    id="files_file"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.files_file.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.files_file.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.files_directory) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="files_directory">
+                                                                    {{ t('Directories') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.files_directory.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="files_directory"
+                                                                    id="files_directory"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.files_directory.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.files_directory.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.http) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="http">
+                                                                    {{ t('HTTP endpoints') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.http.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="http"
+                                                                    id="http"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.http.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.http.options">
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }

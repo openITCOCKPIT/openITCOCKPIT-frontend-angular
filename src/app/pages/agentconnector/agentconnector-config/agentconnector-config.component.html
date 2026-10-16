@@ -33,13 +33,13 @@
 
         <c-card-body class="p-0">
             <oitc-agentconnector-wizard-progressbar
-                [stepCount]="2"
-                [step]="AgentconnectorWizardStepsEnum.ConfigureAgent"
-                [mode]="AgentModes.Pull"
-                [disableBack]="false"
-                (goBackEvent)="onBackButtonClick()"
-                [disableNext]="false"
-                (goNextEvent)="onNextButtonClick()"
+                    [stepCount]="2"
+                    [step]="AgentconnectorWizardStepsEnum.ConfigureAgent"
+                    [mode]="AgentModes.Pull"
+                    [disableBack]="false"
+                    (goBackEvent)="onBackButtonClick()"
+                    [disableNext]="false"
+                    (goNextEvent)="onNextButtonClick()"
             ></oitc-agentconnector-wizard-progressbar>
         </c-card-body>
 
@@ -109,10 +109,10 @@
                                                 {{ t('Operation mode') }}
                                             </label>
                                             <select
-                                                cSelect
-                                                name="enable_push_mode"
-                                                id="enable_push_mode"
-                                                [(ngModel)]="config.bool.enable_push_mode">
+                                                    cSelect
+                                                    name="enable_push_mode"
+                                                    id="enable_push_mode"
+                                                    [(ngModel)]="config.bool.enable_push_mode">
                                                 <option [ngValue]="false">{{ t('Pull mode') }}</option>
                                                 <option [ngValue]="true">{{ t('Push mode') }}</option>
                                             </select>
@@ -206,8 +206,8 @@
                                                 <div class="help-block">
                                                     {{ t('Determine if the configured proxy should be used.') }}
                                                     <a
-                                                        *oitcPermission="['proxy', 'index']"
-                                                        [routerLink]="['/', 'proxy', 'index']">
+                                                            *oitcPermission="['proxy', 'index']"
+                                                            [routerLink]="['/', 'proxy', 'index']">
                                                         {{ t('Go to "Proxy settings"') }}
                                                     </a>
                                                 </div>
@@ -364,18 +364,18 @@
                                                     {{ t('Connection type') }}
                                                 </label>
                                                 <select
-                                                    cSelect
-                                                    name="connectionType"
-                                                    id="connectionType"
-                                                    [(ngModel)]="connectionType">
+                                                        cSelect
+                                                        name="connectionType"
+                                                        id="connectionType"
+                                                        [(ngModel)]="connectionType">
                                                     <option
-                                                        [ngValue]="AgentconnectorConnectionTypes.AutoTls">{{ t('Auto-TLS') }}
+                                                            [ngValue]="AgentconnectorConnectionTypes.AutoTls">{{ t('Auto-TLS') }}
                                                     </option>
                                                     <option
-                                                        [ngValue]="AgentconnectorConnectionTypes.Https">{{ t('HTTPS') }}
+                                                            [ngValue]="AgentconnectorConnectionTypes.Https">{{ t('HTTPS') }}
                                                     </option>
                                                     <option
-                                                        [ngValue]="AgentconnectorConnectionTypes.Http">{{ t('HTTP (plaintext)') }}
+                                                            [ngValue]="AgentconnectorConnectionTypes.Http">{{ t('HTTP (plaintext)') }}
                                                     </option>
                                                 </select>
                                                 @if (connectionType === AgentconnectorConnectionTypes.AutoTls) {
@@ -451,16 +451,16 @@
                                                     {{ t('Web server type') }}
                                                 </label>
                                                 <select
-                                                    cSelect
-                                                    name="webserverType"
-                                                    id="webserverType"
-                                                    [disabled]="!config.bool.push_enable_webserver"
-                                                    [(ngModel)]="webserverType">
+                                                        cSelect
+                                                        name="webserverType"
+                                                        id="webserverType"
+                                                        [disabled]="!config.bool.push_enable_webserver"
+                                                        [(ngModel)]="webserverType">
                                                     <option
-                                                        [ngValue]="AgentconnectorWebserverTypes.Https">{{ t('HTTPS') }}
+                                                            [ngValue]="AgentconnectorWebserverTypes.Https">{{ t('HTTPS') }}
                                                     </option>
                                                     <option
-                                                        [ngValue]="AgentconnectorWebserverTypes.Http">{{ t('HTTP (plaintext)') }}
+                                                            [ngValue]="AgentconnectorWebserverTypes.Http">{{ t('HTTP (plaintext)') }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -471,18 +471,18 @@
                                                     {{ t('TLS security level') }}
                                                 </label>
                                                 <select
-                                                    cSelect
-                                                    name="tls_security_level"
-                                                    id="tls_security_level"
-                                                    [(ngModel)]="config.string.tls_security_level">
+                                                        cSelect
+                                                        name="tls_security_level"
+                                                        id="tls_security_level"
+                                                        [(ngModel)]="config.string.tls_security_level">
                                                     <option
-                                                        [ngValue]="'lax'">{{ t('Lax - Compatible with very old systems (TLS 1.2 no restrictions on cipher suites)') }}
+                                                            [ngValue]="'lax'">{{ t('Lax - Compatible with very old systems (TLS 1.2 no restrictions on cipher suites)') }}
                                                     </option>
                                                     <option
-                                                        [ngValue]="'intermediate'">{{ t('Intermediate - General-purpose (TLS 1.2, restrict usage of cipher suites to a secure subset)') }}
+                                                            [ngValue]="'intermediate'">{{ t('Intermediate - General-purpose (TLS 1.2, restrict usage of cipher suites to a secure subset)') }}
                                                     </option>
                                                     <option
-                                                        [ngValue]="'modern'">{{ t('Modern - Most secure (TLS 1.3 only)') }}
+                                                            [ngValue]="'modern'">{{ t('Modern - Most secure (TLS 1.3 only)') }}
                                                     </option>
                                                 </select>
                                             </div>
@@ -632,7 +632,12 @@
                                             {{ t('Enable/disable checks') }}
                                         </h4>
                                     </legend>
-                                    <div>
+
+                                    <c-alert [color]="'info'">
+                                        {{ t('Usually it is not required to enable or disable checks. The agent will detect automatically in which operating system it is running and which checks are available.') }}
+                                    </c-alert>
+
+                                    <div class="row row-cols-1 row-cols-sm-2">
                                         <div class="mb-3">
                                             <c-form-check>
                                                 <input cFormCheckInput
@@ -688,7 +693,7 @@
                                                        id="netstats"
                                                        type="checkbox"
                                                        [(ngModel)]="config.bool.netstats"/>
-                                                <label cFormCheckLabel for="processstats">
+                                                <label cFormCheckLabel for="netstats">
                                                     {{ t('Enable Network stats') }}
                                                 </label>
                                             </c-form-check>
@@ -834,6 +839,162 @@
                                                        [(ngModel)]="config.bool.ntp"/>
                                                 <label cFormCheckLabel for="ntp">
                                                     {{ t('Monitor of system clock is synchronized (NTP)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="winscheduledtasks"
+                                                       id="winscheduledtasks"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.winscheduledtasks"/>
+                                                <label cFormCheckLabel for="winscheduledtasks">
+                                                    {{ t('Monitor Windows scheduled tasks') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="security"
+                                                       id="security"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.security"/>
+                                                <label cFormCheckLabel for="security">
+                                                    {{ t('Monitor OS security settings (Windows Defender, FileVault, SELinux)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="zfs"
+                                                       id="zfs"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.zfs"/>
+                                                <label cFormCheckLabel for="zfs">
+                                                    {{ t('Monitor ZFS pools and ARC') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="smart"
+                                                       id="smart"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.smart"/>
+                                                <label cFormCheckLabel for="smart">
+                                                    {{ t('Monitor monitoring of all disks') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="proxmox"
+                                                       id="proxmox"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.proxmox"/>
+                                                <label cFormCheckLabel for="proxmox">
+                                                    {{ t('Monitor Proxmox VE status (Proxmox only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="ceph"
+                                                       id="ceph"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.ceph"/>
+                                                <label cFormCheckLabel for="ceph">
+                                                    {{ t('Monitor Ceph cluster (Linux only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="postfix"
+                                                       id="postfix"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.postfix"/>
+                                                <label cFormCheckLabel for="postfix">
+                                                    {{ t('Monitor Postfix Mail Queue (Linux only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="exim"
+                                                       id="exim"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.exim"/>
+                                                <label cFormCheckLabel for="exim">
+                                                    {{ t('Monitor Exim Mail Queue (Linux only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="lvm"
+                                                       id="lvm"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.lvm"/>
+                                                <label cFormCheckLabel for="lvm">
+                                                    {{ t('Monitor LVM thin pools (Linux only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="mounts"
+                                                       id="mounts"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.mounts"/>
+                                                <label cFormCheckLabel for="mounts">
+                                                    {{ t('Monitor auto mounts (Linux only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="networkports"
+                                                       id="networkports"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.networkports"/>
+                                                <label cFormCheckLabel for="networkports">
+                                                    {{ t('Monitor listening ports') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="ipmi"
+                                                       id="ipmi"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.ipmi"/>
+                                                <label cFormCheckLabel for="ipmi">
+                                                    {{ t('Monitor IPMI sensors and events (Linux and Windows)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="systemhealth"
+                                                       id="systemhealth"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.systemhealth"/>
+                                                <label cFormCheckLabel for="systemhealth">
+                                                    {{ t('Monitor Linux System Health') }}
                                                 </label>
                                             </c-form-check>
                                         </div>
