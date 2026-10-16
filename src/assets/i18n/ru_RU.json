@@ -6089,5 +6089,11 @@
   "Certificates": "Сертификаты",
   "Files": "Файлы",
   "Directories": "Каталоги",
-  "HTTP endpoints": "HTTP-эндпоинты"
+  "HTTP endpoints": "HTTP-эндпоинты",
+  "ZFS, Ceph and LVM": "ZFS, Ceph и LVM",
+  "LVM thin pools": "Thin-пулы LVM",
+  "Network bonds": "Сетевые агрегации (bond)",
+  "Listening ports": "Прослушиваемые порты",
+  "Hardware (IPMI)": "Оборудование (IPMI)",
+  "IPMI sensors": "Датчики IPMI"
 }

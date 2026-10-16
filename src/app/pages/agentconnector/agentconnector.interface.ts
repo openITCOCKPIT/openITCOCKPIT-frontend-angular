@@ -304,6 +304,9 @@ export interface AgentServicesForCreate {
     system_health_file_descriptors: AgentServiceForCreate
     system_health_conntrack: AgentServiceForCreate
     system_health_pressure: AgentServiceForCreate[]
+    system_health_filesystem_errors: AgentServiceForCreate
+    system_health_edac: AgentServiceForCreate
+    system_health_bonding: AgentServiceForCreate[]
 
     // Security
     security_firewall: AgentServiceForCreate
@@ -312,6 +315,7 @@ export interface AgentServicesForCreate {
     security_sip: AgentServiceForCreate
     security_defender: AgentServiceForCreate
     security_selinux: AgentServiceForCreate
+    security_bitlocker: AgentServiceForCreate
 
     // Definitions of the logfiles.ini, certificates.ini, http.ini, perfcounters.ini and files.ini of the agent
     logfiles: AgentServiceForCreate[]
@@ -339,6 +343,16 @@ export interface AgentServicesForCreate {
     proxmox_guests: AgentServiceForCreate[]
 
     postfix: AgentServiceForCreate
+    exim: AgentServiceForCreate
+
+    lvm_thin_pools: AgentServiceForCreate[]
+    mounts: AgentServiceForCreate
+
+    // Network ports
+    network_ports: AgentServiceForCreate[]
+    network_ports_tcp_states: AgentServiceForCreate
+    network_ports_ephemeral_ports: AgentServiceForCreate
+    network_ports_tcp_errors: AgentServiceForCreate
 
     // Redfish (one service per BMC of the redfish.ini of the agent)
     redfish_health: AgentServiceForCreate[]
@@ -346,6 +360,11 @@ export interface AgentServicesForCreate {
     redfish_power: AgentServiceForCreate[]
     redfish_storage: AgentServiceForCreate[]
     redfish_eventlog: AgentServiceForCreate[]
+
+    // IPMI (local BMC)
+    ipmi_health: AgentServiceForCreate
+    ipmi_sensors: AgentServiceForCreate[]
+    ipmi_sel: AgentServiceForCreate
 
     packagemanager: AgentServiceForCreate
 }

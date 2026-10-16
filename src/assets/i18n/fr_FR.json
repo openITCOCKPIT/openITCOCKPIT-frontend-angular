@@ -5359,5 +5359,11 @@
   "Certificates": "Certificats",
   "Files": "Fichiers",
   "Directories": "Répertoires",
-  "HTTP endpoints": "Points de terminaison HTTP"
+  "HTTP endpoints": "Points de terminaison HTTP",
+  "ZFS, Ceph and LVM": "ZFS, Ceph et LVM",
+  "LVM thin pools": "Pools LVM thin",
+  "Network bonds": "Agrégations réseau (bonds)",
+  "Listening ports": "Ports en écoute",
+  "Hardware (IPMI)": "Matériel (IPMI)",
+  "IPMI sensors": "Capteurs IPMI"
 }

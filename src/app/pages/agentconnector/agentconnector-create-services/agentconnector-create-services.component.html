@@ -308,14 +308,14 @@
                                                         }
                                                     </c-col>
                                                 }
-                                                <!-- ZFS and Ceph -->
-                                                @if (newServicesAsSelect.zfs_pools || newServicesAsSelect.ceph_usage) {
+                                                <!-- ZFS, Ceph and LVM -->
+                                                @if (newServicesAsSelect.zfs_pools || newServicesAsSelect.ceph_usage || newServicesAsSelect.lvm_thin_pools) {
                                                     <c-col [xs]="12"
                                                            class="mb-3">
                                                         <div class="hr-separator pt-3">
                                                             <span class="h5">
                                                                 <fa-icon [icon]="['fas', 'database']"></fa-icon>
-                                                                {{ t('ZFS and Ceph') }}
+                                                                {{ t('ZFS, Ceph and LVM') }}
                                                             </span>
                                                         </div>
                                                         @if (newServicesAsSelect.zfs_pools) {
@@ -354,10 +354,28 @@
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }
+                                                        @if (newServicesAsSelect.lvm_thin_pools) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="lvm_thin_pools">
+                                                                    {{ t('LVM thin pools') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.lvm_thin_pools.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="lvm_thin_pools"
+                                                                    id="lvm_thin_pools"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.lvm_thin_pools.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.lvm_thin_pools.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
                                                     </c-col>
                                                 }
                                                 <!-- Network information -->
-                                                @if (newServicesAsSelect.net_stats || newServicesAsSelect.net_io) {
+                                                @if (newServicesAsSelect.net_stats || newServicesAsSelect.net_io || newServicesAsSelect.system_health_bonding || newServicesAsSelect.network_ports) {
                                                     <c-col [xs]="12"
                                                            class="mb-3">
                                                         <div class="hr-separator pt-3">
@@ -399,6 +417,42 @@
                                                                     optionLabel="value"
                                                                     [(ngModel)]="newServicesAsSelect.net_io.selectedIndicies"
                                                                     [options]="newServicesAsSelect.net_io.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.system_health_bonding) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="system_health_bonding">
+                                                                    {{ t('Network bonds') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.system_health_bonding.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="system_health_bonding"
+                                                                    id="system_health_bonding"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.system_health_bonding.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.system_health_bonding.options">
+                                                                </oitc-multi-select>
+                                                            </div>
+                                                        }
+                                                        @if (newServicesAsSelect.network_ports) {
+                                                            <div class="mb-3">
+                                                                <label cLabel for="network_ports">
+                                                                    {{ t('Listening ports') }}
+                                                                    <span class="help-block">
+                                                                        ({{ newServicesAsSelect.network_ports.length }})
+                                                                    </span>
+                                                                </label>
+                                                                <oitc-multi-select
+                                                                    name="network_ports"
+                                                                    id="network_ports"
+                                                                    optionValue="key"
+                                                                    optionLabel="value"
+                                                                    [(ngModel)]="newServicesAsSelect.network_ports.selectedIndicies"
+                                                                    [options]="newServicesAsSelect.network_ports.options">
                                                                 </oitc-multi-select>
                                                             </div>
                                                         }
@@ -715,6 +769,35 @@
                                                         }
                                                     </c-col>
                                                 }
+                                                <!-- IPMI -->
+                                                @if (newServicesAsSelect.ipmi_sensors) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                                                {{ t('Hardware (IPMI)') }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label cLabel for="ipmi_sensors">
+                                                                {{ t('IPMI sensors') }}
+                                                                <span class="help-block">
+                                                                    ({{ newServicesAsSelect.ipmi_sensors.length }})
+                                                                </span>
+                                                            </label>
+                                                            <oitc-multi-select
+                                                                name="ipmi_sensors"
+                                                                id="ipmi_sensors"
+                                                                optionValue="key"
+                                                                optionLabel="value"
+                                                                [(ngModel)]="newServicesAsSelect.ipmi_sensors.selectedIndicies"
+                                                                [options]="newServicesAsSelect.ipmi_sensors.options">
+                                                            </oitc-multi-select>
+                                                        </div>
+                                                    </c-col>
+                                                }
+
                                                 <!-- Redfish -->
                                                 @if (newServicesAsSelect.redfish_health || newServicesAsSelect.redfish_sensors || newServicesAsSelect.redfish_power || newServicesAsSelect.redfish_storage || newServicesAsSelect.redfish_eventlog) {
                                                     <c-col [xs]="12"

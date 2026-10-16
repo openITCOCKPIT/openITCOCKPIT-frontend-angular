@@ -6282,5 +6282,11 @@
   "Certificates": "Certyfikaty",
   "Files": "Pliki",
   "Directories": "Katalogi",
-  "HTTP endpoints": "Punkty końcowe HTTP"
+  "HTTP endpoints": "Punkty końcowe HTTP",
+  "ZFS, Ceph and LVM": "ZFS, Ceph i LVM",
+  "LVM thin pools": "Pule LVM thin",
+  "Network bonds": "Połączenia sieciowe (bond)",
+  "Listening ports": "Nasłuchujące porty",
+  "Hardware (IPMI)": "Sprzęt (IPMI)",
+  "IPMI sensors": "Czujniki IPMI"
 }
