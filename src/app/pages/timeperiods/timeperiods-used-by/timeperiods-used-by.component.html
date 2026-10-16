@@ -54,7 +54,7 @@
             </c-card-header>
             <c-card-body>
                 <c-container
-                    [fluid]="true">
+                        [fluid]="true">
                     @if (objects) {
                         <table bordered cTable class="mt-2 mb-0" hover striped>
                             <tbody>
@@ -71,9 +71,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="contact.id"
-                                                    [route]="'/contacts/edit'"
-                                                    [permissions]="'contacts.edit'">
+                                                        [objectId]="contact.id"
+                                                        [route]="'/contacts/edit'"
+                                                        [permissions]="'contacts.edit'">
                                                     {{ contact.name }}
                                                 </oitc-label-link>
                                             </td>
@@ -92,9 +92,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="hostdependency.id"
-                                                    [route]="'/hostdependencies/edit'"
-                                                    [permissions]="'hostdependencies.edit'">
+                                                        [objectId]="hostdependency.id"
+                                                        [route]="'/hostdependencies/edit'"
+                                                        [permissions]="'hostdependencies.edit'">
                                                     {{ t('Host dependency') }} #{{ $index + 1 }}
                                                 </oitc-label-link>
                                             </td>
@@ -114,9 +114,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="hostescalation.id"
-                                                    [route]="'/hostescalations/edit'"
-                                                    [permissions]="'hostescalations.edit'">
+                                                        [objectId]="hostescalation.id"
+                                                        [route]="'/hostescalations/edit'"
+                                                        [permissions]="'hostescalations.edit'">
                                                     {{ t('Host escalation') }} #{{ $index + 1 }}
                                                 </oitc-label-link>
                                             </td>
@@ -137,9 +137,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="host.id"
-                                                    [route]="'/hosts/edit'"
-                                                    [permissions]="'hosts.edit'">
+                                                        [objectId]="host.id"
+                                                        [route]="'/hosts/edit'"
+                                                        [permissions]="'hosts.edit'">
                                                     {{ host.name }}
                                                 </oitc-label-link>
                                             </td>
@@ -160,9 +160,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="hosttemplate.id"
-                                                    [route]="'/hosttemplates/edit'"
-                                                    [permissions]="'hosttemplates.edit'">
+                                                        [objectId]="hosttemplate.id"
+                                                        [route]="'/hosttemplates/edit'"
+                                                        [permissions]="'hosttemplates.edit'">
                                                     {{ hosttemplate.name }}
                                                 </oitc-label-link>
                                             </td>
@@ -183,9 +183,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="instantreport.id"
-                                                    [route]="'/instantreports/edit'"
-                                                    [permissions]="'instantreports.edit'">
+                                                        [objectId]="instantreport.id"
+                                                        [route]="'/instantreports/edit'"
+                                                        [permissions]="'instantreports.edit'">
                                                     {{ instantreport.name }}
                                                 </oitc-label-link>
                                             </td>
@@ -206,9 +206,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="servicedependency.id"
-                                                    [route]="'/servicedependencies/edit'"
-                                                    [permissions]="'servicedependencies.edit'">
+                                                        [objectId]="servicedependency.id"
+                                                        [route]="'/servicedependencies/edit'"
+                                                        [permissions]="'servicedependencies.edit'">
                                                     {{ t('Service dependency') }} #{{ $index + 1 }}
                                                 </oitc-label-link>
                                             </td>
@@ -228,9 +228,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="serviceescalation.id"
-                                                    [route]="'/serviceescalations/edit'"
-                                                    [permissions]="'serviceescalations.edit'">
+                                                        [objectId]="serviceescalation.id"
+                                                        [route]="'/serviceescalations/edit'"
+                                                        [permissions]="'serviceescalations.edit'">
                                                     {{ t('Service escalation') }} #{{ $index + 1 }}
                                                 </oitc-label-link>
                                             </td>
@@ -250,9 +250,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="service.id"
-                                                    [route]="'/services/edit'"
-                                                    [permissions]="'services.edit'">
+                                                        [objectId]="service.id"
+                                                        [route]="'/services/edit'"
+                                                        [permissions]="'services.edit'">
                                                     {{ service._matchingData.Hosts.name }} / {{ service.servicename }}
                                                 </oitc-label-link>
                                             </td>
@@ -271,13 +271,16 @@
                                     </tr>
                                     @for (servicetemplate of objects.Servicetemplates; track $index) {
                                         <tr>
-                                            <td colspan="2">
+                                            <td>
                                                 <oitc-label-link
-                                                    [objectId]="servicetemplate.id"
-                                                    [route]="'/servicetemplates/edit'"
-                                                    [permissions]="'servicetemplates.edit'">
+                                                        [objectId]="servicetemplate.id"
+                                                        [route]="'/servicetemplates/edit'"
+                                                        [permissions]="'servicetemplates.edit'">
                                                     {{ servicetemplate.name }}
                                                 </oitc-label-link>
+                                            </td>
+                                            <td>
+                                                {{ servicetemplate.template_name }}
                                             </td>
                                         </tr>
                                     }
@@ -297,9 +300,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="timeperiod.id"
-                                                    [route]="'/timeperiods/edit'"
-                                                    [permissions]="'timeperiods.edit'">
+                                                        [objectId]="timeperiod.id"
+                                                        [route]="'/timeperiods/edit'"
+                                                        [permissions]="'timeperiods.edit'">
                                                     {{ timeperiod.name }}
                                                 </oitc-label-link>
                                             </td>
@@ -321,9 +324,9 @@
                                         <tr>
                                             <td colspan="2">
                                                 <oitc-label-link
-                                                    [objectId]="autoreport.id"
-                                                    [route]="'/autoreport_module/autoreports/editStepOne'"
-                                                    [permissions]="'autoreportmodule.autoreports.edit'">
+                                                        [objectId]="autoreport.id"
+                                                        [route]="'/autoreport_module/autoreports/editStepOne'"
+                                                        [permissions]="'autoreportmodule.autoreports.edit'">
                                                     {{ autoreport.name }}
                                                 </oitc-label-link>
                                             </td>
