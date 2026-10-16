@@ -43,7 +43,6 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 import { ApikeyDocModalComponent } from '../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { FormsModule } from '@angular/forms';
-import { OitcAlertComponent } from '../../../components/alert/alert.component';
 
 @Component({
     selector: 'oitc-agentconnector-config',
@@ -74,8 +73,7 @@ import { OitcAlertComponent } from '../../../components/alert/alert.component';
         RowComponent,
         ColComponent,
         FormsModule,
-        AlertComponent,
-        OitcAlertComponent
+        AlertComponent
     ],
     templateUrl: './agentconnector-config.component.html',
     styleUrl: './agentconnector-config.component.css',
