@@ -32,7 +32,7 @@ export class TelegramService {
     setTelegramSettings(settings: TelegramSettings): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
 
-        return this.http.post<TelegramSettingsPostResponse>(`${proxyPath}/telegram_module/TelegramSettings/save.json?angular=true`,
+        return this.http.post<TelegramSettingsPostResponse>(`${proxyPath}/telegram_module/TelegramSettings/saveConfig.json?angular=true`,
             settings
         ).pipe(
             map((data: TelegramSettingsPostResponse): any => {
@@ -58,7 +58,7 @@ export class TelegramService {
     generateAccessKeyForContact(contactUuid: string): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
 
-        return this.http.post<ContactAccessKeyResponse>(`${proxyPath}/telegram_module/TelegramSettings/genKey.json?angular=true`, {
+        return this.http.post<ContactAccessKeyResponse>(`${proxyPath}/telegram_module/TelegramSettings/generateContactAccessKey.json?angular=true`, {
             contact_uuid: contactUuid
         }).pipe(
             map((data: ContactAccessKeyResponse): any => {
@@ -80,7 +80,7 @@ export class TelegramService {
     removeAccessKeyForContact(contactUuid: string): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
 
-        return this.http.post<ContactAccessKeyResponse>(`${proxyPath}/telegram_module/TelegramSettings/rmKey.json?angular=true`, {
+        return this.http.post<ContactAccessKeyResponse>(`${proxyPath}/telegram_module/TelegramSettings/removeContactAccesKey.json?angular=true`, {
             contact_uuid: contactUuid
         }).pipe(
             map((data: ContactAccessKeyResponse): any => {
@@ -102,7 +102,7 @@ export class TelegramService {
     deleteChat(chatId: number): Observable<GenericResponseWrapper> {
         const proxyPath: string = this.proxyPath;
 
-        return this.http.post<TelegramChatResponse>(`${proxyPath}/telegram_module/TelegramSettings/rmChat.json?angular=true`, {
+        return this.http.post<TelegramChatResponse>(`${proxyPath}/telegram_module/TelegramSettings/deleteChat.json?angular=true`, {
             id: chatId
         }).pipe(
             map((data: TelegramChatResponse): any => {

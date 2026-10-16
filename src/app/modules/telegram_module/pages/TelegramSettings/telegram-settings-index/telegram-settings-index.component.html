@@ -157,7 +157,7 @@
 
             </c-card-body>
             <c-card-footer class="text-end">
-                <button cButton class="ripple" color="primary" type="submit" *oitcPermission="['TelegramModule', 'TelegramSettings', 'save']">
+                <button cButton class="ripple" color="primary" type="submit" *oitcPermission="['TelegramModule', 'TelegramSettings', 'saveConfig']">
                     {{ t('Save configuration') }}
                 </button>
             </c-card-footer>
@@ -188,7 +188,7 @@
                             </span>
                             <div>
                                 @if (!isContactAccessKeyGenerated(contact.uuid)) {
-                                    <span *oitcPermission="['TelegramModule', 'TelegramSettings', 'genKey']">
+                                    <span *oitcPermission="['TelegramModule', 'TelegramSettings', 'generateContactAccessKey']">
                                         <button type="button"
                                                 class="btn btn-xs btn-success me-1"
                                                 (click)="generateAccessKeyForContact(contact.uuid)">
@@ -199,7 +199,7 @@
                                 @if (isContactAccessKeyGenerated(contact.uuid)) {
                                     <span>
                                         <code>{{ isContactAccessKeyGenerated(contact.uuid) }}</code>
-                                        <button *oitcPermission="['TelegramModule', 'TelegramSettings', 'rmKey']"
+                                        <button *oitcPermission="['TelegramModule', 'TelegramSettings', 'removeContactAccesKey']"
                                                 type="button"
                                                 class="btn btn-xs btn-danger ms-2"
                                                 (click)="removeAccessKeyForContact(contact.uuid)">
@@ -248,7 +248,7 @@
                                         <fa-icon [icon]="['fas', 'message']"></fa-icon>
                                         {{ t('Send test chat message') }}
                                     </button>
-                                    <button type="button" *oitcPermission="['TelegramModule', 'TelegramSettings', 'rmChat']"
+                                    <button type="button" *oitcPermission="['TelegramModule', 'TelegramSettings', 'deleteChat']"
                                             class="btn btn-xs btn-danger"
                                             (click)="deleteChat(chat.id)">
                                         {{ t('Delete chat connection / Revoke authorization') }}
