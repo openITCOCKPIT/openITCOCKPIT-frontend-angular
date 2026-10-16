@@ -56,6 +56,19 @@ export interface AgentConfigBoolFields {
     libvirt: boolean
     userstats: boolean
     ntp: boolean
+    winscheduledtasks: boolean
+    security: boolean
+    zfs: boolean
+    smart: boolean
+    proxmox: boolean
+    ceph: boolean
+    postfix: boolean
+    exim: boolean
+    lvm: boolean
+    mounts: boolean
+    networkports: boolean
+    ipmi: boolean
+    systemhealth: boolean
 }
 
 export interface AgentConfigIntFields {
@@ -64,6 +77,9 @@ export interface AgentConfigIntFields {
     push_timeout: number
     packagemanager_check_interval: number
     packagemanager_description_length: number
+    ipmi_interval: number
+    ipmi_sel_window: number
+    wineventlog_max_records: number
 }
 
 export interface AgentConfigArrayFields {

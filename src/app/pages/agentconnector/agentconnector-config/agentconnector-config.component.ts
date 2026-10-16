@@ -6,10 +6,9 @@ import {
     AgentconnectorWebserverTypes,
     AgentconnectorWizardStepsEnum
 } from '../agentconnector.enums';
+import { AgentconnectorWizardProgressbarComponent } from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
 import {
-    AgentconnectorWizardProgressbarComponent
-} from '../agentconnector-wizard-progressbar/agentconnector-wizard-progressbar.component';
-import {
+    AlertComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -44,6 +43,7 @@ import { GenericIdResponse, GenericValidationError } from '../../../generic-resp
 import { ApikeyDocModalComponent } from '../../../layouts/coreui/apikey-doc-modal/apikey-doc-modal.component';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { FormsModule } from '@angular/forms';
+import { OitcAlertComponent } from '../../../components/alert/alert.component';
 
 @Component({
     selector: 'oitc-agentconnector-config',
@@ -73,7 +73,9 @@ import { FormsModule } from '@angular/forms';
         ApikeyDocModalComponent,
         RowComponent,
         ColComponent,
-        FormsModule
+        FormsModule,
+        AlertComponent,
+        OitcAlertComponent
     ],
     templateUrl: './agentconnector-config.component.html',
     styleUrl: './agentconnector-config.component.css',
