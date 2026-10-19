@@ -122,16 +122,20 @@ export class ExternalMonitoringsEditComponent implements OnInit, OnDestroy {
             value: this.TranslocoService.translate('Icinga 2')
         },
         {
+            key: ExternalMonitoringSystems.LibreNMS,
+            value: this.TranslocoService.translate('LibreNMS')
+        },
+        {
+            key: ExternalMonitoringSystems.ApplicationsManager,
+            value: this.TranslocoService.translate('ManageEngine Applications Manager')
+        },
+        {
             key: ExternalMonitoringSystems.OpManager,
             value: this.TranslocoService.translate('ManageEngine OpManager')
         },
         {
             key: ExternalMonitoringSystems.PRTG,
             value: this.TranslocoService.translate('Paessler PRTG System')
-        },
-        {
-            key: ExternalMonitoringSystems.LibreNMS,
-            value: this.TranslocoService.translate('LibreNMS')
         }
     ];
     protected readonly Object = Object;
