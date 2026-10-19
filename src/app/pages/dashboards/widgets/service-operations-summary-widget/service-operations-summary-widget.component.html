@@ -153,8 +153,16 @@
                                                                         {{ servicestatusSummary.lastTimeAlwaysCritical.count }}
                                                                     </span>
                                                                 </div>
-                                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">
-                                                                    {{ t('Complete Outages (Last 24h)') }}
+                                                                <div class="tracking-wide mt-2">
+                                                                    <figure>
+                                                                        <blockquote
+                                                                                class="text-uppercase text-muted small fw-bold">
+                                                                            {{ t('Complete Outages (Last 24h)') }}
+                                                                        </blockquote>
+                                                                        <figcaption class="blockquote-footer">
+                                                                            {{ t('Services that experienced a complete outage during the last 24 hours.') }}
+                                                                        </figcaption>
+                                                                    </figure>
                                                                 </div>
                                                                 <div class="mt-3 pt-2 border-top border-danger-subtle small">
                                                                     <c-row>
@@ -219,8 +227,16 @@
                                                                         {{ servicestatusSummary.lastTimeAlwaysOk.count }}
                                                                     </span>
                                                                 </div>
-                                                                <div class="text-uppercase text-muted small fw-bold tracking-wide">
-                                                                    {{ t('Stable Services (Last 24h)') }}
+                                                                <div class="tracking-wide mt-2">
+                                                                    <figure>
+                                                                        <blockquote
+                                                                                class="text-uppercase text-muted small fw-bold">
+                                                                            {{ t('Stable Services (Last 24h)') }}
+                                                                        </blockquote>
+                                                                        <figcaption class="blockquote-footer">
+                                                                            {{ t('Services that remained fully operational and stable with zero issues throughout the last 24 hours.') }}
+                                                                        </figcaption>
+                                                                    </figure>
                                                                 </div>
                                                                 <div class="mt-3 pt-2 border-top border-success-subtle small text-success">
                                                                     <c-row>
