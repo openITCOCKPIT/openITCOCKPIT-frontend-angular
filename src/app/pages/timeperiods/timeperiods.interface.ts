@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { GenericIdResponse, GenericValidationError } from '../../generic-responses';
 import { GenericIdAndName } from '../../generic.interfaces';
+import { ServicetemplateIdNameTemplateName } from '../servicetemplates/servicetemplates.interface';
 
 export interface TimeperiodsIndexParams {
     angular: true,
@@ -149,7 +150,7 @@ export interface TimeperiodUsedByObjects {
     Servicedependencies: GenericIdResponse[]
     Serviceescalations: GenericIdResponse[]
     Services: TimeperiodUsedByService[]
-    Servicetemplates: GenericIdAndName[]
+    Servicetemplates: ServicetemplateIdNameTemplateName[]
     Timeperiods: GenericIdAndName[]
     Autoreports: GenericIdAndName[]
 }
