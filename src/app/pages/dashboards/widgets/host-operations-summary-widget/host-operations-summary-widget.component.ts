@@ -59,6 +59,9 @@ import {
 } from '../../../../components/charts/host-status-scatter-echart/host-status-scatter-echart.component';
 import { IntervalPickerComponent } from '../../../../components/interval-picker/interval-picker.component';
 import { SummaryStateHostsExtended } from '../../../hosts/summary_state.interface';
+import {
+    OperationsSummaryLoaderComponent
+} from '../../../../layouts/primeng/loading/operations-summary-loader/operations-summary-loader.component';
 
 echarts.use([
     TooltipComponent,
@@ -99,7 +102,8 @@ echarts.use([
         RouterLink,
         HostHeatmapEchartComponent,
         HostStatusScatterEchartComponent,
-        IntervalPickerComponent
+        IntervalPickerComponent,
+        OperationsSummaryLoaderComponent
     ],
     templateUrl: "./host-operations-summary-widget.component.html",
     styleUrl: "./host-operations-summary-widget.component.css",
@@ -114,6 +118,7 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent im
     public config!: HostOperationsSummaryConfig;
     protected selectedAutoRefresh: SelectKeyValue = {key: 0, value: 'Disabled'};
     private refreshInterval: any = null;
+    private isLoading: boolean = false;
 
     public hoststatusSummary!: SummaryStateHostsExtended;
 
@@ -176,6 +181,7 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent im
 
     public override load() {
         if (this.widget) {
+            this.isLoading = true;
             this.subscriptions.add(this.HostOperationsSummaryWidgetService.getHostOperationsSummaryWidget(this.widget, 'hosts')
                 .subscribe((result) => {
                     this.config = result.config;
@@ -198,7 +204,7 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent im
                     if (this.selectedAutoRefresh.key > 0) {
                         this.startRefreshInterval(this.selectedAutoRefresh.key);
                     }
-
+                    this.isLoading = false;
                     this.cdr.markForCheck();
                 }));
         }
@@ -298,6 +304,10 @@ export class HostOperationsSummaryWidgetComponent extends BaseWidgetComponent im
     }
 
     protected refresh(): void {
+        // request already running, skip this refresh
+        if (this.isLoading) {
+            return;
+        }
         this.load();
         this.cdr.markForCheck();
 
