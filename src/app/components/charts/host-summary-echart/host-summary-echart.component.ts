@@ -69,7 +69,7 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
     private readonly containerHeight = signal<number>(0);
     private resizeObserver?: ResizeObserver;
 
-    public echartInitOpts = {
+    public echartInitOpts: echarts.EChartsInitOpts = {
         renderer: 'svg'
     };
 

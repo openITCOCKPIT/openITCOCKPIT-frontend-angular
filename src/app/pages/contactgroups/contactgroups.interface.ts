@@ -206,6 +206,7 @@ export interface ContactgroupUsedByObjects {
     servicetemplates: {
         id: number
         name: string
+        template_name: string
         ContactgroupsToServicetemplates: {
             contactgroup_id: number
         }
