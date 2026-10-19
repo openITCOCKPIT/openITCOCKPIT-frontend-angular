@@ -99,6 +99,11 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
         3: true
     });
     private resizeObserver?: ResizeObserver;
+
+    // Render the canvas with at least 2x resolution (supersampling).
+    // The dashboard grid positions widgets with sub-pixel transforms. Chrome snaps
+    // them to full pixels, Firefox resamples the canvas bitmap instead which makes
+    // text blurry on 1x displays. A higher backing resolution compensates for that.
     public chartInitOptions = {
         renderer: 'canvas' as const,
         devicePixelRatio: Math.max(2, Math.ceil(window.devicePixelRatio || 1))
