@@ -54,7 +54,7 @@
             </c-card-header>
             <c-card-body>
                 <c-container
-                    [fluid]="true">
+                        [fluid]="true">
                     @if (objects) {
                         <table bordered cTable class="mt-2 mb-0" hover striped>
                             <tbody>
@@ -113,7 +113,7 @@
                                 }
                                 @for (servicetemplate of objects.servicetemplates; track servicetemplate) {
                                     <tr>
-                                        <td colspan="2">
+                                        <td>
                                             <a *oitcPermission="['servicetemplates', 'edit']"
                                                [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
                                                 {{ servicetemplate.name }}
@@ -121,6 +121,9 @@
                                             <span *oitcPermission="['hosttemplates', 'edit']; negate: true">
                                                 {{ servicetemplate.name }}
                                             </span>
+                                        </td>
+                                        <td>
+                                            {{ servicetemplate.template_name }}
                                         </td>
                                     </tr>
                                 }

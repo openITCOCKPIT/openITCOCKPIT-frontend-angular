@@ -54,7 +54,7 @@
             </c-card-header>
             <c-card-body>
                 <c-container
-                    [fluid]="true">
+                        [fluid]="true">
                     @if (objects) {
                         <table bordered cTable class="mt-2 mb-0" hover striped>
                             <tbody>
@@ -137,7 +137,7 @@
                                 }
                                 @for (servicetemplate of objects.Servicetemplates; track servicetemplate) {
                                     <tr>
-                                        <td colspan="2">
+                                        <td>
                                             <a *oitcPermission="['servicetemplates', 'edit']"
                                                [routerLink]="['/', 'servicetemplates', 'edit', servicetemplate.id]">
                                                 {{ servicetemplate.name }}
@@ -146,8 +146,7 @@
                                                 {{ servicetemplate.name }}
                                             </span>
                                             @if (containerIds.length > 0 && containerIds.indexOf(servicetemplate.container_id) !== -1) {
-                                                <fa-stack
-                                                >
+                                                <fa-stack>
                                                     <fa-icon [icon]="['fas', 'lock']"
                                                              class="text-warning lock-icon-gradient"
                                                              stackItemSize="1x" pull="right"></fa-icon>
@@ -157,6 +156,9 @@
                                                              transform="shrink-8 right-6 down-6"></fa-icon>
                                                 </fa-stack>
                                             }
+                                        </td>
+                                        <td>
+                                            {{ servicetemplate.template_name }}
                                         </td>
                                     </tr>
                                 }

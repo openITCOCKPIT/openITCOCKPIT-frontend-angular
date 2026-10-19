@@ -4,6 +4,7 @@ import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { Customvariable } from '../contacts/contacts.interface';
 import { GenericValidationError } from '../../generic-responses';
 import { HostEntity, HostOrServiceType, HostsToContainersSharing } from '../hosts/hosts.interface';
+import { GenericIdAndName } from '../../generic.interfaces';
 
 /**********************
  *    Index action    *
@@ -329,4 +330,8 @@ export interface ServicetemplatesUsedByService {
     }
     servicename: string
     hostname: string
+}
+
+export interface ServicetemplateIdNameTemplateName extends GenericIdAndName {
+    template_name: string
 }
