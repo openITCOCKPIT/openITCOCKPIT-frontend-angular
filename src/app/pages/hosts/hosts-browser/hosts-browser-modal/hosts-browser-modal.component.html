@@ -88,7 +88,7 @@
                                     {{ 'Output' }}
                                 </c-col>
                                 <c-col [xs]="6" [md]="10">
-                                    <div class="code-font"
+                                    <div class="code-font font-monospace font-xs"
                                          [innerHTML]="String(result.hoststatus.outputHtml) | trustAsHtml "></div>
                                 </c-col>
                             </c-row>
@@ -270,7 +270,7 @@
                                 <h4>{{ t('Parent host overview') }}</h4>
                             </c-col>
                             <c-col [xs]="12">
-                                <table cTable bordered>
+                                <table cTable small bordered>
                                     <thead>
                                     <tr>
                                         <th class="width-130">{{ t('Parent host state') }}</th>
@@ -310,7 +310,7 @@
                             <c-col [xs]="12">
                                 <c-card>
                                     <c-card-body>
-                                        <div class="word-break"
+                                        <div class="word-break font-monospace font-xs"
                                              [innerHTML]="String(result.hoststatus.longOutputHtml) | trustAsHtml "></div>
                                     </c-card-body>
                                 </c-card>
