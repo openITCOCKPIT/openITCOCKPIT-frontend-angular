@@ -51,8 +51,8 @@ export class HostStatusScatterEchartComponent implements OnDestroy, AfterViewIni
     private resizeObserver?: ResizeObserver;
 
     public chartInitOptions = {
-        renderer: 'svg' as const,
-        devicePixelRatio: (window as any).devicePixelRatio || 1
+        renderer: 'canvas' as const,
+        devicePixelRatio: Math.max(2, Math.ceil(window.devicePixelRatio || 1))
     };
 
     // Current size of the container - drives the responsive layout of the chart

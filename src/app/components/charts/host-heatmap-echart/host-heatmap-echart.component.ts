@@ -97,6 +97,11 @@ export class HostHeatmapEchartComponent implements OnDestroy, AfterViewInit {
     });
     private resizeObserver?: ResizeObserver;
 
+    public chartInitOptions = {
+        renderer: 'canvas' as const,
+        devicePixelRatio: Math.max(2, Math.ceil(window.devicePixelRatio || 1))
+    };
+
     constructor() {
         // Subscribe to the color mode changes (drop down menu in header)
         this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {

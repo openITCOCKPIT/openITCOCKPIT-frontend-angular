@@ -99,6 +99,10 @@ export class ServiceHeatmapEchartComponent implements OnDestroy, AfterViewInit {
         3: true
     });
     private resizeObserver?: ResizeObserver;
+    public chartInitOptions = {
+        renderer: 'canvas' as const,
+        devicePixelRatio: Math.max(2, Math.ceil(window.devicePixelRatio || 1))
+    };
 
     constructor() {
         // Subscribe to the color mode changes (drop down menu in header)
