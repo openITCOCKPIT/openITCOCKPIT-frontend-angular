@@ -127,7 +127,7 @@
 
 
             <!-- isLoading animation has an issue on theme switch so for now I disabled it -->
-            <div class="chart-wrapper" style="position: relative;">
+            <div class="chart-wrapper">
                 <div echarts [options]="chartOptionDetails" [theme]="theme"
                      (chartInit)="onDetailChartInit($event)"
                      (chartDataZoom)="onChartDataZoom($event)"
@@ -137,9 +137,7 @@
                 <div echarts [options]="chartOption" [theme]="theme"
                      (chartInit)="onOverviewChartInit($event)"
                      (chartDataZoom)="onOverviewDataZoom($event)"
-                     style="height: 60px"
-                     class="w-100"></div>
-
+                     class="w-100 annual-graph"></div>
                 <div class="text-muted text-center small mb-1">{{ detailRangeLabel }}</div>
             </div>
 

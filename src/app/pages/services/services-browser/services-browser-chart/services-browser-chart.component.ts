@@ -53,17 +53,17 @@ import { GenericUnixtimerange } from '../../../../generic.interfaces';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 
 import {
+    DataZoomComponent,
     GridComponent,
     LegendComponent,
     TitleComponent,
     ToolboxComponent,
     TooltipComponent,
-    DataZoomComponent,
     VisualMapComponent
 } from 'echarts/components';
 import { BarChart, LineChart } from 'echarts/charts';
 
-echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent,DataZoomComponent]);
+echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, DataZoomComponent]);
 
 interface ServiceBrowserChartConfig {
     showDataPoint: boolean,
@@ -351,10 +351,9 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         this.detailSub?.unsubscribe();
         this.detailSub = this.PopoverGraphService.getPerfdata(params)
             .subscribe({
-                next : (perfdata) => {
+                next: (perfdata) => {
                     this.cdr.markForCheck();
                     this.isLoading = false;
-
 
 
                     if (this.currentGraphUnit === null) {
@@ -376,7 +375,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                      *
                      * If min is empty, we simply do not set the corresponding value in the graph.
                      */
-                    if (perfdata.performance_data[0].datasource.min !== null) {
+                    if (perfdata.performance_data[0] && perfdata.performance_data[0].datasource.min !== null) {
                         this.currentYMinDetail = perfdata.performance_data[0].datasource.setup.scale.min ?? undefined;
                     }
 
@@ -390,23 +389,26 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                      *
                      * If max is empty, we simply do not set the corresponding value in the graph.
                      */
-                    if (perfdata.performance_data[0].datasource.max !== null) {
+                    if (perfdata.performance_data[0] && perfdata.performance_data[0].datasource.max !== null) {
                         this.currentYMaxDetail = perfdata.performance_data[0].datasource.setup.scale.max ?? undefined;
                     }
 
                     this.lastTimestampWithData = new Date(range.start * 1000);
-
+                    this.hasEnoughData = false;
                     // Store the last timestamp with data
                     // This is used by the auto refresh to only load new data
-                    for (const isoTimestamp in perfdata.performance_data[0].data) {
-                        let timestamp = new Date(isoTimestamp);
-                        if (timestamp > this.lastTimestampWithData) {
-                            this.lastTimestampWithData = timestamp;
+                    if (perfdata.performance_data[0]) {
+                        for (const isoTimestamp in perfdata.performance_data[0].data) {
+                            let timestamp = new Date(isoTimestamp);
+                            if (timestamp > this.lastTimestampWithData) {
+                                this.lastTimestampWithData = timestamp;
+                            }
                         }
+                        // ECharts needs at least 2 data points to render the chart
+                        this.hasEnoughData = (Object.keys(perfdata.performance_data[0].data).length >= 2);
                     }
 
-                    // ECharts needs at least 2 data points to render the chart
-                    this.hasEnoughData = (Object.keys(perfdata.performance_data[0].data).length >= 2);
+
                     // Emit the new end time to the parent component
                     this.onGraphChange.emit(range);
                     this.renderChartDetails(perfdata, range);
@@ -466,7 +468,8 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         const rangeStartAtRequest = this.detailTimeRange.start;
         this.isLoading = true;
         this.subscriptions.add(this.PopoverGraphService.getPerfdata(params)
-            .subscribe({ next: (perfdata) => {
+            .subscribe({
+                next: (perfdata) => {
                     this.cdr.markForCheck();
                     this.isLoading = false;
 
@@ -529,12 +532,18 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     if (this.overviewEchartsInstance) {
                         const overviewSource = this.overviewEchartsInstance.getOption().dataset?.[0]?.source;
                         if (overviewSource) {
-                            this.overviewTimeRange = {start: this.overviewTimeRange.start, end: Math.max(this.overviewTimeRange.end, newEnd)};
+                            this.overviewTimeRange = {
+                                start: this.overviewTimeRange.start,
+                                end: Math.max(this.overviewTimeRange.end, newEnd)
+                            };
                             this.syncingSlider = true;
                             this.overviewEchartsInstance.setOption({
                                 dataset: {source: [...overviewSource, ...data]},
                                 xAxis: [{max: this.overviewTimeRange.end * 1000}, {max: this.overviewTimeRange.end * 1000}],
-                                dataZoom: [{startValue: this.detailTimeRange.start * 1000, endValue: this.detailTimeRange.end * 1000}]
+                                dataZoom: [{
+                                    startValue: this.detailTimeRange.start * 1000,
+                                    endValue: this.detailTimeRange.end * 1000
+                                }]
                             });
                             this.syncingSlider = false;
                         }
@@ -545,7 +554,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                     // Emit the new end time to the parent component
                     this.onGraphChange.emit(this.detailTimeRange);
 
-                }, error : () => {
+                }, error: () => {
                     this.isLoading = false;
                     this.cdr.markForCheck();
                 }
@@ -554,7 +563,20 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
     }
 
     private renderChartDetails(perfdata: PopoverGraphInterface, range: GenericUnixtimerange) {
-        let gauge = perfdata.performance_data[0];
+        let gauge = perfdata.performance_data[0] ?? {
+            data: {},
+            datasource: {
+                name: '',
+                unit: '',
+                setup: {
+                    scale: {
+                        min: null,
+                        max: null,
+                        type: '',
+                    }
+                }
+            }
+        };
         let data = [];
 
         // Data format for eCharts
@@ -755,7 +777,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 {type: 'time', show: false, min: axisMin, max: axisMax}, // [Axis 0]
                 {type: 'time', show: false, min: axisMin, max: axisMax}  // [Axis 1]
             ],
-            yAxis: {type: 'value', show: false, scale: true },
+            yAxis: {type: 'value', show: false, scale: true},
             grid: {show: false, left: 80, right: 50, top: 3, height: 45},
             dataZoom: [
                 {
@@ -791,7 +813,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 showSymbol: false,
                 sampling: 'lttb',
                 lineStyle: {width: 1, color: '#8392a5'},
-                areaStyle: { opacity: 0.3},
+                areaStyle: {opacity: 0.3},
                 encode: {
                     x: 'timestamp',
                     y: gauge.datasource.name
@@ -863,7 +885,10 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         if (this.selectedTimerange > 0) {
             this.detailTimeRange = this.getDetailRange(this.selectedTimerange);
         } else if (wasLive) {
-            this.detailTimeRange = {start: Math.max(this.overviewTimeRange.start, this.overviewTimeRange.end - duration), end: this.overviewTimeRange.end};
+            this.detailTimeRange = {
+                start: Math.max(this.overviewTimeRange.start, this.overviewTimeRange.end - duration),
+                end: this.overviewTimeRange.end
+            };
         }
 
         this.updateDetailLabel();
@@ -1103,7 +1128,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
         // dz: get current dataZoom settings from the overview chart, to get the start/end values in seconds
         const dz = (this.overviewEchartsInstance.getOption() as any)?.dataZoom?.[0];
-        if (!dz || dz.startValue === undefined || dz.endValue === undefined){
+        if (!dz || dz.startValue === undefined || dz.endValue === undefined) {
             // No data yet, or the chart is not rendered yet
             return;
         }
@@ -1276,7 +1301,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
 
     private getNowSeconds(): number {
         if (!this.timezone || !this.ServerTime) {
-            return Math.floor(Date.now() / 1000) ;
+            return Math.floor(Date.now() / 1000);
         }
 
         // we get the current server time (12:00:00)
