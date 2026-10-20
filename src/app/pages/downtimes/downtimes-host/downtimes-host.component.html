@@ -386,7 +386,7 @@
                                 </td>
                                 <td>
                                     {{ hostDowntime.DowntimeHost.durationHuman }}
-                                    @if (hostDowntime.DowntimeHost.actualDuration && hostDowntime.DowntimeHost.actualDurationHuman !== hostDowntime.DowntimeHost.durationHuman) {
+                                    @if (hostDowntime.DowntimeHost.actualEndTime && hostDowntime.DowntimeHost.actualStartTime && hostDowntime.DowntimeHost.actualDurationHuman !== hostDowntime.DowntimeHost.durationHuman) {
                                         <br/>
                                         <small class="text-muted" [cTooltip]="t('Actual duration')">
                                             {{ hostDowntime.DowntimeHost.actualDurationHuman }}
