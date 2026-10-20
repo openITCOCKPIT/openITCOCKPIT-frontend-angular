@@ -36,11 +36,19 @@
                                 <dt class="col-4">{{ t('Author') }}:</dt>
                                 <dd class="col-8">{{ downtime?.authorName }}</dd>
 
-                                <dt class="col-4">{{ t('Start') }}:</dt>
-                                <dd class="col-8">{{ downtime?.scheduledStartTime }}</dd>
+                                @if (downtime?.actualStartTime && downtime?.scheduledStartTime !== downtime?.actualStartTime) {
+                                    <dt class="col-4">{{ t('Actual start time') }}:</dt>
+                                    <dd class="col-8">{{ downtime?.actualStartTime }}</dd>
+                                } @else {
+                                    <dt class="col-4">{{ t('Scheduled start time') }}:</dt>
+                                    <dd class="col-8">{{ downtime?.scheduledStartTime }}</dd>
+                                }
 
-                                <dt class="col-4">{{ t('End') }}:</dt>
+                                <dt class="col-4">{{ t('Scheduled end time') }}:</dt>
                                 <dd class="col-8">{{ downtime?.scheduledEndTime }}</dd>
+
+                                <dt class="col-4">{{ t('Duration') }}:</dt>
+                                <dd class="col-8">{{ downtime?.durationHuman }}</dd>
 
                                 <dt class="col-4">{{ t('Comment') }}:</dt>
                                 <dd class="col-8">{{ downtime?.commentData }}</dd>
