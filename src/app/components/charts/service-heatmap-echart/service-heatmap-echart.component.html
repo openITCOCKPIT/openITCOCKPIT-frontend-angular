@@ -1,4 +1,5 @@
 <div echarts [options]="chartOption" [theme]="theme"
-     [initOpts]="{ renderer: 'svg' }" (chartInit)="onChartInit($event)"
+     [initOpts]="chartInitOptions"
+     (chartInit)="onChartInit($event)"
      [style.height.px]="chartHeightPx"
      class="heatmap-chart"></div>
