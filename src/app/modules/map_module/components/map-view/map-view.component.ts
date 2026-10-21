@@ -177,6 +177,14 @@ export class MapViewComponent implements OnInit, OnDestroy {
                 this.router.navigate(['/map_module/mapeditors/view/' + item.object_id]);
                 break;
 
+            case 'statuspage':
+                this.router.navigate(['/statuspages/view/' + item.object_id]);
+                break;
+
+            case 'statuspagegroup':
+                this.router.navigate(['/statuspagegroups/view/' + item.object_id]);
+                break;
+
             default:
                 break;
         }
