@@ -80,17 +80,20 @@ export class TopSearchComponent implements OnDestroy {
         if (this.currentSearchType === SearchType.UUID) {
             // Query the server if the UUID is known
             this.subscriptions.add(this.SearchService.searchUUID(this.searchStr)
-                .subscribe((result) => {
-                    this.isSearching = false;
-                    this.cdr.markForCheck();
-                    if (result.hasPermission) {
-                        this.router.navigate(result.url, {
-                            queryParams: {
-                                id: result.id
-                            }
-                        });
-                    } else {
-                        this.router.navigate(['/error/403']);
+                .subscribe({
+                    next: (result) => {
+                        this.isSearching = false;
+                        this.cdr.markForCheck();
+                        if (result.hasPermission) {
+                            this.router.navigate(result.url, {
+                                queryParams: { id: result.id }
+                            });
+                        } else {
+                            this.router.navigate(['/error/403']);
+                        }
+                    }, error: () => {
+                        this.isSearching = false;
+                        this.cdr.markForCheck();
                     }
                 })
             );

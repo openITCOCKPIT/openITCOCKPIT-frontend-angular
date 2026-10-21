@@ -1,6 +1,6 @@
 import { TemplateRef } from '@angular/core';
-import { ScrollerOptions } from '@openng/optimus-ui/api';
-import { MultiSelect, MultiSelectItem } from './multiselect';
+import { ScrollerOptions } from '@openng/optimus-ui/api'
+import { MultiSelect, MultiSelectItem } from './multiselect/multiselect';
 
 /**
  * Callbacks to invoke on filter or reset.

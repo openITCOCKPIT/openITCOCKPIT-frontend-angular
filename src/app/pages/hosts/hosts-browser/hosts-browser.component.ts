@@ -142,6 +142,7 @@ import {
 import {
     HostdependenciesTreeComponent
 } from '../../hostdependencies/hostdependencies-tree/hostdependencies-tree.component';
+import { DowntimeComponent } from '../../../components/downtimes/downtime-component/downtime-component.component';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -209,7 +210,8 @@ import {
         HostParentsChildrenTreeComponent,
         IconDirective,
         ProxmoxHostBrowserTabComponent,
-        HostdependenciesTreeComponent
+        HostdependenciesTreeComponent,
+        DowntimeComponent
     ],
     templateUrl: './hosts-browser.component.html',
     styleUrl: './hosts-browser.component.css',

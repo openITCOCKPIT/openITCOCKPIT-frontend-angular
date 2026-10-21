@@ -69,7 +69,7 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
     private readonly containerHeight = signal<number>(0);
     private resizeObserver?: ResizeObserver;
 
-    public echartInitOpts = {
+    public echartInitOpts: echarts.EChartsInitOpts = {
         renderer: 'svg'
     };
 
@@ -337,6 +337,46 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
             ? Math.round(centerXpx + edgePadding + legendGap)
             : Math.round((width - centerXpx) + edgePadding + legendGap);
 
+        // The legend is split into two groups with a separator line in between:
+        // monitoring states (ok, warning, critical, unknown) and user interactions
+        // (in_downtime, acknowledged, unhandled).
+        // Both groups are anchored to the vertical center, so the separator
+        // always sits exactly at height / 2.
+        const legendSeparatorGap = isCompact ? 14 : 20;
+        const legendSeparatorLength = Math.max(legendWidth - 30, 40);
+
+        const readableLabels: { [key: string]: string } = {
+            'ok': this.TranslocoService.translate('Ok'),
+            'warning': this.TranslocoService.translate('Warning'),
+            'critical': this.TranslocoService.translate('Critical'),
+            'unknown': this.TranslocoService.translate('Unknown'),
+            'in_downtime': this.TranslocoService.translate('In downtime'),
+            'acknowledged': this.TranslocoService.translate('Acknowledged'),
+            'unhandled': this.TranslocoService.translate('Unhandled')
+        };
+
+        const legendBase = {
+            show: legendVisible,
+            orient: 'vertical' as const,
+            selectedMode: true,
+            left: legendOnRight ? legendOffset : 'auto',
+            right: legendOnRight ? 'auto' : legendOffset,
+            icon: 'rect',
+            itemWidth: legendItemSize,
+            itemHeight: legendItemSize,
+            itemGap: legendItemGap,
+            padding: 0,
+            formatter: (name: string) => {
+                const label = readableLabels[name] || name;
+                const value = values[name] ?? 0;
+                return `${label} (${value})`;
+            },
+            textStyle: {
+                color: textColor,
+                fontSize: legendFontSize
+            }
+        };
+
         this.chartOption = {
             backgroundColor: 'transparent',
             tooltip: {
@@ -405,36 +445,32 @@ export class ServiceSummaryEchartComponent implements OnDestroy, AfterViewInit {
                 type: 'category',
                 show: false
             })),
-            legend: {
-                show: legendVisible,
-                orient: 'vertical',
-                selectedMode: true,
-                left: legendOnRight ? legendOffset : 'auto',
-                right: legendOnRight ? 'auto' : legendOffset,
-                top: 'center',
-                icon: 'rect',
-                itemWidth: legendItemSize,
-                itemHeight: legendItemSize,
-                itemGap: legendItemGap,
-                formatter: (name: string) => {
-                    const readableLabels: { [key: string]: string } = {
-                        'ok': this.TranslocoService.translate('Ok'),
-                        'warning': this.TranslocoService.translate('Warning'),
-                        'critical': this.TranslocoService.translate('Critical'),
-                        'unknown': this.TranslocoService.translate('Unknown'),
-                        'in_downtime': this.TranslocoService.translate('In downtime'),
-                        'acknowledged': this.TranslocoService.translate('Acknowledged'),
-                        'unhandled': this.TranslocoService.translate('Unhandled')
-                    };
-                    const label = readableLabels[name] || name;
-                    const value = values[name] ?? 0;
-                    return `${label} (${value})`;
-                },
-                textStyle: {
-                    color: textColor,
-                    fontSize: legendFontSize
+            graphic: legendVisible ? [
+                {
+                    type: 'line',
+                    silent: true,
+                    left: legendOnRight ? legendOffset : undefined,
+                    right: legendOnRight ? undefined : legendOffset,
+                    top: Math.round(height / 2),
+                    shape: {x1: 0, y1: 0, x2: legendSeparatorLength, y2: 0},
+                    style: {
+                        stroke: contrastColor,
+                        lineWidth: 1
+                    }
                 }
-            },
+            ] : [],
+            legend: [
+                {
+                    ...legendBase,
+                    data: ['ok', 'warning', 'critical', 'unknown'],
+                    bottom: Math.round(height / 2 + legendSeparatorGap / 2)
+                },
+                {
+                    ...legendBase,
+                    data: ['in_downtime', 'acknowledged', 'unhandled'],
+                    top: Math.round(height / 2 + legendSeparatorGap)
+                }
+            ],
 
             series: [
                 {

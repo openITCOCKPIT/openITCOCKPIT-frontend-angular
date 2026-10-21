@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { BbCodeEditorComponent } from '../../documentations/bb-code-editor/bb-code-editor.component';
 import {
@@ -93,7 +93,8 @@ import { TrueFalseDirective } from '../../../directives/true-false.directive';
         NgClass
     ],
     templateUrl: './messagesotd-edit.component.html',
-    styleUrl: './messagesotd-edit.component.css'
+    styleUrl: './messagesotd-edit.component.css',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessagesotdEditComponent implements OnInit, OnDestroy {
     private readonly subscriptions: Subscription = new Subscription();
@@ -151,6 +152,7 @@ export class MessagesotdEditComponent implements OnInit, OnDestroy {
                 this.post = result;
                 this.post.expire = !!this.post.expiration_duration;
                 this.html = this.BbCodeParserService.parse(this.post.content);
+                this.cdr.markForCheck();
             }));
     }
 

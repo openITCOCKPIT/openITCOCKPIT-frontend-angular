@@ -80,6 +80,7 @@ import { HostStatusNamePipe } from '../../../../pipes/host-status-name.pipe';
 import {
     HostsBrowserServicesListComponent
 } from '../../hosts-browser-services-list/hosts-browser-services-list.component';
+import { DowntimeComponent } from '../../../../components/downtimes/downtime-component/downtime-component.component';
 
 @Component({
     selector: 'oitc-hosts-browser-modal',
@@ -122,7 +123,8 @@ import {
         HostsMaintenanceModalComponent,
         HostsProcessCheckresultModalComponent,
         HostStatusNamePipe,
-        HostsBrowserServicesListComponent
+        HostsBrowserServicesListComponent,
+        DowntimeComponent
     ],
     templateUrl: './hosts-browser-modal.component.html',
     styleUrl: './hosts-browser-modal.component.css',

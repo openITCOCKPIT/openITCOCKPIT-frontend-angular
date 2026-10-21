@@ -279,52 +279,11 @@
                                 </c-row>
                                 <!-- Service Downtime -->
                                 @if (Number(result.servicestatus.scheduledDowntimeDepth) > 0 && result.downtime) {
-                                    <c-row>
-                                        <c-col [xs]="12">
-                                            <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                                    class="mb-3">
-                                                <c-card-header>
-                                                    <h5 class="text-info">
-                                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                                        {{ t('The service is currently in a planned maintenance period') }}
-                                                    </h5>
-                                                </c-card-header>
-                                                <c-card-body>
-                                                    <div>
-                                                        {{ t('Downtime was set by') }}
-                                                        <b>{{ result.downtime.authorName }}</b>
-                                                        {{ t('with an duration of') }}
-                                                        <b>{{ result.downtime.durationHuman }}</b>.
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <small>
-                                                            {{ t('Start time:') }}
-                                                            {{ result.downtime.scheduledStartTime }}
-                                                            {{ t('End time:') }}
-                                                            {{ result.downtime.scheduledEndTime }}
-                                                        </small>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        {{ t('Comment: ') }}
-                                                        {{ result.downtime.commentData }}
-                                                    </div>
-                                                    <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                                        @if (result.downtime.allowEdit && result.downtime.isCancellable) {
-                                                            <button
-                                                                (click)="toggleCancelServiceDowntimeModal(result.downtime)"
-                                                                cButton
-                                                                class="ripple float-end" color="danger"
-                                                                size="xs"
-                                                            >
-                                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                                {{ t('Cancel') }}
-                                                            </button>
-                                                        }
-                                                    </div>
-                                                </c-card-body>
-                                            </c-card>
-                                        </c-col>
-                                    </c-row>
+                                    <oitc-downtime-component
+                                            [Downtime]="result.downtime"
+                                            [DowntimeType]="'service'"
+                                            (onCancelClick)="toggleCancelServiceDowntimeModal(result.downtime)"
+                                    />
                                 }
                                 <!-- Service Acknowledgement -->
                                 @if (result.servicestatus.problemHasBeenAcknowledged && result.acknowledgement) {
@@ -406,52 +365,11 @@
                                 }
                                 <!-- Host Downtime -->
                                 @if (Number(result.hoststatus.scheduledDowntimeDepth) > 0 && result.hostDowntime) {
-                                    <c-row>
-                                        <c-col [xs]="12">
-                                            <c-card [cBorder]="{top: {color: 'info', width: 3}}"
-                                                    class="mb-3">
-                                                <c-card-header>
-                                                    <h5 class="text-info">
-                                                        <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
-                                                        {{ t('The host is currently in a planned maintenance period') }}
-                                                    </h5>
-                                                </c-card-header>
-                                                <c-card-body>
-                                                    <div>
-                                                        {{ t('Downtime was set by') }}
-                                                        <b>{{ result.hostDowntime.authorName }}</b>
-                                                        {{ t('with an duration of') }}
-                                                        <b>{{ result.hostDowntime.durationHuman }}</b>.
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        <small>
-                                                            {{ t('Start time:') }}
-                                                            {{ result.hostDowntime.scheduledStartTime }}
-                                                            {{ t('End time:') }}
-                                                            {{ result.hostDowntime.scheduledEndTime }}
-                                                        </small>
-                                                    </div>
-                                                    <div class="pt-1">
-                                                        {{ t('Comment: ') }}
-                                                        {{ result.hostDowntime.commentData }}
-                                                    </div>
-                                                    <div class="w-100" *oitcPermission="['downtimes', 'delete']">
-                                                        @if (result.hostDowntime.allowEdit && result.hostDowntime.isCancellable) {
-                                                            <button
-                                                                (click)="toggleCancelHostDowntimeModal(result.hostDowntime)"
-                                                                cButton
-                                                                class="ripple float-end" color="danger"
-                                                                size="xs"
-                                                            >
-                                                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
-                                                                {{ t('Cancel') }}
-                                                            </button>
-                                                        }
-                                                    </div>
-                                                </c-card-body>
-                                            </c-card>
-                                        </c-col>
-                                    </c-row>
+                                    <oitc-downtime-component
+                                            [Downtime]="result.hostDowntime"
+                                            [DowntimeType]="'host'"
+                                            (onCancelClick)="toggleCancelHostDowntimeModal(result.hostDowntime)"
+                                    />
                                 }
                                 <!-- Host Acknowledgement -->
                                 @if (result.hoststatus.problemHasBeenAcknowledged && result.hostAcknowledgement) {

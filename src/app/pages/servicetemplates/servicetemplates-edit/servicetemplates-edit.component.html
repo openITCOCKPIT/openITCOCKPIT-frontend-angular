@@ -29,7 +29,7 @@
                     <h5 cCardTitle>
                         {{ t('Edit service template:') }}
                         <small class="fw-300">
-                            {{ post.name }}
+                            {{ post.template_name }}
                         </small>
                     </h5>
                     <c-nav class="card-toolbar card-header-pills">
@@ -39,8 +39,8 @@
                         <c-nav-item class="px-1">
                             @if (typeDetails) {
                                 <span
-                                    class="badge border margin-right-10"
-                                    [ngClass]="[typeDetails.class, typeDetails.color]">
+                                        class="badge border margin-right-10"
+                                        [ngClass]="[typeDetails.class, typeDetails.color]">
                                     <fa-icon [icon]="typeDetails.icon"
                                              [rotate]="typeDetails.rotate"></fa-icon>
                                     {{ typeDetails.title }}
@@ -73,14 +73,14 @@
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
                                 <oitc-select
-                                    name="container"
-                                    id="container"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.container_id"
-                                    [options]="containers?.containers"
-                                    (onChange)="onContainerChange()"
-                                    oitcFormError [errors]="errors" errorField="container_id">
+                                        name="container"
+                                        id="container"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.container_id"
+                                        [options]="containers?.containers"
+                                        (onChange)="onContainerChange()"
+                                        oitcFormError [errors]="errors" errorField="container_id">
                                 </oitc-select>
                                 @if (containers?.areContainersRestricted) {
                                     <div class="help-block text-info">
@@ -114,14 +114,14 @@
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
                                 <oitc-select
-                                    name="ServicetemplateSelect"
-                                    id="ServicetemplateSelect"
-                                    optionValue="key"
-                                    optionLabel="value.title"
-                                    [(ngModel)]="post.servicetemplatetype_id"
-                                    [options]="servicetemplateTypes"
-                                    (onChange)="onTypeChange()"
-                                    oitcFormError [errors]="errors" errorField="servicetemplatetype_id">
+                                        name="ServicetemplateSelect"
+                                        id="ServicetemplateSelect"
+                                        optionValue="key"
+                                        optionLabel="value.title"
+                                        [(ngModel)]="post.servicetemplatetype_id"
+                                        [options]="servicetemplateTypes"
+                                        (onChange)="onTypeChange()"
+                                        oitcFormError [errors]="errors" errorField="servicetemplatetype_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="servicetemplatetype_id"></oitc-form-feedback>
@@ -158,13 +158,13 @@
                                     {{ t('Service groups') }}
                                 </label>
                                 <oitc-multi-select
-                                    name="ServicetemplateServicegroups"
-                                    id="ServicetemplateServicegroups"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.servicegroups._ids"
-                                    [options]="servicegroups"
-                                    oitcFormError [errors]="errors" errorField="servicegroups">
+                                        name="ServicetemplateServicegroups"
+                                        id="ServicetemplateServicegroups"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.servicegroups._ids"
+                                        [options]="servicegroups"
+                                        oitcFormError [errors]="errors" errorField="servicegroups">
                                 </oitc-multi-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="servicegroups"></oitc-form-feedback>
@@ -174,16 +174,16 @@
                                     {{ t('Tags') }}
                                 </label>
                                 <ng-select
-                                    id="ServicetemplateTags"
-                                    name="ServicetemplateTags"
-                                    [items]="[]"
-                                    [(ngModel)]="tagsForSelect"
-                                    [addTag]="true"
-                                    [multiple]="true"
-                                    [selectOnTab]="true"
-                                    [placeholder]="'Add tags'|transloco"
-                                    [isOpen]="false"
-                                    oitcFormError [errors]="errors" errorField="tags">
+                                        id="ServicetemplateTags"
+                                        name="ServicetemplateTags"
+                                        [items]="[]"
+                                        [(ngModel)]="tagsForSelect"
+                                        [addTag]="true"
+                                        [multiple]="true"
+                                        [selectOnTab]="true"
+                                        [placeholder]="'Add tags'|transloco"
+                                        [isOpen]="false"
+                                        oitcFormError [errors]="errors" errorField="tags">
                                 </ng-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="tags"></oitc-form-feedback>
@@ -197,8 +197,8 @@
                                 </label>
                                 <div>
                                     <oitc-priority
-                                        [priority]="post.priority"
-                                        (onChange)="post.priority = $event"
+                                            [priority]="post.priority"
+                                            (onChange)="post.priority = $event"
                                     ></oitc-priority>
                                 </div>
                                 <oitc-form-feedback [errors]="errors"
@@ -219,22 +219,22 @@
                             <div class="mb-3">
                                 <label cLabel for="CheckPeriodSelect">
                                     <oitc-label-link
-                                        [objectId]="post.check_period_id"
-                                        [route]="'/timeperiods/edit'"
-                                        [permissions]="'timeperiods.edit'"
+                                            [objectId]="post.check_period_id"
+                                            [route]="'/timeperiods/edit'"
+                                            [permissions]="'timeperiods.edit'"
                                     >
                                         {{ t('Check period') }}
                                         <oitc-required-icon></oitc-required-icon>
                                     </oitc-label-link>
                                 </label>
                                 <oitc-select
-                                    name="CheckPeriodSelect"
-                                    id="CheckPeriodSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.check_period_id"
-                                    [options]="checkperiods"
-                                    oitcFormError [errors]="errors" errorField="check_period_id">
+                                        name="CheckPeriodSelect"
+                                        id="CheckPeriodSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.check_period_id"
+                                        [options]="checkperiods"
+                                        oitcFormError [errors]="errors" errorField="check_period_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="check_period_id"></oitc-form-feedback>
@@ -288,10 +288,10 @@
                                         <oitc-required-icon></oitc-required-icon>
                                     </label>
                                     <oitc-interval-input
-                                        id="freshness_threshold"
-                                        name="freshness_threshold"
-                                        [selectedInterval]="post.freshness_threshold"
-                                        (selectedIntervalChange)="post.freshness_threshold = $event"
+                                            id="freshness_threshold"
+                                            name="freshness_threshold"
+                                            [selectedInterval]="post.freshness_threshold"
+                                            (selectedIntervalChange)="post.freshness_threshold = $event"
                                     ></oitc-interval-input>
                                     <oitc-form-feedback [errors]="errors"
                                                         errorField="freshness_threshold"></oitc-form-feedback>
@@ -300,23 +300,23 @@
                             <div class="mb-3">
                                 <label cLabel for="ServiceCheckCommandSelect">
                                     <oitc-label-link
-                                        [objectId]="post.command_id"
-                                        [route]="'/commands/edit'"
-                                        [permissions]="'commands.edit'"
+                                            [objectId]="post.command_id"
+                                            [route]="'/commands/edit'"
+                                            [permissions]="'commands.edit'"
                                     >
                                         {{ t('Check command') }}
                                         <oitc-required-icon></oitc-required-icon>
                                     </oitc-label-link>
                                 </label>
                                 <oitc-select
-                                    name="ServiceCheckCommandSelect"
-                                    id="ServiceCheckCommandSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.command_id"
-                                    [options]="commands"
-                                    (onChange)="onCommandChange()"
-                                    oitcFormError [errors]="errors" errorField="command_id">
+                                        name="ServiceCheckCommandSelect"
+                                        id="ServiceCheckCommandSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.command_id"
+                                        [options]="commands"
+                                        (onChange)="onCommandChange()"
+                                        oitcFormError [errors]="errors" errorField="command_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="command_id"></oitc-form-feedback>
@@ -339,10 +339,10 @@
                                     </label>
                                     <div class="col-xs-12 col-lg-8">
                                         <input
-                                            class="form-control"
-                                            type="text"
-                                            [name]="'servicetemplatecommandargumentvalue_'+i"
-                                            [(ngModel)]="servicetemplatecommandargumentvalue.value">
+                                                class="form-control"
+                                                type="text"
+                                                [name]="'servicetemplatecommandargumentvalue_'+i"
+                                                [(ngModel)]="servicetemplatecommandargumentvalue.value">
                                         <div class="help-block">
                                             {{ servicetemplatecommandargumentvalue.commandargument.name }}
                                         </div>
@@ -355,10 +355,10 @@
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
                                 <oitc-interval-input
-                                    id="check_interval"
-                                    name="check_interval"
-                                    [selectedInterval]="post.check_interval"
-                                    (selectedIntervalChange)="post.check_interval = $event"
+                                        id="check_interval"
+                                        name="check_interval"
+                                        [selectedInterval]="post.check_interval"
+                                        (selectedIntervalChange)="post.check_interval = $event"
                                 ></oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="check_interval"></oitc-form-feedback>
@@ -369,10 +369,10 @@
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
                                 <oitc-interval-input
-                                    id="retry_interval"
-                                    name="retry_interval"
-                                    [selectedInterval]="post.retry_interval"
-                                    (selectedIntervalChange)="post.retry_interval = $event"
+                                        id="retry_interval"
+                                        name="retry_interval"
+                                        [selectedInterval]="post.retry_interval"
+                                        (selectedIntervalChange)="post.retry_interval = $event"
                                 ></oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="retry_interval"></oitc-form-feedback>
@@ -383,10 +383,10 @@
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
                                 <oitc-check-attempts-input
-                                    id="max_check_attempts"
-                                    name="max_check_attempts"
-                                    [selectedAttempts]="post.max_check_attempts"
-                                    (selectedAttemptsChange)="post.max_check_attempts = $event">
+                                        id="max_check_attempts"
+                                        name="max_check_attempts"
+                                        [selectedAttempts]="post.max_check_attempts"
+                                        (selectedAttemptsChange)="post.max_check_attempts = $event">
                                 </oitc-check-attempts-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="max_check_attempts"></oitc-form-feedback>
@@ -398,7 +398,7 @@
                                 <div>
                                     {{ t('Worst case time delay until notification command gets executed after state hits a non ok state: ') }}
                                     <oitc-human-time
-                                        [seconds]="(post.check_interval + (post.max_check_attempts -1) * post.retry_interval)"></oitc-human-time>
+                                            [seconds]="(post.check_interval + (post.max_check_attempts -1) * post.retry_interval)"></oitc-human-time>
                                 </div>
                             </c-alert>
                         </c-card-body>
@@ -436,22 +436,22 @@
                             <div class="mb-3">
                                 <label cLabel for="NotifyPeriodSelect">
                                     <oitc-label-link
-                                        [objectId]="post.notify_period_id"
-                                        [route]="'/timeperiods/edit'"
-                                        [permissions]="'timeperiods.edit'"
+                                            [objectId]="post.notify_period_id"
+                                            [route]="'/timeperiods/edit'"
+                                            [permissions]="'timeperiods.edit'"
                                     >
                                         {{ t('Notification period') }}
                                         <oitc-required-icon></oitc-required-icon>
                                     </oitc-label-link>
                                 </label>
                                 <oitc-select
-                                    name="NotifyPeriodSelect"
-                                    id="NotifyPeriodSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.notify_period_id"
-                                    [options]="timeperiods"
-                                    oitcFormError [errors]="errors" errorField="notify_period_id">
+                                        name="NotifyPeriodSelect"
+                                        id="NotifyPeriodSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.notify_period_id"
+                                        [options]="timeperiods"
+                                        oitcFormError [errors]="errors" errorField="notify_period_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="notify_period_id"></oitc-form-feedback>
@@ -462,10 +462,10 @@
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
                                 <oitc-interval-input
-                                    id="notification_interval"
-                                    name="notification_interval"
-                                    [selectedInterval]="post.notification_interval"
-                                    (selectedIntervalChange)="post.notification_interval = $event"
+                                        id="notification_interval"
+                                        name="notification_interval"
+                                        [selectedInterval]="post.notification_interval"
+                                        (selectedIntervalChange)="post.notification_interval = $event"
                                 ></oitc-interval-input>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="notification_interval"></oitc-form-feedback>
@@ -475,13 +475,13 @@
                                     {{ t('Contacts') }}
                                 </label>
                                 <oitc-multi-select
-                                    name="ContactsPeriodSelect"
-                                    id="ContactsPeriodSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.contacts._ids"
-                                    [options]="contacts"
-                                    oitcFormError [errors]="errors" errorField="contacts">
+                                        name="ContactsPeriodSelect"
+                                        id="ContactsPeriodSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.contacts._ids"
+                                        [options]="contacts"
+                                        oitcFormError [errors]="errors" errorField="contacts">
                                 </oitc-multi-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="contacts"></oitc-form-feedback>
@@ -491,13 +491,13 @@
                                     {{ t('Contact groups') }}
                                 </label>
                                 <oitc-multi-select
-                                    name="ContactgroupsSelect"
-                                    id="ContactgroupsSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.contactgroups._ids"
-                                    [options]="contactgroups"
-                                    oitcFormError [errors]="errors" errorField="contactgroups">
+                                        name="ContactgroupsSelect"
+                                        id="ContactgroupsSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.contactgroups._ids"
+                                        [options]="contactgroups"
+                                        oitcFormError [errors]="errors" errorField="contactgroups">
                                 </oitc-multi-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="contactgroups"></oitc-form-feedback>
@@ -511,15 +511,15 @@
                                 <div class="input-group mx-1">
                                     <span class="input-group-text">
                                         <input
-                                            cFormCheckInput
-                                            class="checkbox-success"
-                                            name="notify_on_recovery"
-                                            id="notify_on_recovery"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            [(ngModel)]="post.notify_on_recovery"/>
+                                                cFormCheckInput
+                                                class="checkbox-success"
+                                                name="notify_on_recovery"
+                                                id="notify_on_recovery"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                [(ngModel)]="post.notify_on_recovery"/>
                                     </span>
                                     <div class="form-control bg-success text-white text-center">
                                         <label for="notify_on_recovery">
@@ -530,15 +530,15 @@
                                 <div class="input-group mx-1">
                                     <span class="input-group-text">
                                         <input
-                                            cFormCheckInput
-                                            class="checkbox-warning"
-                                            name="notify_on_warning"
-                                            id="notify_on_warning"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            [(ngModel)]="post.notify_on_warning"/>
+                                                cFormCheckInput
+                                                class="checkbox-warning"
+                                                name="notify_on_warning"
+                                                id="notify_on_warning"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                [(ngModel)]="post.notify_on_warning"/>
                                     </span>
                                     <div class="form-control bg-warning text-center">
                                         <label for="notify_on_warning">
@@ -549,15 +549,15 @@
                                 <div class="input-group mx-1">
                                     <span class="input-group-text">
                                         <input
-                                            cFormCheckInput
-                                            class="checkbox-danger"
-                                            name="notify_on_critical"
-                                            id="notify_on_critical"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            [(ngModel)]="post.notify_on_critical"/>
+                                                cFormCheckInput
+                                                class="checkbox-danger"
+                                                name="notify_on_critical"
+                                                id="notify_on_critical"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                [(ngModel)]="post.notify_on_critical"/>
                                     </span>
                                     <div class="form-control bg-danger text-white text-center">
                                         <label for="notify_on_critical">
@@ -568,15 +568,15 @@
                                 <div class="input-group mx-1">
                                     <span class="input-group-text">
                                         <input
-                                            cFormCheckInput
-                                            class="checkbox-secondary"
-                                            name="notify_on_unknown"
-                                            id="notify_on_unknown"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            [(ngModel)]="post.notify_on_unknown"/>
+                                                cFormCheckInput
+                                                class="checkbox-secondary"
+                                                name="notify_on_unknown"
+                                                id="notify_on_unknown"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                [(ngModel)]="post.notify_on_unknown"/>
                                     </span>
                                     <div class="form-control bg-unknown text-white text-center">
                                         <label for="notify_on_unknown">
@@ -587,14 +587,14 @@
                                 <div class="input-group mx-1">
                                     <span class="input-group-text">
                                         <input
-                                            cFormCheckInput
-                                            name="notify_on_flapping"
-                                            id="notify_on_flapping"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            [(ngModel)]="post.notify_on_flapping"/>
+                                                cFormCheckInput
+                                                name="notify_on_flapping"
+                                                id="notify_on_flapping"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                [(ngModel)]="post.notify_on_flapping"/>
                                     </span>
                                     <div class="form-control bg-primary text-white text-center">
                                         <label for="notify_on_flapping">
@@ -605,14 +605,14 @@
                                 <div class="input-group mx-1">
                                     <span class="input-group-text">
                                         <input
-                                            cFormCheckInput
-                                            name="notify_on_downtime"
-                                            id="notify_on_downtime"
-                                            type="checkbox"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            [(ngModel)]="post.notify_on_downtime"/>
+                                                cFormCheckInput
+                                                name="notify_on_downtime"
+                                                id="notify_on_downtime"
+                                                type="checkbox"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                [(ngModel)]="post.notify_on_downtime"/>
                                     </span>
                                     <div class="form-control bg-primary text-white text-center">
                                         <label for="notify_on_downtime">
@@ -683,15 +683,15 @@
                                     <div class="input-group mx-1">
                                         <span class="input-group-text">
                                             <input
-                                                cFormCheckInput
-                                                class="checkbox-success"
-                                                name="flap_detection_on_ok"
-                                                id="flap_detection_on_ok"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                [falseValue]="0"
-                                                [trueValue]="1"
-                                                [(ngModel)]="post.flap_detection_on_ok"/>
+                                                    cFormCheckInput
+                                                    class="checkbox-success"
+                                                    name="flap_detection_on_ok"
+                                                    id="flap_detection_on_ok"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    [falseValue]="0"
+                                                    [trueValue]="1"
+                                                    [(ngModel)]="post.flap_detection_on_ok"/>
                                         </span>
                                         <div class="form-control bg-success text-white text-center">
                                             <label for="flap_detection_on_ok">
@@ -702,15 +702,15 @@
                                     <div class="input-group mx-1">
                                         <span class="input-group-text">
                                             <input
-                                                cFormCheckInput
-                                                class="checkbox-warning"
-                                                name="flap_detection_on_warning"
-                                                id="flap_detection_on_warning"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                [falseValue]="0"
-                                                [trueValue]="1"
-                                                [(ngModel)]="post.flap_detection_on_warning"/>
+                                                    cFormCheckInput
+                                                    class="checkbox-warning"
+                                                    name="flap_detection_on_warning"
+                                                    id="flap_detection_on_warning"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    [falseValue]="0"
+                                                    [trueValue]="1"
+                                                    [(ngModel)]="post.flap_detection_on_warning"/>
                                         </span>
                                         <div class="form-control bg-warning text-center">
                                             <label for="flap_detection_on_warning">
@@ -721,15 +721,15 @@
                                     <div class="input-group mx-1">
                                         <span class="input-group-text">
                                             <input
-                                                cFormCheckInput
-                                                class="checkbox-danger"
-                                                name="flap_detection_on_critical"
-                                                id="flap_detection_on_critical"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                [falseValue]="0"
-                                                [trueValue]="1"
-                                                [(ngModel)]="post.flap_detection_on_critical"/>
+                                                    cFormCheckInput
+                                                    class="checkbox-danger"
+                                                    name="flap_detection_on_critical"
+                                                    id="flap_detection_on_critical"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    [falseValue]="0"
+                                                    [trueValue]="1"
+                                                    [(ngModel)]="post.flap_detection_on_critical"/>
                                         </span>
                                         <div class="form-control bg-danger text-white text-center">
                                             <label for="flap_detection_on_critical">
@@ -740,15 +740,15 @@
                                     <div class="input-group mx-1">
                                         <span class="input-group-text">
                                             <input
-                                                cFormCheckInput
-                                                class="checkbox-secondary"
-                                                name="flap_detection_on_unknown"
-                                                id="flap_detection_on_unknown"
-                                                type="checkbox"
-                                                trueFalseValue
-                                                [falseValue]="0"
-                                                [trueValue]="1"
-                                                [(ngModel)]="post.flap_detection_on_unknown"/>
+                                                    cFormCheckInput
+                                                    class="checkbox-secondary"
+                                                    name="flap_detection_on_unknown"
+                                                    id="flap_detection_on_unknown"
+                                                    type="checkbox"
+                                                    trueFalseValue
+                                                    [falseValue]="0"
+                                                    [trueValue]="1"
+                                                    [(ngModel)]="post.flap_detection_on_unknown"/>
                                         </span>
                                         <div class="form-control bg-unknown text-white text-center">
                                             <label for="flap_detection_on_unknown">
@@ -798,23 +798,23 @@
                             <div class="mb-3">
                                 <label cLabel for="ServiceEventHandlerSelect">
                                     <oitc-label-link
-                                        [objectId]="post.eventhandler_command_id"
-                                        [route]="'/commands/edit'"
-                                        [permissions]="'commands.edit'"
+                                            [objectId]="post.eventhandler_command_id"
+                                            [route]="'/commands/edit'"
+                                            [permissions]="'commands.edit'"
                                     >
                                         {{ t('Event Handler') }}
                                     </oitc-label-link>
                                 </label>
                                 <oitc-select
-                                    name="ServiceEventHandlerSelect"
-                                    id="ServiceEventHandlerSelect"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="post.eventhandler_command_id"
-                                    [options]="eventhandlerCommands"
-                                    (onChange)="onEventHandlerChange()"
-                                    [showClear]="true"
-                                    oitcFormError [errors]="errors" errorField="eventhandler_command_id">
+                                        name="ServiceEventHandlerSelect"
+                                        id="ServiceEventHandlerSelect"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="post.eventhandler_command_id"
+                                        [options]="eventhandlerCommands"
+                                        (onChange)="onEventHandlerChange()"
+                                        [showClear]="true"
+                                        oitcFormError [errors]="errors" errorField="eventhandler_command_id">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors"
                                                     errorField="eventhandler_command_id"></oitc-form-feedback>
@@ -834,10 +834,10 @@
                                     </label>
                                     <div class="col-xs-12 col-lg-8">
                                         <input
-                                            class="form-control"
-                                            type="text"
-                                            [name]="'servicetemplateeventcommandargumentvalue_'+i"
-                                            [(ngModel)]="servicetemplateeventcommandargumentvalue.value">
+                                                class="form-control"
+                                                type="text"
+                                                [name]="'servicetemplateeventcommandargumentvalue_'+i"
+                                                [(ngModel)]="servicetemplateeventcommandargumentvalue.value">
                                         <div class="help-block">
                                             {{ servicetemplateeventcommandargumentvalue.commandargument.name }}
                                         </div>
@@ -868,12 +868,12 @@
                                 <div class="row"
                                 >
                                     <oitc-macros
-                                        [macro]="customVariable"
-                                        [macroName]="'SERVICE'"
-                                        [index]="i"
-                                        [deleteMacroCallback]="deleteMacro"
-                                        [errors]="errors"
-                                        class="col-lg-12"
+                                            [macro]="customVariable"
+                                            [macroName]="'SERVICE'"
+                                            [index]="i"
+                                            [deleteMacroCallback]="deleteMacro"
+                                            [errors]="errors"
+                                            class="col-lg-12"
                                     />
                                 </div>
                             }
@@ -919,7 +919,7 @@
                                         <span class="font-lg">⚠️</span>
                                         {{
                                             t('This setting affects all services, which are using this service template. If deactivated, all SLA related data will be removed permanently.\n' +
-                                                'To exclude single services, please edit the service configuration directly instead.')
+                                                    'To exclude single services, please edit the service configuration directly instead.')
                                         }}
                                     </div>
                                 </div>

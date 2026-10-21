@@ -21,9 +21,9 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -102,7 +102,8 @@ import { NotyService } from '../../../layouts/coreui/noty.service';
         DropdownToggleDirective,
         DropdownItemDirective,
         TableLoaderComponent,
-        AsyncPipe
+        AsyncPipe,
+        TooltipDirective
     ],
     templateUrl: './downtimes-host.component.html',
     styleUrl: './downtimes-host.component.css',
