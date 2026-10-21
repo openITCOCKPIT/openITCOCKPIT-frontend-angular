@@ -84,7 +84,7 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
                 return 'down';
 
             default:
-                return 'not-monitored';
+                return 'primary';
         }
     }
 
