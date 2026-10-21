@@ -339,7 +339,8 @@
                                                         {{ t('High CPU usage') }}:
                                                     </span>
 
-                                                    <strong class="font-monospace font-xs border border-secondary-subtle">{{ systemHealth.load?.load1 }}, {{ systemHealth.load?.load5 }}, {{
+                                                    <strong class="font-monospace font-xs border border-secondary-subtle">{{ systemHealth.load?.load1 }}
+                                                        , {{ systemHealth.load?.load5 }}, {{
                                                             systemHealth.load?.load15
                                                         }}</strong>
                                                 </div>
@@ -455,7 +456,7 @@
                                                         <div class="align-items-center">
                                                             <span class="text-muted">
                                                                 {{ ( 'Low disk space' ) }}: </span>
-                                                                <strong class="font-monospace border border-secondary-subtle font-xs txt-overflow-ellipsis">
+                                                            <strong class="font-monospace border border-secondary-subtle font-xs txt-overflow-ellipsis">
                                                                 {{ disk?.mountpoint || disk?.disk }}
                                                             </strong>
                                                         </div>
@@ -502,7 +503,6 @@
                                             </div>
                                         </li>
                                     }
-
 
 
                                 </ul>
@@ -566,7 +566,7 @@
             </button>
         </div>
 
-        @if ( (PermissionsService.hasModuleObservable('DistributeModule') | async) && (this.PermissionsService.hasPermissionObservable(['DistributeModule', 'satellites', 'index'])|async) && (systemHealth.satellites ?? []).length > 0 ) {
+        @if (( PermissionsService.hasModuleObservable('DistributeModule') | async ) && ( this.PermissionsService.hasPermissionObservable(['DistributeModule', 'satellites', 'info'])|async ) && ( systemHealth.satellites ?? [] ).length > 0) {
             <div class="btn-group btn-group-xs mx-1" aria-label="Display of Satellites health notifications"
                  role="group">
                 <c-dropdown class="dropdown">
@@ -609,7 +609,7 @@
 
                                                                 <span class="badge rounded-pill status-badge-text border"
                                                                       [class]="satellite.satellite_status.status === 2 ?  'text-danger border-danger' : 'text-warning border-warning'">
-                                                                    {{ satellite.satellite_status.status === 2 ?  t('Critical') : t('Warning') }}
+                                                                    {{ satellite.satellite_status.status === 2 ? t('Critical') : t('Warning') }}
                                                                 </span>
                                                             </div>
 
@@ -621,7 +621,8 @@
 
                                                             @if (satellite.satellite_status.last_seen) {
                                                                 <div class=" mb-1 text-xs">
-                                                                    <span class="text-muted">{{ t('last seen') }}: </span>
+                                                                    <span class="text-muted">{{ t('last seen') }}
+                                                                        : </span>
 
                                                                     <strong class="font-monospace font-xs">{{ satellite.satellite_status.last_seen }}</strong>
 
@@ -658,7 +659,8 @@
                                                                 <span class="text-muted">
                                                                     {{ t('High CPU usage') }}:
                                                                 </span>
-                                                                <strong class="font-monospace font-xs border border-secondary-subtle">{{ satelliteSystemHealth.cpu_load1 }}, {{ satelliteSystemHealth.cpu_load5 }}, {{
+                                                                <strong class="font-monospace font-xs border border-secondary-subtle">{{ satelliteSystemHealth.cpu_load1 }}
+                                                                    , {{ satelliteSystemHealth.cpu_load5 }}, {{
                                                                         satelliteSystemHealth.cpu_load15
                                                                     }}</strong>
                                                             </div>
@@ -695,7 +697,8 @@
                                                                 </span>
                                                                     <strong class="border border-secondary-subtle font-monospace font-xs">Memory</strong></span>
                                                                 <span class="fw-bold font-monospace text-nowrap fm-bg-value">
-                                                                    {{ satelliteSystemHealth?.memory?.memory?.percentage }}%
+                                                                    {{ satelliteSystemHealth?.memory?.memory?.percentage }}
+                                                                    %
                                                                 </span>
                                                             </div>
                                                             <div class="custom-progress-wrapper">
@@ -737,7 +740,8 @@
 
                                                                 </span>
                                                                 <span class="fw-bold font-monospace text-nowrap fm-bg-value">
-                                                                    {{ satelliteSystemHealth?.memory?.swap?.percentage }}%
+                                                                    {{ satelliteSystemHealth?.memory?.swap?.percentage }}
+                                                                    %
                                                                 </span>
                                                             </div>
                                                             <div class="custom-progress-wrapper">
