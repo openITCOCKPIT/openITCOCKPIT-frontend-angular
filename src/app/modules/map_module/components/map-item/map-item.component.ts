@@ -159,6 +159,16 @@ export class MapItemComponent extends MapItemBaseComponent<Mapitem> implements O
                 this.label = data.Map!.name;
                 this.label = this.shortenLabel(this.label, 50, true);
                 break;
+
+            case 'statuspage':
+                this.label = data.Statuspage!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
+                break;
+
+            case 'statuspagegroup':
+                this.label = data.Statuspagegroup!.name;
+                this.label = this.shortenLabel(this.label, 50, true);
+                break;
         }
         this.cdr.markForCheck();
     };
