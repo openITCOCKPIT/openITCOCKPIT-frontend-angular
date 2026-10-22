@@ -32,6 +32,7 @@ import {
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
+    ColorModeService,
     DropdownComponent,
     DropdownItemDirective,
     DropdownMenuDirective,
@@ -159,6 +160,7 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         mapText: '',
     } as Design;
 
+    protected readonly colorModeService = inject(ColorModeService);
 
     @ViewChild(ColourLocatorPickerComponent) childComponent!: ColourLocatorPickerComponent;
 
@@ -437,6 +439,11 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
     }
 
+
+    private applyMode(mode: string ):void {
+        this.colorModeService.colorMode.set(mode);
+    }
+
     private hideUploadModals() {
         this.modalService.toggle({
             show: false,
@@ -501,12 +508,12 @@ export class DesignsEditComponent implements OnInit, OnDestroy {
                 if (result.success) {
                     const title = this.TranslocoService.translate('Colours');
                     const msg = this.TranslocoService.translate('updated successfully');
-
                     // open modal page reload modal
                     this.modalService.toggle({
                         show: true,
                         id: 'reloadInterfaceModal',
                     });
+                    this.applyMode(this.post.mode);
                     return;
                 }
 
