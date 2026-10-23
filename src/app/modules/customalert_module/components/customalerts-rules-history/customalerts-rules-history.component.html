@@ -17,7 +17,7 @@
                     <th class="col-1" scope="col" mat-sort-header="CustomalertStatehistory.state_time">
                         {{ t('State time') }}
                     </th>
-                    <th scope="col" mat-sort-header="Hosts.name">
+                    <th scope="col" mat-sort-header="Hosts.name" class="col-2">
                         {{ t('Host') }}
                     </th>
                     <th scope="col" mat-sort-header="servicename">
@@ -29,7 +29,7 @@
                     <th scope="col" mat-sort-header="CustomalertComments.comment">
                         {{ t('Comment') }}
                     </th>
-                    <th scope="col" mat-sort-header="CustomalertComments.entry_time">
+                    <th scope="col" mat-sort-header="CustomalertComments.entry_time" class="col-2">
                         {{ t('Comment entry time') }}
                     </th>
                 </tr>
@@ -68,7 +68,7 @@
                             <td [title]="customAlert.stateTime">
                                 {{ customAlert.stateTimeInHumanShort }}
                             </td>
-                            <td>
+                            <td class="word-break">
                                 <oitc-label-link
                                     [objectId]="customAlert.Hosts.id"
                                     [route]="'/hosts/browser'"
@@ -76,7 +76,7 @@
                                     {{ customAlert.Hosts.name }}
                                 </oitc-label-link>
                             </td>
-                            <td>
+                            <td class="word-break">
                                 <oitc-label-link
                                     [objectId]="customAlert.Services.id"
                                     [route]="'/services/browser'"
