@@ -173,14 +173,15 @@
                 @if (data.result) {
                     @for (module of data.result.data.modules; track module) {
                         <c-col>
-                            <c-card class="mb-3 mt-3">
+                            <c-card class="mb-3 mt-3"
+                                    [class.warning-glow]="module.Module.name === highlightedPacket">
                                 <c-card-header
                                     [ngClass]="{'enterprise-bg-header': module.Module.enterprise, 'community-bg-header': !module.Module.enterprise}"
                                 >
                                     <c-container>
                                         <c-row class="row align-items-center text-white">
                                             <c-col>
-                                                <h4>
+                                                <h4 [id]="module.Module.name">
                                                     {{ module.Module.name }}
                                                 </h4>
                                             </c-col>

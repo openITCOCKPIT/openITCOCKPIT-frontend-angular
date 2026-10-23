@@ -1,8 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    afterNextRender,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Injector,
+    OnDestroy,
+    OnInit
+} from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { NgClass } from '@angular/common';
 import {
@@ -85,6 +94,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
 
     public newVersionAvailable: boolean = false;
+    protected highlightedPacket: string | null = null;
 
     protected modulesToCheckboxesInstall: { [key: string]: boolean } = {};
     private packageList: string = '';
@@ -114,6 +124,8 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     };
 
     private cdr = inject(ChangeDetectorRef);
+    private readonly ActivatedRoute: ActivatedRoute = inject(ActivatedRoute);
+    private readonly injector: Injector = inject(Injector);
 
 
     public ngOnInit() {
@@ -129,8 +141,19 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 }
 
                 this.initializeModulesToCheckboxesInstall();
+
+                this.highlightedPacket = this.ActivatedRoute.snapshot.queryParamMap.get('packetName');
+                if (this.highlightedPacket) {
+                    this.scrollToPacket(this.highlightedPacket);
+                }
             })
         );
+    }
+
+    private scrollToPacket(packetName: string): void {
+        afterNextRender(() => {
+            document.getElementById(packetName)?.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }, {injector: this.injector});
     }
 
     private initializeModulesToCheckboxesInstall(): void {
