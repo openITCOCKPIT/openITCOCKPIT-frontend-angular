@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    effect,
+    inject,
+    OnDestroy,
+    OnInit
+} from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
     QueryHandlerCheckerComponent
@@ -143,6 +151,7 @@ import {
     HostdependenciesTreeComponent
 } from '../../hostdependencies/hostdependencies-tree/hostdependencies-tree.component';
 import { DowntimeComponent } from '../../../components/downtimes/downtime-component/downtime-component.component';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-hosts-browser',
@@ -270,7 +279,17 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly ExternalSystems = ExternalSystems;
 
-    constructor() {
+    public theme: string = '';
+    private readonly LayoutService = inject(LayoutService);
+
+    public constructor() {
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            if (theme) {
+                this.theme = theme;
+                this.updateGrafanaIframeTheme();
+            }
+            this.cdr.markForCheck();
+        }));
     }
 
     public ngOnInit(): void {
@@ -358,7 +377,11 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public loadGrafanaIframeUrl(): void {
         if (this.result?.mergedHost) {
             this.subscriptions.add(this.HostsService.loadHostGrafanaIframeUrl(String(this.result.mergedHost.uuid), this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh).subscribe((result) => {
-                this.GrafanaIframe = result;
+                if (result.iframeUrl) {
+                    this.updateOrAddIframeTheme(result);
+                } else {
+                    this.GrafanaIframe = result;
+                }
                 this.cdr.markForCheck();
             }));
         }
@@ -617,6 +640,32 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
         if (this.result) {
             this.resetChecktime(this.result.mergedHost);
         }
+    }
+
+    private updateGrafanaIframeTheme(): void {
+        if (!this.GrafanaIframe?.iframeUrl) {
+            return;
+        }
+        this.updateOrAddIframeTheme(this.GrafanaIframe);
+    }
+
+    private updateOrAddIframeTheme(result: GrafanaIframeUrlForDatepicker): void {
+        if (!result.iframeUrl || !this.theme) {
+            return;
+        }
+        let updatedIframeUrl = '';
+        const separator = result?.iframeUrl.includes('?') ? '&' : '?';
+
+        if (/([?&])theme=[^&]*/.test(result?.iframeUrl)) {
+            updatedIframeUrl =  result?.iframeUrl.replace(/([?&])theme=[^&]*/, `$1theme=${this.theme}`);
+        } else {
+            updatedIframeUrl = `${result}${separator}theme=${this.theme}`;
+        }
+
+        this.GrafanaIframe = {
+            ...result,
+            iframeUrl: updatedIframeUrl
+        };
     }
 
     protected readonly Number = Number;

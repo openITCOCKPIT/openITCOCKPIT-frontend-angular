@@ -23,6 +23,7 @@ import { Error404Component } from '../../../../../layouts/coreui/errors/error404
 import { IframeComponent } from '../../../../../components/iframe/iframe.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-grafana-userdashboards-view',
@@ -64,10 +65,20 @@ export class GrafanaUserdashboardsViewComponent implements OnInit, OnDestroy {
     private router: Router = inject(Router);
     private subscriptions: Subscription = new Subscription();
 
+    public theme: string = '';
+    private readonly LayoutService = inject(LayoutService);
+
     private readonly GrafanaUserdashboardsService = inject(GrafanaUserdashboardsService)
     private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            if (theme) {
+                this.theme = theme;
+                this.iframeUrl = this.updateOrAddIframeTheme(this.iframeUrl);
+            }
+            this.cdr.markForCheck();
+        }));
     }
 
     public ngOnInit(): void {
@@ -104,12 +115,24 @@ export class GrafanaUserdashboardsViewComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.GrafanaUserdashboardsService.getViewIframeUrl(this.id, this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh).subscribe(response => {
             this.dashboardFoundInGrafana = response.dashboardFoundInGrafana;
-            this.iframeUrl = response.iframeUrl;
-
+            this.iframeUrl = this.updateOrAddIframeTheme(response.iframeUrl);
             this.isLoading = false; // Avoid flickering of 404 icon
 
             this.cdr.markForCheck();
         }));
+    }
+
+    private updateOrAddIframeTheme(url: string): string {
+        if (!url || !this.theme) {
+            return '';
+        }
+        const separator = url.includes('?') ? '&' : '?';
+
+        if (/([?&])theme=[^&]*/.test(url)) {
+            return url.replace(/([?&])theme=[^&]*/, `$1theme=${this.theme}`);
+        } else {
+            return `${url}${separator}theme=${this.theme}`;
+        }
     }
 
     public onGrafanaTimeRangeChange(event: GrafanaTimepickerChange): void {
