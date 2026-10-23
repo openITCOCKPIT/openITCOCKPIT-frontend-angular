@@ -26,7 +26,7 @@
                 <c-card
                     [ngClass]="result.servicestatus.cssClass"
                     class="mb-3 text-white">
-                    <c-card-header>
+                    <c-card-header class="word-break">
                         {{ result.host.Host.name }} / {{ result.mergedService.name }}
                     </c-card-header>
                     <c-card-body class="bg-gradient">
@@ -388,6 +388,3 @@
 
 <oitc-cancel-servicedowntime-modal [items]="selectedItems"
                                    (completed)="onMassActionComplete($event)"></oitc-cancel-servicedowntime-modal>
-
-
-
