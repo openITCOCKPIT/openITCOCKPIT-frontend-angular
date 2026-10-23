@@ -156,7 +156,17 @@
                                         <c-col>
                                             @if (wizard.value.required_modules.length) {
                                                 @for (RequiredModule of wizard.value.required_modules; track $index) {
-                                                    <oitc-badge-outline color="warning">
+                                                    <oitc-badge-outline color="warning"
+                                                                        *oitcPermission="['packetmanager', 'index'];negate:true">
+                                                        <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                                        {{ t('Requires') }}
+                                                        {{ RequiredModule }}
+                                                    </oitc-badge-outline>
+                                                    <oitc-badge-outline color="warning"
+                                                                        class="cursor-pointer"
+                                                                        *oitcPermission="['packetmanager', 'index']"
+                                                                        [routerLink]="['/', 'packetmanager', 'index']"
+                                                                        [queryParams]="{packetName:RequiredModule}">
                                                         <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
                                                         {{ t('Requires') }}
                                                         {{ RequiredModule }}
@@ -256,7 +266,17 @@
                                                     <c-col>
                                                         @if (wizard.value.required_modules.length) {
                                                             @for (RequiredModule of wizard.value.required_modules; track $index) {
-                                                                <oitc-badge-outline color="warning">
+                                                                <oitc-badge-outline color="warning"
+                                                                                    *oitcPermission="['packetmanager', 'index'];negate:true">
+                                                                    <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
+                                                                    {{ t('Requires') }}
+                                                                    {{ RequiredModule }}
+                                                                </oitc-badge-outline>
+                                                                <oitc-badge-outline color="warning"
+                                                                                    class="cursor-pointer"
+                                                                                    *oitcPermission="['packetmanager', 'index']"
+                                                                                    [routerLink]="['/', 'packetmanager', 'index']"
+                                                                                    [queryParams]="{packetName:RequiredModule}">
                                                                     <fa-icon [icon]="['fas', 'puzzle-piece']"></fa-icon>
                                                                     {{ t('Requires') }}
                                                                     {{ RequiredModule }}
