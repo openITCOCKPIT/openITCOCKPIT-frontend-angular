@@ -1,34 +1,39 @@
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import { GenericValidationError } from '../../generic-responses';
-import {
-    ImportedHostsToServicetemplate
-} from '../../modules/import_module/pages/importedhosts/importedhosts.interface';
+import { ImportedHostsToServicetemplate } from '../../modules/import_module/pages/importedhosts/importedhosts.interface';
 import { Commandargument, TemplateCheckCommand } from '../hosttemplates/hosttemplates.interface';
 
 export interface WizardsIndex {
-    wizards: { [key: string]: WizardElement }
-    possibleWizards: any[]
+    wizards: { [key: string]: InstalledWizard }
+    possibleWizards: { [key: string]: PossibleWizard }
     _csrfToken: string
 }
 
 export interface WizardElement {
     type_id: string
-    uuid: string
     title: string
     description: string
     image: string
-    directive: string
-    state: string
     category: string[]
-    necessity_of_assignment: boolean
-    second_url: string
-    selected_os: undefined | string
     active: boolean
 }
 
+export interface InstalledWizard extends WizardElement {
+    necessity_of_assignment: boolean
+    second_url: string
+    selected_os: undefined | string
+    uuid: string
+    directive: string
+    state: string
+}
+
+export interface PossibleWizard extends WizardElement {
+    required_modules: string[]
+}
+
 export interface DeprecatedWizards {
-    deprecatedWizards: { [key: string]: WizardElement }
-    possibleDeprecatedWizards: { [key: string]: WizardElement }
+    deprecatedWizards: { [key: string]: InstalledWizard }
+    possibleDeprecatedWizards: { [key: string]: PossibleWizard }
 }
 
 // Host Select Validation
