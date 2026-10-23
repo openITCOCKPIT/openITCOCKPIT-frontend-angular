@@ -96,7 +96,7 @@
                                     {{ 'Output' }}
                                 </c-col>
                                 <c-col [xs]="6" [md]="10">
-                                    <div class="code-font"
+                                    <div class="code-font font-monospace font-xs"
                                          [innerHTML]="String(result.servicestatus.outputHtml) | trustAsHtml "></div>
                                 </c-col>
                             </c-row>
@@ -320,7 +320,7 @@
                             <c-col [xs]="12">
                                 <c-card>
                                     <c-card-body>
-                                        <div class="word-break"
+                                        <div class="word-break font-monospace font-xs"
                                              [innerHTML]="String(result.servicestatus.longOutputHtml) | trustAsHtml "></div>
                                     </c-card-body>
                                 </c-card>
