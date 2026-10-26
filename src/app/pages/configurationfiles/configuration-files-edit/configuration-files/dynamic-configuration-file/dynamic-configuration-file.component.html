@@ -87,7 +87,7 @@
         @case (ConfigurationFilesFieldTypes.string_array) {
             @if (Array.isArray(field.value)) {
                 <div class="mb-3">
-                    <label cLabel [for]="field.field">
+                    <label cLabel [attr.id]="field.field + '-label'">
                         {{ field.field }}
                     </label>
                     @for (arrayValue of field.value; track $index) {
@@ -95,6 +95,8 @@
                             <c-col xs="10" class="mb-1">
                                 <input cFormControl
                                        [attr.id]="field.field+$index"
+                                       [attr.aria-labelledby]="field.field + '-label'"
+                                       [attr.aria-label]="field.field + ' ' + ($index + 1)"
                                        [name]="field.field+$index"
                                        type="text"
                                        [(ngModel)]="field.value[$index]"
@@ -104,6 +106,7 @@
                             </c-col>
                             <c-col xs="2" class="mb-1">
                                 <button cButton class="ripple" color="danger" type="button"
+                                        [attr.aria-label]="('Remove') + ' ' + field.field + ' ' + ($index + 1)"
                                         (click)="removeRow(field, $index)">
                                     <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                 </button>
