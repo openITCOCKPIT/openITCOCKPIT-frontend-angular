@@ -142,6 +142,15 @@
                                 {{ t('Cores') }}:
                                 <span class="mx-2">
                                     <code>{{ result.response.current.cpus }}</code>
+                                    @if (pendingChanges['cores']; as pc) {
+                                        @if (pc.pending !== null && pc.pending !== undefined && !pc.delete) {
+                                            <span class="text-warning fw-bold ms-1"
+                                                  [cTooltip]="t('Pending change - will be applied after the next restart')">
+                                                <fa-icon [icon]="['fas', 'arrow-right']" class="me-1"></fa-icon>
+                                                <code class="text-warning">{{ pc.pending }}</code>
+                                            </span>
+                                        }
+                                    }
                                 </span>
 
                             </h6>
@@ -157,6 +166,13 @@
                                 </h5>
                                 <h6 cCardSubtitle class="mb-2 mt-1 text-medium-emphasis">
                                     {{ result.response.current.maxmem | byteToHuman }}
+                                    @if (pendingMemoryBytes !== undefined) {
+                                        <span class="text-warning fw-bold ms-1"
+                                              [cTooltip]="t('Pending change - will be applied after the next restart')">
+                                            <fa-icon [icon]="['fas', 'arrow-right']" class="me-1"></fa-icon>
+                                            {{ pendingMemoryBytes | byteToHuman }}
+                                        </span>
+                                    }
                                 </h6>
                                 <p cCardText>
                                     {{ result.response.current.mem / result.response.current.maxmem * 100|  number: '1.3-3' }}
@@ -184,6 +200,57 @@
 
             </c-card-body>
         </c-card>
+
+        @if (hasPendingChanges) {
+            <c-card class="mt-2 border-warning">
+                <c-card-body>
+                    <h5 class="fs-6 fw-semibold text-uppercase text-warning">
+                        <fa-icon [icon]="['fas', 'clock-rotate-left']" class="me-1"></fa-icon>
+                        {{ t('Pending changes') }}
+                    </h5>
+                    <p class="text-medium-emphasis mb-2">
+                        {{ t('The following configuration changes are pending and will be applied after the next restart of the virtual machine or container.') }}
+                    </p>
+                    <table cTable [small]="true" [hover]="true" class="mb-0">
+                        <thead>
+                        <tr>
+                            <th>{{ t('Setting') }}</th>
+                            <th>{{ t('Current value') }}</th>
+                            <th>{{ t('Pending value') }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @for (change of pendingChangesList; track change.key) {
+                                <tr>
+                                    <td>
+                                        <code>{{ change.key }}</code>
+                                    </td>
+                                    <td class="text-break">
+                                        @if (change.current !== null && change.current !== undefined) {
+                                            <span [ngClass]="{'text-decoration-line-through': change.delete}">
+                                                {{ change.current }}
+                                            </span>
+                                        } @else {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td class="text-break text-warning fw-bold">
+                                        @if (change.delete) {
+                                            <fa-icon [icon]="['fas', 'trash']" class="me-1"></fa-icon>
+                                            {{ t('Will be removed') }}
+                                        } @else if (change.pending !== null && change.pending !== undefined) {
+                                            {{ change.pending }}
+                                        } @else {
+                                            -
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </c-card-body>
+            </c-card>
+        }
 
         @if (vmid && nodeName) {
             <oitc-proxmox-graphs
@@ -244,6 +311,15 @@
                                     <c-col class="text-end">
                                         {{ result.response.current.cpu * 100|  number: '1.3-3' }} % {{ t('of') }}
                                         {{ result.response.current.cpus }}{{ t('CPU(s)') }}
+                                        @if (pendingChanges['cores']; as pc) {
+                                            @if (pc.pending !== null && pc.pending !== undefined && !pc.delete) {
+                                                <span class="text-warning fw-bold ms-1"
+                                                      [cTooltip]="t('Pending change - will be applied after the next restart')">
+                                                    <fa-icon [icon]="['fas', 'arrow-right']" class="me-1"></fa-icon>
+                                                    {{ pc.pending }} {{ t('Cores') }}
+                                                </span>
+                                            }
+                                        }
                                     </c-col>
                                 </c-row>
                                 <c-row>
@@ -268,6 +344,13 @@
                                         {{ t('of') }}
                                         {{ result.response.current.maxmem | byteToHuman }}
                                         )
+                                        @if (pendingMemoryBytes !== undefined) {
+                                            <span class="text-warning fw-bold ms-1"
+                                                  [cTooltip]="t('Pending change - will be applied after the next restart')">
+                                                <fa-icon [icon]="['fas', 'arrow-right']" class="me-1"></fa-icon>
+                                                {{ pendingMemoryBytes | byteToHuman }}
+                                            </span>
+                                        }
                                     </c-col>
                                 </c-row>
                                 <c-row>

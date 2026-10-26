@@ -22,7 +22,9 @@ import {
     ModalService,
     ProgressComponent,
     RowComponent,
-    TextColorDirective
+    TableDirective,
+    TextColorDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AdditionalHostInformationProxmoxResult, ProxmoxPendingChange } from './proxmox-api.interface';
@@ -65,7 +67,9 @@ import { OnlineOfflineComponent } from '../additional-host-information/online-of
         ProxmoxGraphsComponent,
         ProxmoxSnapshotsComponent,
         ProxmoxLoadingModalComponent,
-        OnlineOfflineComponent
+        OnlineOfflineComponent,
+        TooltipDirective,
+        TableDirective
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -87,7 +91,11 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
 
     // Pending changes indexed by config key (e.g. pendingChanges['memory'], pendingChanges['cores'])
     public pendingChanges: Record<string, ProxmoxPendingChange> = {};
+    public pendingChangesList: ProxmoxPendingChange[] = [];
     public hasPendingChanges: boolean = false;
+
+    // Pending memory in bytes (Proxmox returns the memory in MiB) - undefined if no memory change is pending
+    public pendingMemoryBytes?: number;
 
     private loadTrigger$ = new Subject<void>();
     private subscriptions: Subscription = new Subscription();
@@ -178,10 +186,18 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
 
         // Index pending changes by key for easy lookup in the template
         this.pendingChanges = {};
-        for (const change of result.response.info?.pending_changes ?? []) {
+        this.pendingChangesList = result.response.info?.pending_changes ?? [];
+        for (const change of this.pendingChangesList) {
             this.pendingChanges[change.key] = change;
         }
-        this.hasPendingChanges = Object.keys(this.pendingChanges).length > 0;
+        this.hasPendingChanges = this.pendingChangesList.length > 0;
+
+        this.pendingMemoryBytes = undefined;
+        const pendingMemory = this.pendingChanges['memory'];
+        const pendingMemoryMiB = this.parseNumber(pendingMemory?.pending);
+        if (pendingMemory && pendingMemoryMiB !== undefined && !pendingMemory.delete) {
+            this.pendingMemoryBytes = pendingMemoryMiB * 1024 * 1024;
+        }
 
         // Disable overrule-shutdown if Ha is enabled
         // https://github.com/proxmox/pve-manager/blob/59f360414e671d43005cea7f4ff4db07a35319ea/www/manager6/window/GuestStop.js#L25-L26
@@ -218,5 +234,20 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
         }
 
         this.cdr.markForCheck();
+    }
+
+    /**
+     * Proxmox returns config values sometimes as number (2) and sometimes as string ("4096" or "current=4096").
+     * Returns the first number found in the value or undefined.
+     */
+    private parseNumber(value: string | number | null | undefined): number | undefined {
+        if (value === null || value === undefined) {
+            return undefined;
+        }
+        if (typeof value === 'number') {
+            return value;
+        }
+        const match = value.match(/\d+(\.\d+)?/);
+        return match ? Number(match[0]) : undefined;
     }
 }
