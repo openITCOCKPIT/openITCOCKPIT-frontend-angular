@@ -84,6 +84,51 @@
                 <oitc-form-feedback [errors]="errors" errorField="Configfile.{{field.field}}"></oitc-form-feedback>
             </div>
         }
+        @case (ConfigurationFilesFieldTypes.string_array) {
+            @if (Array.isArray(field.value)) {
+                <div class="mb-3">
+                    <label cLabel [for]="field.field">
+                        {{ field.field }}
+                    </label>
+                    @for (arrayValue of field.value; track $index) {
+                        <c-row class="mt-1">
+                            <c-col xs="10" class="mb-1">
+                                <input cFormControl
+                                       [attr.id]="field.field+$index"
+                                       [name]="field.field+$index"
+                                       type="text"
+                                       [(ngModel)]="field.value[$index]"
+                                       oitcFormError [errors]="errors"
+                                       errorField="{{field.field}}.{{$index}}">
+                                <oitc-form-feedback [errors]="errors" errorField="{{field.field}}.{{$index}}"></oitc-form-feedback>
+                            </c-col>
+                            <c-col xs="2" class="mb-1">
+                                <button cButton class="ripple" color="danger" type="button"
+                                        (click)="removeRow(field, $index)">
+                                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                </button>
+                            </c-col>
+                        </c-row>
+                    }
+
+                    <c-row class="mt-1">
+                        <c-col xs="12" lg="9" class="help-block">
+                            @if (field.help) {
+                                {{ field.help }}
+                            }
+                        </c-col>
+                        <c-col xs="12" lg="3">
+                            <button cButton class="ripple" color="success" type="button"
+                                    (click)="pushNewRow(field)">
+                                <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                {{ ('Add new Line') }}
+                            </button>
+                        </c-col>
+
+                    </c-row>
+                </div>
+            }
+        }
         @default {
             <div class="mb-3">
                 <label cLabel [for]="field.field">
