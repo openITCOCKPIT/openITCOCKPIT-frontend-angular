@@ -57,10 +57,10 @@
                 <c-nav variant="underline" class="card-toolbar card-header-pills">
                     <c-nav-item>
                         <button
-                            class="nav-link"
-                            type="button"
-                            [ngClass]="{'active': tabName == SlasGenerateTabs.ReportConfig}"
-                            (click)="changeTab(SlasGenerateTabs.ReportConfig)">
+                                class="nav-link"
+                                type="button"
+                                [ngClass]="{'active': tabName == SlasGenerateTabs.ReportConfig}"
+                                (click)="changeTab(SlasGenerateTabs.ReportConfig)">
                             <fa-icon [icon]="['fas', 'pen-to-square']"></fa-icon>
                             {{ t('Configuration') }}
                         </button>
@@ -68,10 +68,10 @@
 
                     <c-nav-item [hidden]="!reportWasGenerated">
                         <button
-                            class="nav-link"
-                            type="button"
-                            [ngClass]="{'active': tabName == SlasGenerateTabs.ShowReport}"
-                            (click)="changeTab(SlasGenerateTabs.ShowReport)">
+                                class="nav-link"
+                                type="button"
+                                [ngClass]="{'active': tabName == SlasGenerateTabs.ShowReport}"
+                                (click)="changeTab(SlasGenerateTabs.ShowReport)">
                             <fa-icon [icon]="['fas', 'pie-chart']"></fa-icon>
                             {{ t('Report') }}
                         </button>
@@ -83,8 +83,8 @@
 
                 @if (tabName === SlasGenerateTabs.ReportConfig) {
                     <div>
-                        <c-alert color="danger" role="alert" [hidden]="!report_error">
-                            @if (report_error) {
+                        @if (report_error) {
+                            <c-alert color="danger" role="alert">
                                 {{ report_error.message }}
                                 <ul [hidden]="!report_error.objects">
                                     @for (host of report_error.objects; track host) {
@@ -100,22 +100,22 @@
                                         </li>
                                     }
                                 </ul>
-                            }
-                        </c-alert>
+                            </c-alert>
+                        }
                         <div class="mb-3">
                             <label cLabel for="ReportId">
                                 {{ t('SLA') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <oitc-select
-                                name="ReportId"
-                                id="ReportId"
-                                optionValue="id"
-                                optionLabel="name"
-                                [placeholder]="'Please choose' | transloco"
-                                required
-                                [(ngModel)]="post.Sla.id"
-                                [options]="slas">
+                                    name="ReportId"
+                                    id="ReportId"
+                                    optionValue="id"
+                                    optionLabel="name"
+                                    [placeholder]="'Please choose' | transloco"
+                                    required
+                                    [(ngModel)]="post.Sla.id"
+                                    [options]="slas">
                             </oitc-select>
                         </div>
                         <div class="mb-3">
@@ -124,14 +124,14 @@
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <oitc-select
-                                name="SlaFormat"
-                                id="SlaFormat"
-                                optionValue="key"
-                                optionLabel="value"
-                                [placeholder]="'Please choose' | transloco"
-                                required
-                                [(ngModel)]="post.Sla.format"
-                                [options]="reportFormats">
+                                    name="SlaFormat"
+                                    id="SlaFormat"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [placeholder]="'Please choose' | transloco"
+                                    required
+                                    [(ngModel)]="post.Sla.format"
+                                    [options]="reportFormats">
                             </oitc-select>
                         </div>
                         <div class="mb-3">
@@ -344,15 +344,15 @@
                                                                     </td>
                                                                     <td>
                                                                         <c-badge
-                                                                            [hidden]="!host.sla_log.last_log_entry.passed"
-                                                                            textColor="success"
-                                                                            class="badge-border w-100">
+                                                                                [hidden]="!host.sla_log.last_log_entry.passed"
+                                                                                textColor="success"
+                                                                                class="badge-border w-100">
                                                                             {{ t('PASSED') }}
                                                                         </c-badge>
                                                                         <c-badge
-                                                                            [hidden]="host.sla_log.last_log_entry.passed"
-                                                                            textColor="danger"
-                                                                            class="badge-border w-100">
+                                                                                [hidden]="host.sla_log.last_log_entry.passed"
+                                                                                textColor="danger"
+                                                                                class="badge-border w-100">
                                                                             {{ t('FAILED') }}
                                                                         </c-badge>
                                                                     </td>
@@ -404,15 +404,15 @@
                                                                         </td>
                                                                         <td>
                                                                             <c-badge
-                                                                                [hidden]="!service.sla_log.last_log_entry.passed"
-                                                                                textColor="success"
-                                                                                class="badge-border w-100">
+                                                                                    [hidden]="!service.sla_log.last_log_entry.passed"
+                                                                                    textColor="success"
+                                                                                    class="badge-border w-100">
                                                                                 {{ t('PASSED') }}
                                                                             </c-badge>
                                                                             <c-badge
-                                                                                [hidden]="service.sla_log.last_log_entry.passed"
-                                                                                textColor="danger"
-                                                                                class="badge-border w-100">
+                                                                                    [hidden]="service.sla_log.last_log_entry.passed"
+                                                                                    textColor="danger"
+                                                                                    class="badge-border w-100">
                                                                                 {{ t('FAILED') }}
                                                                             </c-badge>
                                                                         </td>
@@ -493,15 +493,15 @@
                                                                     </td>
                                                                     <td>
                                                                         <c-badge
-                                                                            [hidden]="!(service.sla_log.last_log_entry.determined_availability_percent < service.sla_log.last_log_entry.minimal_availability_percent)"
-                                                                            textColor="danger"
-                                                                            class="badge-border w-100">
+                                                                                [hidden]="!(service.sla_log.last_log_entry.determined_availability_percent < service.sla_log.last_log_entry.minimal_availability_percent)"
+                                                                                textColor="danger"
+                                                                                class="badge-border w-100">
                                                                             {{ t('FAILED') }}
                                                                         </c-badge>
                                                                         <c-badge
-                                                                            [hidden]="service.sla_log.last_log_entry.determined_availability_percent < service.sla_log.last_log_entry.minimal_availability_percent"
-                                                                            textColor="success"
-                                                                            class="badge-border w-100">
+                                                                                [hidden]="service.sla_log.last_log_entry.determined_availability_percent < service.sla_log.last_log_entry.minimal_availability_percent"
+                                                                                textColor="success"
+                                                                                class="badge-border w-100">
                                                                             {{ t('PASSED') }}
                                                                         </c-badge>
                                                                     </td>
