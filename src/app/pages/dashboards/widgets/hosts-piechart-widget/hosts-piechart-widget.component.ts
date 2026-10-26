@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
-import 'echarts/theme/dark.js';
+import { CanvasRenderer } from 'echarts/renderers';
+import '../../../../components/charts/echarts-dark-theme';
 import { EChartsOption } from 'echarts';
 
 import { LegendComponent, PolarComponent, TitleComponent, TooltipComponent } from 'echarts/components';
@@ -17,7 +18,7 @@ import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { KtdGridLayout } from '@katoid/angular-grid-layout';
 
-echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, PolarComponent]);
+echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, PolarComponent, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-hosts-piechart-widget',

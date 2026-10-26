@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
-import 'echarts/theme/dark.js';
+import '../echarts-dark-theme';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';

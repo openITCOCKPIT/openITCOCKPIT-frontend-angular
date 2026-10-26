@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
-import 'echarts/theme/dark.js';
+import { CanvasRenderer } from 'echarts/renderers';
+import '../echarts-dark-theme';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { PieChartMetric } from '../charts.interface';
@@ -10,7 +11,7 @@ import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from
 import { BarChart, LineChart } from 'echarts/charts';
 import { HostBarChartData } from '../../../pages/downtimereports/downtimereports.interface';
 
-echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent]);
+echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-hosts-bar-chart',

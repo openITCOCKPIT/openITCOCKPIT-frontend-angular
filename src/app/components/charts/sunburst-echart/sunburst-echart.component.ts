@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { CanvasRenderer } from 'echarts/renderers';
+import { LabelLayout } from 'echarts/features';
 
 import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 

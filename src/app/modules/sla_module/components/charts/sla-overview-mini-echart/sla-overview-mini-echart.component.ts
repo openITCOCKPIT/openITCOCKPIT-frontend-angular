@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
-import 'echarts/theme/dark.js';
+import { CanvasRenderer } from 'echarts/renderers';
+import '../../../../../components/charts/echarts-dark-theme';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
@@ -20,7 +21,7 @@ import { TimezoneObject } from '../../../../../pages/services/timezone.interface
 import { TimezoneService } from '../../../../../services/timezone.service';
 import { DateTime } from 'luxon';
 
-echarts.use([BarChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, MarkLineComponent]);
+echarts.use([BarChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, MarkLineComponent, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-sla-overview-mini-echart',
