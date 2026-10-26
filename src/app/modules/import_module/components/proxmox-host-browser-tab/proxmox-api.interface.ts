@@ -6,6 +6,34 @@ export enum ProxmoxVirtType {
     Lxc = 'lxc'
 }
 
+/**
+ * A single pending configuration change of a VM / LXC.
+ * Result of PveClient->getNodes()->get($node)->getQemu()->get($vmid)->getPending()->vmPending()
+ * (or the LXC equivalent).
+ *
+ * Proxmox API docs:
+ * - Key is set, pending is set -> value will be changed / added on next reboot
+ * - Key is set, delete is true -> value will be removed on next reboot
+ */
+export interface ProxmoxPendingChange {
+    key: string // Name of the config key e.g. memory | cores | cpu | numa | scsi0 | net0 ...
+    current?: string | number | null // Current active value (null if the key is new)
+    pending?: string | number | null // Pending value which will be applied on next reboot
+    delete: boolean // true if the key will be removed on next reboot
+}
+
+// Generic VM / LXC info
+export interface ProxmoxVmInfo {
+    node: string
+    vmid: number
+    name: string
+    status: 'running' | 'stopped' | 'paused' | string
+    tags?: string[]
+    identifier: string
+    ipaddress: string
+    pending_changes?: ProxmoxPendingChange[]
+}
+
 interface ProxmoxQemuResponse {
     response: {
         externalLink: string | null
@@ -14,14 +42,7 @@ interface ProxmoxQemuResponse {
         ipaddresses: Ipaddress[]
         found: boolean
         // Generic VM info
-        info: null | {
-            node: string
-            vmid: number
-            name: string
-            status: 'running' | 'stopped' | 'paused' | string
-            identifier: string
-            ipaddress: string
-        },
+        info: null | ProxmoxVmInfo,
         current: null | ProxmoxQemuStatusCurrentMinimal | ProxmoxQemuStatusCurrentRunning
         agent: null | ProxmoxQemuAgent,
         type: ProxmoxVirtType.Qemu
@@ -37,15 +58,8 @@ interface ProxmoxLxcResponse {
         status: boolean // true = online, false = offline
         ipaddresses: Ipaddress[]
         found: boolean
-        // Generic VM info
-        info: null | {
-            node: string
-            vmid: number
-            name: string
-            status: 'running' | 'stopped' | 'paused' | string
-            identifier: string
-            ipaddress: string
-        },
+        // Generic LXC info
+        info: null | ProxmoxVmInfo,
         current: null | ProxmoxLxcStatusCurrentMinimal
         agent: null,
         type: ProxmoxVirtType.Lxc

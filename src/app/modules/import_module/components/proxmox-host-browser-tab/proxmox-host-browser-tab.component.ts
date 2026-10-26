@@ -25,7 +25,7 @@ import {
     TextColorDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AdditionalHostInformationProxmoxResult } from './proxmox-api.interface';
+import { AdditionalHostInformationProxmoxResult, ProxmoxPendingChange } from './proxmox-api.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ProxmoxStatus } from './proxmox-status.enum';
 import { ProxmoxActionsComponent } from './proxmox-actions/proxmox-actions.component';
@@ -84,6 +84,10 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
     public nodeName?: string
     public status: ProxmoxStatus = ProxmoxStatus.Stopped;
     public overruleShutdown: boolean = true;
+
+    // Pending changes indexed by config key (e.g. pendingChanges['memory'], pendingChanges['cores'])
+    public pendingChanges: Record<string, ProxmoxPendingChange> = {};
+    public hasPendingChanges: boolean = false;
 
     private loadTrigger$ = new Subject<void>();
     private subscriptions: Subscription = new Subscription();
@@ -171,6 +175,13 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
         this.result = result;
         this.nodeName = result.response.info?.node;
         this.vmid = result.response.info?.vmid.toString();
+
+        // Index pending changes by key for easy lookup in the template
+        this.pendingChanges = {};
+        for (const change of result.response.info?.pending_changes ?? []) {
+            this.pendingChanges[change.key] = change;
+        }
+        this.hasPendingChanges = Object.keys(this.pendingChanges).length > 0;
 
         // Disable overrule-shutdown if Ha is enabled
         // https://github.com/proxmox/pve-manager/blob/59f360414e671d43005cea7f4ff4db07a35319ea/www/manager6/window/GuestStop.js#L25-L26
