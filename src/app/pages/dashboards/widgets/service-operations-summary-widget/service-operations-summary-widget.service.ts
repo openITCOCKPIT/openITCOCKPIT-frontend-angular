@@ -21,8 +21,9 @@ export class ServiceOperationsSummaryWidgetService {
         return this.http.get<ServiceOperationsSummaryResponse>(`${proxyPath}/dashboards/operationsSummaryWidget.json`, {
             params: {
                 angular: true,
-                'widgetId': widget.id,
-                'type': widgetType
+                widgetId: widget.id,
+                type: widgetType,
+                disableGlobalLoader: true
             }
         }).pipe(
             map(data => {

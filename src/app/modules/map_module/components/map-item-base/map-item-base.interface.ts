@@ -86,6 +86,8 @@ export interface DataForMapItem {
     Servicestatus: ServicestatusForMapItem
     Hostgroup?: HostgroupForMapItem
     Servicegroup?: ServicegroupForMapItem
+    Statuspage?: StatuspageForMapItem
+    Statuspagegroup?: StatuspagegroupForMapItem
     Map?: Map
 }
 
@@ -261,4 +263,14 @@ export interface ServicegroupForMapItem {
     description: string
 }
 
+export interface StatuspageForMapItem {
+    id: number
+    name: string
+    description: string
+}
 
+export interface StatuspagegroupForMapItem {
+    id: number
+    name: string
+    description: string
+}

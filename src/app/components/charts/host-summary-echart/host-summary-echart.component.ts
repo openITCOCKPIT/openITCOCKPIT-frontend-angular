@@ -19,14 +19,14 @@ import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 
-import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { GraphicComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { PieChart } from 'echarts/charts';
 import { SummaryStateHosts } from '../../../pages/hosts/summary_state.interface';
 import { Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { SVGRenderer } from 'echarts/renderers';
 
-echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, SVGRenderer]);
+echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, GraphicComponent, SVGRenderer]);
 
 @Component({
     selector: 'oitc-host-summary-echart',
@@ -325,6 +325,45 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
             ? Math.round(centerXpx + edgePadding + legendGap)
             : Math.round((width - centerXpx) + edgePadding + legendGap);
 
+        // The legend is split into two groups with a separator line in between:
+        // monitoring states (up, down, unreachable) and user interactions
+        // (in_downtime, acknowledged, unhandled).
+        // Both groups are anchored to the vertical center, so the separator
+        // always sits exactly at height / 2.
+        const legendSeparatorGap = isCompact ? 14 : 20;
+        const legendSeparatorLength = Math.max(legendWidth - 30, 40);
+
+        const readableLabels: { [key: string]: string } = {
+            'up': this.TranslocoService.translate('Up'),
+            'down': this.TranslocoService.translate('Down'),
+            'unreachable': this.TranslocoService.translate('Unreachable'),
+            'in_downtime': this.TranslocoService.translate('In downtime'),
+            'acknowledged': this.TranslocoService.translate('Acknowledged'),
+            'unhandled': this.TranslocoService.translate('Unhandled')
+        };
+
+        const legendBase = {
+            show: legendVisible,
+            orient: 'vertical' as const,
+            selectedMode: true,
+            left: legendOnRight ? legendOffset : 'auto',
+            right: legendOnRight ? 'auto' : legendOffset,
+            icon: 'rect',
+            itemWidth: legendItemSize,
+            itemHeight: legendItemSize,
+            itemGap: legendItemGap,
+            padding: 0,
+            formatter: (name: string) => {
+                const label = readableLabels[name] || name;
+                const value = values[name] ?? 0;
+                return `${label} (${value})`;
+            },
+            textStyle: {
+                color: textColor,
+                fontSize: legendFontSize
+            }
+        };
+
         this.chartOption = {
             backgroundColor: 'transparent',
             tooltip: {
@@ -393,36 +432,32 @@ export class HostSummaryEchartComponent implements OnDestroy, AfterViewInit {
                 type: 'category',
                 show: false
             })),
-            legend: {
-                show: legendVisible,
-                orient: 'vertical',
-                selectedMode: true,
-                left: legendOnRight ? legendOffset : 'auto',
-                right: legendOnRight ? 'auto' : legendOffset,
-                top: 'center',
-                icon: 'rect',
-                itemWidth: legendItemSize,
-                itemHeight: legendItemSize,
-                itemGap: legendItemGap,
-                formatter: (name: string) => {
-                    const readableLabels: { [key: string]: string } = {
-                        'up': this.TranslocoService.translate('Up'),
-                        'down': this.TranslocoService.translate('Down'),
-                        'unreachable': this.TranslocoService.translate('Unreachable'),
-                        'in_downtime': this.TranslocoService.translate('In downtime'),
-                        'acknowledged': this.TranslocoService.translate('Acknowledged'),
-                        'unhandled': this.TranslocoService.translate('Unhandled')
-                    };
-                    const label = readableLabels[name] || name;
-                    const value = values[name] ?? 0;
-                    return `${label} (${value})`;
-                },
-                textStyle: {
-                    color: textColor,
-                    fontSize: legendFontSize
+            graphic: legendVisible ? [
+                {
+                    type: 'line',
+                    silent: true,
+                    left: legendOnRight ? legendOffset : undefined,
+                    right: legendOnRight ? undefined : legendOffset,
+                    top: Math.round(height / 2),
+                    shape: {x1: 0, y1: 0, x2: legendSeparatorLength, y2: 0},
+                    style: {
+                        stroke: contrastColor,
+                        lineWidth: 1
+                    }
                 }
-            },
-
+            ] : [],
+            legend: [
+                {
+                    ...legendBase,
+                    data: ['up', 'down', 'unreachable'],
+                    bottom: Math.round(height / 2 + legendSeparatorGap / 2)
+                },
+                {
+                    ...legendBase,
+                    data: ['in_downtime', 'acknowledged', 'unhandled'],
+                    top: Math.round(height / 2 + legendSeparatorGap)
+                }
+            ],
             series: [
                 {
                     name: 'up',
