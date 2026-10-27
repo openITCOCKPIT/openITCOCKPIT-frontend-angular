@@ -68,9 +68,9 @@
                     @if (notificationsOverviewAllowed) {
                         <c-nav-item>
                             <button
-                                    *oitcPermission="['hosts', 'notificationsOverview']" class="nav-link"
-                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.NotificationPeriods}"
-                                    (click)="changeTab(HostBrowserTabs.NotificationPeriods)">
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.NotificationPeriods}"
+                                (click)="changeTab(HostBrowserTabs.NotificationPeriods)">
                                 <fa-icon [icon]="['fas', 'alarm-clock']"></fa-icon>
                                 {{ t('Notifications overview') }}
                             </button>

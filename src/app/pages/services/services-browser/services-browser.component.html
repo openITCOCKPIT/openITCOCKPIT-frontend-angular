@@ -68,8 +68,7 @@
                     </c-nav-item>
                     @if (notificationsOverviewAllowed) {
                         <c-nav-item>
-                            <button
-                                *oitcPermission="['services', 'notificationsOverview']" class="nav-link"
+                            <button class="nav-link"
                                 [ngClass]="{'active': selectedTab == ServiceBrowserTabs.NotificationPeriods}"
                                 (click)="changeTab(ServiceBrowserTabs.NotificationPeriods)">
                                 <fa-icon [icon]="['fas', 'alarm-clock']"></fa-icon>
