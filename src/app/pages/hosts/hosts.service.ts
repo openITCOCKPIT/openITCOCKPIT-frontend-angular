@@ -622,6 +622,21 @@ export class HostsService {
             )
     }
 
+    public loadNotificationsOverviewAllowed(id: number): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ notifications_overview_allowed: boolean }>(`${proxyPath}/hosts/notificationsOverviewAllowed/${id}.json`, {
+                params: {
+                    angular: true
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.notifications_overview_allowed;
+                })
+            )
+    }
+
     public loadSlaInformation(id: number, slaId: number): Observable<false | HostBrowserSlaOverview> {
         const proxyPath = this.proxyPath;
         return this

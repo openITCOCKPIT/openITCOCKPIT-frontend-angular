@@ -102,6 +102,9 @@ import {
 import { HoststatusSimpleIconComponent } from '../../hosts/hoststatus-simple-icon/hoststatus-simple-icon.component';
 import { HostBrowserTabs } from '../../hosts/hosts.enum';
 import { BrowserTimelineComponent } from '../../../components/timeline/browser-timeline/browser-timeline.component';
+import {
+    NotificationPeriodOverviewComponent
+} from '../../../components/notification-periods/notification-period-overview/notification-period-overview.component';
 
 
 import {
@@ -179,6 +182,7 @@ import { DowntimeComponent } from '../../../components/downtimes/downtime-compon
         HoststatusSimpleIconComponent,
         BrowserTimelineComponent,
         ServiceTimelineLegendComponent,
+        NotificationPeriodOverviewComponent,
         FormCheckComponent,
         FormCheckInputDirective,
         FormCheckLabelDirective,
@@ -226,6 +230,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
     public tags: string[] = [];
 
     public CustomalertsExists: boolean = false;
+    public notificationsOverviewAllowed: boolean = false;
 
     public SlaOverview: false | ServiceBrowserSlaOverview = false;
 
@@ -328,6 +333,7 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             }
 
             this.loadCustomalerts();
+            this.loadNotificationsOverviewAllowed();
             this.loadSlaInformation();
 
             this.lastUpdated = new Date();
@@ -350,6 +356,24 @@ export class ServicesBrowserComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.ServicesService.loadCustomAlertExists(this.result.mergedService.id).subscribe((result) => {
                 this.CustomalertsExists = result;
                 this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public loadNotificationsOverviewAllowed(): void {
+        if (this.result?.mergedService && this.result.mergedService.id) {
+            const serviceId = this.result.mergedService.id;
+            // Only ask the server if the user has the permission for the notifications overview at all (otherwise 403)
+            this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['services', 'notificationsOverview']).subscribe((hasPermission) => {
+                if (!hasPermission) {
+                    this.notificationsOverviewAllowed = false;
+                    this.cdr.markForCheck();
+                    return;
+                }
+                this.subscriptions.add(this.ServicesService.loadNotificationsOverviewAllowed(serviceId).subscribe((result) => {
+                    this.notificationsOverviewAllowed = result;
+                    this.cdr.markForCheck();
+                }));
             }));
         }
     }
