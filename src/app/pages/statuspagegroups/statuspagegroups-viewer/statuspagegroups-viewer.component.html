@@ -212,7 +212,7 @@
                                                     categoryIndex = $index) {
 
                                                     @if (StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].total_statuspages > 0) {
-                                                        <td
+                                                        <td class="ps-2"
                                                             [ngClass]="{'inner-border-not-in-monitoring': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.NOT_IN_MONITORING,
                                                         'inner-border-up': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.OPERATIONAL,
                                                         'inner-border-warning': StatupagegroupViewRootResponse.matrix[collectionIndex][categoryIndex].cumulatedState === CumulatedStatuspagegroupStatus.PERFORMANCE_ISSUES,
