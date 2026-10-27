@@ -68,8 +68,8 @@
             </c-card-header>
             <c-card-body>
                 <c-container
-                    [fluid]="true">
-                    <table bordered cTable class="mt-2 mb-0" hover striped>
+                        [fluid]="true">
+                    <table bordered cTable class="mt-2 mb-0" hover striped small>
                         <thead>
                             @if (total > 0) {
                                 <tr>
@@ -88,7 +88,7 @@
                         <tbody>
                             @for (host of hostsWithServices; track $index) {
                                 <tr>
-                                    <td colspan="3">
+                                    <td colspan="3" class="word-break">
                                         @if (PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
                                             <a [routerLink]="['/', 'hosts', 'browser', host.id]">
                                                 {{ host.name }} ({{ host.address }})
@@ -110,11 +110,11 @@
                                     <tr>
                                         <td class="text-center">
                                             <oitc-item-select
-                                                *oitcPermission="['hosts', 'edit']"
-                                                [disabled]="!host.allow_edit"
-                                                [item]="service"></oitc-item-select>
+                                                    *oitcPermission="['hosts', 'edit']"
+                                                    [disabled]="!host.allow_edit"
+                                                    [item]="service"></oitc-item-select>
                                         </td>
-                                        <td>
+                                        <td class="word-break">
                                             @if (PermissionsService.hasPermissionObservable(['services', 'edit'])|async) {
                                                 <a [routerLink]="['/', 'services', 'edit', service.id]">
                                                     {{ service.servicename }}
@@ -165,7 +165,7 @@
                             <c-row>
                                 <c-col>
                                     <oitc-select-all
-                                        [itemsCount]="total"></oitc-select-all>
+                                            [itemsCount]="total"></oitc-select-all>
                                 </c-col>
                                 <c-col [sm]="8" [md]="5" [lg]="4" [xs]="3">
                                     <div class="btn-group d-flex flex-row" role="group">

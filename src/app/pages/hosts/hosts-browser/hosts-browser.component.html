@@ -420,7 +420,7 @@
                                                     </h5>
                                                 </c-card-header>
                                                 <c-card-body>
-                                                    <table cTable [striped]="true">
+                                                    <table cTable small [striped]="true">
                                                         <thead>
                                                         <tr>
                                                             <th scope="col">{{ t('User') }}</th>
@@ -465,7 +465,7 @@
                                 <c-row>
                                     <!-- Check command -->
                                     <c-col [xs]="12" [sm]="12" [md]="9" class="mt-1">
-                                        <table cTable bordered>
+                                        <table cTable small bordered>
                                             <tbody>
                                                 @if (PermissionsService.hasPermissionObservable(['hosts', 'checkcommand'])|async) {
                                                     <tr>
@@ -496,7 +496,7 @@
                                             <tr>
                                                 <td>{{ t('Output') }}</td>
                                                 <td>
-                                                    <div class="code-font"
+                                                    <div class="code-font font-monospace font-xs"
                                                          [ngClass]="result.hoststatus.textClass"
                                                          [innerHTML]="String(result.hoststatus.outputHtml) | trustAsHtml "></div>
                                                 </td>
@@ -517,7 +517,7 @@
                                     </c-col>
                                     <!-- Check period -->
                                     <c-col [xs]="12" [sm]="12" [md]="3" class="mt-1">
-                                        <table cTable bordered>
+                                        <table cTable small bordered>
                                             <tbody>
                                             <tr>
                                                 <td>{{ t('Check period') }}</td>
@@ -556,7 +556,7 @@
                                         <c-col [xs]="12">
                                             <c-card>
                                                 <c-card-body>
-                                                    <div class="word-break"
+                                                    <div class="word-break font-monospace font-xs"
                                                          [innerHTML]="String(result.hoststatus.longOutputHtml) | trustAsHtml "></div>
                                                 </c-card-body>
                                             </c-card>
@@ -570,7 +570,7 @@
                                             <h4>{{ t('Parent host overview') }}</h4>
                                         </c-col>
                                         <c-col [xs]="12">
-                                            <table cTable bordered>
+                                            <table cTable small bordered>
                                                 <thead>
                                                 <tr>
                                                     <th class="width-130">{{ t('Parent host state') }}</th>
@@ -624,7 +624,7 @@
                                     <c-row>
                                         <!-- Contacts and Contact groups -->
                                         <c-col [xs]="12" [md]="6">
-                                            <table cTable bordered>
+                                            <table cTable small bordered>
                                                 <tbody>
                                                     @if (result.mergedHost.contacts.length > 0) {
                                                         <tr>
@@ -668,7 +668,7 @@
                                         </c-col>
                                         <!-- Notification period -->
                                         <c-col [xs]="12" [md]="6">
-                                            <table cTable bordered>
+                                            <table cTable small bordered>
                                                 <tbody>
                                                 <tr>
                                                     <td>{{ t('Notification period') }}</td>
@@ -920,7 +920,7 @@
                                 </c-col>
                                 <!-- Left panel -->
                                 <c-col [xs]="12" [md]="6">
-                                    <table cTable bordered>
+                                    <table cTable small bordered>
                                         <tbody>
                                         <tr>
                                             <td> {{ t('IP address') }}</td>
@@ -946,7 +946,7 @@
                                 </c-col>
                                 <!-- Right panel -->
                                 <c-col [xs]="12" [md]="6">
-                                    <table cTable bordered>
+                                    <table cTable small bordered>
                                         <tbody>
                                         <tr>
                                             <td> {{ t('Priority') }}</td>
@@ -973,7 +973,7 @@
                                 </c-col>
                                 <!-- Container -->
                                 <c-col [xs]="12">
-                                    <table cTable bordered>
+                                    <table cTable small bordered>
                                         <tbody>
                                         <tr>
                                             <td>{{ t('Container') }}</td>
@@ -1298,7 +1298,7 @@
                                                 <fa-icon [icon]="['fas', 'info-circle']" [cTextColor]="'info'"
                                                          [size]="'2x'"></fa-icon>
                                             </div>
-                                            <table cTable>
+                                            <table cTable small>
                                                 <tr>
                                                     <th> {{ t('Uptime') }}</th>
                                                     <td class="text-end"> {{ softwareInformation.packagesHostDetails.uptime_in_words }}</td>

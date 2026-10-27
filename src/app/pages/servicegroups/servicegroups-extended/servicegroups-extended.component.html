@@ -161,7 +161,7 @@
             }
 
             @if (servicegroupExtended.servicegroup.Servicegroup.uuid !== '') {
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="serviceParams.sort" [matSortDirection]="serviceParams.direction">
                     <thead>
@@ -350,7 +350,7 @@
                                 <td>{{ service.Servicestatus.lastHardStateChange }}</td>
                                 <td>{{ service.Servicestatus.lastCheck }}</td>
                                 <td>{{ service.Servicestatus.nextCheck }}</td>
-                                <td>
+                                <td class="font-monospace font-xs">
                                     {{ service.Servicestatus.output }}
                                 </td>
                                 <td class="text-center">
