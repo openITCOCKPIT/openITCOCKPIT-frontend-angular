@@ -272,3 +272,73 @@ export interface ProxmoxRollbackSnapshotData {
     type: ProxmoxVirtType,
     snapshotName: string
 }
+
+/****************************
+ *    Hardware (CPU / RAM / Disk)
+ ****************************/
+export interface ProxmoxGetHardwareParams {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+}
+
+export interface ProxmoxHardwareDisk {
+    key: string // scsi0 | virtio0 | sata0 | ide0 | rootfs | mp0 ...
+    storage: string // local-lvm | ceph ...
+    volume: string // Full volume string e.g. local-lvm:vm-100-disk-0
+    size: number // Size in bytes
+}
+
+export interface ProxmoxHardwareConfig {
+    cores: number // Number of cores (per socket for QEMU)
+    sockets?: number // QEMU only
+    // QEMU only - Number of active (hotplugged) vCPUs. Must be <= cores * sockets.
+    // 0 or undefined = all vCPUs (cores * sockets) are active (Proxmox default)
+    // This is the only CPU value that can be changed at runtime (requires "cpu" in hotplug)
+    // https://pve.proxmox.com/wiki/Hotplug_(qemu_disk,nic,cpu,memory)#CPU_and_Memory_Hotplug
+    vcpus?: number
+    memory: number // Memory in MiB
+    balloon?: number // QEMU only - minimum memory in MiB (0 = ballooning disabled)
+    swap?: number // LXC only - SWAP in MiB
+    hotplug?: string // QEMU only e.g. "network,disk,usb,cpu,memory"
+    numa?: boolean // QEMU only - required for memory hotplug
+    disks: ProxmoxHardwareDisk[]
+    limits: {
+        maxCpus: number // Number of CPUs of the Proxmox node
+        maxMemory: number // Memory of the Proxmox node in MiB
+    }
+}
+
+export interface ProxmoxGetHardwareResult {
+    hardware: ProxmoxHardwareConfig
+    _csrfToken: null | string,
+}
+
+export interface ProxmoxUpdateHardwareData {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+    cores: number,
+    sockets?: number, // QEMU only
+    vcpus?: number, // QEMU only - active vCPUs. 0 = all (cores * sockets) - backend should delete the "vcpus" option in this case
+    memory: number, // MiB
+    swap?: number // LXC only (MiB)
+}
+
+export interface ProxmoxResizeDiskData {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+    disk: string, // scsi0 | rootfs | mp0 ...
+    increaseGiB: number // Proxmox only supports growing disks - backend sends size=+<n>G
+}
+
+export interface ProxmoxHardwareApiResult {
+    result: {
+        success: boolean
+        upid: null | string // Task ID if Proxmox runs the change async, null if the change was applied synchronously
+        message: string // Error message in case success is false
+    }
+    _csrfToken: null | string
+}
+

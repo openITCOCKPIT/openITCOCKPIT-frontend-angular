@@ -264,9 +264,23 @@
             <c-col md="12" xl="6">
                 <c-card class="h-100">
                     <c-card-body>
-                        <h5 class="fs-6 fw-semibold text-uppercase">
-                            {{ t('System') }}
-                        </h5>
+                        <c-row>
+                            <c-col>
+                                <h5 class="fs-6 fw-semibold text-uppercase">
+                                    {{ t('System') }}
+                                </h5>
+                            </c-col>
+                            @if (allowEdit && vmid && nodeName) {
+                                <c-col class="text-end">
+                                    <button cButton size="sm" color="default" class="ripple"
+                                            [disabled]="status === ProxmoxStatus.Migrate"
+                                            (click)="toggleEditHardwareModal()">
+                                        <fa-icon [icon]="['fas', 'sliders']" class="me-1"></fa-icon>
+                                        {{ t('Edit hardware') }}
+                                    </button>
+                                </c-col>
+                            }
+                        </c-row>
                         @if (result.response.current && result.response.current.ha) {
                             <c-row class="my-1 odd">
                                 <c-col lg="7">
@@ -499,6 +513,16 @@
                 </c-card>
             </c-col>
         </c-row>
+
+        @if (allowEdit && vmid && nodeName) {
+            <oitc-proxmox-edit-hardware-modal
+                [hostId]="hostId"
+                [vmid]="vmid"
+                [nodeName]="nodeName"
+                [status]="status"
+                [virtType]="result.response.type"
+                (onFinish)="load()"></oitc-proxmox-edit-hardware-modal>
+        }
     }
 
     <oitc-proxmox-loading-modal></oitc-proxmox-loading-modal>

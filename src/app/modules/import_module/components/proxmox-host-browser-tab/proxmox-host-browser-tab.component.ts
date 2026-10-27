@@ -13,6 +13,7 @@ import { catchError, EMPTY, merge, Subject, Subscription, switchMap, takeWhile, 
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import {
     AlertComponent,
+    ButtonDirective,
     CardBodyComponent,
     CardComponent,
     CardSubtitleDirective,
@@ -42,6 +43,9 @@ import { ProxmoxSnapshotsComponent } from './proxmox-snapshots/proxmox-snapshots
 
 import { ProxmoxLoadingModalComponent } from './proxmox-loading-modal/proxmox-loading-modal.component';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
+import {
+    ProxmoxEditHardwareModalComponent
+} from './proxmox-edit-hardware-modal/proxmox-edit-hardware-modal.component';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -69,7 +73,9 @@ import { OnlineOfflineComponent } from '../additional-host-information/online-of
         ProxmoxLoadingModalComponent,
         OnlineOfflineComponent,
         TooltipDirective,
-        TableDirective
+        TableDirective,
+        ButtonDirective,
+        ProxmoxEditHardwareModalComponent
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -99,6 +105,8 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
 
     private loadTrigger$ = new Subject<void>();
     private subscriptions: Subscription = new Subscription();
+
+    protected readonly ProxmoxStatus = ProxmoxStatus;
 
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private readonly modalService = inject(ModalService);
@@ -168,6 +176,13 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
 
     public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+    }
+
+    public toggleEditHardwareModal(): void {
+        this.modalService.toggle({
+            show: true,
+            id: ProxmoxEditHardwareModalComponent.MODAL_ID
+        });
     }
 
     public load(): void {
