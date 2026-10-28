@@ -33,19 +33,16 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { ProxmoxStatus } from './proxmox-status.enum';
 import { ProxmoxActionsComponent } from './proxmox-actions/proxmox-actions.component';
 import { PatchstatusIconComponent } from '../../../../pages/patchstatus/patchstatus-icon/patchstatus-icon.component';
-import { DecimalPipe, NgClass } from '@angular/common';
+import { AsyncPipe, DecimalPipe, NgClass } from '@angular/common';
 import { ByteToHumanPipe } from '../../../../pipes/byte-to-human.pipe';
-import {
-    ProxmoxBrowserLoaderComponent
-} from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
+import { ProxmoxBrowserLoaderComponent } from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
 import { ProxmoxGraphsComponent } from './proxmox-graphs/proxmox-graphs.component';
 import { ProxmoxSnapshotsComponent } from './proxmox-snapshots/proxmox-snapshots.component';
 
 import { ProxmoxLoadingModalComponent } from './proxmox-loading-modal/proxmox-loading-modal.component';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
-import {
-    ProxmoxEditHardwareModalComponent
-} from './proxmox-edit-hardware-modal/proxmox-edit-hardware-modal.component';
+import { ProxmoxEditHardwareModalComponent } from './proxmox-edit-hardware-modal/proxmox-edit-hardware-modal.component';
+import { PermissionsService } from '../../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -75,7 +72,8 @@ import {
         TooltipDirective,
         TableDirective,
         ButtonDirective,
-        ProxmoxEditHardwareModalComponent
+        ProxmoxEditHardwareModalComponent,
+        AsyncPipe
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -107,6 +105,8 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
     private subscriptions: Subscription = new Subscription();
 
     protected readonly ProxmoxStatus = ProxmoxStatus;
+    protected readonly PermissionsService: PermissionsService = inject(PermissionsService);
+
 
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private readonly modalService = inject(ModalService);

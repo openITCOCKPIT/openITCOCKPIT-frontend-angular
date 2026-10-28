@@ -96,26 +96,26 @@
                                     @switch (result.response.agent.id) {
                                         @case ('ubuntu') {
                                             <oitc-patchstatus-icon
-                                                [platform]="result.response.agent.id"
-                                                [type]="'linux'"
+                                                    [platform]="result.response.agent.id"
+                                                    [type]="'linux'"
                                             ></oitc-patchstatus-icon>
                                         }
                                         @case ('debian') {
                                             <oitc-patchstatus-icon
-                                                [platform]="result.response.agent.id"
-                                                [type]="'linux'"
+                                                    [platform]="result.response.agent.id"
+                                                    [type]="'linux'"
                                             ></oitc-patchstatus-icon>
                                         }
                                         @case ('suse') {
                                             <oitc-patchstatus-icon
-                                                [platform]="result.response.agent.id"
-                                                [type]="'suse'"
+                                                    [platform]="result.response.agent.id"
+                                                    [type]="'suse'"
                                             ></oitc-patchstatus-icon>
                                         }
                                         @case ('mswindows') {
                                             <oitc-patchstatus-icon
-                                                [platform]="result.response.agent.id"
-                                                [type]="'windows'"
+                                                    [platform]="result.response.agent.id"
+                                                    [type]="'windows'"
                                             ></oitc-patchstatus-icon>
                                         }
                                         @default {
@@ -189,12 +189,12 @@
                 <div>
                     @if (allowEdit && vmid && nodeName) {
                         <oitc-proxmox-actions
-                            [hostId]="hostId"
-                            [vmid]="vmid"
-                            [nodeName]="nodeName"
-                            [status]="status"
-                            [overruleShutdown]="overruleShutdown"
-                            [virtType]="result.response.type"></oitc-proxmox-actions>
+                                [hostId]="hostId"
+                                [vmid]="vmid"
+                                [nodeName]="nodeName"
+                                [status]="status"
+                                [overruleShutdown]="overruleShutdown"
+                                [virtType]="result.response.type"></oitc-proxmox-actions>
                     }
                 </div>
 
@@ -254,10 +254,10 @@
 
         @if (vmid && nodeName) {
             <oitc-proxmox-graphs
-                [hostId]="hostId"
-                [vmid]="vmid"
-                [nodeName]="nodeName"
-                [virtType]="result.response.type"></oitc-proxmox-graphs>
+                    [hostId]="hostId"
+                    [vmid]="vmid"
+                    [nodeName]="nodeName"
+                    [virtType]="result.response.type"></oitc-proxmox-graphs>
         }
 
         <c-row class="mt-2 equal-height-row d-flex flex-wrap">
@@ -270,7 +270,7 @@
                                     {{ t('System') }}
                                 </h5>
                             </c-col>
-                            @if (allowEdit && vmid && nodeName) {
+                            @if (allowEdit && vmid && nodeName && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'proxmox', 'hardware'])|async )) {
                                 <c-col class="text-end">
                                     <button cButton size="sm" color="default" class="ripple"
                                             [disabled]="status === ProxmoxStatus.Migrate"
@@ -496,32 +496,34 @@
             </c-col>
         </c-row>
 
-        <c-row class="mt-2 equal-height-row d-flex flex-wrap">
-            <c-col [xs]="12">
-                <c-card class="h-100">
-                    <c-card-body>
-                        @if (vmid && nodeName) {
-                            <oitc-proxmox-snapshots
-                                [hostId]="hostId"
-                                [vmid]="vmid"
-                                [nodeName]="nodeName"
-                                [status]="status"
-                                [virtType]="result.response.type"
-                                [allowEdit]="allowEdit"></oitc-proxmox-snapshots>
-                        }
-                    </c-card-body>
-                </c-card>
-            </c-col>
-        </c-row>
+        @if (this.PermissionsService.hasPermissionObservable(['ImportModule', 'proxmox', 'snapshots'])|async) {
+            <c-row class="mt-2 equal-height-row d-flex flex-wrap">
+                <c-col [xs]="12">
+                    <c-card class="h-100">
+                        <c-card-body>
+                            @if (vmid && nodeName) {
+                                <oitc-proxmox-snapshots
+                                        [hostId]="hostId"
+                                        [vmid]="vmid"
+                                        [nodeName]="nodeName"
+                                        [status]="status"
+                                        [virtType]="result.response.type"
+                                        [allowEdit]="allowEdit"></oitc-proxmox-snapshots>
+                            }
+                        </c-card-body>
+                    </c-card>
+                </c-col>
+            </c-row>
+        }
 
-        @if (allowEdit && vmid && nodeName) {
+        @if (allowEdit && vmid && nodeName && ( this.PermissionsService.hasPermissionObservable(['ImportModule', 'proxmox', 'hardware'])|async )) {
             <oitc-proxmox-edit-hardware-modal
-                [hostId]="hostId"
-                [vmid]="vmid"
-                [nodeName]="nodeName"
-                [status]="status"
-                [virtType]="result.response.type"
-                (onFinish)="load()"></oitc-proxmox-edit-hardware-modal>
+                    [hostId]="hostId"
+                    [vmid]="vmid"
+                    [nodeName]="nodeName"
+                    [status]="status"
+                    [virtType]="result.response.type"
+                    (onFinish)="load()"></oitc-proxmox-edit-hardware-modal>
         }
     }
 
