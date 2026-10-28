@@ -68,6 +68,7 @@
                             <input cFormControl id="proxmoxHwMemory" name="proxmoxHwMemory" type="number"
                                    min="16" step="512" [disabled]="isRunning"
                                    [(ngModel)]="form.memory"
+                                   (blur)="roundMemoryToPowerOfTwo()"
                                    oitcFormError [errors]="errors" errorField="memory">
                             <span cInputGroupText>MiB</span>
                         </c-input-group>

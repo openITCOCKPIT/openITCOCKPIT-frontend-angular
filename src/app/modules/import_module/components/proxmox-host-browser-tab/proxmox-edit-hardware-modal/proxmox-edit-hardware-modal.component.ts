@@ -280,6 +280,30 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
         this.cdr.markForCheck();
     }
 
+    /**
+     * Rounds the entered memory value (MiB) to the nearest power of two, e.g. 1000 -> 1024, 3000 -> 2048.
+     * If the value is exactly between two powers of two, the larger one is used (e.g. 1536 -> 2048).
+     * Called on blur of the memory input - not on every keystroke, otherwise the user could not type "1000".
+     * Invalid values (empty, 0, negative) are left untouched - the backend validation will report them.
+     *
+     * Notice: For now we only round the memory in the frontend but do not validate it in the backend.
+     * This is in case we want to support HugePages in the future, where the best value is power of HugePage size.
+     */
+    public roundMemoryToPowerOfTwo(): void {
+        const memory = Number(this.form.memory);
+        if (!Number.isFinite(memory) || memory <= 0) {
+            return;
+        }
+
+        const lower = Math.pow(2, Math.floor(Math.log2(memory)));
+        const upper = lower * 2;
+        const rounded = (memory - lower) < (upper - memory) ? lower : upper;
+
+        // Proxmox requires at least 16 MiB
+        this.form.memory = Math.max(16, rounded);
+        this.cdr.markForCheck();
+    }
+
     public saveHardware(): void {
         if (!this.hardware) {
             return;
