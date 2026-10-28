@@ -271,6 +271,10 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
         return this.hardware?.disks.find(d => d.key === this.diskForm.disk)?.size;
     }
 
+    public get availableStorageSpaceOfDisk(): number | undefined {
+        return this.hardware?.disks.find(d => d.key === this.diskForm.disk)?.storageAvail;
+    }
+
     public setMemoryGiB(gib: number): void {
         this.form.memory = gib * 1024;
         this.cdr.markForCheck();

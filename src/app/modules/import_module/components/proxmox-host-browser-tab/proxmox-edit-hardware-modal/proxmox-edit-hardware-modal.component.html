@@ -200,6 +200,9 @@
                                     <fa-icon [icon]="['fas', 'arrow-right']" class="mx-1"></fa-icon>
                                     {{ selectedDiskSize + diskForm.increaseGiB * 1024 * 1024 * 1024 | byteToHuman }}
                                 </div>
+                                <div class="help-block">
+                                    {{ availableStorageSpaceOfDisk | byteToHuman }} {{ t('available on storage') }}
+                                </div>
                             }
                             <oitc-form-feedback [errors]="errors" errorField="increaseGiB"></oitc-form-feedback>
                         </c-col>

@@ -287,6 +287,9 @@ export interface ProxmoxHardwareDisk {
     storage: string // local-lvm | ceph ...
     volume: string // Full volume string e.g. local-lvm:vm-100-disk-0
     size: number // Size in bytes
+    storageTotal: number // Total storage size in bytes
+    storageAvail: number // Available storage size in bytes
+    maxIncreaseGiB: number // Maximum size we can increase the disk to in GiB (Proxmox only supports growing disks)
 }
 
 export interface ProxmoxHardwareConfig {
