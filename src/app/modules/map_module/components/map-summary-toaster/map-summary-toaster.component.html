@@ -214,18 +214,16 @@
                                                 <c-row class="pt-2">
                                                     <!-- Servicename -->
                                                     <c-col lg="5" class="map-summary-cell"
-                                                           title="{{service.Host.hostname}}/{{service.Service.servicename}}">
+                                                           title="{{service.Service.servicename}}">
                                                         <span *oitcPermission="['services', 'browser']"
                                                               class="d-block text-truncate">
                                                             <a [routerLink]="['/', 'services', 'browser', service.Service.id]">
-                                                                {{ service.Host.hostname }}
-                                                                /{{ service.Service.servicename }}
+                                                                {{ service.Service.servicename }}
                                                             </a>
                                                         </span>
                                                         <span *oitcPermission="['services', 'browser']; negate: true"
                                                               class="d-block text-truncate">
-                                                            {{ service.Host.hostname }}
-                                                            /{{ service.Service.servicename }}
+                                                            {{ service.Service.servicename }}
                                                         </span>
                                                     </c-col>
                                                     <c-col lg="2" [hidden]="!service.Servicestatus.isInMonitoring"
