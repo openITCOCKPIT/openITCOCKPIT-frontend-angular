@@ -292,11 +292,6 @@ export interface ProxmoxHardwareDisk {
 export interface ProxmoxHardwareConfig {
     cores: number // Number of cores (per socket for QEMU)
     sockets?: number // QEMU only
-    // QEMU only - Number of active (hotplugged) vCPUs. Must be <= cores * sockets.
-    // 0 or undefined = all vCPUs (cores * sockets) are active (Proxmox default)
-    // This is the only CPU value that can be changed at runtime (requires "cpu" in hotplug)
-    // https://pve.proxmox.com/wiki/Hotplug_(qemu_disk,nic,cpu,memory)#CPU_and_Memory_Hotplug
-    vcpus?: number
     memory: number // Memory in MiB
     balloon?: number // QEMU only - minimum memory in MiB (0 = ballooning disabled)
     swap?: number // LXC only - SWAP in MiB
@@ -320,7 +315,6 @@ export interface ProxmoxUpdateHardwareData {
     type: ProxmoxVirtType,
     cores: number,
     sockets?: number, // QEMU only
-    vcpus?: number, // QEMU only - active vCPUs. 0 = all (cores * sockets) - backend should delete the "vcpus" option in this case
     memory: number, // MiB
     swap?: number // LXC only (MiB)
 }

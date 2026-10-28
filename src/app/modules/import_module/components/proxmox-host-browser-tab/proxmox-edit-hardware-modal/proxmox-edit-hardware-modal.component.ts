@@ -99,7 +99,6 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
     public form = {
         cores: 1,
         sockets: 1,
-        vcpus: 1, // QEMU only - active vCPUs (always filled, even if Proxmox has no "vcpus" option set)
         memory: 512, // MiB
         swap: 0 // MiB
     };
@@ -114,7 +113,6 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
     public isResizeConfirmPending: boolean = false;
 
     // CakePHP style validation errors: {field: {ruleName: 'message'}}
-    // Compatible with oitcFormError and <oitc-form-feedback>
     public errors: GenericValidationError | null = null;
 
     private subscriptions: Subscription = new Subscription();
@@ -170,7 +168,6 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
                 this.form = {
                     cores: result.hardware.cores,
                     sockets: result.hardware.sockets ?? 1,
-                    vcpus: this.getCurrentVCpus(result.hardware),
                     memory: result.hardware.memory,
                     swap: result.hardware.swap ?? 0
                 };
@@ -196,12 +193,12 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
      *
      * QEMU rules (https://pve.proxmox.com/wiki/Hotplug_(qemu_disk,nic,cpu,memory)):
      * - cores / sockets define the CPU topology and can NEVER be changed at runtime
-     * - vcpus (active vCPUs) can be changed at runtime if "cpu" is in hotplug
+     *   (CPU hotplug via the "vcpus" option is not supported to keep things simple)
      * - memory can be changed at runtime if "memory" is in hotplug AND NUMA is enabled
      *
      * LXC containers support live changes for cores, memory and swap.
      */
-    public get restartRequiredFor(): Array<'cores' | 'sockets' | 'vcpus' | 'memory'> {
+    public get restartRequiredFor(): Array<'cores' | 'sockets' | 'memory'> {
         const hw = this.hardware;
         if (!hw || this.virtType() !== ProxmoxVirtType.Qemu) {
             return [];
@@ -211,21 +208,18 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
             return [];
         }
 
+        // Proxmox gives hotplug features as a comma-separated string, e.g. "network,disk,usb"
         const hotplug = (hw.hotplug ?? '').split(',').map(v => v.trim());
-        const cpuHotplug = hotplug.includes('cpu');
         // To enable memory hotplug you need to enable both NUMA and memory hotplug
         // https://pve.proxmox.com/wiki/Hotplug_(qemu_disk,nic,cpu,memory)#Memory_Hotplug
         const memHotplug = hotplug.includes('memory') && !!hw.numa;
 
-        const result: Array<'cores' | 'sockets' | 'vcpus' | 'memory'> = [];
+        const result: Array<'cores' | 'sockets' | 'memory'> = [];
         if (this.form.cores !== hw.cores) {
             result.push('cores');
         }
         if (this.form.sockets !== (hw.sockets ?? 1)) {
             result.push('sockets');
-        }
-        if (this.form.vcpus !== this.getCurrentVCpus(hw) && !cpuHotplug) {
-            result.push('vcpus');
         }
         if (this.form.memory !== hw.memory && !memHotplug) {
             result.push('memory');
@@ -233,10 +227,16 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
         return result;
     }
 
+    /**
+     * Returns true if all changes can be applied immediately without a restart of the VM.
+     */
     public get isLiveChangePossible(): boolean {
         return this.restartRequiredFor.length === 0;
     }
 
+    /**
+     * Returns true if the user changed any of the hardware settings in the form compared to the current hardware configuration.
+     */
     public get hasHardwareChanges(): boolean {
         const hw = this.hardware;
         if (!hw) {
@@ -246,15 +246,14 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
             return true;
         }
         if (this.virtType() === ProxmoxVirtType.Qemu) {
-            return this.form.sockets !== (hw.sockets ?? 1) || this.form.vcpus !== this.getCurrentVCpus(hw);
+            return this.form.sockets !== (hw.sockets ?? 1);
         }
         return this.form.swap !== (hw.swap ?? 0);
     }
 
     /**
-     * Returns the maximum number of virtual CPUs (vCPUs) defined by the CPU topology of the form.
+     * Returns the total number of virtual CPUs (vCPUs) defined by the CPU topology of the form.
      * For QEMU/KVM VMs, this is calculated as cores * sockets. For LXC containers, it is simply the number of cores.
-     * For QEMU the number of active vCPUs (form.vcpus) can be lower than this value (CPU hotplug).
      *
      * This is a "JavaScript getter" you can access it in the template as {{ maxVCpus }} or in the code as this.maxVCpus. No () like "maxVCpus()" are needed.
      */
@@ -266,29 +265,8 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
     }
 
     /**
-     * Called when cores or sockets changed in the form.
-     * If all vCPUs were active before (the default), we keep it that way and follow the new maximum.
-     * If the user reduced the topology below the active vCPUs, we clamp the active vCPUs.
+     * Returns the size of the selected disk in bytes, or undefined if no disk is selected or the hardware configuration is not loaded yet.
      */
-    public setCpuTopology(field: 'cores' | 'sockets', value: number): void {
-        const wasMax = this.form.vcpus === this.maxVCpus;
-        this.form[field] = value;
-
-        const max = this.maxVCpus;
-        if (Number.isInteger(max) && max > 0 && (wasMax || this.form.vcpus > max)) {
-            this.form.vcpus = max;
-        }
-        this.cdr.markForCheck();
-    }
-
-    /**
-     * Proxmox returns no "vcpus" option (or 0) if all vCPUs of the topology are active.
-     */
-    private getCurrentVCpus(hw: ProxmoxHardwareConfig): number {
-        const max = hw.cores * (hw.sockets ?? 1);
-        return hw.vcpus && hw.vcpus > 0 ? hw.vcpus : max;
-    }
-
     public get selectedDiskSize(): number | undefined {
         return this.hardware?.disks.find(d => d.key === this.diskForm.disk)?.size;
     }
@@ -313,8 +291,6 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
         };
         if (this.virtType() === ProxmoxVirtType.Qemu) {
             data.sockets = this.form.sockets;
-            // 0 = all vCPUs of the topology are active (Proxmox default) - keeps the VM config clean
-            data.vcpus = this.form.vcpus === this.maxVCpus ? 0 : this.form.vcpus;
         } else {
             data.swap = this.form.swap;
         }
@@ -366,6 +342,12 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
         );
     }
 
+    /**
+     * Runs the given request$ observable and handles the response, errors and task polling.
+     * @param request$
+     * @param successMessage
+     * @private
+     */
     private runAction(request$: Observable<ProxmoxHardwareApiResult>, successMessage: string): void {
         this.isRunning = true;
         this.errors = null;
@@ -403,6 +385,12 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
         }));
     }
 
+    /**
+     * Query the Proxmox API for the status of the task with the given UPID until it is finished (status=stopped).
+     * @param upid
+     * @param successMessage
+     * @private
+     */
     private waitForTask(upid: string, successMessage: string): void {
         const params: ProxmoxGetTaskStatusParams = {
             node: this.nodeName(),
@@ -432,6 +420,12 @@ export class ProxmoxEditHardwareModalComponent implements OnDestroy {
         });
     }
 
+    /**
+     * Finishes the current action, shows a success message if given and reloads the hardware configuration.
+     * @param success
+     * @param successMessage
+     * @private
+     */
     private finish(success: boolean, successMessage?: string): void {
         this.isRunning = false;
         if (success && successMessage) {

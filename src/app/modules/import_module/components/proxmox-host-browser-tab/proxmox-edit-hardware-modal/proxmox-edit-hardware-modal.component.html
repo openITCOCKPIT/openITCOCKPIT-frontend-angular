@@ -27,53 +27,35 @@
 
                 <c-row>
                     @if (virtType() === ProxmoxVirtType.Qemu) {
-                        <c-col [md]="4" class="mb-3">
+                        <c-col [md]="6" class="mb-3">
                             <label cLabel for="proxmoxHwSockets">
                                 {{ t('Sockets') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <input cFormControl id="proxmoxHwSockets" name="proxmoxHwSockets" type="number"
                                    min="1" step="1" [disabled]="isRunning"
-                                   [ngModel]="form.sockets"
-                                   (ngModelChange)="setCpuTopology('sockets', $event)"
+                                   [(ngModel)]="form.sockets"
                                    oitcFormError [errors]="errors" errorField="sockets">
                             <oitc-form-feedback [errors]="errors" errorField="sockets"></oitc-form-feedback>
                         </c-col>
                     }
-                    <c-col [md]="virtType() === ProxmoxVirtType.Qemu ? 4 : 6" class="mb-3">
+                    <c-col [md]="6" class="mb-3">
                         <label cLabel for="proxmoxHwCores">
                             {{ t('Cores') }}
                             <oitc-required-icon></oitc-required-icon>
                         </label>
                         <input cFormControl id="proxmoxHwCores" name="proxmoxHwCores" type="number"
                                min="1" step="1" [disabled]="isRunning"
-                               [ngModel]="form.cores"
-                               (ngModelChange)="setCpuTopology('cores', $event)"
+                               [(ngModel)]="form.cores"
                                oitcFormError [errors]="errors" errorField="cores">
                         <div class="help-block">
-                            {{ t('Max vCPUs') }}: <code>{{ maxVCpus }}</code>
+                            {{ t('Total vCPUs') }}: <code>{{ maxVCpus }}</code>
                             @if (hw.limits && hw.limits.maxCpus) {
                                 / {{ hw.limits.maxCpus }} {{ t('available on node') }}
                             }
                         </div>
                         <oitc-form-feedback [errors]="errors" errorField="cores"></oitc-form-feedback>
                     </c-col>
-                    @if (virtType() === ProxmoxVirtType.Qemu) {
-                        <c-col [md]="4" class="mb-3">
-                            <label cLabel for="proxmoxHwVcpus">
-                                {{ t('Active vCPUs') }}
-                                <oitc-required-icon></oitc-required-icon>
-                            </label>
-                            <input cFormControl id="proxmoxHwVcpus" name="proxmoxHwVcpus" type="number"
-                                   min="1" step="1" [max]="maxVCpus" [disabled]="isRunning"
-                                   [(ngModel)]="form.vcpus"
-                                   oitcFormError [errors]="errors" errorField="vcpus">
-                            <div class="help-block">
-                                {{ t('Number of vCPUs which are online. Can be changed at runtime if CPU hotplug is enabled.') }}
-                            </div>
-                            <oitc-form-feedback [errors]="errors" errorField="vcpus"></oitc-form-feedback>
-                        </c-col>
-                    }
                 </c-row>
 
                 <c-row>
@@ -142,15 +124,11 @@
                                             @switch (field) {
                                                 @case ('cores') {
                                                     <strong>{{ t('Cores') }}</strong>
-                                                    - {{ t('The CPU topology can only be changed by a restart. Use "Active vCPUs" for live changes.') }}
+                                                    - {{ t('The CPU topology can only be changed by a restart.') }}
                                                 }
                                                 @case ('sockets') {
                                                     <strong>{{ t('Sockets') }}</strong>
-                                                    - {{ t('The CPU topology can only be changed by a restart. Use "Active vCPUs" for live changes.') }}
-                                                }
-                                                @case ('vcpus') {
-                                                    <strong>{{ t('Active vCPUs') }}</strong>
-                                                    - {{ t('CPU hotplug is not enabled for this virtual machine.') }}
+                                                    - {{ t('The CPU topology can only be changed by a restart.') }}
                                                 }
                                                 @case ('memory') {
                                                     <strong>{{ t('Memory') }}</strong>
