@@ -243,7 +243,8 @@ export class SlaOverviewMiniEchartComponent implements OnDestroy {
                 left: '1%',
                 right: '10%',
                 bottom: '5%',
-                containLabel: true
+                outerBoundsMode: 'same',
+                outerBoundsContain: 'axisLabel'
             }
         };
         this.cdr.markForCheck();
