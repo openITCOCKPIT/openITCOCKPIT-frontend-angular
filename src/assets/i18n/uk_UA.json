@@ -6137,5 +6137,7 @@
   "Fri": "Пт",
   "Sat": "Сб",
   "Sun": "Нд",
-  "Notifications overview": "Огляд сповіщень"
+  "Notifications overview": "Огляд сповіщень",
+  "GPUs": "Графічні процесори (GPU)",
+  "GPU usage": "Використання GPU"
 }
