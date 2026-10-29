@@ -6287,7 +6287,7 @@
   "Network bonds": "Połączenia sieciowe (bond)",
   "Listening ports": "Nasłuchujące porty",
   "Hardware (IPMI)": "Sprzęt (IPMI)",
-  "IPMI sensors": "Czujniki IPMI"
+  "IPMI sensors": "Czujniki IPMI",
   "Future openITCOCKPIT releases will require at least PHP version {0}": "Przyszłe wydania openITCOCKPIT będą wymagały co najmniej wersji PHP {{0}}",
   "Show excludes": "Pokaż wykluczenia",
   "Excludes": "Wykluczenia",
@@ -6332,5 +6332,7 @@
   "Fri": "Pt",
   "Sat": "Sob",
   "Sun": "Nd",
-  "Notifications overview": "Przegląd powiadomień"
+  "Notifications overview": "Przegląd powiadomień",
+  "GPUs": "Karty graficzne (GPU)",
+  "GPU usage": "Wykorzystanie GPU"
 }
