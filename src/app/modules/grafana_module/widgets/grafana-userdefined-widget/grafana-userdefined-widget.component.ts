@@ -20,6 +20,7 @@ import { RequiredIconComponent } from '../../../../components/required-icon/requ
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { LayoutService } from '../../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-grafana-userdefined-widget',
@@ -48,11 +49,26 @@ export class GrafanaUserdefinedWidgetComponent extends BaseWidgetComponent imple
 
     private readonly GrafanaUserdefinedWidgetService = inject(GrafanaUserdefinedWidgetService);
 
+    public theme: string = '';
+    private readonly LayoutService = inject(LayoutService);
+
+    constructor() {
+        super();
+
+        this.subscriptions.add(this.LayoutService.theme$.subscribe((theme) => {
+            if (theme) {
+                this.theme = theme;
+                this.iframe_url = this.updateOrAddIframeTheme(this.iframe_url);
+            }
+            this.cdr.markForCheck();
+        }));
+    }
+
     public override load() {
         if (this.widget) {
             this.GrafanaUserdefinedWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
                 this.grafana_userdashboard_id = response.grafana_userdashboard_id;
-                this.iframe_url = response.iframe_url;
+                this.iframe_url = this.updateOrAddIframeTheme(response.iframe_url);
                 this.cdr.markForCheck();
             });
         }
@@ -128,5 +144,18 @@ export class GrafanaUserdefinedWidgetComponent extends BaseWidgetComponent imple
 
     public override layoutUpdate(event: KtdGridLayout) {
 
+    }
+
+    private updateOrAddIframeTheme(url: string): string {
+        if (!url || !this.theme) {
+            return url;
+        }
+        const separator = url.includes('?') ? '&' : '?';
+
+        if (/([?&])theme=[^&]*/.test(url)) {
+            return url.replace(/([?&])theme=[^&]*/, `$1theme=${this.theme}`);
+        } else {
+            return `${url}${separator}theme=${this.theme}`;
+        }
     }
 }
