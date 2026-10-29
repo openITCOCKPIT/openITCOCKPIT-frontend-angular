@@ -222,22 +222,19 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
         );
     }
 
-    /** The tone for a line, from the keyword it opens with. Colour is a
-     *  hint on top of the text, never the only signal. */
-    public tone(line: string): string {
-        if (line.includes('CRITICAL') || line.includes(';DOWN;') || line.includes('UNREACHABLE')) {
-            return 'critical';
-        }
-        if (line.includes('WARNING')) {
-            return 'warning';
-        }
-        if (line.includes(' OK') || line.startsWith('OK') || line.includes(';OK;') || line.includes('UP;')) {
-            return 'ok';
-        }
-        if (line.includes('UNKNOWN')) {
-            return 'unknown';
-        }
-        return '';
+    // Status color class per logentry_type (see entryTypes), other types keep the default text color
+    private readonly entryTypeColors: { [key: number]: string } = {
+        1024: 'up',
+        2048: 'down',
+        4096: 'unreachable',
+        8192: 'ok',
+        16384: 'unknown',
+        32768: 'warning',
+        65536: 'critical'
+    };
+
+    public getEntryTypeColor(logentryType: number): string {
+        return this.entryTypeColors[logentryType] ?? '';
     }
 
     protected readonly String = String;
