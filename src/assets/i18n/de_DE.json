@@ -1729,6 +1729,7 @@
   "Passive service": "Passiver Service",
   "Generating report...": "Bericht erstellen...",
   "State type": "Status Typ",
+  "State change": "Statuswechsel",
   "n/a": "n/a",
   "Hard state": "Harter Status",
   "Soft state": "Weicher Status",

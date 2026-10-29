@@ -225,6 +225,9 @@
                         <th scope="col" mat-sort-header="StatehistoryServices.is_hardstate">
                             {{ t('State type') }}
                         </th>
+                        <th scope="col">
+                            {{ t('State change') }}
+                        </th>
                         <th scope="col" mat-sort-header="StatehistoryServices.output">
                             {{ t('Service output') }}
                         </th>
@@ -269,6 +272,28 @@
                                         >
                                             {{ 'Soft' | transloco }}
                                         </span>
+                                    }
+                                </td>
+                                <td class="text-nowrap">
+                                    <span class="state-change fw-bold"
+                                          [ngClass]="{
+                                    'state-change-soft': !statehistory.StatehistoryService.is_hardstate,
+                                    'ok': statehistory.StatehistoryService.state == 0,
+                                    'warning': statehistory.StatehistoryService.state == 1,
+                                    'critical': statehistory.StatehistoryService.state == 2,
+                                    'unknown': statehistory.StatehistoryService.state == 3
+                                    }">
+                                        <span [ngClass]="{
+                                    'ok': statehistory.StatehistoryService.last_state == 0,
+                                    'warning': statehistory.StatehistoryService.last_state == 1,
+                                    'critical': statehistory.StatehistoryService.last_state == 2,
+                                    'unknown': statehistory.StatehistoryService.last_state == 3
+                                    }">{{ statehistory.StatehistoryService.last_state | serviceStatusName }}</span>
+                                        <fa-icon class="text-secondary mx-1" [icon]="['fas', 'arrow-right']"></fa-icon>
+                                        {{ statehistory.StatehistoryService.state | serviceStatusName }}
+                                    </span>
+                                    @if (!statehistory.StatehistoryService.is_hardstate) {
+                                        <small class="text-secondary text-lowercase ms-1">{{ 'Soft' | transloco }}</small>
                                     }
                                 </td>
                                 <td>
