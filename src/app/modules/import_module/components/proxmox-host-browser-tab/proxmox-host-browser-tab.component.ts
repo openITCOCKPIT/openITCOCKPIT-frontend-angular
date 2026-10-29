@@ -13,6 +13,7 @@ import { catchError, EMPTY, merge, Subject, Subscription, switchMap, takeWhile, 
 import { ExternalSystemsService } from '../../pages/externalsystems/external-systems.service';
 import {
     AlertComponent,
+    ButtonDirective,
     CardBodyComponent,
     CardComponent,
     CardSubtitleDirective,
@@ -22,24 +23,26 @@ import {
     ModalService,
     ProgressComponent,
     RowComponent,
-    TextColorDirective
+    TableDirective,
+    TextColorDirective,
+    TooltipDirective
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AdditionalHostInformationProxmoxResult } from './proxmox-api.interface';
+import { AdditionalHostInformationProxmoxResult, ProxmoxPendingChange } from './proxmox-api.interface';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ProxmoxStatus } from './proxmox-status.enum';
 import { ProxmoxActionsComponent } from './proxmox-actions/proxmox-actions.component';
 import { PatchstatusIconComponent } from '../../../../pages/patchstatus/patchstatus-icon/patchstatus-icon.component';
-import { DecimalPipe, NgClass } from '@angular/common';
+import { AsyncPipe, DecimalPipe, NgClass } from '@angular/common';
 import { ByteToHumanPipe } from '../../../../pipes/byte-to-human.pipe';
-import {
-    ProxmoxBrowserLoaderComponent
-} from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
+import { ProxmoxBrowserLoaderComponent } from '../../../../layouts/primeng/loading/proxmox-browser-loader/proxmox-browser-loader.component';
 import { ProxmoxGraphsComponent } from './proxmox-graphs/proxmox-graphs.component';
 import { ProxmoxSnapshotsComponent } from './proxmox-snapshots/proxmox-snapshots.component';
 
 import { ProxmoxLoadingModalComponent } from './proxmox-loading-modal/proxmox-loading-modal.component';
 import { OnlineOfflineComponent } from '../additional-host-information/online-offline/online-offline.component';
+import { ProxmoxEditHardwareModalComponent } from './proxmox-edit-hardware-modal/proxmox-edit-hardware-modal.component';
+import { PermissionsService } from '../../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-proxmox-host-browser-tab',
@@ -65,7 +68,12 @@ import { OnlineOfflineComponent } from '../additional-host-information/online-of
         ProxmoxGraphsComponent,
         ProxmoxSnapshotsComponent,
         ProxmoxLoadingModalComponent,
-        OnlineOfflineComponent
+        OnlineOfflineComponent,
+        TooltipDirective,
+        TableDirective,
+        ButtonDirective,
+        ProxmoxEditHardwareModalComponent,
+        AsyncPipe
     ],
     templateUrl: './proxmox-host-browser-tab.component.html',
     styleUrl: './proxmox-host-browser-tab.component.css',
@@ -85,8 +93,20 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
     public status: ProxmoxStatus = ProxmoxStatus.Stopped;
     public overruleShutdown: boolean = true;
 
+    // Pending changes indexed by config key (e.g. pendingChanges['memory'], pendingChanges['cores'])
+    public pendingChanges: Record<string, ProxmoxPendingChange> = {};
+    public pendingChangesList: ProxmoxPendingChange[] = [];
+    public hasPendingChanges: boolean = false;
+
+    // Pending memory in bytes (Proxmox returns the memory in MiB) - undefined if no memory change is pending
+    public pendingMemoryBytes?: number;
+
     private loadTrigger$ = new Subject<void>();
     private subscriptions: Subscription = new Subscription();
+
+    protected readonly ProxmoxStatus = ProxmoxStatus;
+    protected readonly PermissionsService: PermissionsService = inject(PermissionsService);
+
 
     private readonly ExternalSystemsService = inject(ExternalSystemsService);
     private readonly modalService = inject(ModalService);
@@ -158,6 +178,13 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
         this.subscriptions.unsubscribe();
     }
 
+    public toggleEditHardwareModal(): void {
+        this.modalService.toggle({
+            show: true,
+            id: ProxmoxEditHardwareModalComponent.MODAL_ID
+        });
+    }
+
     public load(): void {
         // Tell the loadTrigger$ to load the data.
         // We use this approach to be able to cancel the previous HTTP requests becasue the Proxmox API
@@ -171,6 +198,21 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
         this.result = result;
         this.nodeName = result.response.info?.node;
         this.vmid = result.response.info?.vmid.toString();
+
+        // Index pending changes by key for easy lookup in the template
+        this.pendingChanges = {};
+        this.pendingChangesList = result.response.info?.pending_changes ?? [];
+        for (const change of this.pendingChangesList) {
+            this.pendingChanges[change.key] = change;
+        }
+        this.hasPendingChanges = this.pendingChangesList.length > 0;
+
+        this.pendingMemoryBytes = undefined;
+        const pendingMemory = this.pendingChanges['memory'];
+        const pendingMemoryMiB = this.parseNumber(pendingMemory?.pending);
+        if (pendingMemory && pendingMemoryMiB !== undefined && !pendingMemory.delete) {
+            this.pendingMemoryBytes = pendingMemoryMiB * 1024 * 1024;
+        }
 
         // Disable overrule-shutdown if Ha is enabled
         // https://github.com/proxmox/pve-manager/blob/59f360414e671d43005cea7f4ff4db07a35319ea/www/manager6/window/GuestStop.js#L25-L26
@@ -207,5 +249,20 @@ export class ProxmoxHostBrowserTabComponent implements OnInit, OnChanges, OnDest
         }
 
         this.cdr.markForCheck();
+    }
+
+    /**
+     * Proxmox returns config values sometimes as number (2) and sometimes as string ("4096" or "current=4096").
+     * Returns the first number found in the value or undefined.
+     */
+    private parseNumber(value: string | number | null | undefined): number | undefined {
+        if (value === null || value === undefined) {
+            return undefined;
+        }
+        if (typeof value === 'number') {
+            return value;
+        }
+        const match = value.match(/\d+(\.\d+)?/);
+        return match ? Number(match[0]) : undefined;
     }
 }

@@ -4,6 +4,11 @@ import { PROXY_PATH } from '../../../../tokens/proxy-path.token';
 import { map, Observable } from 'rxjs';
 import {
     ProxmoxCreateSnapshotParams,
+    ProxmoxGetHardwareParams,
+    ProxmoxGetHardwareResult,
+    ProxmoxHardwareApiResult,
+    ProxmoxResizeDiskData,
+    ProxmoxUpdateHardwareData,
     ProxmoxGetSnapshotsParams,
     ProxmoxGetSnapshotsResult,
     ProxmoxGetTaskStatusParams,
@@ -100,6 +105,23 @@ export class ProxmoxService {
                 return data;
             })
         )
+    }
+
+    public getHardware(hostId: number, params: ProxmoxGetHardwareParams): Observable<ProxmoxGetHardwareResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<ProxmoxGetHardwareResult>(`${proxyPath}/import_module/Proxmox/hardware/${hostId}.json`, {
+            params: params as {}
+        });
+    }
+
+    public updateHardware(hostId: number, data: ProxmoxUpdateHardwareData): Observable<ProxmoxHardwareApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ProxmoxHardwareApiResult>(`${proxyPath}/import_module/Proxmox/hardware/${hostId}.json`, data);
+    }
+
+    public resizeDisk(hostId: number, data: ProxmoxResizeDiskData): Observable<ProxmoxHardwareApiResult> {
+        const proxyPath = this.proxyPath;
+        return this.http.post<ProxmoxHardwareApiResult>(`${proxyPath}/import_module/Proxmox/resize_disk/${hostId}.json`, data);
     }
 
 }

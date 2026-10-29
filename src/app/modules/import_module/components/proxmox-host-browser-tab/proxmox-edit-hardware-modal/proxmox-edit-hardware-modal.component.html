@@ -1,0 +1,284 @@
+<ng-container *transloco="let t">
+    <c-modal
+            [keyboard]="!isRunning"
+            [backdrop]="isRunning ? 'static' : true"
+            [id]="modalId"
+            size="lg"
+            (visibleChange)="onVisibleChange($event)">
+        <c-modal-header class="text-bg-gray">
+            <h5>
+                <fa-icon [icon]="['fas', 'sliders']" class="me-1"></fa-icon>
+                {{ t('Edit hardware') }}
+            </h5>
+            <button (click)="hideModal()" [disabled]="isRunning" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            @if (isLoading && !hardware) {
+                <oitc-block-loader [height]="'10rem'"></oitc-block-loader>
+            }
+
+            <!-- as hw is a workaround to avoid 'can't access property "limits", ctx_r1.hardware is undefined' errors during development hot reload -->
+            @if (hardware; as hw) {
+                <!-- CPU & Memory -->
+                <h5 class="fs-6 fw-semibold text-uppercase">
+                    <fa-icon [icon]="['fas', 'microchip']" class="me-1"></fa-icon>
+                    {{ t('CPU & Memory') }}
+                </h5>
+
+                <c-row>
+                    @if (virtType() === ProxmoxVirtType.Qemu) {
+                        <c-col [md]="6" class="mb-3">
+                            <label cLabel for="proxmoxHwSockets">
+                                {{ t('Sockets') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <input cFormControl id="proxmoxHwSockets" name="proxmoxHwSockets" type="number"
+                                   min="1" step="1" [disabled]="isRunning"
+                                   [(ngModel)]="form.sockets"
+                                   oitcFormError [errors]="errors" errorField="sockets">
+                            <oitc-form-feedback [errors]="errors" errorField="sockets"></oitc-form-feedback>
+                        </c-col>
+                    }
+                    <c-col [md]="6" class="mb-3">
+                        <label cLabel for="proxmoxHwCores">
+                            {{ t('Cores') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <input cFormControl id="proxmoxHwCores" name="proxmoxHwCores" type="number"
+                               min="1" step="1" [disabled]="isRunning"
+                               [(ngModel)]="form.cores"
+                               oitcFormError [errors]="errors" errorField="cores">
+                        <div class="help-block">
+                            {{ t('Total vCPUs') }}: <code>{{ maxVCpus }}</code>
+                            @if (hw.limits && hw.limits.maxCpus) {
+                                / {{ hw.limits.maxCpus }} {{ t('available on node') }}
+                            }
+                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="cores"></oitc-form-feedback>
+                    </c-col>
+                </c-row>
+
+                <c-row>
+                    <c-col [md]="6" class="mb-3">
+                        <label cLabel for="proxmoxHwMemory">
+                            {{ t('Memory') }}
+                            <oitc-required-icon></oitc-required-icon>
+                        </label>
+                        <c-input-group>
+                            <input cFormControl id="proxmoxHwMemory" name="proxmoxHwMemory" type="number"
+                                   min="16" step="512" [disabled]="isRunning"
+                                   [(ngModel)]="form.memory"
+                                   (blur)="roundMemoryToPowerOfTwo()"
+                                   oitcFormError [errors]="errors" errorField="memory">
+                            <span cInputGroupText>MiB</span>
+                        </c-input-group>
+                        <div class="help-block">
+                            <!-- negativ number or 0 is not valid -->
+                            @if (form.memory > 0) {
+                                = {{ form.memory * 1024 * 1024 | byteToHuman }}
+                            } @else {
+                                {{ t('invalid') }}
+                            }
+                        </div>
+                        <div class="mt-1">
+                            @for (gib of [1, 2, 4, 8, 16, 32]; track gib) {
+                                <button cButton size="sm" color="default" class="ripple me-1 mb-1"
+                                        [disabled]="isRunning || (hw.limits && (hw.limits.maxMemory > 0 && gib * 1024 > hw.limits.maxMemory))"
+                                        (click)="setMemoryGiB(gib)">
+                                    {{ gib }} GiB
+                                </button>
+                            }
+                        </div>
+                        <oitc-form-feedback [errors]="errors" errorField="memory"></oitc-form-feedback>
+                    </c-col>
+                    @if (virtType() === ProxmoxVirtType.Lxc) {
+                        <c-col [md]="6" class="mb-3">
+                            <label cLabel for="proxmoxHwSwap">
+                                {{ t('SWAP') }}
+                            </label>
+                            <c-input-group>
+                                <input cFormControl id="proxmoxHwSwap" name="proxmoxHwSwap" type="number"
+                                       min="0" step="512" [disabled]="isRunning"
+                                       [(ngModel)]="form.swap"
+                                       oitcFormError [errors]="errors" errorField="swap">
+                                <span cInputGroupText>MiB</span>
+                            </c-input-group>
+                            <oitc-form-feedback [errors]="errors" errorField="swap"></oitc-form-feedback>
+                        </c-col>
+                    }
+                </c-row>
+
+                @if (hasHardwareChanges) {
+                    @if (isLiveChangePossible) {
+                        <c-alert color="info" class="d-flex align-items-center py-2">
+                            <fa-icon [icon]="['fas', 'bolt']" class="me-2"></fa-icon>
+                            {{ t('The changes will be applied immediately.') }}
+                        </c-alert>
+                    } @else {
+                        <c-alert color="warning" class="d-flex align-items-center py-2">
+                            <fa-icon [icon]="['fas', 'clock-rotate-left']" class="me-2"></fa-icon>
+                            <div>
+                                {{ t('The following changes can not be applied at runtime. They will be stored as pending changes and applied after the next restart:') }}
+                                <ul class="p-0 mb-0">
+                                    @for (field of restartRequiredFor; track field) {
+                                        <li>
+                                            @switch (field) {
+                                                @case ('cores') {
+                                                    <strong>{{ t('Cores') }}</strong>
+                                                    - {{ t('The CPU topology can only be changed by a restart.') }}
+                                                }
+                                                @case ('sockets') {
+                                                    <strong>{{ t('Sockets') }}</strong>
+                                                    - {{ t('The CPU topology can only be changed by a restart.') }}
+                                                }
+                                                @case ('memory') {
+                                                    <strong>{{ t('Memory') }}</strong>
+                                                    - {{ t('Memory hotplug requires "memory" hotplug and NUMA to be enabled.') }}
+                                                }
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </c-alert>
+                    }
+                }
+
+                <div class="text-end mb-3">
+                    <button cButton color="primary" class="ripple"
+                            [disabled]="isRunning || !hasHardwareChanges"
+                            (click)="saveHardware()">
+                        <fa-icon [hidden]="!isRunning" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                        {{ t('Apply CPU & memory') }}
+                    </button>
+                </div>
+
+                <hr>
+
+                <!-- Disk resize -->
+                <h5 class="fs-6 fw-semibold text-uppercase">
+                    <fa-icon [icon]="['far', 'hard-drive']" class="me-1"></fa-icon>
+                    {{ t('Resize disk') }}
+                </h5>
+
+                @if (hw.disks.length === 0) {
+                    <div class="text-muted">{{ t('No resizable disks found.') }}</div>
+                } @else {
+                    <c-row>
+                        <c-col [md]="6" class="mb-3">
+                            <label cLabel for="proxmoxHwDisk">
+                                {{ t('Disk') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <select cSelect id="proxmoxHwDisk" name="proxmoxHwDisk"
+                                    [disabled]="isRunning || isResizeConfirmPending"
+                                    [(ngModel)]="diskForm.disk"
+                                    oitcFormError [errors]="errors" errorField="disk">
+                                @for (disk of hw.disks; track disk.key) {
+                                    <option [value]="disk.key">
+                                        {{ disk.key }} - {{ disk.volume }} ({{ disk.size | byteToHuman }})
+                                    </option>
+                                }
+                            </select>
+                            <oitc-form-feedback [errors]="errors" errorField="disk"></oitc-form-feedback>
+                        </c-col>
+                        <c-col [md]="6" class="mb-3">
+                            <label cLabel for="proxmoxHwDiskIncrease">
+                                {{ t('Increase by') }}
+                                <oitc-required-icon></oitc-required-icon>
+                            </label>
+                            <c-input-group>
+                                <span cInputGroupText>+</span>
+                                <input cFormControl id="proxmoxHwDiskIncrease" name="proxmoxHwDiskIncrease"
+                                       type="number" min="1" step="1" [disabled]="isRunning || isResizeConfirmPending"
+                                       [(ngModel)]="diskForm.increaseGiB"
+                                       oitcFormError [errors]="errors" errorField="increaseGiB">
+                                <span cInputGroupText>GiB</span>
+                            </c-input-group>
+                            @if (selectedDiskSize !== undefined && diskForm.increaseGiB > 0) {
+                                <div class="help-block">
+                                    {{ selectedDiskSize | byteToHuman }}
+                                    <fa-icon [icon]="['fas', 'arrow-right']" class="mx-1"></fa-icon>
+                                    {{ selectedDiskSize + diskForm.increaseGiB * 1024 * 1024 * 1024 | byteToHuman }}
+                                </div>
+                                <div class="help-block">
+                                    {{ availableStorageSpaceOfDisk | byteToHuman }} {{ t('available on storage') }}
+                                </div>
+                            }
+                            <oitc-form-feedback [errors]="errors" errorField="increaseGiB"></oitc-form-feedback>
+                        </c-col>
+                    </c-row>
+
+                    <c-alert color="warning" class="d-flex align-items-center py-2">
+                        <fa-icon [icon]="['fas', 'exclamation-triangle']" class="me-2"></fa-icon>
+                        <div>
+                            {{ t('Disks can only be enlarged. Shrinking a disk is not possible!') }}
+                            <br>
+                            {{ t('The partition and file system inside the guest operating system must be extended manually.') }}
+                        </div>
+                    </c-alert>
+
+                    @if (!isResizeConfirmPending) {
+                        <div class="text-end">
+                            <button cButton color="primary" class="ripple"
+                                    [disabled]="isRunning || !diskForm.disk"
+                                    (click)="askResizeDisk()">
+                                <fa-icon [hidden]="!isRunning" [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                                {{ t('Resize disk') }}
+                            </button>
+                        </div>
+                    } @else {
+                        <!-- Second step: confirmation (inline, because CoreUI closes this modal when another modal gets opened) -->
+                        <c-alert color="danger" class="mb-0">
+                            <div class="d-flex align-items-center">
+                                <fa-icon [icon]="['fas', 'exclamation-triangle']" size="2x" class="me-3"></fa-icon>
+                                <div>
+                                    <strong>{{ t('Are you sure you want to resize the disk?') }}</strong>
+                                    <div>
+                                        <code>{{ diskForm.disk }}</code>
+                                        @if (selectedDiskSize !== undefined) {
+                                            : {{ selectedDiskSize | byteToHuman }}
+                                            <fa-icon [icon]="['fas', 'arrow-right']" class="mx-1"></fa-icon>
+                                            {{ selectedDiskSize + diskForm.increaseGiB * 1024 * 1024 * 1024 | byteToHuman }}
+                                        }
+                                        (+{{ diskForm.increaseGiB }} GiB)
+                                    </div>
+                                    <div class="mt-1">
+                                        {{ t('Disks can not be shrunk! This action can not be undone.') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-end mt-2">
+                                <button cButton color="danger" class="ripple me-1"
+                                        [disabled]="isRunning"
+                                        (click)="resizeDisk()">
+                                    <fa-icon [hidden]="!isRunning" [icon]="['fas', 'spinner']"
+                                             animation="spin"></fa-icon>
+                                    {{ t('Yes, resize disk') }}
+                                </button>
+                                <button cButton color="default" class="ripple"
+                                        [disabled]="isRunning"
+                                        (click)="cancelResizeDisk()">
+                                    {{ t('Cancel') }}
+                                </button>
+                            </div>
+                        </c-alert>
+                    }
+                }
+            }
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="hideModal()" [disabled]="isRunning" cButton class="ripple" color="default">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
+
+
+
+
+
+
+
+
