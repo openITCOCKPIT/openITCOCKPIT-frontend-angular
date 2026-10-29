@@ -40,11 +40,12 @@ import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { DateTime } from 'luxon';
 import { EChartsOption } from 'echarts';
 import * as echarts from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
 import { BarChart, LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components';
 import { TimezoneService } from '../../../services/timezone.service';
 
-import 'echarts/theme/dark.js';
+import '../../../components/charts/echarts-dark-theme';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TimezoneObject } from '../../services/timezone.interface';
@@ -55,7 +56,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LocalNumberPipe } from '../../../pipes/local-number.pipe';
 
 
-echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent]);
+echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, CanvasRenderer]);
 
 
 @Component({
@@ -315,7 +316,9 @@ export class AdministratorsDebugComponent implements OnInit, OnDestroy {
                 right: 10,
                 top: 20,
                 bottom: 10,
-                containLabel: true
+                // Replacement for deprecated containLabel: true
+                outerBoundsMode: 'same',
+                outerBoundsContain: 'axisLabel'
             },
 
             legend: {

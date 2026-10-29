@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
-import 'echarts/theme/dark.js';
+import { CanvasRenderer } from 'echarts/renderers';
+import '../../../../../components/charts/echarts-dark-theme';
 import { EChartsOption } from 'echarts';
 import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
@@ -17,7 +18,7 @@ import {
 } from 'echarts/components';
 import { BarChart } from 'echarts/charts';
 
-echarts.use([BarChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, MarkLineComponent]);
+echarts.use([BarChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, MarkLineComponent, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-sla-hosts-overview-bar-echart',
@@ -198,7 +199,9 @@ export class SlaHostsOverviewBarEchartComponent implements OnDestroy {
                 left: '1%',
                 right: '1%',
                 bottom: '1%',
-                containLabel: true
+                // Replacement for deprecated containLabel: true
+                outerBoundsMode: 'same',
+                outerBoundsContain: 'axisLabel'
             }
         };
         this.cdr.markForCheck();

@@ -20,10 +20,11 @@ import { BarChart } from 'echarts/charts';
 import { LegendComponent, PolarComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
-import 'echarts/theme/dark.js';
+import { CanvasRenderer } from 'echarts/renderers';
+import '../echarts-dark-theme';
 import { EChartsOption } from 'echarts';
 
-echarts.use([BarChart, LegendComponent, TitleComponent, TooltipComponent, PolarComponent]);
+echarts.use([BarChart, LegendComponent, TitleComponent, TooltipComponent, PolarComponent, CanvasRenderer]);
 
 
 @Component({

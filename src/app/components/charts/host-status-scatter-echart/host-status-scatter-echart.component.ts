@@ -15,7 +15,7 @@ import { EChartsOption } from 'echarts';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { Subscription } from 'rxjs';
 import * as echarts from 'echarts/core';
-import { BarChart, LineChart } from 'echarts/charts';
+import { BarChart, LineChart, ScatterChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { HostStatusBuckets, HostStatusDetails } from '../../../pages/hosts/summary_state.interface';
@@ -25,7 +25,7 @@ import { Router } from '@angular/router';
 import { CanvasRenderer } from 'echarts/renderers';
 import { DateTime } from 'luxon';
 
-echarts.use([LineChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer]);
+echarts.use([LineChart, BarChart, ScatterChart, LegendComponent, TitleComponent, TooltipComponent, GridComponent, CanvasRenderer]);
 
 
 @Component({
