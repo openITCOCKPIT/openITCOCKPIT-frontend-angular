@@ -28,7 +28,7 @@ import {
 } from '../../../modules/scm_module/pages/resourcegroups/resourcegroups-summary/resourcegroups-summary.interface';
 import _ from 'lodash';
 
-echarts.use([SunburstChart, LegendComponent, TitleComponent, TooltipComponent, CanvasRenderer]);
+echarts.use([SunburstChart, LegendComponent, TitleComponent, TooltipComponent, LabelLayout, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-sunburst-echart',

@@ -6,7 +6,7 @@ import '../../../../components/charts/echarts-dark-theme';
 import { EChartsOption } from 'echarts';
 
 import { LegendComponent, PolarComponent, TitleComponent, TooltipComponent } from 'echarts/components';
-import { PieChart } from 'echarts/charts';
+import { BarChart, PieChart } from 'echarts/charts';
 import { BlockLoaderComponent } from '../../../../layouts/primeng/loading/block-loader/block-loader.component';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -18,7 +18,7 @@ import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { KtdGridLayout } from '@katoid/angular-grid-layout';
 
-echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, PolarComponent, CanvasRenderer]);
+echarts.use([PieChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, PolarComponent, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-hosts-piechart-widget',

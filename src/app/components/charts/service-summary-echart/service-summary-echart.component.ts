@@ -19,14 +19,14 @@ import { Subscription } from 'rxjs';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 
-import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
-import { PieChart } from 'echarts/charts';
+import { GraphicComponent, LegendComponent, PolarComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { BarChart, PieChart } from 'echarts/charts';
 import { SummaryStateServices } from '../../../pages/services/summary_state.interface';
 import { Router } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { SVGRenderer } from 'echarts/renderers';
 
-echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, SVGRenderer]);
+echarts.use([PieChart, BarChart, LegendComponent, TitleComponent, TooltipComponent, GraphicComponent, PolarComponent, SVGRenderer]);
 
 @Component({
     selector: 'oitc-service-summary-echart',
