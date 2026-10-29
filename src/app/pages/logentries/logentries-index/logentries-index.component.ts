@@ -223,7 +223,7 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     // Status color class per logentry_type (see entryTypes), other types keep the default text color
-    private readonly entryTypeColors: { [key: number]: string } = {
+    public readonly entryTypeColors: { [key: number]: string } = {
         1024: 'up',
         2048: 'down',
         4096: 'unreachable',
@@ -232,10 +232,6 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
         32768: 'warning',
         65536: 'critical'
     };
-
-    public getEntryTypeColor(logentryType: number): string {
-        return this.entryTypeColors[logentryType] ?? '';
-    }
 
     protected readonly String = String;
 
