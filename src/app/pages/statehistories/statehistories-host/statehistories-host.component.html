@@ -210,6 +210,9 @@
                         <th scope="col" mat-sort-header="StatehistoryHosts.is_hardstate">
                             {{ t('State type') }}
                         </th>
+                        <th scope="col">
+                            {{ t('State change') }}
+                        </th>
                         <th scope="col" mat-sort-header="StatehistoryHosts.output">
                             {{ t('Host output') }}
                         </th>
@@ -252,6 +255,26 @@
                                         >
                                             {{ 'Soft' | transloco }}
                                         </span>
+                                    }
+                                </td>
+                                <td class="text-nowrap">
+                                    <span class="state-change fw-bold"
+                                          [ngClass]="{
+                                    'state-change-soft': !statehistory.StatehistoryHost.is_hardstate,
+                                    'up': statehistory.StatehistoryHost.state == 0,
+                                    'down': statehistory.StatehistoryHost.state == 1,
+                                    'unreachable': statehistory.StatehistoryHost.state == 2
+                                    }">
+                                        <span [ngClass]="{
+                                    'up': statehistory.StatehistoryHost.last_state == 0,
+                                    'down': statehistory.StatehistoryHost.last_state == 1,
+                                    'unreachable': statehistory.StatehistoryHost.last_state == 2
+                                    }">{{ statehistory.StatehistoryHost.last_state | hostStatusName }}</span>
+                                        <fa-icon class="text-secondary mx-1" [icon]="['fas', 'arrow-right']"></fa-icon>
+                                        {{ statehistory.StatehistoryHost.state | hostStatusName }}
+                                    </span>
+                                    @if (!statehistory.StatehistoryHost.is_hardstate) {
+                                        <small class="text-secondary text-lowercase ms-1">{{ 'Soft' | transloco }}</small>
                                     }
                                 </td>
                                 <td>

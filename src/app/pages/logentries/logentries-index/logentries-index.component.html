@@ -185,7 +185,7 @@
                                 <td>
                                     {{ logentry.logentry_type_string }}
                                 </td>
-                                <td class="word-break">
+                                <td class="word-break" [class]="entryTypeColors[logentry.logentry_type]">
                                     <oitc-server-link
                                         [linkHtml]="logentry.logentry_data_angular_html"></oitc-server-link>
                                 </td>
