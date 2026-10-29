@@ -222,6 +222,24 @@ export class LogentriesIndexComponent implements OnInit, OnDestroy, IndexPage {
         );
     }
 
+    /** The tone for a line, from the keyword it opens with. Colour is a
+     *  hint on top of the text, never the only signal. */
+    public tone(line: string): string {
+        if (line.includes('CRITICAL') || line.includes('DOWN') || line.includes('UNREACHABLE')) {
+            return 'critical';
+        }
+        if (line.includes('WARNING')) {
+            return 'warning';
+        }
+        if (line.includes(' OK') || line.startsWith('OK') || line.includes(';OK;') || line.includes('UP;')) {
+            return 'ok';
+        }
+        if (line.includes('UNKNOWN')) {
+            return 'unknown';
+        }
+        return '';
+    }
+
     protected readonly String = String;
 
     public onMassActionComplete(success: boolean): void {
