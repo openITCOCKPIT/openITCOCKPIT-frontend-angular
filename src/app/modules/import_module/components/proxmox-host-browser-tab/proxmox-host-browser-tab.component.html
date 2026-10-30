@@ -187,14 +187,16 @@
                     }
                 }
                 <div>
-                    @if (allowEdit && vmid && nodeName) {
-                        <oitc-proxmox-actions
-                                [hostId]="hostId"
-                                [vmid]="vmid"
-                                [nodeName]="nodeName"
-                                [status]="status"
-                                [overruleShutdown]="overruleShutdown"
-                                [virtType]="result.response.type"></oitc-proxmox-actions>
+                    @if (PermissionsService.hasPermissionObservable(['importmodule','proxmox', 'power_actions'])|async) {
+                        @if (allowEdit && vmid && nodeName) {
+                            <oitc-proxmox-actions
+                                    [hostId]="hostId"
+                                    [vmid]="vmid"
+                                    [nodeName]="nodeName"
+                                    [status]="status"
+                                    [overruleShutdown]="overruleShutdown"
+                                    [virtType]="result.response.type"></oitc-proxmox-actions>
+                        }
                     }
                 </div>
 

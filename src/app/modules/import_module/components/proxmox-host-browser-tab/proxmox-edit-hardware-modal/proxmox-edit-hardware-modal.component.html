@@ -109,6 +109,13 @@
                 </c-row>
 
                 @if (hasHardwareChanges) {
+                    <c-alert color="info">
+                        <h6 class="alert-heading">
+                            <fa-icon [icon]="['fas', 'circle-exclamation']"></fa-icon>
+                            {{ t('Important note (only required if you also want to resize the disk)') }}
+                        </h6>
+                        {{ t('If you have modified the CPU, RAM, or other hardware settings, please save those changes first.') }}
+                    </c-alert>
                     @if (isLiveChangePossible) {
                         <c-alert color="info" class="d-flex align-items-center py-2">
                             <fa-icon [icon]="['fas', 'bolt']" class="me-2"></fa-icon>
@@ -274,11 +281,3 @@
         </c-modal-footer>
     </c-modal>
 </ng-container>
-
-
-
-
-
-
-
-
