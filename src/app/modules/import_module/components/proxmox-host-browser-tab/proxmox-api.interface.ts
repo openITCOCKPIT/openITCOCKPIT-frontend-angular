@@ -6,6 +6,34 @@ export enum ProxmoxVirtType {
     Lxc = 'lxc'
 }
 
+/**
+ * A single pending configuration change of a VM / LXC.
+ * Result of PveClient->getNodes()->get($node)->getQemu()->get($vmid)->getPending()->vmPending()
+ * (or the LXC equivalent).
+ *
+ * Proxmox API docs:
+ * - Key is set, pending is set -> value will be changed / added on next reboot
+ * - Key is set, delete is true -> value will be removed on next reboot
+ */
+export interface ProxmoxPendingChange {
+    key: string // Name of the config key e.g. memory | cores | cpu | numa | scsi0 | net0 ...
+    current?: string | number | null // Current active value (null if the key is new)
+    pending?: string | number | null // Pending value which will be applied on next reboot
+    delete: boolean // true if the key will be removed on next reboot
+}
+
+// Generic VM / LXC info
+export interface ProxmoxVmInfo {
+    node: string
+    vmid: number
+    name: string
+    status: 'running' | 'stopped' | 'paused' | string
+    tags?: string[]
+    identifier: string
+    ipaddress: string
+    pending_changes?: ProxmoxPendingChange[]
+}
+
 interface ProxmoxQemuResponse {
     response: {
         externalLink: string | null
@@ -14,14 +42,7 @@ interface ProxmoxQemuResponse {
         ipaddresses: Ipaddress[]
         found: boolean
         // Generic VM info
-        info: null | {
-            node: string
-            vmid: number
-            name: string
-            status: 'running' | 'stopped' | 'paused' | string
-            identifier: string
-            ipaddress: string
-        },
+        info: null | ProxmoxVmInfo,
         current: null | ProxmoxQemuStatusCurrentMinimal | ProxmoxQemuStatusCurrentRunning
         agent: null | ProxmoxQemuAgent,
         type: ProxmoxVirtType.Qemu
@@ -37,15 +58,8 @@ interface ProxmoxLxcResponse {
         status: boolean // true = online, false = offline
         ipaddresses: Ipaddress[]
         found: boolean
-        // Generic VM info
-        info: null | {
-            node: string
-            vmid: number
-            name: string
-            status: 'running' | 'stopped' | 'paused' | string
-            identifier: string
-            ipaddress: string
-        },
+        // Generic LXC info
+        info: null | ProxmoxVmInfo,
         current: null | ProxmoxLxcStatusCurrentMinimal
         agent: null,
         type: ProxmoxVirtType.Lxc
@@ -258,3 +272,70 @@ export interface ProxmoxRollbackSnapshotData {
     type: ProxmoxVirtType,
     snapshotName: string
 }
+
+/****************************
+ *    Hardware (CPU / RAM / Disk)
+ ****************************/
+export interface ProxmoxGetHardwareParams {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+}
+
+export interface ProxmoxHardwareDisk {
+    key: string // scsi0 | virtio0 | sata0 | ide0 | rootfs | mp0 ...
+    storage: string // local-lvm | ceph ...
+    volume: string // Full volume string e.g. local-lvm:vm-100-disk-0
+    size: number // Size in bytes
+    storageTotal: number // Total storage size in bytes
+    storageAvail: number // Available storage size in bytes
+    maxIncreaseGiB: number // Maximum size we can increase the disk to in GiB (Proxmox only supports growing disks)
+}
+
+export interface ProxmoxHardwareConfig {
+    cores: number // Number of cores (per socket for QEMU)
+    sockets?: number // QEMU only
+    memory: number // Memory in MiB
+    balloon?: number // QEMU only - minimum memory in MiB (0 = ballooning disabled)
+    swap?: number // LXC only - SWAP in MiB
+    hotplug?: string // QEMU only e.g. "network,disk,usb,cpu,memory"
+    numa?: boolean // QEMU only - required for memory hotplug
+    disks: ProxmoxHardwareDisk[]
+    limits: {
+        maxCpus: number // Number of CPUs of the Proxmox node
+        maxMemory: number // Memory of the Proxmox node in MiB
+    }
+}
+
+export interface ProxmoxGetHardwareResult {
+    hardware: ProxmoxHardwareConfig
+    _csrfToken: null | string,
+}
+
+export interface ProxmoxUpdateHardwareData {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+    cores: number,
+    sockets?: number, // QEMU only
+    memory: number, // MiB
+    swap?: number // LXC only (MiB)
+}
+
+export interface ProxmoxResizeDiskData {
+    node: string,
+    vmid: string,
+    type: ProxmoxVirtType,
+    disk: string, // scsi0 | rootfs | mp0 ...
+    increaseGiB: number // Proxmox only supports growing disks - backend sends size=+<n>G
+}
+
+export interface ProxmoxHardwareApiResult {
+    result: {
+        success: boolean
+        upid: null | string // Task ID if Proxmox runs the change async, null if the change was applied synchronously
+        message: string // Error message in case success is false
+    }
+    _csrfToken: null | string
+}
+
