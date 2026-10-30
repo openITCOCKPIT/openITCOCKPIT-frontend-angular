@@ -1,0 +1,9 @@
+/* Colored bar in front of the state change, uses the color of the new state */
+.state-change {
+    border-left: 3px solid currentColor;
+    padding-left: 0.5rem;
+}
+
+.state-change-soft {
+    border-left-style: dashed;
+}
