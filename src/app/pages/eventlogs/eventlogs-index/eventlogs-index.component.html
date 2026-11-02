@@ -56,7 +56,7 @@
                 </c-row>
                 <form cForm>
                     <c-row>
-                        <c-col md="6" class="mb-2">
+                        <c-col md="6" xs="12" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -72,29 +72,24 @@
                                 />
                             </c-input-group>
                         </c-col>
-                        <c-col md="6" class="mb-2">
+                        <c-col md="6" xs="12" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'list']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[user_email]']"
-                                       [placeholder]="'Filter by email' | transloco"
+                                       [(ngModel)]="params['filter[type]']"
+                                       [placeholder]="'Filter by event type' | transloco"
                                        aria-label="name"
                                        cFormControl
-                                       name="user_email"
+                                       name="type"
                                        oitcDebounce
                                        type="text"
                                 />
                             </c-input-group>
-                            <c-row class="my-1">
-                                <c-col class="text-info small">
-                                    <fa-icon [icon]="['fas', 'info-circle']" class="text-info"></fa-icon>
-                                    {{ t('E-mail filter does not search for deleted users!') }}
-                                </c-col>
-                            </c-row>
+
                         </c-col>
-                        <c-col md="6" class="mb-2">
+                        <c-col md="6" xs="12" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
                                     {{ t('From') }}
@@ -110,7 +105,7 @@
                                 />
                             </c-input-group>
                         </c-col>
-                        <c-col md="6" class="mb-2">
+                        <c-col md="6" xs="12" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
                                     {{ t('To') }}
@@ -128,7 +123,7 @@
                         </c-col>
                     </c-row>
                     <c-row>
-                        <c-col md="6">
+                        <c-col md="4">
                             <fieldset>
                                 <h5>
                                     {{ t('Log type') }}
@@ -169,6 +164,149 @@
                                         {{ t('User Password Change') }}
                                     </label>
                                 </c-form-check>
+
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.notification_enabled" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="enableHostNotification"
+                                           name="enableHostNotification"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="enableHostNotification" class="ms-1 mt-1">
+                                        {{ t('Notification Enabled') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.notification_disabled" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="disableHostNotification"
+                                           name="disableHostNotification"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="disableHostNotification" class="ms-1 mt-1">
+                                        {{ t('Notification Disabled') }}
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
+                        </c-col>
+                        <c-col md="4">
+                            <fieldset>
+                                <h5>
+                                    {{ t('Log type') }}
+                                </h5>
+
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.downtime_created" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="downtime_created"
+                                           name="downtime_created"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="downtime_created" class="ms-1 mt-1">
+                                        {{ t('Downtime Scheduled') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.downtime_deleted" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="downtime_deleted"
+                                           name="downtime_deleted"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="downtime_deleted" class="ms-1 mt-1">
+                                        {{ t('Downtime Deleted') }}
+                                    </label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.check_rescheduled" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="check_rescheduled"
+                                           name="check_rescheduled"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="check_rescheduled" class="ms-1 mt-1">
+                                        {{ t('Check Rescheduled') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.passive_transfer_check_result" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="passive_transfer_check_result"
+                                           name="passive_transfer_check_result"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="passive_transfer_check_result" class="ms-1 mt-1">
+                                        {{ t('Passive Check Result Received') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.acknowledgement_created" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="acknowledgement_created"
+                                           name="acknowledgement_created"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="acknowledgement_created" class="ms-1 mt-1">
+                                        {{ t('Acknowledgement Created') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.acknowledgement_deleted" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="acknowledgement_deleted"
+                                           name="acknowledgement_deleted"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="acknowledgement_deleted" class="ms-1 mt-1">
+                                        {{ t('Acknowledgement Deleted') }}
+                                    </label>
+                                </c-form-check>
+
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.flapdetection_enabled" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="flapdetection_enabled"
+                                           name="flapdetection_enabled"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="flapdetection_enabled" class="ms-1 mt-1">
+                                        {{ t('Flap Detection Enabled') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.flapdetection_disabled" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="flapdetection_disabled"
+                                           name="flapdetection_disabled"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="flapdetection_disabled" class="ms-1 mt-1">
+                                        {{ t('Flap Detection Disabled') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input (debouncedValue)="onFilterChange($event)"
+                                           [(ngModel)]="tmpFilter.Types.custom_notification_sent" cFormCheckInput
+                                           class="checkbox-lg checkbox-primary"
+                                           id="custom_notification_sent"
+                                           name="custom_notification_sent"
+                                           oitcDebounce
+                                           type="checkbox"/>
+                                    <label cFormCheckLabel for="custom_notification_sent" class="ms-1 mt-1">
+                                        {{ t('Custom Notification Sent') }}
+                                    </label>
+                                </c-form-check>
                             </fieldset>
                         </c-col>
                     </c-row>
@@ -194,15 +332,15 @@
                     <th colspan="2" scope="col" mat-sort-header="Eventlogs.type">
                         {{ t('Event Type') }}
                     </th>
+                    <th  scope="col" mat-sort-header="Eventlogs.model">
+                        {{ t('Art') }}
+                    </th>
                     <th scope="col" mat-sort-header="name">
                         {{ t('Name') }}
                     </th>
-                    @if (eventlogs && ( eventlogs.logTypes.includes('login') || eventlogs.logTypes.includes('user_delete') || eventlogs.logTypes.includes('user_password_change') )) {
-                        <th scope="col" mat-sort-header="user_email"
-                        >
-                            {{ t('Email') }}
-                        </th>
-                    }
+                    <th scope="col" mat-sort-header="actor">
+                        {{ t('Actor') }}
+                    </th>
                     <th scope="col" mat-sort-header="Eventlogs.created">
                         {{ t('Date') }}
                     </th>
@@ -212,38 +350,40 @@
                     <tbody>
                         @for (event of eventlogs.all_events; track event) {
                             <tr>
-                                <td>
-                                    <fa-icon [icon]="eventlogs.typeIconClasses[event.type].icon"
-                                             title="{{eventlogs.typeTranslations[event.type]}}"
-                                             class="{{eventlogs.typeIconClasses[event.type].className}}"></fa-icon>
+                                <td class="text-center">
+                                    @let iconConfig = (event.type && eventlogs.typeIconClasses[event.type]) ? eventlogs.typeIconClasses[event.type] : eventlogs.typeIconClasses['default'];
+                                    @let titleConfig = (event.type && eventlogs.typeTranslations[event.type]) ? eventlogs.typeTranslations[event.type] : eventlogs.typeTranslations['default'];
+                                    @let classConfig = (event.type && eventlogs.typeIconClasses[event.type]) ? eventlogs.typeIconClasses[event.type] : eventlogs.typeIconClasses['default'];
+                                    <fa-icon [icon]="iconConfig.icon"
+                                             [title]="titleConfig"
+                                             [class]="classConfig.className"></fa-icon>
                                 </td>
-                                <td>{{ eventlogs.typeTranslations[event.type] }}</td>
-                                <td>
+                                <td>{{ (event.type && eventlogs.typeTranslations[event.type]) ? eventlogs.typeTranslations[event.type] : event.type }}</td>
+                                <td>{{ event.model }} </td>
+                                <td class="event-name-cell">
                                     @if (event.recordExists) {
-                                        <span>
+                                        <span class="event-name">
                                             {{ event.name }}
                                         </span>
                                     }
                                     @if (!event.recordExists) {
-                                        <span>
+                                        <span class="event-name">
                                             <s>{{ event.name }}</s>
                                         </span>
                                     }
                                 </td>
-                                @if (eventlogs && ( eventlogs.logTypes.includes('login') || eventlogs.logTypes.includes('user_delete') || eventlogs.logTypes.includes('user_password_change') )) {
-                                    <td>
-                                        @if (event.recordExists) {
-                                            <span>
-                                                {{ event.user_email }}
-                                            </span>
-                                        }
-                                        @if (!event.recordExists) {
-                                            <span>
-                                                <s>{{ event.data['user_email'] }}</s>
-                                            </span>
-                                        }
-                                    </td>
-                                }
+                                <td class="event-name-cell">
+                                    @if (event.actorExists) {
+                                        <span class="event-name">
+                                            {{ event.actor }}
+                                        </span>
+                                    } @else {
+
+                                        <span class="event-name">
+                                            <s>{{ event.actor }}</s>
+                                        </span>
+                                    }
+                                </td>
                                 <td>{{ event.time }}</td>
                             </tr>
                         }

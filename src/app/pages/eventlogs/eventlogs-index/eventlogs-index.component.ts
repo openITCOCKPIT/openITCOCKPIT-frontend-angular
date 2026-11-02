@@ -39,7 +39,7 @@ import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xs
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PaginatorChangeEvent } from '../../../layouts/coreui/paginator/paginator.interface';
-import { EventlogsIndex, EventlogsIndexParams, getDefaultEventlogsIndexParams } from '../eventlogs.interface';
+import { Eventlog, EventlogsIndex, EventlogsIndexParams, getDefaultEventlogsIndexParams } from '../eventlogs.interface';
 import { EventlogsService } from '../eventlogs.service';
 import { HttpParams } from '@angular/common/http';
 import { IndexPage } from '../../../pages.interface';
@@ -104,7 +104,18 @@ export class EventlogsIndexComponent implements OnInit, OnDestroy, IndexPage {
         Types: {
             login: true,
             user_delete: true,
-            user_password_change: true
+            user_password_change: true,
+            notification_enabled: true,
+            notification_disabled: true,
+            flapdetection_enabled: true,
+            flapdetection_disabled: true,
+            custom_notification_sent: true,
+            passive_transfer_check_result: true,
+            acknowledgement_created: true,
+            acknowledgement_deleted: true,
+            check_rescheduled: true,
+            downtime_created: true,
+            downtime_deleted: true
         }
     }
 
@@ -166,7 +177,18 @@ export class EventlogsIndexComponent implements OnInit, OnDestroy, IndexPage {
             Types: {
                 login: true,
                 user_delete: true,
-                user_password_change: true
+                user_password_change: true,
+                notification_enabled: true,
+                notification_disabled: true,
+                flapdetection_enabled: true,
+                flapdetection_disabled: true,
+                custom_notification_sent: true,
+                passive_transfer_check_result: true,
+                acknowledgement_created: true,
+                acknowledgement_deleted: true,
+                check_rescheduled: true,
+                downtime_created: true,
+                downtime_deleted: true
             }
         }
         this.loadEventlogs();
@@ -209,7 +231,7 @@ export class EventlogsIndexComponent implements OnInit, OnDestroy, IndexPage {
             'types[]': this.params['types[]'],
             'filter[Eventlogs.type][]': this.params['filter[Eventlogs.type][]'],
             'filter[name]': this.params['filter[name]'],
-            'filter[user_email]': this.params['filter[user_email]'],
+            'filter[type]': this.params['filter[type]'],
             'filter[from]': formatDate(new Date(this.from), 'dd.MM.y HH:mm', 'en-US'),
             'filter[to]': formatDate(new Date(this.to), 'dd.MM.y HH:mm', 'en-US')
         };
@@ -222,6 +244,13 @@ export class EventlogsIndexComponent implements OnInit, OnDestroy, IndexPage {
     }
 
     public onMassActionComplete(success: boolean): void {
+    }
+
+    expandedEventId: number | null = null;
+
+    toggleEventDetails(event: Eventlog): void {
+        this.expandedEventId =
+            this.expandedEventId === event.id ? null : event.id;
     }
 
 }

@@ -1,0 +1,135 @@
+.event-name-cell {
+    max-width: 300px;
+    overflow: hidden;
+}
+
+.recent-events {
+    border: 1px solid #dedede;
+    border-radius: 12px;
+    padding: 12px;
+    background: #fff;
+}
+
+.recent-events-title {
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 0 12px;
+}
+
+.recent-event-row {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    padding: 10px 10px;
+    border-bottom: 1px solid #ededed;
+    cursor: pointer;
+    gap: 12px;
+}
+
+.recent-event-row:hover {
+    background: #f8f9fa;
+}
+
+.recent-event-time {
+    color: #777;
+    font-size: 13px;
+    min-width: 65px;
+}
+
+.recent-event-info {
+    flex: 1;
+    text-align: left;
+    padding-left: 10px;
+    border-left: 1px solid #e1e1e1;
+}
+
+.recent-event-name {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.recent-event-description {
+    font-size: 14px;
+    color: #777;
+    margin-top: 4px;
+}
+
+.recent-event-icon {
+    width: 18px;
+    font-size: 18px;
+}
+
+.icon-green {
+    color: #00b85a;
+}
+
+.icon-red {
+    color: #e00000;
+}
+
+.event-details {
+    padding: 16px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dedede;
+}
+
+.event-details-content {
+    min-height: 100px;
+    border-left: 3px solid #f1f1f1;
+    padding: 10px 15px;
+}
+
+
+.event-details {
+    padding: 20px 16px;
+    background: #fff;
+    border-bottom: 1px solid #dedede;
+}
+
+.event-details-content {
+    direction: ltr;
+    text-align: left;
+}
+
+.details-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+.details-table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.details-table th,
+.details-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ededed;
+}
+
+.details-table th:first-child,
+.details-table td:first-child {
+    width: 35%;
+    text-align: left;
+}
+
+.details-table th:last-child,
+.details-table td:last-child {
+    text-align: left;
+}
+.event-details-close{
+    float: right;
+    font-size: 18px;
+    color: #777;
+    padding: 4px;
+}
+
+.event-details-close:hover{
+    cursor: pointer;
+    background: #f1f1f1;
+
+    border-radius: 4px;
+
+}

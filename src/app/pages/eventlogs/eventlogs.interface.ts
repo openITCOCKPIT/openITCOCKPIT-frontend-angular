@@ -20,10 +20,11 @@ export interface EventlogsIndexParams {
     direction: 'asc' | 'desc' | '', // asc or desc
     'types[]': string[],
     'filter[name]': string,
-    'filter[user_email]': string,
+    'filter[type]': string,
     'filter[from]': Date | string,
     'filter[to]': Date | string,
     'filter[Eventlogs.type][]': string[],
+    'filter[Eventlogs.model][]': string[],
 }
 
 export function getDefaultEventlogsIndexParams(): EventlogsIndexParams {
@@ -36,8 +37,9 @@ export function getDefaultEventlogsIndexParams(): EventlogsIndexParams {
         direction: 'desc',
         'types[]': [],
         'filter[name]': '',
-        'filter[user_email]': '',
+        'filter[type]': '',
         'filter[Eventlogs.type][]': [],
+        'filter[Eventlogs.model][]': [],
         'filter[from]': new Date(now.getTime() - (3600 * 24 * 30 * 4 * 1000)),
         'filter[to]': new Date(now.getTime() + (3600 * 24 * 5 * 1000)),
     }
@@ -51,15 +53,17 @@ export interface Eventlog {
     object_id: number
     name: string
     user_email: string
+    actor?: string
     data: Data
     created: string
     containers: EventlogContainer[]
     time: string
     recordExists: boolean
+    actorExists?: boolean
 }
 
 export interface Data {
-    user_email: string
+    [key: string]: unknown;
 }
 
 export interface EventlogContainer extends Container {
