@@ -989,6 +989,18 @@
                                         <div class="mb-3">
                                             <c-form-check>
                                                 <input cFormCheckInput
+                                                       name="gpus"
+                                                       id="gpus"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.gpus"/>
+                                                <label cFormCheckLabel for="gpus">
+                                                    {{ t('Monitor GPUs (NVIDIA, AMD and Intel)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
                                                        name="systemhealth"
                                                        id="systemhealth"
                                                        type="checkbox"

@@ -4582,5 +4582,7 @@
   "Fri": "Fri",
   "Sat": "Sat",
   "Sun": "Sun",
-  "Notifications overview": "Notifications overview"
+  "Notifications overview": "Notifications overview",
+  "GPUs": "GPUs",
+  "GPU usage": "GPU usage"
 }

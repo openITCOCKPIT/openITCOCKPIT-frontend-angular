@@ -366,6 +366,10 @@ export interface AgentServicesForCreate {
     ipmi_sensors: AgentServiceForCreate[]
     ipmi_sel: AgentServiceForCreate
 
+    // GPUs: health of all GPUs and the usage per GPU
+    gpus_health: AgentServiceForCreate
+    gpus_usage: AgentServiceForCreate[]
+
     packagemanager: AgentServiceForCreate
 }
 
