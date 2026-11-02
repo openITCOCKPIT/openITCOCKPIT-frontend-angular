@@ -26,8 +26,10 @@ import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { HtmlspecialcharsPipe } from '../../../../pipes/htmlspecialchars.pipe';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import * as echarts from 'echarts/core';
-import 'echarts/theme/dark.js';
+import { CanvasRenderer } from 'echarts/renderers';
+import '../../../../components/charts/echarts-dark-theme';
 import {
+    DatasetComponent,
     GridComponent,
     LegendComponent,
     MarkLineComponent,
@@ -44,7 +46,7 @@ import { TimezoneConfiguration, TimezoneService } from '../../../../services/tim
 import { HostForMapItem, ServiceForMapItem, Setup } from '../map-item-base/map-item-base.interface';
 import { AngularDraggableModule } from 'angular2-draggable';
 
-echarts.use([LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, MarkLineComponent]);
+echarts.use([LineChart, DatasetComponent, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, MarkLineComponent, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-graph-item',
@@ -760,7 +762,10 @@ export class GraphItemComponent extends MapItemBaseComponent<Mapgadget> implemen
                 right: '4%',
                 bottom: '10%',
                 top: '3%',
-                containLabel: label.length > 0 // containLabel is deprecated https://echarts.apache.org/en/option.html#grid.containLabel
+                // Replacement for deprecated containLabel: label.length > 0
+                // https://echarts.apache.org/en/option.html#grid.outerBoundsMode
+                outerBoundsMode: label.length > 0 ? 'same' : 'auto',
+                outerBoundsContain: label.length > 0 ? 'axisLabel' : 'all'
             },
 
             // Workaround to hide the toolbar and to auto select the dataZoom in this.onChartFinished method

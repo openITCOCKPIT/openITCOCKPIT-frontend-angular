@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { CanvasRenderer } from 'echarts/renderers';
+import { LabelLayout } from 'echarts/features';
 
 import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 
@@ -27,7 +28,7 @@ import {
 } from '../../../modules/scm_module/pages/resourcegroups/resourcegroups-summary/resourcegroups-summary.interface';
 import _ from 'lodash';
 
-echarts.use([SunburstChart, LegendComponent, TitleComponent, TooltipComponent, CanvasRenderer]);
+echarts.use([SunburstChart, LegendComponent, TitleComponent, TooltipComponent, LabelLayout, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-sunburst-echart',
