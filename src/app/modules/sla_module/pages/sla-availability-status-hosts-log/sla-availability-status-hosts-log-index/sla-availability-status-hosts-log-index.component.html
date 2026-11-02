@@ -129,7 +129,7 @@
                 <oitc-table-loader></oitc-table-loader>
             }
             @if (slaHostAndStatusLog && !isLoading) {
-                <table bordered cTable class="mt-2 mb-2" hover striped matSort
+                <table bordered cTable class="mt-2 mb-2" hover striped small matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
@@ -198,7 +198,7 @@
                                                     <fa-icon [icon]="['fas', 'minus']" class="text-primary"></fa-icon>
                                                     {{ outage.end }} ({{ outage.duration }})
                                                     <br/>
-                                                    <code>
+                                                    <code class="font-monospace font-xs">
                                                         {{ outage.output }}
                                                     </code>
                                                 </li>
@@ -214,7 +214,7 @@
                                                     {{ outage.end }}
                                                     (<span class="outages-in-downtime">{{ outage.duration }}</span>)
                                                     <br/>
-                                                    <code>
+                                                    <code class="font-monospace font-xs">
                                                         {{ outage.output }}
                                                     </code>
                                                 </li>

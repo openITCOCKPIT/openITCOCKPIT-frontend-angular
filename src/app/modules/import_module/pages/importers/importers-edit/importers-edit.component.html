@@ -476,7 +476,7 @@
                             </div>
                             @if (post.hostdefault_id > 0 && hostdefaults[post.hostdefault_id]) {
                                 <div>
-                                    <table cTable>
+                                    <table cTable small>
                                         <tr>
                                             <td>
                                                 <b>{{ t('Host template') }}</b>
@@ -786,7 +786,7 @@
                                             @if (match.hostdefault_id && match.hostdefault_id > 0 && hostdefaults[match.hostdefault_id]) {
                                                 <c-col [xs]="12" [md]="12" [lg]="10"
                                                 >
-                                                    <table cTable>
+                                                    <table cTable small>
                                                         <td>
                                                             <b>{{ t('Host template') }}</b>
                                                             {{ hostdefaults[match.hostdefault_id].hosttemplate.name }}

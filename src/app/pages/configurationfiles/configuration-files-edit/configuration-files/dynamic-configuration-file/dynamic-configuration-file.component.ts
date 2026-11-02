@@ -13,6 +13,8 @@ import { ConfigurationFilesDbKeys, ConfigurationFilesFieldTypes } from '../../..
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigurationFilesService } from '../../../configuration-files.service';
 import {
+    ColComponent,
+    RowComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -30,6 +32,8 @@ import { TrueFalseDirective } from '../../../../../directives/true-false.directi
 import { GenericValidationError } from '../../../../../generic-responses';
 import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { FormsModule } from '@angular/forms';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 /**
  * This component will just loop through all configuration fields and will create an input according to the field type.
@@ -51,7 +55,11 @@ import { FormsModule } from '@angular/forms';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        FormsModule
+        FormsModule,
+        ColComponent,
+        FaIconComponent,
+        RowComponent,
+        XsButtonDirective
     ],
     templateUrl: './dynamic-configuration-file.component.html',
     styleUrl: './dynamic-configuration-file.component.css',
@@ -151,5 +159,21 @@ export class DynamicConfigurationFileComponent implements OnInit, OnDestroy {
 
     }
 
+    public pushNewRow(field: ConfigurationEditorField) {
+
+        if (Array.isArray(field.value)) {
+            field.value.push('');
+            this.cdr.markForCheck();
+        }
+    }
+
+    public removeRow(field: ConfigurationEditorField, index: number) {
+        if (Array.isArray(field.value)) {
+            field.value.splice(index, 1);
+            this.cdr.markForCheck();
+        }
+    }
+
     protected readonly ConfigurationFilesFieldTypes = ConfigurationFilesFieldTypes;
+    protected readonly Array = Array;
 }

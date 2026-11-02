@@ -74,8 +74,7 @@
                                     </c-card-header>
                                     <c-card-body class="p-0">
                                         @if (satellites) {
-                                            <table bordered cTable class="m-0 table table-fit" hover
-                                                   striped>
+                                            <table bordered cTable class="m-0 table table-fit" hover striped small>
                                                 <thead>
                                                 <tr>
                                                     <th class="width-15 text-center">
@@ -161,7 +160,7 @@
                                                             {{ t('New configuration is invalid') }}
                                                         </h5>
                                                         <div>
-                                                            <pre>{{ exportValidation.result.nagios.output.join("\n") }}</pre>
+                                                            <pre class="font-monospace font-xs">{{ exportValidation.result.nagios.output.join("\n") }}</pre>
                                                         </div>
                                                     </c-alert>
                                                 </c-col>
@@ -175,7 +174,7 @@
                                                             {{ t('New Prometheus configuration is invalid') }}
                                                         </h5>
                                                         <div>
-                                                            <pre>{{ exportValidation.result.prometheus.output.join("\n") }}</pre>
+                                                            <pre class="font-monospace font-xs">{{ exportValidation.result.prometheus.output.join("\n") }}</pre>
                                                         </div>
                                                     </c-alert>
                                                 </c-col>

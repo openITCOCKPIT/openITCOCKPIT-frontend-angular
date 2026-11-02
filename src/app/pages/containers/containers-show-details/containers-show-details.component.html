@@ -117,7 +117,7 @@
                                 </c-card-header>
                                 <c-card-body>
                                     @if (container.childsElements) {
-                                        <table cTable bordered>
+                                        <table cTable small bordered>
                                             <tbody>
                                                 @for (details of objectDetails; track $index) {
                                                     @if (hasChildElementsForObjectDetails(container.childsElements, details)) {

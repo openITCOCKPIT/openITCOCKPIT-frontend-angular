@@ -62,7 +62,7 @@
                         <oitc-table-loader></oitc-table-loader>
                     }
                     @if (hosts && config) {
-                        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
                                (matSortChange)="onSortChange($event)"
                                [matSortActive]="config.sort" [matSortDirection]="config.direction">
                             <thead>
@@ -164,7 +164,7 @@
                                                 {{ host.Hoststatus.last_state_change }}
                                             </td>
                                             <td>
-                                                <div class="word-break"
+                                                <div class="word-break font-monospace font-xs"
                                                      [innerHTML]="String(host.Hoststatus.outputHtml) | trustAsHtml "></div>
                                             </td>
                                         </tr>

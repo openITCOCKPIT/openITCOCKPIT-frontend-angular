@@ -38,6 +38,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { HostStatusNamePipe } from '../../../pipes/host-status-name.pipe';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { ActivatedRoute, Router } from '@angular/router';
 import { getHostStateForApi, HostNotificationsStateFilter } from '../../notifications/notifications.interface';
@@ -85,6 +86,7 @@ import {
         TranslocoPipe,
         TrueFalseDirective,
         TrustAsHtmlPipe,
+        HostStatusNamePipe,
         XsButtonDirective,
         NgClass,
         CardFooterComponent

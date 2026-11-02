@@ -75,8 +75,8 @@
             <c-card-body>
                 @if (tabName === 'reportConfig') {
                     <div>
-                        <c-alert color="danger" role="alert" [hidden]="!report_error">
-                            @if (report_error) {
+                        @if (report_error) {
+                            <c-alert color="danger" role="alert">
                                 {{ report_error.message }}
                                 @if (report_error.objects.length > 0) {
                                     <ul>
@@ -96,20 +96,21 @@
                                         }
                                     </ul>
                                 }
-                            }
-                        </c-alert>
+                            </c-alert>
+                        }
+
                         <div class="mb-3">
                             <label cLabel for="report">
                                 {{ t('Auto report') }}
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <oitc-select
-                                name="report"
-                                id="report"
-                                optionValue="id"
-                                optionLabel="name"
-                                [(ngModel)]="post.Autoreport.id"
-                                [options]="autoreports">
+                                    name="report"
+                                    id="report"
+                                    optionValue="id"
+                                    optionLabel="name"
+                                    [(ngModel)]="post.Autoreport.id"
+                                    [options]="autoreports">
                             </oitc-select>
                         </div>
                         <div class="mb-3">
@@ -118,12 +119,12 @@
                                 <oitc-required-icon></oitc-required-icon>
                             </label>
                             <oitc-select
-                                name="format"
-                                id="format"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="post.Autoreport.format"
-                                [options]="formatOptions">
+                                    name="format"
+                                    id="format"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="post.Autoreport.format"
+                                    [options]="formatOptions">
                             </oitc-select>
                         </div>
                         <div class="mb-3">
@@ -207,7 +208,7 @@
                                     </h4>
                                 </c-col>
                                 <c-col class="col-12">
-                                    <table class="table">
+                                    <table class="table table-sm table-striped">
                                         <thead>
                                         <tr>
                                             <th style="border-top:none;" class="col-3"></th>
@@ -283,7 +284,7 @@
                                     </h4>
                                 </c-col>
                                 <c-col class="col-12">
-                                    <table class="table">
+                                    <table class="table table-sm table-striped">
                                         <thead>
                                         <tr>
                                             <th class="col-3"></th>
@@ -332,7 +333,7 @@
                                 </h4>
                             </c-col>
                             <c-col lg="12">
-                                <table class="table">
+                                <table class="table table-sm table-striped">
                                     <thead>
                                     <tr>
                                         <th class="col-3"></th>
@@ -379,7 +380,7 @@
                                                     }
                                                     @if (!host.value.Host.state_overview && checkIfHostInReport(host.value.Host.id)) {
                                                         <span
-                                                            class="text-primary">
+                                                                class="text-primary">
                                                             <i>
                                                                 {{ t('No historical data available ') }}
                                                             </i>
@@ -435,7 +436,7 @@
                                                             }
                                                             @if (!service.value.Service.state_overview) {
                                                                 <span
-                                                                    class="text-primary">
+                                                                        class="text-primary">
                                                                     <i>
                                                                         {{ t('No historical data available ') }}
                                                                     </i>
@@ -449,7 +450,7 @@
                                                                     @if (( hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value) ) &&
                                                                     ( 100 - report.autoreport_data.max_outages_time_in_percent ) <= service.value.Service.state_overview.percent_availability) {
                                                                         <span
-                                                                            class="badge border border-success text-success"
+                                                                                class="badge border border-success text-success"
                                                                         >
                                                                             {{ t('PASSED') }}
                                                                         </span>
@@ -457,7 +458,7 @@
                                                                     @if (hasBitValue(report.autoreport_data.settings.configuration_option, report.autoreport_data.defaultSettings.AUTOREPORTS_EXTENDED_SERV_DESC.value) &&
                                                                     ( 100 - report.autoreport_data.max_outages_time_in_percent ) > service.value.Service.state_overview.percent_availability) {
                                                                         <span
-                                                                            class="badge border border-danger text-danger"
+                                                                                class="badge border border-danger text-danger"
                                                                         >
                                                                             {{ t('FAILED') }}
                                                                         </span>
@@ -610,7 +611,7 @@
                                             <c-col xs="12" md="9" class="offset-md-3">
                                                 @for (outage of host.value.Host.frontend.outages; track outage) {
                                                     <c-row
-                                                        [ngClass]="{'service_option': outage.duration === host.value.Host.frontend.maximum_outage_duration}">
+                                                            [ngClass]="{'service_option': outage.duration === host.value.Host.frontend.maximum_outage_duration}">
                                                         <c-col xs="12" md="4">
                                                             {{ outage.start }} - {{ outage.end }}
                                                         </c-col>
@@ -821,9 +822,9 @@
                                                                 @for (graph of graphBlobs.value; track graph) {
                                                                     <div>
                                                                         <img
-                                                                            class="img-fluid py-1"
-                                                                            [src]="'data:image/png;base64,' + graph"
-                                                                            alt="Missing chart image">
+                                                                                class="img-fluid py-1"
+                                                                                [src]="'data:image/png;base64,' + graph"
+                                                                                alt="Missing chart image">
                                                                     </div>
                                                                 }
                                                             </div>
@@ -865,7 +866,7 @@
                                                         >
                                                             @for (outage of service.value.Service.frontend.outages; track outage) {
                                                                 <c-row
-                                                                    [ngClass]="{'service_option': outage.duration === service.value.Service.frontend.maximum_outage_duration}">
+                                                                        [ngClass]="{'service_option': outage.duration === service.value.Service.frontend.maximum_outage_duration}">
                                                                     <c-col xs="12" md="4">
                                                                         {{ outage.start }} - {{ outage.end }}
                                                                     </c-col>

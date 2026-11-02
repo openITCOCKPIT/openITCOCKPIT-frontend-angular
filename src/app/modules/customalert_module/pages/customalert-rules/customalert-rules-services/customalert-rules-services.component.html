@@ -138,12 +138,12 @@
             }
 
             @if (result) {
-                <table bordered cTable class="mt-2 mb-0" hover striped matSort
+                <table bordered cTable class="mt-2 mb-0" hover striped small matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
                     <tr>
-                        <th scope="col" mat-sort-header="Hosts.name">
+                        <th scope="col" mat-sort-header="Hosts.name" class="col-4">
                             {{ t('Host') }}
                         </th>
                         <th scope="col" mat-sort-header="servicename">

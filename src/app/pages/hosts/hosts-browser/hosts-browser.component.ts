@@ -98,6 +98,9 @@ import {
     HostTimelineLegendComponent
 } from '../../../components/timeline/host-timeline-legend/host-timeline-legend.component';
 import {
+    NotificationPeriodOverviewComponent
+} from '../../../components/notification-periods/notification-period-overview/notification-period-overview.component';
+import {
     HostsBrowserServicesListComponent
 } from '../hosts-browser-services-list/hosts-browser-services-list.component';
 import { IframeComponent } from '../../../components/iframe/iframe.component';
@@ -211,6 +214,7 @@ import { DowntimeComponent } from '../../../components/downtimes/downtime-compon
         IconDirective,
         ProxmoxHostBrowserTabComponent,
         HostdependenciesTreeComponent,
+        NotificationPeriodOverviewComponent,
         DowntimeComponent
     ],
     templateUrl: './hosts-browser.component.html',
@@ -247,6 +251,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public ExternalSystemType: null | ExternalSystems = null;
 
     public isarFlowInformationExists: boolean = false;
+    public notificationsOverviewAllowed: boolean = false;
     public softwareInformation?: SoftwareInformationHost;
 
     public SlaOverview: false | HostBrowserSlaOverview = false;
@@ -337,6 +342,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.loadGrafanaIframeUrl();
             this.loadAdditionalInformation();
             this.loadIsarFlowInformation();
+            this.loadNotificationsOverviewAllowed();
             this.loadSlaInformation();
             this.loadSoftwareInformation();
 
@@ -385,6 +391,24 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.HostsService.loadIsarFlowInformation(this.result.mergedHost.id).subscribe((result) => {
                 this.isarFlowInformationExists = result;
                 this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public loadNotificationsOverviewAllowed(): void {
+        if (this.result?.mergedHost) {
+            const hostId = this.result.mergedHost.id;
+            // Only ask the server if the user has the permission for the notifications overview at all (otherwise 403)
+            this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hosts', 'notificationsOverview']).subscribe((hasPermission) => {
+                if (!hasPermission) {
+                    this.notificationsOverviewAllowed = false;
+                    this.cdr.markForCheck();
+                    return;
+                }
+                this.subscriptions.add(this.HostsService.loadNotificationsOverviewAllowed(hostId).subscribe((result) => {
+                    this.notificationsOverviewAllowed = result;
+                    this.cdr.markForCheck();
+                }));
             }));
         }
     }

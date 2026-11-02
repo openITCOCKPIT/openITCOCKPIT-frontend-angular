@@ -13,7 +13,7 @@
             <li class="breadcrumb-item">
                 <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'index']"
                    [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'index']">
-                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                     {{ t('Event Correlations') }}
                 </a>
             </li>
@@ -124,7 +124,7 @@
                 <oitc-table-loader></oitc-table-loader>
             }
             @if (eventcorrelations) {
-                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
                        (matSortChange)="onSortChange($event)"
                        [matSortActive]="params.sort" [matSortDirection]="params.direction">
                     <thead>
