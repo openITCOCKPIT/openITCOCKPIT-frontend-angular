@@ -230,14 +230,14 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             }
 
             if (this.loginAnimation) {
+                // init() runs the callback only once per app lifetime, so set the flag after awaiting it
                 this.ngParticlesService.init(async (engine: Engine) => {
                     await loadFull(engine);
                     await loadInteractivityPlugin(engine);
                     await loadExternalAttractInteraction(engine);
                     await loadParticlesAttractInteraction(engine);
                     await loadHeartShape(engine);
-
-
+                }).then(() => {
                     this.isEngineReady = true;
                     this.cdr.markForCheck();
                 });
