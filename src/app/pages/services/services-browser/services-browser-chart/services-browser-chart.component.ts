@@ -18,7 +18,7 @@ import { Observable, Subscription } from 'rxjs';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
 import { TimezoneObject } from '../../timezone.interface';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { EChartsOption, VisualMapComponentOption } from 'echarts';
+import { EChartsOption, VisualMapComponentOption, YAXisComponentOption } from 'echarts';
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 
@@ -768,6 +768,15 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         const axisMin = this.overviewTimeRange.start * 1000;
         const axisMax = this.overviewTimeRange.end * 1000;
 
+        const yAxisOptions: YAXisComponentOption = {type: 'value', show: false, scale: true};
+        if (gauge.datasource.min !== null) {
+            yAxisOptions.min = Number(gauge.datasource.min);
+        }
+        if (gauge.datasource.max !== null) {
+            yAxisOptions.max = Number(gauge.datasource.max);
+        }
+
+
         this.chartOption = {
             animation: false,
             tooltip: {show: false},
@@ -779,7 +788,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 {type: 'time', show: false, min: axisMin, max: axisMax}, // [Axis 0]
                 {type: 'time', show: false, min: axisMin, max: axisMax}  // [Axis 1]
             ],
-            yAxis: {type: 'value', show: false, scale: true},
+            yAxis: yAxisOptions,
             grid: {show: false, left: 80, right: 50, top: 3, height: 45},
             dataZoom: [
                 {
