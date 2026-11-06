@@ -72,11 +72,15 @@ export class ServicenowSettingsIndexComponent implements OnInit, OnDestroy {
 
     public post: ServicenowSettings = {
         domain: '',
+        incident_url_path: '',
         user_id: '',
         user_password: '',
         assignment_group: '',
         assigned_to: '',
         business_service: '',
+        contact_type: '',
+        category: 'openITCOCKPIT',
+        subcategory: '',
         impact: 1,
         urgency: 1,
         recovery_state: 6,

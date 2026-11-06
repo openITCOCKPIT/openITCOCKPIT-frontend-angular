@@ -36,7 +36,13 @@
                     <tr>
                         <td>{{ t('URL') }}</td>
                         <td>
-                            @if (result.globalsettings.ServicenowSettings.domain) {
+                            @if (result.incident.ServicenowIncident.incident_url) {
+                                <div>
+                                    <a href="{{result.incident.ServicenowIncident.incident_url}}" target="_blank">
+                                        {{ result.incident.ServicenowIncident.incident_url }}
+                                    </a>
+                                </div>
+                            } @else if (result.globalsettings.ServicenowSettings.domain) {
                                 <div>
                                     <a href="{{result.globalsettings.ServicenowSettings.domain}}/nav_to.do?uri=/incident.do?sys_id={{result.incident.ServicenowIncident.sys_id}}"
                                        target="_blank">

@@ -57,6 +57,24 @@
                         </span>
                     </div>
                     <div class="mb-3">
+                        <label cLabel for="incident_url_path">
+                            {{ t('Incident URL path') }}
+                        </label>
+                        <input cFormControl
+                               id="incident_url_path"
+                               type="text"
+                               name="incident_url_path"
+                               placeholder="/now/sow/record/incident"
+                               oitcFormError [errors]="errors" errorField="incident_url_path"
+                               [(ngModel)]="post.incident_url_path">
+                        <oitc-form-feedback [errors]="errors" errorField="incident_url_path"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('Leave empty to link incidents to the classic UI (nav_to.do).') }}
+                            <br>
+                            {{ t('To link incidents to a workspace, enter the path e.g. /now/cwf/agent/record/incident (CSM/FSM) or /now/sow/record/incident (SOW).') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
                         <label cLabel for="user_id">
                             {{ t('User ID') }}
                             <oitc-required-icon></oitc-required-icon>
@@ -206,6 +224,52 @@
                         <oitc-form-feedback [errors]="errors" errorField="business_service"></oitc-form-feedback>
                         <span class="help-block">
                             {{ t('ServiceNow Incident Business Service') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="contact_type">
+                            {{ t('Channel') }}
+                        </label>
+                        <input cFormControl
+                               id="contact_type"
+                               type="text"
+                               name="contact_type"
+                               oitcFormError [errors]="errors" errorField="contact_type"
+                               [(ngModel)]="post.contact_type">
+                        <oitc-form-feedback [errors]="errors" errorField="contact_type"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('ServiceNow Incident Channel (contact_type).') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="category">
+                            {{ t('Category') }}
+                        </label>
+                        <input cFormControl
+                               id="category"
+                               type="text"
+                               name="category"
+                               placeholder="openITCOCKPIT"
+                               oitcFormError [errors]="errors" errorField="category"
+                               [(ngModel)]="post.category">
+                        <oitc-form-feedback [errors]="errors" errorField="category"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('ServiceNow Incident Category.') }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <label cLabel for="subcategory">
+                            {{ t('Subcategory') }}
+                        </label>
+                        <input cFormControl
+                               id="subcategory"
+                               type="text"
+                               name="subcategory"
+                               oitcFormError [errors]="errors" errorField="subcategory"
+                               [(ngModel)]="post.subcategory">
+                        <oitc-form-feedback [errors]="errors" errorField="subcategory"></oitc-form-feedback>
+                        <span class="help-block">
+                            {{ t('ServiceNow Incident Subcategory.') }}
                         </span>
                     </div>
                     <div class="mb-3">
