@@ -6355,5 +6355,8 @@
   "Sun": "So",
   "Notifications overview": "Benachrichtigungsübersicht",
   "GPUs": "GPUs",
-  "GPU usage": "GPU-Auslastung"
+  "GPU usage": "GPU-Auslastung",
+  "All": "Alle",
+  "Selected": "Ausgewählt",
+  "selected": "ausgewählt"
 }

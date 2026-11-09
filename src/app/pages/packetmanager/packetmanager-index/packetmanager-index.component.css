@@ -1,47 +1,21 @@
-.packetManagerCardBody {
-    height: 150px;
+/* Edition colours from assets/images/logos/bgs/*_edition.png */
+.pm-module {
+    --c: #3182b1;
+    border-top: 4px solid var(--c);
 }
 
-.text-right {
-    text-align: right;
+.pm-module--enterprise {
+    --c: #cb2522;
 }
 
-/**
- * Source:  https://bootsnipp.com/snippets/xrKXW
- * Bootstrap 4.1.1 Snippet by mylastof
- * license: MIT
- */
-
-ul.timeline {
-    list-style-type: none;
-    position: relative;
+.pm-module .card-header {
+    background: linear-gradient(color-mix(in srgb, var(--c) 15%, transparent), transparent);
 }
 
-ul.timeline:before {
-    content: ' ';
-    background: #d4d9df;
-    display: inline-block;
-    position: absolute;
-    left: 29px;
-    width: 2px;
-    height: 100%;
-    z-index: 400;
+.pm-module__desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
 }
 
-ul.timeline > li {
-    margin: 20px 0;
-    padding-left: 20px;
-}
-
-ul.timeline > li:before {
-    content: ' ';
-    background: white;
-    display: inline-block;
-    position: absolute;
-    border-radius: 50%;
-    border: 3px solid #22c0e8;
-    left: 20px;
-    width: 20px;
-    height: 20px;
-    z-index: 400;
-}
