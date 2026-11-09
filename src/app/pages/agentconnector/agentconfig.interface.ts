@@ -68,6 +68,7 @@ export interface AgentConfigBoolFields {
     mounts: boolean
     networkports: boolean
     ipmi: boolean
+    gpus: boolean
     systemhealth: boolean
 }
 

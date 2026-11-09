@@ -486,6 +486,7 @@
   "Date": "Date",
   "Check attempt": "Check attempt",
   "State type": "State type",
+  "State change": "State change",
   "Service output": "Service output",
   "Host output": "Host output",
   "Dashboard": "Dashboard",
@@ -4581,5 +4582,7 @@
   "Fri": "Fri",
   "Sat": "Sat",
   "Sun": "Sun",
-  "Notifications overview": "Notifications overview"
+  "Notifications overview": "Notifications overview",
+  "GPUs": "GPUs",
+  "GPU usage": "GPU usage"
 }

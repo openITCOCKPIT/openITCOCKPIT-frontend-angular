@@ -5409,5 +5409,7 @@
   "Fri": "Ven",
   "Sat": "Sam",
   "Sun": "Dim",
-  "Notifications overview": "Aperçu des notifications"
+  "Notifications overview": "Aperçu des notifications",
+  "GPUs": "GPU",
+  "GPU usage": "Utilisation des GPU"
 }
