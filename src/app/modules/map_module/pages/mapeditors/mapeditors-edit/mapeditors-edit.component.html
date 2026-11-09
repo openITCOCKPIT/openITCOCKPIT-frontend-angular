@@ -971,21 +971,23 @@
                         </div>
                     </c-col>
                 </c-row>
-                <c-row>
-                    <c-col class="mb-3">
-                        <c-form-check>
-                            <input [(ngModel)]="currentItem.show_label" cFormCheckInput
-                                   id="mapLineShowLabel"
-                                   name="mapLineShowLabel"
-                                   oitcFormError [errors]="errors" errorField="show_label"
-                                   type="checkbox"/>
-                            <label cFormCheckLabel for="mapLineShowLabel">
-                                {{ t('Show Label') }}
-                            </label>
-                        </c-form-check>
-                        <oitc-form-feedback [errors]="errors" errorField="show_label"></oitc-form-feedback>
-                    </c-col>
-                </c-row>
+                @if (currentItem.type !== 'stateless') {
+                    <c-row>
+                        <c-col class="mb-3">
+                            <c-form-check>
+                                <input [(ngModel)]="currentItem.show_label" cFormCheckInput
+                                       id="mapLineShowLabel"
+                                       name="mapLineShowLabel"
+                                       oitcFormError [errors]="errors" errorField="show_label"
+                                       type="checkbox"/>
+                                <label cFormCheckLabel for="mapLineShowLabel">
+                                    {{ t('Show Label') }}
+                                </label>
+                            </c-form-check>
+                            <oitc-form-feedback [errors]="errors" errorField="show_label"></oitc-form-feedback>
+                        </c-col>
+                    </c-row>
+                }
 
             </c-modal-body>
             <c-modal-footer>
