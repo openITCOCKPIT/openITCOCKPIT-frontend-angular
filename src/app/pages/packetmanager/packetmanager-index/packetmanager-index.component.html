@@ -174,7 +174,7 @@
                     @for (module of data.result.data.modules; track module) {
                         <c-col>
                             <c-card class="mb-3 mt-3"
-                                    [class.warning-glow]="module.Module.name === highlightedPacket">
+                                    [class.animatedcard]="module.Module.name === highlightedPacket">
                                 <c-card-header
                                     [ngClass]="{'enterprise-bg-header': module.Module.enterprise, 'community-bg-header': !module.Module.enterprise}"
                                 >
