@@ -12,7 +12,11 @@ import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
 import { EChartsCoreOption } from 'echarts/core';
 import { Subscription } from 'rxjs';
+import { BarChart } from 'echarts/charts';
+import { GridComponent, TooltipComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
 
+echarts.use([BarChart, GridComponent, TooltipComponent, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-sparkline-bar-echarts',
@@ -74,10 +78,10 @@ export class SparklineBarEchartsComponent implements OnDestroy {
         this.chartOption = {
             height: 35,
             grid: {
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 0
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0
             },
             color: ['#FFFFFF'],
             tooltip: {

@@ -798,6 +798,35 @@
                                                     </c-col>
                                                 }
 
+                                                <!-- GPUs -->
+                                                @if (newServicesAsSelect.gpus_usage) {
+                                                    <c-col [xs]="12"
+                                                           class="mb-3">
+                                                        <div class="hr-separator pt-3">
+                                                            <span class="h5">
+                                                                <fa-icon [icon]="['fas', 'microchip']"></fa-icon>
+                                                                {{ t('GPUs') }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label cLabel for="gpus_usage">
+                                                                {{ t('GPU usage') }}
+                                                                <span class="help-block">
+                                                                    ({{ newServicesAsSelect.gpus_usage.length }})
+                                                                </span>
+                                                            </label>
+                                                            <oitc-multi-select
+                                                                name="gpus_usage"
+                                                                id="gpus_usage"
+                                                                optionValue="key"
+                                                                optionLabel="value"
+                                                                [(ngModel)]="newServicesAsSelect.gpus_usage.selectedIndicies"
+                                                                [options]="newServicesAsSelect.gpus_usage.options">
+                                                            </oitc-multi-select>
+                                                        </div>
+                                                    </c-col>
+                                                }
+
                                                 <!-- Redfish -->
                                                 @if (newServicesAsSelect.redfish_health || newServicesAsSelect.redfish_sensors || newServicesAsSelect.redfish_power || newServicesAsSelect.redfish_storage || newServicesAsSelect.redfish_eventlog) {
                                                     <c-col [xs]="12"

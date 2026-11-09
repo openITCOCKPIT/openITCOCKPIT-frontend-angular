@@ -145,7 +145,9 @@ export class AreaEchartsComponent implements OnDestroy {
                 left: 0,   // Force align left edge
                 right: 0,  // Force align right edge
                 bottom: 0,
-                containLabel: false // MUST be false to reproduce the truncation issue
+                // Replacement for deprecated containLabel: false (ECharts 6 default behaviour).
+                // Use 'none' if labels should be allowed to overflow the chart edges (ECharts 5 behaviour).
+                outerBoundsMode: 'auto'
             },
             tooltip: {
                 trigger: 'axis',

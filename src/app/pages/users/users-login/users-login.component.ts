@@ -22,11 +22,15 @@ import { LoginImage } from '../users.interface';
 import { AuthService } from '../../../auth/auth.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 // PRTCLS
-import { Container, Engine, MoveDirection, OutMode, } from "@tsparticles/engine";
-import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
+import { Container, Engine, ISourceOptions, MoveDirection, OutMode, } from "@tsparticles/engine";
+import { loadFull } from "tsparticles";
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
+import { loadInteractivityPlugin } from "@tsparticles/plugin-interactivity";
+import { loadExternalAttractInteraction } from "@tsparticles/interaction-external-attract";
+import { loadParticlesAttractInteraction } from "@tsparticles/interaction-particles-attract";
+import { loadHeartShape } from "@tsparticles/shape-heart";
 import { LayoutOptions, LayoutService } from '../../../layouts/coreui/layout.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { LoginResponse } from '../../../auth/auth.interface';
 import { TitleService } from '../../../services/title.service';
@@ -67,9 +71,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     private readonly AuthService: AuthService = inject(AuthService);
     private readonly PermissionsService: PermissionsService = inject(PermissionsService);
     private readonly router: Router = inject(Router);
-    private readonly route: ActivatedRoute = inject(ActivatedRoute);
     private readonly TitleService: TitleService = inject(TitleService);
-    private _csrfToken: string = '';
 
     protected logoUrl: string = '';
     protected isSsoEnabled: boolean = true;
@@ -81,7 +83,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
     protected disableSocialButtons: boolean = false;
     protected enableColumnLayout: boolean = false;
     protected disableLogin: boolean = false;
-    protected particlesOptions: any = {
+    protected particlesOptions: ISourceOptions = {
         background: {
             color: {
                 value: "#0d47a1",
@@ -103,6 +105,10 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             color: {
                 value: "#ffffff",
             },
+            stroke: {
+                width: 0,
+                color: "#000000"
+            },
             links: {
                 color: "#ffffff",
                 distance: 150,
@@ -123,7 +129,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             number: {
                 density: {
                     enable: true,
-                    area: 800,
+                    width: 800,
+                    height: 800
                 },
                 value: 80,
             },
@@ -132,6 +139,15 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             },
             shape: {
                 type: "circle",
+                options: {
+                    polygon: {
+                        sides: 5
+                    },
+                    image: {
+                        width: 100,
+                        height: 100
+                    }
+                }
             },
             size: {
                 value: {min: 1, max: 5},
@@ -148,6 +164,8 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         password: '',
         remember_me: true
     };
+    public particlesContainer: Container | undefined;
+    public isEngineReady = false;
 
     constructor(private readonly ngParticlesService: NgParticlesService) {
         localStorage.removeItem('browserUuid');
@@ -202,18 +220,29 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                 case 'football':
                     this.particlesOptions = this.getBallConfig();
                     break;
+
+                case 'hearts':
+                    this.particlesOptions = this.getHeartConfig();
+                    break;
                 default:
                     this.particlesOptions = this.getDefaultConfig();
                     break;
             }
 
             if (this.loginAnimation) {
+                // init() runs the callback only once per app lifetime, so set the flag after awaiting it
                 this.ngParticlesService.init(async (engine: Engine) => {
                     await loadFull(engine);
+                    await loadInteractivityPlugin(engine);
+                    await loadExternalAttractInteraction(engine);
+                    await loadParticlesAttractInteraction(engine);
+                    await loadHeartShape(engine);
+                }).then(() => {
+                    this.isEngineReady = true;
+                    this.cdr.markForCheck();
                 });
             }
 
-            this._csrfToken = data._csrfToken;
 
             let hasSsoError = false;
             if (data.hasOwnProperty('errorMessages') && data.errorMessages.length > 0) {
@@ -253,7 +282,11 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl(this.getRedirectUrl());
     }
 
-    public particlesLoaded(container: Container): void {
+    public particlesLoaded(container: Container | undefined): void {
+        if (!container) {
+            return;
+        }
+        this.particlesContainer = container;
     }
 
     protected submit(): void {
@@ -312,560 +345,571 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
         return redirectUrl.split('/a/')[1] || '/dashboards/index';
     };
 
-    private getDefaultConfig = () => {
+    private getDefaultConfig = (): ISourceOptions => {
         return {
-            "particles": {
-                "number": {
-                    "density": {
-                        "enable": true,
-                        "width": 1920,
-                        "height": 1080
+            particles: {
+                number: {
+                    density: {
+                        enable: true,
+                        width: 1920,
+                        height: 1080
                     },
-                    "limit": {
-                        "mode": "delete",
-                        "value": 100
+                    limit: {
+                        mode: "delete",
+                        value: 100
                     },
-                    "value": 100,
+                    value: 100,
                 },
-                "color": {
-                    "value": "#ffffff"
+                color: {
+                    value: "#ffffff"
                 },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 5
-                    },
-                    "image": {
-                        "width": 100,
-                        "height": 100
+                stroke: {
+                    width: 0,
+                    color: "#000000"
+                },
+                shape: {
+                    type: "circle",
+                    options: {
+                        polygon: {
+                            sides: 5
+                        },
+                        image: {
+                            width: 100,
+                            height: 100
+                        }
                     }
                 },
-                "opacity": {
-                    "value": 0.5,
-                    "random": false,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
+                opacity: {
+                    value: 0.5,
+                    random: false,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
                     }
                 },
-                "size": {
-                    "value": {
-                        "min": 2,
-                        "max": 5
+                size: {
+                    value: {
+                        min: 2,
+                        max: 5
                     },
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 40,
-                        "sync": false
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 40,
+                        sync: false
                     }
                 },
-                "links": {
-                    "blink": false,
-                    "color": "#ffffff",
-                    "distance": 150,
-                    "enable": true,
-                    "frequency": 1,
-                    "opacity": 0.4,
-                    "width": 1
+                links: {
+                    blink: false,
+                    color: "#ffffff",
+                    distance: 150,
+                    enable: true,
+                    frequency: 1,
+                    opacity: 0.4,
+                    width: 1
                 },
-                "move": {
-                    "enable": true,
-                    "speed": 1,
-                    "direction": "none",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    outModes: {
+                        default: OutMode.bounce,
                     }
+                },
+                rotate: {
+                    x: 600,
+                    y: 1200
                 }
             },
-            "interactivity": {
-                "detectsOn": "canvas",
-                "events": {
-                    "onHover": {
-                        "enable": true,
-                        "mode": "repulse"
+            interactivity: {
+                detectsOn: "canvas",
+                events: {
+                    onHover: {
+                        enable: true,
+                        mode: "repulse"
                     },
-                    "onClick": {
-                        "enable": true,
-                        "mode": "push"
+                    onClick: {
+                        enable: true,
+                        mode: "push"
                     },
-                    "resize": true
+                    resize: true
                 },
-                "modes": {
-                    "grab": {
-                        "distance": 400,
-                        "line_linked": {
-                            "opacity": 1
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
                         }
                     },
-                    "bubble": {
-                        "distance": 400,
-                        "size": 40,
-                        "duration": 2,
-                        "opacity": 8,
-                        "speed": 3
+                    bubble: {
+                        distance: 400,
+                        size: 40,
+                        duration: 2,
+                        opacity: 8,
+                        speed: 3
                     },
-                    "repulse": {
-                        "distance": 200
+                    repulse: {
+                        distance: 200
                     },
-                    "push": {
-                        "particles_nb": 4
+                    push: {
+                        particles_nb: 4
                     },
-                    "remove": {
-                        "particles_nb": 2
+                    remove: {
+                        particles_nb: 2
                     }
                 }
             },
-            "retina_detect": true,
-            "fpsLimit": 30,
-            "config_demo": {
-                "hide_card": false,
-                "background_color": "#b61924",
-                "background_image": "",
-                "background_position": "50% 50%",
-                "background_repeat": "no-repeat",
-                "background_size": "cover"
+            retina_detect: true,
+            fpsLimit: 30,
+            config_demo: {
+                hide_card: false,
+                background_color: "#b61924",
+                background_image: "",
+                background_position: "50% 50%",
+                background_repeat: "no-repeat",
+                background_size: "cover"
             }
         }
     };
 
-    private getSnowConfig = () => {
+    private getSnowConfig = (): ISourceOptions => {
         return {
-            "particles": {
-                "number": {
-                    "density": {
-                        "enable": true,
-                        "width": 1920,
-                        "height": 1080
+            particles: {
+                number: {
+                    density: {
+                        enable: true,
+                        width: 1920,
+                        height: 1080
                     },
-                    "limit": {
-                        "mode": "delete",
-                        "value": 400
+                    limit: {
+                        mode: "delete",
+                        value: 400
                     },
-                    "value": 400,
+                    value: 400,
                 },
-                "color": {
-                    "value": "#fff"
+                color: {
+                    value: "#fff"
                 },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 5
-                    },
-                    "image": {
-                        "width": 100,
-                        "height": 100
-                    }
+                stroke: {
+                    width: 0,
+                    color: "#000000"
                 },
-                "opacity": {
-                    "value": {
-                        "min": .1,
-                        "max": .5
-                    },
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": {
-                        "min": 0.1,
-                        "max": 10
-                    },
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 40,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": false,
-                    "distance": 500,
-                    "color": "#ffffff",
-                    "opacity": 0.4,
-                    "width": 2
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1,
-                    "direction": "bottom",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detectsOn": "canvas",
-                "events": {
-                    "onHover": {
-                        "enable": true,
-                        "mode": "bubble"
-                    },
-                    "onClick": {
-                        "enable": true,
-                        "mode": "repulse"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 400,
-                        "line_linked": {
-                            "opacity": 0.5
-                        }
-                    },
-                    "bubble": {
-                        "distance": 400,
-                        "size": 4,
-                        "duration": 0.3,
-                        "opacity": 1,
-                        "speed": 3
-                    },
-                    "repulse": {
-                        "distance": 200,
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
-            },
-            "retina_detect": true,
-            "fpsLimit": 30
-        };
-    };
-
-    private getStarsConfig = () => {
-        return {
-            "particles": {
-                "number": {
-                    "density": {
-                        "enable": true,
-                        "width": 1920,
-                        "height": 1080
-                    },
-                    "limit": {
-                        "mode": "delete",
-                        "value": 300
-                    },
-                    "value": 300,
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 5
-                    },
-                    "image": {
-                        "width": 100,
-                        "height": 100
-                    }
-                },
-                "opacity": {
-                    "value": {
-                        "min": .1,
-                        "max": .5
-                    },
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": {
-                        "min": .3,
-                        "max": 5
-                    },
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 40,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": false,
-                },
-                "move": {
-                    "enable": true,
-                    "speed": .5,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 600
-                    }
-                }
-            },
-            "interactivity": {
-                "detectsOn": "canvas",
-                "events": {
-                    "onClick": {
-                        "enable": true,
-                        "mode": "repulse"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 400,
-                        "line_linked": {
-                            "opacity": 1
-                        }
-                    },
-                    "bubble": {
-                        "distance": 250,
-                        "size": 0,
-                        "duration": 2,
-                        "opacity": 0,
-                        "speed": 3
-                    },
-                    "repulse": {
-                        "distance": 400,
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
-            },
-            "retina_detect": true,
-            "fpsLimit": 30
-        };
-    };
-
-    private getBubbleConfig = () => {
-        return {
-            "particles": {
-                "number": {
-                    "value": 6,
-                    "density": {
-                        "enable": true,
-                        "width": 1920,
-                        "height": 1080
-                    }
-                },
-                "color": {
-                    "value": "#1b1e34"
-                },
-                "shape": {
-                    "type": "polygon",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000"
-                    },
-                    "polygon": {
-                        "nb_sides": 6
-                    },
-                    "image": {
-                        "width": 100,
-                        "height": 100
-                    }
-                },
-                "opacity": {
-                    "value": 0.3,
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 160,
-                    "random": false,
-                    "anim": {
-                        "enable": true,
-                        "speed": 10,
-                        "size_min": 40,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": false,
-                    "distance": 200,
-                    "color": "#ffffff",
-                    "opacity": 1,
-                    "width": 2
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 2,
-                    "direction": "none",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detectsOn": "canvas",
-                "events": {
-                    "onHover": {
-                        "enable": false,
-                        "mode": "grab"
-                    },
-                    "onClick": {
-                        "enable": false,
-                        "mode": "push"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 400,
-                        "line_linked": {
-                            "opacity": 1
-                        }
-                    },
-                    "bubble": {
-                        "distance": 400,
-                        "size": 40,
-                        "duration": 2,
-                        "opacity": 8,
-                        "speed": 3
-                    },
-                    "repulse": {
-                        "distance": 200,
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
-            },
-            "retina_detect": true,
-            "fpsLimit": 30
-        };
-    };
-    private getBallConfig = () => {
-        return {
-            "key": "dataImages",
-            "name": "Data URI Images",
-            "interactivity": {
-                "events": {
-                    "onClick": {
-                        "enable": false,
-                        "mode": "push"
-                    },
-                    "onHover": {
-                        "enable": false,
-                        "mode": "bubble"
-                    }
-                },
-                "modes": {
-                    "bubble": {
-                        "distance": 400,
-                        "duration": 2,
-                        "opacity": 0.8,
-                        "size": 40
-                    },
-                    "connect": {
-                        "distance": 80,
-                        "links": {
-                            "opacity": 0.5
+                shape: {
+                    type: "circle",
+                    options: {
+                        polygon: {
+                            sides: 5
                         },
-                        "radius": 60
+                        image: {
+                            width: 100,
+                            height: 100
+                        }
+                    }
+                },
+                opacity: {
+                    value: {
+                        min: .1,
+                        max: .5
                     },
-                    "grab": {
-                        "distance": 400,
-                        "links": {
-                            "opacity": 1
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: {
+                        min: 0.1,
+                        max: 10
+                    },
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 40,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: false,
+                    distance: 500,
+                    color: "#ffffff",
+                    opacity: 0.4,
+                    width: 2
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "bottom",
+                    random: false,
+                    straight: false,
+                    outModes: {
+                        default: OutMode.out
+                    }
+                },
+                rotate: {
+                    x: 600,
+                    y: 1200
+                }
+            },
+            interactivity: {
+                detectsOn: "canvas",
+                events: {
+                    onHover: {
+                        enable: true,
+                        mode: "bubble"
+                    },
+                    onClick: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 0.5
                         }
                     },
-                    "push": {
-                        "quantity": 4
+                    bubble: {
+                        distance: 400,
+                        size: 4,
+                        duration: 0.3,
+                        opacity: 1,
+                        speed: 3
                     },
-                    "remove": {
-                        "quantity": 2
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
                     },
-                    "repulse": {
-                        "distance": 200,
-                        "duration": 0.4
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
                     }
                 }
             },
-            "particles": {
-                "move": {
-                    "direction": "none",
-                    "enable": true,
-                    "speed": 2
-                },
-                "number": {
-                    "density": {
-                        "enable": true
+            retina_detect: true,
+            fpsLimit: 30
+        };
+    };
+
+    private getStarsConfig = (): ISourceOptions => {
+        return {
+            particles: {
+                number: {
+                    density: {
+                        enable: true,
+                        width: 1920,
+                        height: 1080
                     },
-                    "value": 80
-                },
-                "opacity": {
-                    "value": 0.8
-                },
-                "rotate": {
-                    "animation": {
-                        "enable": true,
-                        "speed": 5,
-                        "sync": false
+                    limit: {
+                        mode: "delete",
+                        value: 300
                     },
-                    "direction": "random",
-                    "value": {
-                        "min": 0,
-                        "max": 360
+                    value: 300,
+                },
+                color: {
+                    value: "#ffffff"
+                },
+                stroke: {
+                    width: 0,
+                    color: "#000000"
+                },
+                shape: {
+                    type: "circle",
+                    options: {
+                        polygon: {
+                            sides: 5
+                        },
+                        image: {
+                            width: 100,
+                            height: 100
+                        }
                     }
                 },
-                "shape": {
+                opacity: {
+                    value: {
+                        min: .1,
+                        max: .5
+                    },
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: {
+                        min: .3,
+                        max: 5
+                    },
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 40,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: false,
+                },
+                move: {
+                    enable: true,
+                    speed: .5,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    outModes: {
+                        default: OutMode.out
+                    }
+                },
+                rotate: {
+                    x: 600,
+                    y: 1200
+                }
+            },
+            interactivity: {
+                detectsOn: "canvas",
+                events: {
+                    onClick: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    bubble: {
+                        distance: 250,
+                        size: 0,
+                        duration: 2,
+                        opacity: 0,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 400,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                }
+            },
+            retina_detect: true,
+            fpsLimit: 30
+        };
+    };
+
+    private getBubbleConfig = (): ISourceOptions => {
+        return {
+            particles: {
+                number: {
+                    value: 6,
+                    density: {
+                        enable: true,
+                        width: 1920,
+                        height: 1080
+                    }
+                },
+                color: {
+                    value: "#1b1e34"
+                },
+                stroke: {
+                    width: 0,
+                    color: "#000"
+                },
+                shape: {
+                    type: "polygon",
+                    options: {
+                        polygon: {
+                            sides: 6
+                        },
+                        image: {
+                            width: 100,
+                            height: 100
+                        }
+                    }
+                },
+                opacity: {
+                    value: 0.3,
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 160,
+                    random: false,
+                    anim: {
+                        enable: true,
+                        speed: 10,
+                        size_min: 40,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: false,
+                    distance: 200,
+                    color: "#ffffff",
+                    opacity: 1,
+                    width: 2
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    outModes: {
+                        default: OutMode.out
+                    }
+                },
+                rotate: {
+                    x: 600,
+                    y: 1200
+                }
+            },
+            interactivity: {
+                detectsOn: "canvas",
+                events: {
+                    onHover: {
+                        enable: false,
+                        mode: "grab"
+                    },
+                    onClick: {
+                        enable: false,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 40,
+                        duration: 2,
+                        opacity: 8,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                }
+            },
+            retina_detect: true,
+            fpsLimit: 30
+        };
+    };
+    private getBallConfig = (): ISourceOptions => {
+        return {
+            key: "dataImages",
+            name: "Data URI Images",
+            interactivity: {
+                events: {
+                    onClick: {
+                        enable: false,
+                        mode: "push"
+                    },
+                    onHover: {
+                        enable: false,
+                        mode: "bubble"
+                    }
+                },
+                modes: {
+                    bubble: {
+                        distance: 400,
+                        duration: 2,
+                        opacity: 0.8,
+                        size: 40
+                    },
+                    connect: {
+                        distance: 80,
+                        links: {
+                            opacity: 0.5
+                        },
+                        radius: 60
+                    },
+                    grab: {
+                        distance: 400,
+                        links: {
+                            opacity: 1
+                        }
+                    },
+                    push: {
+                        quantity: 4
+                    },
+                    remove: {
+                        quantity: 2
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    }
+                }
+            },
+            particles: {
+                move: {
+                    direction: "none",
+                    enable: true,
+                    speed: 2
+                },
+                number: {
+                    density: {
+                        enable: true,
+                        width: 800,
+                        height: 800
+                    },
+                    value: 80
+                },
+                opacity: {
+                    value: 0.8
+                },
+                rotate: {
+                    animation: {
+                        enable: true,
+                        speed: 5,
+                        sync: false
+                    },
+                    direction: "random",
+                    value: {
+                        min: 0,
+                        max: 360
+                    }
+                },
+                shape: {
                     options: {
                         character: {
                             value: ['⚽']
@@ -874,7 +918,7 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
                     type: "character"
                 },
                 size: {
-                    value: { min: 4, max: 14 },
+                    value: {min: 4, max: 14},
                     random: {
                         enable: true,
                         minimumValue: 4
@@ -889,4 +933,129 @@ export class UsersLoginComponent implements OnInit, OnDestroy {
             }
         };
     }
+    private getHeartConfig = (): ISourceOptions => {
+        return {
+            particles: {
+                number: {
+                    density: {
+                        enable: true,
+                        width: 1920,
+                        height: 1080
+                    },
+                    limit: {
+                        mode: "delete",
+                        value: 400
+                    },
+                    value: 400,
+                },
+                color: {
+                    value: "#fff"
+                },
+                stroke: {
+                    width: 0,
+                    color: "#000000"
+                },
+                shape: {
+                    type: "heart",
+                    options: {
+                        polygon: {
+                            sides: 5
+                        },
+                        image: {
+                            width: 100,
+                            height: 100
+                        }
+                    }
+                },
+                opacity: {
+                    value: {
+                        min: .1,
+                        max: .5
+                    },
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: {
+                        min: 0.1,
+                        max: 10
+                    },
+                    random: true,
+                    anim: {
+                        enable: false,
+                        speed: 40,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: false,
+                    distance: 500,
+                    color: "#ffffff",
+                    opacity: 0.4,
+                    width: 2
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "bottom",
+                    random: false,
+                    straight: false,
+                    outModes: {
+                        default: OutMode.out
+                    }
+                },
+                rotate: {
+                    x: 600,
+                    y: 1200
+                }
+            },
+            interactivity: {
+                detectsOn: "canvas",
+                events: {
+                    onHover: {
+                        enable: true,
+                        mode: "bubble"
+                    },
+                    onClick: {
+                        enable: true,
+                        mode: "repulse"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 400,
+                        line_linked: {
+                            opacity: 0.5
+                        }
+                    },
+                    bubble: {
+                        distance: 400,
+                        size: 4,
+                        duration: 0.3,
+                        opacity: 1,
+                        speed: 3
+                    },
+                    repulse: {
+                        distance: 200,
+                        duration: 0.4
+                    },
+                    push: {
+                        particles_nb: 4
+                    },
+                    remove: {
+                        particles_nb: 2
+                    }
+                }
+            },
+            retina_detect: true,
+            fpsLimit: 30
+        };
+    };
+
 }

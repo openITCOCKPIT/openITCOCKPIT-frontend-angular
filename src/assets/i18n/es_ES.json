@@ -5186,5 +5186,7 @@
   "Fri": "Vie",
   "Sat": "Sáb",
   "Sun": "Dom",
-  "Notifications overview": "Resumen de notificaciones"
+  "Notifications overview": "Resumen de notificaciones",
+  "GPUs": "GPU",
+  "GPU usage": "Uso de GPU"
 }
