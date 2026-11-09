@@ -20,6 +20,7 @@ import { TimezoneObject } from '../../timezone.interface';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { EChartsOption, VisualMapComponentOption } from 'echarts';
 import * as echarts from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
 
 import {
     AlertComponent,
@@ -45,7 +46,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../layouts/primeng/select.interface';
 
-import 'echarts/theme/dark.js';
+import '../../../../components/charts/echarts-dark-theme';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import { DateTime } from "luxon";
 import { LocalStorageService } from '../../../../services/local-storage.service';
@@ -53,6 +54,7 @@ import { GenericUnixtimerange } from '../../../../generic.interfaces';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 
 import {
+    DatasetComponent,
     DataZoomComponent,
     GridComponent,
     LegendComponent,
@@ -63,7 +65,7 @@ import {
 } from 'echarts/components';
 import { BarChart, LineChart } from 'echarts/charts';
 
-echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, DataZoomComponent]);
+echarts.use([BarChart, LineChart, DatasetComponent, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, DataZoomComponent, CanvasRenderer]);
 
 interface ServiceBrowserChartConfig {
     showDataPoint: boolean,
