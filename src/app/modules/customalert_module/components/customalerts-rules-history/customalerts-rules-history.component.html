@@ -26,7 +26,7 @@
                     <th scope="col" mat-sort-header="full_name">
                         {{ t('User') }}
                     </th>
-                    <th scope="col" mat-sort-header="CustomalertComments.comment">
+                    <th scope="col" mat-sort-header="CustomalertComments.comment" class="col-3">
                         {{ t('Comment') }}
                     </th>
                     <th scope="col" mat-sort-header="CustomalertComments.entry_time" class="col-2">
@@ -94,7 +94,7 @@
                                     </oitc-label-link>
                                 }
                             </td>
-                            <td>
+                            <td class="word-break">
                                 @if (customAlert.CustomalertComments.comment) {
                                     {{ customAlert.CustomalertComments.comment }}
                                 }
