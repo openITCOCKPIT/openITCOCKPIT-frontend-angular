@@ -5,45 +5,45 @@
 /* Add support for card-toolbar */
 
 .card {
-    box-shadow: 0 0 13px 0 rgba(9, 61, 148, 0.08);
+  box-shadow: 0 0 13px 0 rgba(9, 61, 148, 0.08);
 }
 
 .card-header {
-    display: flex;
-    background: color.adjust(oitc.$white, $alpha: -0.97);
+  display: flex;
+  background: color.adjust(oitc.$white, $alpha: -0.97);
 }
 
 .card-title {
-    flex: 1
+  flex: 1
 }
 
 h5.card-title {
-    margin-top: 0.25rem;
-    margin-bottom: 0.25rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 h5.card-title > small.fw-300 {
-    font-style: italic;
+  font-style: italic;
 }
 
 .card-toolbar {
-    display: flex;
-    align-items: center;
-    padding-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding-right: 0.5rem;
 }
 
 
 // card header background images for package manager and support
 .community-bg-header {
-    background-image: url("../images/logos/bgs/community_edition.png");
-    background-repeat: no-repeat;
-    background-color: #3182b1;
+  background-image: url("../images/logos/bgs/community_edition.png");
+  background-repeat: no-repeat;
+  background-color: #3182b1;
 }
 
 .enterprise-bg-header {
-    background-image: url("../images/logos/bgs/enterprise_edition.png");
-    background-repeat: no-repeat;
-    background-color: #cb2522;
+  background-image: url("../images/logos/bgs/enterprise_edition.png");
+  background-repeat: no-repeat;
+  background-color: #cb2522;
 }
 
 
@@ -51,7 +51,7 @@ h5.card-title > small.fw-300 {
 
 .animatedcard {
   position: relative;
-  z-index: 0; // eigener Stacking-Context, damit ::before (z-index: -1) nicht hinter Eltern-Hintergründen verschwindet
+  z-index: 0; // Separate Stacking-Context, makes ::before (z-index: -1) not disappear behind parent backgrounds.
 }
 
 .animatedcard::before {
@@ -73,7 +73,7 @@ h5.card-title > small.fw-300 {
 
   animation: rotateInstallbox 4s linear infinite;
 
-  /* Nur den Border-Bereich sichtbar machen */
+  /* Only make the border area visible */
   -webkit-mask: linear-gradient(#fff 0 0) content-box,
   linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
