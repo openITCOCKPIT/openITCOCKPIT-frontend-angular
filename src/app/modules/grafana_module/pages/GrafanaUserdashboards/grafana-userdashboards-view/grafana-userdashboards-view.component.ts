@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { distinctUntilChanged, skip, Subscription } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { GrafanaTimepickerChange } from '../../../components/grafana-timepicker/grafana-timepicker.interface';
 import { GrafanaTimepickerComponent } from '../../../components/grafana-timepicker/grafana-timepicker.component';
@@ -23,6 +23,7 @@ import { Error404Component } from '../../../../../layouts/coreui/errors/error404
 import { IframeComponent } from '../../../../../components/iframe/iframe.component';
 import { BackButtonDirective } from '../../../../../directives/back-button.directive';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 
 @Component({
     selector: 'oitc-grafana-userdashboards-view',
@@ -65,6 +66,7 @@ export class GrafanaUserdashboardsViewComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     private readonly GrafanaUserdashboardsService = inject(GrafanaUserdashboardsService)
+    private readonly LayoutService = inject(LayoutService);
     private cdr = inject(ChangeDetectorRef);
 
     constructor(private route: ActivatedRoute) {
@@ -73,6 +75,13 @@ export class GrafanaUserdashboardsViewComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.id = Number(this.route.snapshot.paramMap.get('id'));
         this.load();
+
+        // Reload the iframe url, if the user switches the theme (light / dark)
+        this.subscriptions.add(this.LayoutService.theme$.pipe(skip(1), distinctUntilChanged()).subscribe(() => {
+            if (this.dashboard) {
+                this.loadGrafanaIframeUrl();
+            }
+        }));
 
         this.cdr.markForCheck();
     }
@@ -102,7 +111,7 @@ export class GrafanaUserdashboardsViewComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.subscriptions.add(this.GrafanaUserdashboardsService.getViewIframeUrl(this.id, this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh).subscribe(response => {
+        this.subscriptions.add(this.GrafanaUserdashboardsService.getViewIframeUrl(this.id, this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh, this.LayoutService.getTheme()).subscribe(response => {
             this.dashboardFoundInGrafana = response.dashboardFoundInGrafana;
             this.iframeUrl = response.iframeUrl;
 

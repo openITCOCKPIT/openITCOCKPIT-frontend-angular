@@ -142,21 +142,6 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label cLabel for="dashboard_style">
-                            {{ t('Dashboard Style') }}
-                        </label>
-                        <oitc-select
-                            name="dashboard_style"
-                            id="dashboard_style"
-                            optionValue="key"
-                            optionLabel="value"
-                            [(ngModel)]="post.dashboard_style"
-                            [options]="dashboardStyles"
-                            oitcFormError [errors]="errors" errorField="dashboard_style">
-                        </oitc-select>
-                        <oitc-form-feedback [errors]="errors" errorField="dashboard_style"></oitc-form-feedback>
-                    </div>
-                    <div class="mb-3">
                         <label cLabel for="Hostgroup">
                             {{ t('Hostgroups') }}
                         </label>

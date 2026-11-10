@@ -65,13 +65,14 @@ export class GrafanaUserdashboardsService {
         )
     }
 
-    public getViewIframeUrl(id: number, from: string, refresh: string): Observable<GrafanaUserdashboardViewIframeUrlResponse> {
+    public getViewIframeUrl(id: number, from: string, refresh: string, theme: 'light' | 'dark'): Observable<GrafanaUserdashboardViewIframeUrlResponse> {
         const proxyPath = this.proxyPath;
         return this.http.get<GrafanaUserdashboardViewIframeUrlResponse>(`${proxyPath}/grafana_module/grafana_userdashboards/getViewIframeUrl/${id}.json`, {
             params: {
                 angular: true,
                 from: from,
-                refresh: refresh
+                refresh: refresh,
+                theme: theme
             }
         }).pipe(
             map(data => {
