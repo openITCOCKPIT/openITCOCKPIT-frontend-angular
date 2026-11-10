@@ -34,7 +34,7 @@
                 @for (item of items; track item) {
                     <c-col sm="12">
                         <ul class="mb-0">
-                            <li>
+                            <li class="word-break">
                                 {{ item.displayName }}
                                 @if (hasErrors && currentItemHasErrors(item)) {
                                     <div>

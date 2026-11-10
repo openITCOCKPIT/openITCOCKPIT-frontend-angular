@@ -58,7 +58,7 @@
                         <c-row>
                             <c-col lg="4" md="12" xs="12">
                                 <div
-                                    class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
+                                        class="p-2 new-flame-bg bg-danger rounded overflow-hidden position-relative text-white mb-4">
                                     <div>
                                         <h6 class="display-4 d-block l-h-n m-0 fw-500 ng-binding">
                                             {{ result.customalertGlobalOverview['0'] }}
@@ -119,8 +119,6 @@
                     </c-card-body>
                 </c-card>
             }
-
-
             <c-card [hidden]="hideFilter">
                 <c-card-header>
                     <h5>
@@ -270,17 +268,16 @@
                                 </c-form-check>
                             </c-col>
                             <c-col md="10">
-
                                 <h5>{{ t('Container') }}</h5>
                                 <oitc-multi-select
-                                    name="filter.Hosts.container_id"
-                                    id="filter.Hosts.container_id"
-                                    [(ngModel)]="filter.Hosts.container_id"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    (debouncedValue)="onFilterChange($event)"
-                                    oitcDebounce
-                                    [options]="containers">
+                                        name="filter.Hosts.container_id"
+                                        id="filter.Hosts.container_id"
+                                        [(ngModel)]="filter.Hosts.container_id"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        (debouncedValue)="onFilterChange($event)"
+                                        oitcDebounce
+                                        [options]="containers">
                                 </oitc-multi-select>
                                 <br/>
 
@@ -361,7 +358,7 @@
                             <th scope="col" mat-sort-header="servicename">
                                 {{ t('Service') }}
                             </th>
-                            <th scope="col" mat-sort-header="Customalerts.message">
+                            <th scope="col" mat-sort-header="Customalerts.message" class="col-2">
                                 {{ t('Message') }}
                             </th>
                             <th scope="col" mat-sort-header="CustomalertComments.comment">
@@ -371,10 +368,10 @@
                                 <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
                                 {{ t('last 24h') }}
                             </th>
-                            <th scope="col" mat-sort-header="Customalerts.created">
+                            <th scope="col" mat-sort-header="Customalerts.created" class="col-1">
                                 {{ t('Created') }}
                             </th>
-                            <th scope="col" mat-sort-header="Customalerts.modified">
+                            <th scope="col" mat-sort-header="Customalerts.modified" class="col-1">
                                 {{ t('Modified') }}
                             </th>
                             <th class="text-center col-1 width-50" scope="col">
@@ -406,9 +403,9 @@
                                         <td class="text-center">
                                             <div>
                                                 <oitc-item-select
-                                                    *oitcPermission="['CustomalertModule', 'Customalerts', 'annotate']"
-                                                    [disabled]="false"
-                                                    [item]="customAlertRule"></oitc-item-select>
+                                                        *oitcPermission="['CustomalertModule', 'Customalerts', 'annotate']"
+                                                        [disabled]="false"
+                                                        [item]="customAlertRule"></oitc-item-select>
                                             </div>
                                         </td>
                                         <td class="text-center">
@@ -416,16 +413,13 @@
                                                 <i class="fa-solid fa-fire-flame-curved flame"></i>
                                             }
                                             @if (customAlertRule.state === 1) {
-                                                <i
-                                                    class="fa-solid fa-person-digging text-secondary"></i>
+                                                <i class="fa-solid fa-person-digging text-secondary"></i>
                                             }
                                             @if (customAlertRule.state === 2) {
-                                                <i
-                                                    class="fa-solid fa-clipboard-check text-success"></i>
+                                                <i class="fa-solid fa-clipboard-check text-success"></i>
                                             }
                                             @if (customAlertRule.state === 3) {
-                                                <i
-                                                    class="fa-solid fa-folder-closed text-primary"></i>
+                                                <i class="fa-solid fa-folder-closed text-primary"></i>
                                             }
                                         </td>
                                         <td class="word-break">
@@ -438,12 +432,13 @@
                                                 {{ customAlertRule.servicename }}
                                             </span>
                                         </td>
-                                        <td>
+                                        <td class="word-break">
                                             {{ customAlertRule.message }}
                                         </td>
-                                        <td>
-                                            <span
-                                                class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
+                                        <td class="word-break">
+                                            <span class="text-info">
+                                                {{ customAlertRule.CustomalertComments.entry_time }}
+                                            </span>
                                             {{ customAlertRule.CustomalertComments.comment }}
                                         </td>
                                         <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0}">
@@ -461,8 +456,8 @@
                                                                  [icon]="['fas', 'comment']"
                                                                  [permission]="'CustomalertModule.Customalerts.annotate'">
                                                 <oitc-actions-button-element
-                                                    (click)="toggleAnnotateModal(customAlertRule)"
-                                                    [permission]="'CustomalertModule.Customalerts.annotate'">
+                                                        (click)="toggleAnnotateModal(customAlertRule)"
+                                                        [permission]="'CustomalertModule.Customalerts.annotate'">
                                                     <fa-icon [icon]="['fas', 'comment']"></fa-icon>
                                                     {{ t('Annotate') }}
                                                 </oitc-actions-button-element>
@@ -472,8 +467,8 @@
                                                     {{ t('Close manually') }}
                                                 </oitc-actions-button-element>
                                                 <oitc-actions-button-element
-                                                    [permission]="'CustomalertModule.Customalerts.history'"
-                                                    [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
+                                                        [permission]="'CustomalertModule.Customalerts.history'"
+                                                        [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
                                                     <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
                                                     {{ t('History') }}
                                                 </oitc-actions-button-element>
@@ -499,16 +494,16 @@
                             <th scope="col" mat-sort-header="Customalerts.state">
                                 {{ t('State') }}
                             </th>
-                            <th scope="col" mat-sort-header="Containers.name">
+                            <th scope="col" mat-sort-header="Containers.name" class="col-1">
                                 {{ t('Container') }}
                             </th>
-                            <th scope="col" mat-sort-header="Hosts.name">
+                            <th scope="col" mat-sort-header="Hosts.name" class="col-2">
                                 {{ t('Host') }}
                             </th>
                             <th scope="col" mat-sort-header="servicename">
                                 {{ t('Service') }}
                             </th>
-                            <th scope="col" mat-sort-header="Customalerts.message">
+                            <th scope="col" mat-sort-header="Customalerts.message" class="col-2">
                                 {{ t('Message') }}
                             </th>
                             <th scope="col" mat-sort-header="CustomalertComments.comment">
@@ -518,10 +513,10 @@
                                 <fa-icon [icon]="['fas', 'exclamation-triangle']" cTextColor="danger"></fa-icon>
                                 {{ t('last 24h') }}
                             </th>
-                            <th scope="col" mat-sort-header="Customalerts.created">
+                            <th scope="col" mat-sort-header="Customalerts.created" class="col-1">
                                 {{ t('Created') }}
                             </th>
-                            <th scope="col" mat-sort-header="Customalerts.modified">
+                            <th scope="col" mat-sort-header="Customalerts.modified" class="col-1">
                                 {{ t('Modified') }}
                             </th>
                             <th class="text-center col-1 width-50" scope="col">
@@ -535,9 +530,9 @@
                                     <td class="text-center">
                                         <div>
                                             <oitc-item-select
-                                                *oitcPermission="['CustomalertModule', 'Customalerts', 'annotate']"
-                                                [disabled]="false"
-                                                [item]="customAlertRule"></oitc-item-select>
+                                                    *oitcPermission="['CustomalertModule', 'Customalerts', 'annotate']"
+                                                    [disabled]="false"
+                                                    [item]="customAlertRule"></oitc-item-select>
                                         </div>
                                     </td>
                                     <td class="text-center">
@@ -546,11 +541,11 @@
                                         }
                                         @if (customAlertRule.state === 1) {
                                             <i
-                                                class="fa-solid fa-person-digging text-secondary"></i>
+                                                    class="fa-solid fa-person-digging text-secondary"></i>
                                         }
                                         @if (customAlertRule.state === 2) {
                                             <i
-                                                class="fa-solid fa-clipboard-check text-success"></i>
+                                                    class="fa-solid fa-clipboard-check text-success"></i>
                                         }
                                         @if (customAlertRule.state === 3) {
                                             <i class="fa-solid fa-folder-closed text-primary"></i>
@@ -579,12 +574,12 @@
                                             {{ customAlertRule.servicename }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         {{ customAlertRule.message }}
                                     </td>
-                                    <td>
+                                    <td class="word-break">
                                         <span
-                                            class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
+                                                class="text-info">{{ customAlertRule.CustomalertComments.entry_time }}</span>
                                         {{ customAlertRule.CustomalertComments.comment }}
                                     </td>
                                     <td [ngClass]="{'text-success': customAlertRule.last24hoursAlerts === 0, 'text-danger': customAlertRule.last24hoursAlerts > 1}">
@@ -614,8 +609,8 @@
                                                 </oitc-actions-button-element>
                                             }
                                             <oitc-actions-button-element
-                                                [permission]="'CustomalertModule.Customalerts.history'"
-                                                [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
+                                                    [permission]="'CustomalertModule.Customalerts.history'"
+                                                    [url]="'/customalert_module/customalerts/history/' + customAlertRule.id">
                                                 <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
                                                 {{ t('History') }}
                                             </oitc-actions-button-element>
@@ -637,7 +632,7 @@
                     <c-row>
                         <c-col>
                             <oitc-select-all
-                                [itemsCount]="result.customalerts.length"></oitc-select-all>
+                                    [itemsCount]="result.customalerts.length"></oitc-select-all>
                         </c-col>
                         <c-col md="3">
                             <div class="btn-group d-flex flex-row" role="group">
@@ -662,13 +657,13 @@
             }
 
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col>
                         @if (result) {
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                         }
                     </c-col>
                 </c-row>
