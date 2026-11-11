@@ -3,7 +3,8 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import { Subscription } from 'rxjs';
+import { distinctUntilChanged, skip, Subscription } from 'rxjs';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HistoryService } from '../../../history.service';
@@ -271,6 +272,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
     private cdr = inject(ChangeDetectorRef);
+    private readonly LayoutService = inject(LayoutService);
 
     protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly ExternalSystems = ExternalSystems;
@@ -279,6 +281,11 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        // Reload the Grafana iframe url, if the user switches the theme (light / dark)
+        this.subscriptions.add(this.LayoutService.theme$.pipe(skip(1), distinctUntilChanged()).subscribe(() => {
+            this.loadGrafanaIframeUrl();
+        }));
+
         this.subscriptions.add(this.route.paramMap.subscribe(params => {
             const idOrUuid = String(params.get('idOrUuid'));
 
@@ -363,7 +370,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
 
     public loadGrafanaIframeUrl(): void {
         if (this.result?.mergedHost) {
-            this.subscriptions.add(this.HostsService.loadHostGrafanaIframeUrl(String(this.result.mergedHost.uuid), this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh).subscribe((result) => {
+            this.subscriptions.add(this.HostsService.loadHostGrafanaIframeUrl(String(this.result.mergedHost.uuid), this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh, this.LayoutService.getTheme()).subscribe((result) => {
                 this.GrafanaIframe = result;
                 this.cdr.markForCheck();
             }));
