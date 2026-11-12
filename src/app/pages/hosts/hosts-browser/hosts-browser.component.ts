@@ -122,6 +122,9 @@ import {
 import {
     IsarFlowHostBrowserTabComponent
 } from '../../../modules/isarflow_module/components/isar-flow-host-browser-tab/isar-flow-host-browser-tab.component';
+import {
+    CvesHostDetailsComponent
+} from '../../../modules/cve_module/components/cves-host-details/cves-host-details.component';
 import { TitleService } from '../../../services/title.service';
 import {
     BrowserSoftwareLinuxComponent
@@ -205,6 +208,7 @@ import { DowntimeComponent } from '../../../components/downtimes/downtime-compon
         AsyncPipe,
         SlaHostInformationElementComponent,
         IsarFlowHostBrowserTabComponent,
+        CvesHostDetailsComponent,
         TextColorDirective,
         BrowserSoftwareLinuxComponent,
         BrowserSoftwareWindowsComponent,

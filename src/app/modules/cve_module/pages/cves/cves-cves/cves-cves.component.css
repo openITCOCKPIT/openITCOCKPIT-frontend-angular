@@ -1,0 +1,7 @@
+/* Descriptions can be very long, the full text is in the title and on the page of the CVE */
+.cves-description {
+    max-width: 32rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

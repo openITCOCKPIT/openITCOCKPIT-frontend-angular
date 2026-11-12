@@ -26,7 +26,8 @@ export enum HostBrowserTabs {
     IsarFlow = 'IsarFlow',
     SoftwareInventory = 'SoftwareInventory',
     DependencyTree = 'DependencyTree',
-    Proxmox = 'Proxmox'
+    Proxmox = 'Proxmox',
+    Vulnerabilities = 'Vulnerabilities'
 }
 
 export enum HostStatusNames {

@@ -1,0 +1,321 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'cve_module', 'cves', 'index']">
+                    <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
+                    {{ t('Vulnerabilities') }}
+                </a>
+            </li>
+            @if (result) {
+                <li class="breadcrumb-item">
+                    <a [routerLink]="['/', 'cve_module', 'cves', 'host', result.finding.host_id]">
+                        <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                        {{ result.finding.host.name }}
+                    </a>
+                </li>
+            }
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                {{ t('Finding') }}
+            </li>
+        </ol>
+    </nav>
+
+    @if (!result) {
+        <oitc-table-loader></oitc-table-loader>
+    } @else {
+        @let finding = result.finding;
+        <c-card class="mb-3">
+            <c-card-header>
+                <h5 cCardTitle>
+                    <oitc-cve-state-badge [color]="finding.color"></oitc-cve-state-badge>
+                    {{ finding.cve.cve_id }}
+                    <small class="fw-300">
+                        {{ finding.component_name }} {{ finding.component_version }}
+                        · {{ finding.host.name }}
+                    </small>
+                </h5>
+                <c-nav class="card-toolbar card-header-pills">
+                    <c-nav-item class="px-1">
+                        <button cButton size="xs" color="default" class="ripple"
+                                [routerLink]="['/', 'cve_module', 'cves', 'view', finding.cve.cve_id]">
+                            <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                            {{ t('All affected hosts') }}
+                        </button>
+                    </c-nav-item>
+                    @if (PermissionsService.hasPermissionObservable(['changelogs', 'index']) | async) {
+                        <c-nav-item class="px-1">
+                            <button cButton size="xs" color="default" class="ripple"
+                                    [routerLink]="['/', 'changelogs', 'entity', 'cve_decision', finding.host_id]">
+                                <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
+                                {{ t('Changelog of the decisions') }}
+                            </button>
+                        </c-nav-item>
+                    }
+                </c-nav>
+            </c-card-header>
+            <c-card-body>
+                <c-row>
+                    <!-- The CVE -->
+                    <c-col [xs]="12" [xl]="6" class="mb-3">
+                        <h5>{{ t('Vulnerability') }}</h5>
+                        @if (finding.cve.summary) {
+                            <p class="cves-summary">{{ finding.cve.summary }}</p>
+                        }
+                        <table cTable small class="mb-0">
+                            <tbody>
+                            <tr>
+                                <th>{{ t('Published') }}</th>
+                                <td>{{ finding.cve.published_user ?? '-' }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('CVSS') }}</th>
+                                <td>
+                                    @if (finding.cve.cvss_score !== null) {
+                                        <strong>{{ finding.cve.cvss_score | number:'1.1-1' }}</strong>
+                                        @if (finding.cve.cvss_source) {
+                                            <span class="text-muted">({{ finding.cve.cvss_source }})</span>
+                                        }
+                                        @if (finding.cve.cvss_vector) {
+                                            <div><code class="small">{{ finding.cve.cvss_vector }}</code></div>
+                                        }
+                                    } @else {
+                                        <span class="text-muted">{{ t('Unknown') }}</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('CISA KEV') }}</th>
+                                <td>
+                                    @if (finding.cve.kev_cisa) {
+                                        <c-badge color="danger">{{ t('Exploited in the wild') }}</c-badge>
+                                        @if (finding.cve.kev_cisa_added) {
+                                            <span class="ms-1 text-muted">{{ t('since') }} {{ finding.cve.kev_cisa_added }}</span>
+                                        }
+                                    } @else {
+                                        {{ t('No') }}
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('VulnCheck KEV') }}</th>
+                                <td>{{ finding.cve.kev_vulncheck ? t('Yes') : t('No') }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Exploits') }}</th>
+                                <td>
+                                    {{ t('Metasploit') }}: {{ finding.cve.metasploit_count }}
+                                    · {{ t('Verified') }}: {{ finding.cve.verified_exploit_count }}
+                                    · {{ t('Proof of concept') }}: {{ finding.cve.poc_exploit_count }}
+                                </td>
+                            </tr>
+                            @if (finding.cve.source_link) {
+                                <tr>
+                                    <th>{{ t('Source') }}</th>
+                                    <td>
+                                        <a [href]="finding.cve.source_link" target="_blank" rel="noopener noreferrer">
+                                            {{ finding.cve.source_link }}
+                                            <fa-icon [icon]="['fas', 'arrow-up-right-from-square']"></fa-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </c-col>
+
+                    <!-- The finding on this host -->
+                    <c-col [xs]="12" [xl]="6" class="mb-3">
+                        <h5>{{ t('Finding on this host') }}</h5>
+                        <table cTable small class="mb-0">
+                            <tbody>
+                            <tr>
+                                <th>{{ t('Package / application') }}</th>
+                                <td>
+                                    <strong>{{ finding.component_name }}</strong>
+                                    <code class="ms-1">{{ finding.component_version }}</code>
+                                    @if (finding.is_kernel) {
+                                        @if (finding.is_running === true) {
+                                            <c-badge color="primary" class="ms-1">{{ t('Running kernel') }}</c-badge>
+                                        } @else if (finding.is_running === false) {
+                                            <c-badge color="secondary" class="ms-1">{{ t('Kernel not running') }}</c-badge>
+                                        } @else {
+                                            <c-badge color="warning" class="ms-1">{{ t('Kernel, running state unknown') }}</c-badge>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Severity') }}</th>
+                                <td>
+                                    <oitc-cve-severity-badge [severity]="finding.severity"></oitc-cve-severity-badge>
+                                    @if (finding.severity_source) {
+                                        <span class="text-muted ms-1">({{ finding.severity_source }})</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Fixed in') }}</th>
+                                <td>
+                                    @if (finding.fixed_in) {
+                                        <code>{{ finding.fixed_in }}</code>
+                                    } @else if (finding.not_fixed_yet) {
+                                        {{ t('Not fixed yet') }}
+                                    } @else {
+                                        <span class="text-muted">{{ t('Unknown') }}</span>
+                                    }
+                                    @if (finding.fix_state) {
+                                        <span class="text-muted ms-1">({{ finding.fix_state }})</span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Available update') }}</th>
+                                <td>
+                                    @if (finding.update_available && finding.update_version) {
+                                        <code>{{ finding.update_version }}</code>
+                                    } @else {
+                                        {{ t('None') }}
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Rule') }}</th>
+                                <td>
+                                    <oitc-cve-rule-label [rule]="finding.rule"></oitc-cve-rule-label>
+                                    <span class="text-muted ms-1">({{ t('Rank') }} {{ finding.rule_rank }}, <code>{{ finding.policy_version }}</code>)</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Facts') }}</th>
+                                <td>
+                                    <oitc-cve-reason-badges [reasons]="finding.reason_codes"></oitc-cve-reason-badges>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Action') }}</th>
+                                <td>
+                                    <oitc-cve-recommendation-label
+                                        [recommendation]="finding.recommendation"></oitc-cve-recommendation-label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('First seen') }}</th>
+                                <td>{{ finding.first_seen_user }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Last seen') }}</th>
+                                <td>{{ finding.last_seen_user }}</td>
+                            </tr>
+                            @if (finding.resolved_at) {
+                                <tr>
+                                    <th>{{ t('Resolved') }}</th>
+                                    <td class="text-success">{{ finding.resolved_at_user }}</td>
+                                </tr>
+                            }
+                            @if (finding.reopen_count > 0) {
+                                <tr>
+                                    <th>{{ t('Reopened') }}</th>
+                                    <td class="text-warning">
+                                        {{ finding.reopened_at_user }}
+                                        ({{ finding.reopen_count }}×)
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </c-col>
+                </c-row>
+
+                <!-- Decision -->
+                <h5 class="mt-2">
+                    <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
+                    {{ t('Decision') }}
+                </h5>
+                @if (finding.decision) {
+                    <table cTable small class="mb-2">
+                        <tbody>
+                        <tr>
+                            <th>{{ t('Decision') }}</th>
+                            <td>
+                                <oitc-cve-decision-state-label [state]="finding.decision.state"></oitc-cve-decision-state-label>
+                                @if (finding.review_required) {
+                                    <c-badge color="warning" class="ms-1">{{ t('Needs a review') }}</c-badge>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ t('Responsible person or team') }}</th>
+                            <td>{{ finding.decision.owner }}</td>
+                        </tr>
+                        <tr>
+                            <th>{{ t('Reason') }}</th>
+                            <td class="cves-summary">{{ finding.decision.reason }}</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                @if (finding.decision.state === 'in_progress') {
+                                    {{ t('Due on') }}
+                                } @else {
+                                    {{ t('Review on') }}
+                                }
+                            </th>
+                            <td>{{ finding.decision.review_after }}</td>
+                        </tr>
+                        @if (finding.decision.evidence_url) {
+                            <tr>
+                                <th>{{ t('Link to the analysis') }}</th>
+                                <td>
+                                    <a [href]="finding.decision.evidence_url" target="_blank" rel="noopener noreferrer">
+                                        {{ finding.decision.evidence_url }}
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <th>{{ t('Decided by') }}</th>
+                            <td>
+                                {{ finding.decision.user?.name ?? t('Unknown') }}
+                                · {{ finding.decision.modified_user }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                } @else {
+                    <p class="text-muted">{{ t('No decision. The finding is classified by the policy.') }}</p>
+                }
+
+                @if (finding.resolved_at) {
+                    <p class="text-muted">{{ t('The finding is resolved, decisions are not possible anymore.') }}</p>
+                } @else if (result.allowEdit && (PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'decide']) | async)) {
+                    <button cButton color="primary" size="xs" class="ripple me-2" (click)="openModal('decide')">
+                        <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
+                        @if (finding.decision) {
+                            {{ t('Change decision') }}
+                        } @else {
+                            {{ t('Decide') }}
+                        }
+                    </button>
+                    @if (finding.decision) {
+                        <button cButton color="danger" size="xs" class="ripple" (click)="openModal('remove')">
+                            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                            {{ t('End decision') }}
+                        </button>
+                    }
+                }
+            </c-card-body>
+        </c-card>
+
+        <oitc-cves-decide-modal [findingIds]="modalFindingIds"
+                                [mode]="modalMode"
+                                [decision]="finding.decision"
+                                (completed)="onDecisionCompleted($event)"></oitc-cves-decide-modal>
+    }
+</ng-container>

@@ -1,0 +1,142 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'cve_module', 'cves', 'index']">
+                    <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
+                    {{ t('Vulnerabilities') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                {{ t('Recommendations') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Vulnerabilities') }}
+                <small class="fw-300">
+                    {{ t('Recommendations') }}
+                </small>
+            </h5>
+            <oitc-cves-pages-nav [active]="'recommendations'">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </oitc-cves-pages-nav>
+        </c-card-header>
+        <c-card-body>
+            <p class="text-muted">
+                {{ t('Updates that fix the CVEs which require action, the most urgent first. Kernel updates require a reboot to take effect.') }}
+            </p>
+
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <form cForm>
+                    <c-row>
+                        <c-col [xs]="12" [md]="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[CveHostFindings.component_name]']"
+                                       [placeholder]="'Filter by package or application' | transloco"
+                                       cFormControl name="componentName" oitcDebounce type="text"/>
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="6" class="mb-2 d-flex align-items-center">
+                            <c-form-check>
+                                <input cFormCheckInput type="checkbox" id="CvesKernelOnly" name="CvesKernelOnly"
+                                       [checked]="params['filter[CveHostFindings.is_kernel]'] === 1"
+                                       (change)="toggleKernelOnly($any($event.target).checked)"/>
+                                <label cFormCheckLabel for="CvesKernelOnly">{{ t('Only kernel') }}</label>
+                            </c-form-check>
+                            <button (click)="resetFilter()" cButton class="ripple ms-auto" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!recommendations) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th scope="col">{{ t('Action') }}</th>
+                    <th scope="col" mat-sort-header="component_name">{{ t('Package / application') }}</th>
+                    <th scope="col" mat-sort-header="highest_severity">{{ t('Highest severity') }}</th>
+                    <th scope="col" mat-sort-header="cve_count">{{ t('Fixes CVEs') }}</th>
+                    <th scope="col" mat-sort-header="red_count">{{ t('Red') }}</th>
+                    <th scope="col" mat-sort-header="kev_count">{{ t('CISA KEV') }}</th>
+                    <th scope="col" mat-sort-header="host_count">{{ t('Hosts') }}</th>
+                    <th scope="col">{{ t('Hosts with update') }}</th>
+                    <th scope="col" mat-sort-header="version_count">{{ t('Installed versions') }}</th>
+                </tr>
+                </thead>
+                @if (recommendations) {
+                    <tbody>
+                        @for (row of recommendations.recommendations; track row.component_type + row.component_name) {
+                            <tr>
+                                <td>
+                                    <oitc-cve-recommendation-label
+                                        [recommendation]="row.recommendation"></oitc-cve-recommendation-label>
+                                </td>
+                                <td>
+                                    <a [routerLink]="['/', 'cve_module', 'cves', 'software']"
+                                       [queryParams]="{component_name: row.component_name}">
+                                        <strong>{{ row.component_name }}</strong>
+                                    </a>
+                                    @if (row.is_kernel) {
+                                        <c-badge color="primary" class="ms-1">{{ t('Kernel') }}</c-badge>
+                                    }
+                                </td>
+                                <td>
+                                    <oitc-cve-severity-badge [severity]="row.highest_severity"></oitc-cve-severity-badge>
+                                </td>
+                                <td>{{ row.cve_count }}</td>
+                                <td [class.text-danger]="row.red_count > 0">{{ row.red_count }}</td>
+                                <td [class.text-danger]="row.kev_count > 0">{{ row.kev_count }}</td>
+                                <td>{{ row.host_count }}</td>
+                                <td>{{ row.host_update_count }}</td>
+                                <td>{{ row.version_count }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+            @if (recommendations && recommendations.recommendations.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            <c-container [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="recommendations"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+    </c-card>
+</ng-container>

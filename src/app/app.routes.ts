@@ -65,6 +65,7 @@ import { sonicWallModuleRoutes } from './modules/sonic_wall_module/sonic_wall_mo
 import { symantecModuleRoutes } from './modules/symantec_module/symantec_module.routes';
 import { aristaNetworksModuleRoutes } from './modules/aristanetworks_module/aristanetworks_module.routes';
 import { telegramModuleRoutes } from "./modules/telegram_module/telegram_module.routes";
+import { cveModuleRoutes } from './modules/cve_module/cve_module.routes';
 
 @Component({
     selector: 'legacy-redirect',
@@ -151,7 +152,8 @@ const moduleRoutes: Routes = [
     ...sonicWallModuleRoutes,
     ...symantecModuleRoutes,
     ...aristaNetworksModuleRoutes,
-    ...telegramModuleRoutes
+    ...telegramModuleRoutes,
+    ...cveModuleRoutes
 ];
 /***    Core routes   ***/
 const coreRoutes: Routes = [{

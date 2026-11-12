@@ -208,6 +208,17 @@
                             </button>
                         </c-nav-item>
                     }
+                    @if (( PermissionsService.hasModuleObservable('CveModule')|async ) && ( PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'index'])|async ) && softwareInformation?.SoftwareInformationExists) {
+                        <c-nav-item>
+                            <button
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.Vulnerabilities}"
+                                (click)="changeTab(HostBrowserTabs.Vulnerabilities)">
+                                <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
+                                {{ t('Vulnerabilities') }}
+                            </button>
+                        </c-nav-item>
+                    }
 
                 </c-nav>
             </c-card-header>
@@ -1419,6 +1430,18 @@
                 }
 
                 <!-- Software inventory end -->
+                <!-- CVE Module start -->
+                @if (selectedTab == HostBrowserTabs.Vulnerabilities && result.mergedHost) {
+                    @if (( PermissionsService.hasModuleObservable('CveModule')|async ) && ( PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'index'])|async )) {
+                        <oitc-cves-host-details [hostId]="Number(result.mergedHost.id)"
+                                                [embedded]="true"></oitc-cves-host-details>
+                    } @else {
+                        <label class="text-danger">
+                            {{ t('No permissions') }}
+                        </label>
+                    }
+                }
+                <!-- CVE Module end -->
                 <!-- SLA Module start -->
                 @if (selectedTab == HostBrowserTabs.SLA) {
                     <div>

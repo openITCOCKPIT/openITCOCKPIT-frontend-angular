@@ -1,0 +1,36 @@
+.cves-tile {
+    display: block;
+    height: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--cui-border-color, #dee2e6);
+    border-left-width: 0.3rem;
+    border-radius: 0.375rem;
+    background-color: var(--cui-body-bg, #fff);
+    color: var(--cui-body-color, #212529);
+    text-decoration: none;
+}
+
+a.cves-tile:hover {
+    background-color: var(--cui-tertiary-bg, #f8f9fa);
+}
+
+.cves-tile-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.cves-tile-red {
+    border-left-color: var(--cui-danger, #e55353);
+}
+
+.cves-tile-yellow {
+    border-left-color: var(--cui-warning, #f9b115);
+}
+
+.cves-tile-gray {
+    border-left-color: var(--cui-secondary, #9da5b1);
+}
+
+.cves-bar-column {
+    min-width: 16rem;
+}

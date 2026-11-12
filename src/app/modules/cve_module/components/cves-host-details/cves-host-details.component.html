@@ -1,0 +1,418 @@
+<ng-container *transloco="let t">
+    @if (!host) {
+        <oitc-table-loader></oitc-table-loader>
+    } @else {
+        <!-- Head: state, counters and inventory -->
+        @if (host.summary === null) {
+            <c-alert color="info">
+                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                {{ t('This host has not been evaluated yet. The cronjob CveCheck evaluates all Linux hosts with a software inventory.') }}
+            </c-alert>
+        } @else {
+            @let summary = host.summary;
+            <c-row class="mb-3">
+                <c-col [xs]="12" [lg]="7" class="mb-2">
+                    <div class="d-flex align-items-center mb-2">
+                        @if (!embedded()) {
+                            <h4 class="mb-0 me-2">
+                                <a [routerLink]="['/', 'hosts', 'browser', summary.host_id]">{{ summary.host.name }}</a>
+                            </h4>
+                        }
+                        <oitc-cve-state-badge [color]="summary.state.color"
+                                              [status]="summary.state.status"></oitc-cve-state-badge>
+                        @if (summary.state.status === 'stale' && summary.color !== summary.state.color) {
+                            <span class="ms-2 small text-muted">
+                                {{ t('Last result') }}:
+                                <oitc-cve-state-badge [color]="summary.color"></oitc-cve-state-badge>
+                            </span>
+                        }
+                        <button cButton size="xs" color="default" class="ripple ms-auto" (click)="load()">
+                            <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                            {{ t('Refresh') }}
+                        </button>
+                    </div>
+                    <oitc-cve-severity-bar [critical]="summary.critical_count"
+                                           [high]="summary.high_count"
+                                           [medium]="summary.medium_count"
+                                           [low]="summary.low_count"
+                                           [unknown]="summary.unknown_count"></oitc-cve-severity-bar>
+                    <table cTable small class="mt-2 mb-0 cves-counters">
+                        <tbody>
+                        <tr>
+                            <th>{{ t('Open CVEs') }}</th>
+                            <td>{{ summary.open_count }}</td>
+                            <th>{{ t('Action required') }}</th>
+                            <td>{{ summary.action_count }}</td>
+                            <th>{{ t('Red') }}</th>
+                            <td class="text-danger">{{ summary.red_count }}</td>
+                        </tr>
+                        <tr>
+                            <th>{{ t('CISA KEV') }}</th>
+                            <td [class.text-danger]="summary.kev_count > 0">{{ summary.kev_count }}</td>
+                            <th>{{ t('Public exploits') }}</th>
+                            <td>{{ summary.exploit_count }}</td>
+                            <th>{{ t('With fix') }}</th>
+                            <td>{{ summary.fixable_count }}</td>
+                        </tr>
+                        <tr>
+                            <th>{{ t('In progress') }}</th>
+                            <td>{{ summary.in_progress_count }}</td>
+                            <th>{{ t('Risk accepted') }}</th>
+                            <td>{{ summary.accepted_count }}</td>
+                            <th>{{ t('Not affected') }}</th>
+                            <td>{{ summary.not_affected_count }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </c-col>
+                <c-col [xs]="12" [lg]="5" class="mb-2">
+                    <table cTable small class="mb-0">
+                        <tbody>
+                            @if (host.inventory) {
+                                <tr>
+                                    <th>{{ t('Operating system') }}</th>
+                                    <td>{{ host.inventory.os_name }} {{ host.inventory.os_version }}</td>
+                                </tr>
+                                <tr>
+                                    <th>{{ t('Running kernel') }}</th>
+                                    <td>
+                                        @if (host.inventory.kernel_release) {
+                                            <code>{{ host.inventory.kernel_release }}</code>
+                                        } @else {
+                                            <span class="text-warning">{{ t('Unknown') }}</span>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>{{ t('Agent version') }}</th>
+                                    <td>{{ host.inventory.agent_version }}</td>
+                                </tr>
+                            }
+                            <tr>
+                                <th>{{ t('Inventory from') }}</th>
+                                <td>
+                                    {{ summary.inventory_last_update_user }}
+                                    @if (summary.state.inventory_age_days !== null) {
+                                        <span class="text-muted">
+                                            ({{ summary.state.inventory_age_days }} {{ t('days') }})
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Evaluated') }}</th>
+                                <td>
+                                    {{ summary.evaluated_user }}
+                                    @if (summary.failed_user) {
+                                        <div class="text-danger">{{ t('Failed') }}: {{ summary.failed_user }}</div>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>{{ t('Checked installations') }}</th>
+                                <td>{{ summary.evaluated_installations }} / {{ summary.installations }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </c-col>
+            </c-row>
+            @if (summary.error_message) {
+                <c-alert color="danger">
+                    <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                    {{ summary.error_message }}
+                </c-alert>
+            }
+        }
+
+        <!-- Tabs: the four views and the coverage -->
+        <c-nav variant="tabs" class="mb-3">
+            <c-nav-item>
+                <button class="nav-link" [class.active]="selectedTab === CveHostTabs.Action"
+                        (click)="changeTab(CveHostTabs.Action)">
+                    <fa-icon [icon]="['fas', 'triangle-exclamation']"></fa-icon>
+                    {{ t('Action required') }}
+                    <c-badge color="danger" class="ms-1">{{ host.views.action.cves }}</c-badge>
+                </button>
+            </c-nav-item>
+            <c-nav-item>
+                <button class="nav-link" [class.active]="selectedTab === CveHostTabs.Unfixed"
+                        (click)="changeTab(CveHostTabs.Unfixed)">
+                    <fa-icon [icon]="['fas', 'hourglass-half']"></fa-icon>
+                    {{ t('Open without fix') }}
+                    <c-badge color="secondary" class="ms-1">{{ host.views.unfixed.cves }}</c-badge>
+                </button>
+            </c-nav-item>
+            <c-nav-item>
+                <button class="nav-link" [class.active]="selectedTab === CveHostTabs.Accepted"
+                        (click)="changeTab(CveHostTabs.Accepted)">
+                    <fa-icon [icon]="['fas', 'handshake']"></fa-icon>
+                    {{ t('Risk accepted') }}
+                    <c-badge color="secondary" class="ms-1">{{ host.views.accepted.cves }}</c-badge>
+                </button>
+            </c-nav-item>
+            <c-nav-item>
+                <button class="nav-link" [class.active]="selectedTab === CveHostTabs.NotAffected"
+                        (click)="changeTab(CveHostTabs.NotAffected)">
+                    <fa-icon [icon]="['fas', 'shield-halved']"></fa-icon>
+                    {{ t('Not affected') }}
+                    <c-badge color="secondary" class="ms-1">{{ host.views.not_affected.cves }}</c-badge>
+                </button>
+            </c-nav-item>
+            <c-nav-item>
+                <button class="nav-link" [class.active]="selectedTab === CveHostTabs.Coverage"
+                        (click)="changeTab(CveHostTabs.Coverage)">
+                    <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                    {{ t('Coverage') }}
+                </button>
+            </c-nav-item>
+        </c-nav>
+
+        @if (selectedTab === CveHostTabs.Coverage) {
+            <!-- Coverage: what could not be evaluated and why -->
+            @if (!coverage) {
+                <oitc-table-loader></oitc-table-loader>
+            } @else {
+                <p>
+                    {{ t('Checked installations') }}:
+                    <strong>{{ coverage.evaluated_installations }} / {{ coverage.installations }}</strong>
+                </p>
+                @if (coverage.error_message) {
+                    <c-alert color="danger">{{ coverage.error_message }}</c-alert>
+                }
+                @if (coverage.reasons.length === 0) {
+                    <c-alert color="success">
+                        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                        {{ t('All installed packages have been checked.') }}
+                    </c-alert>
+                } @else {
+                    <ul class="list-unstyled">
+                        @for (reason of coverage.reasons; track reason) {
+                            <li class="mb-2">
+                                <oitc-cve-coverage-reason-label [reason]="reason"></oitc-cve-coverage-reason-label>
+                            </li>
+                        }
+                    </ul>
+                }
+                @for (type of coverageItemTypes(coverage); track type) {
+                    <h6 class="mt-3">
+                        @switch (type) {
+                            @case ('missing_metadata') {
+                                {{ t('Packages without source package') }}
+                            }
+                            @case ('inactive_kernel') {
+                                {{ t('Installed kernels that are not running') }}
+                            }
+                            @case ('unmapped_app') {
+                                {{ t('Applications without CPE rule') }}
+                            }
+                            @case ('other_platform_cve') {
+                                {{ t('Applications of another operating system') }}
+                            }
+                            @default {
+                                <code>{{ type }}</code>
+                            }
+                        }
+                        <c-badge color="secondary" class="ms-1">{{ coverage.items[type].length }}</c-badge>
+                    </h6>
+                    <div class="cves-coverage-items">
+                        @for (item of coverage.items[type]; track $index) {
+                            <code class="me-2">{{ item }}</code>
+                        }
+                    </div>
+                }
+            }
+        } @else {
+            <!-- Filter of the components -->
+            <form cForm class="mb-2">
+                <c-row>
+                    <c-col [xs]="12" [md]="6" class="mb-1">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            </span>
+                            <input (debouncedValue)="onFilterChange()"
+                                   [(ngModel)]="params['filter[CveHostFindings.component_name]']"
+                                   [placeholder]="'Filter by package or application' | transloco"
+                                   cFormControl
+                                   name="componentName"
+                                   oitcDebounce
+                                   type="text"/>
+                        </c-input-group>
+                    </c-col>
+                    <c-col [xs]="12" [md]="6" class="mb-1 d-flex align-items-center">
+                        <c-form-check class="me-3">
+                            <input cFormCheckInput type="checkbox" id="CvesKernelOnly" name="CvesKernelOnly"
+                                   [ngModel]="params['filter[CveHostFindings.is_kernel]'] === 1"
+                                   (ngModelChange)="params['filter[CveHostFindings.is_kernel]'] = $event ? 1 : ''; onFilterChange()"/>
+                            <label cFormCheckLabel for="CvesKernelOnly">{{ t('Only kernel') }}</label>
+                        </c-form-check>
+                        <c-form-check class="me-3">
+                            <input cFormCheckInput type="checkbox" id="CvesUpdateAvailable" name="CvesUpdateAvailable"
+                                   [ngModel]="params['filter[CveHostFindings.update_available]'] === 1"
+                                   (ngModelChange)="params['filter[CveHostFindings.update_available]'] = $event ? 1 : ''; onFilterChange()"/>
+                            <label cFormCheckLabel for="CvesUpdateAvailable">{{ t('Update available') }}</label>
+                        </c-form-check>
+                        <button (click)="resetFilter()" cButton class="ripple ms-auto" color="danger" size="xs">
+                            {{ t('Reset filter') }}
+                        </button>
+                    </c-col>
+                </c-row>
+            </form>
+
+            <!-- Components of the view -->
+            @if (!components) {
+                <oitc-table-loader></oitc-table-loader>
+            } @else {
+                <table cTable bordered hover small striped class="mb-0 table-fit" matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th class="width-50"></th>
+                        @if (allowEdit) {
+                            <th class="width-50 text-center">
+                                <input cFormCheckInput type="checkbox"
+                                       [checked]="allComponentsSelected()"
+                                       (change)="toggleAllComponents()"
+                                       [title]="'Select all on this page' | transloco"/>
+                            </th>
+                        }
+                        <th mat-sort-header="component_name">{{ t('Package / application') }}</th>
+                        <th mat-sort-header="highest_severity">{{ t('Highest severity') }}</th>
+                        <th mat-sort-header="cve_count">{{ t('CVEs') }}</th>
+                        <th mat-sort-header="red_count">{{ t('Red') }}</th>
+                        <th mat-sort-header="kev_count">{{ t('CISA KEV') }}</th>
+                        <th mat-sort-header="exploit_count">{{ t('Exploits') }}</th>
+                        <th>{{ t('Action') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @for (component of components.components; track componentKey(component)) {
+                            <tr>
+                                <td class="text-center">
+                                    <button cButton size="xs" color="default" (click)="toggleExpand(component)"
+                                            [title]="'Show CVEs' | transloco">
+                                        <fa-icon
+                                            [icon]="['fas', isExpanded(component) ? 'chevron-down' : 'chevron-right']"></fa-icon>
+                                    </button>
+                                </td>
+                                @if (allowEdit) {
+                                    <td class="text-center">
+                                        <input cFormCheckInput type="checkbox"
+                                               [checked]="isComponentSelected(component)"
+                                               (change)="toggleComponent(component)"
+                                               [title]="'Select all CVEs of this package' | transloco"/>
+                                    </td>
+                                }
+                                <td>
+                                    <strong>{{ component.component_name }}</strong>
+                                    <code class="ms-1">{{ component.component_version }}</code>
+                                    @if (component.is_kernel) {
+                                        @if (component.is_running === true) {
+                                            <c-badge color="primary" class="ms-1">{{ t('Running kernel') }}</c-badge>
+                                        } @else if (component.is_running === false) {
+                                            <c-badge color="secondary" class="ms-1">{{ t('Kernel not running') }}</c-badge>
+                                        } @else {
+                                            <c-badge color="warning" class="ms-1">{{ t('Kernel, running state unknown') }}</c-badge>
+                                        }
+                                    }
+                                    @if (component.in_progress_count > 0) {
+                                        <c-badge color="primary" class="ms-1"
+                                                 [cTooltip]="t('CVEs in progress')">
+                                            <fa-icon [icon]="['fas', 'person-digging']"></fa-icon>
+                                            {{ component.in_progress_count }}
+                                        </c-badge>
+                                    }
+                                </td>
+                                <td>
+                                    <oitc-cve-severity-badge
+                                        [severity]="component.highest_severity"></oitc-cve-severity-badge>
+                                </td>
+                                <td>{{ component.cve_count }}</td>
+                                <td [class.text-danger]="component.red_count > 0">{{ component.red_count }}</td>
+                                <td [class.text-danger]="component.kev_count > 0">{{ component.kev_count }}</td>
+                                <td>{{ component.exploit_count }}</td>
+                                <td>
+                                    <oitc-cve-recommendation-label
+                                        [recommendation]="component.recommendation"></oitc-cve-recommendation-label>
+                                </td>
+                            </tr>
+                            @if (isExpanded(component)) {
+                                <tr class="cves-expanded-row">
+                                    <td [attr.colspan]="allowEdit ? 9 : 8" class="p-2">
+                                        <oitc-cves-host-findings
+                                            [hostId]="hostId()"
+                                            [view]="currentView"
+                                            [componentName]="component.component_name"
+                                            [componentVersion]="component.component_version"
+                                            [allowEdit]="allowEdit"
+                                            [selection]="selectedFindingIds"
+                                            (selectionChanged)="onFindingSelectionChanged($event)"></oitc-cves-host-findings>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                @if (components.components.length === 0) {
+                    <oitc-no-records></oitc-no-records>
+                }
+
+                <!-- Decisions for the selection -->
+                @if (allowEdit && (PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'decide']) | async)) {
+                    <div class="bg-secondary bg-opacity-10 py-2 px-2 rounded-bottom border border-top-0 d-flex align-items-center flex-wrap">
+                        <span class="me-3">
+                            {{ t('Selected') }}:
+                            <strong>{{ selectedCount }}</strong> {{ t('CVEs') }}
+                        </span>
+                        <button cButton size="xs" color="primary" class="ripple me-2"
+                                [disabled]="selectedCount === 0 || isCollecting"
+                                (click)="openDecideModal('decide')">
+                            @if (isCollecting) {
+                                <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                            } @else {
+                                <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
+                            }
+                            {{ t('Decide on selected') }}
+                        </button>
+                        @if (canRemoveDecisions || selectedTab === CveHostTabs.Action) {
+                            <button cButton size="xs" color="danger" class="ripple me-2"
+                                    [disabled]="selectedCount === 0 || isCollecting"
+                                    (click)="openDecideModal('remove')">
+                                <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                                {{ t('End decision of selected') }}
+                            </button>
+                        }
+                        @if (selectedCount > 0) {
+                            <button cButton size="xs" color="default" class="ripple"
+                                    (click)="clearSelection()">
+                                {{ t('Clear selection') }}
+                            </button>
+                        }
+                        @if (tooManyFindings) {
+                            <span class="text-danger ms-3">
+                                {{ t('Too many findings selected. At most 5000 findings can be decided on at once.') }}
+                            </span>
+                        }
+                    </div>
+                }
+
+                <oitc-paginate-or-scroll
+                    (paginatorChange)="onPaginatorChange($event)"
+                    [paginateOrScroll]="components"></oitc-paginate-or-scroll>
+            }
+        }
+
+        @if (!embedded()) {
+            <h5 class="mt-4">
+                <fa-icon [icon]="['fas', 'chart-line']"></fa-icon>
+                {{ t('Trend') }}
+            </h5>
+            <oitc-cves-trend-chart [hostId]="hostId()"></oitc-cves-trend-chart>
+        }
+    }
+</ng-container>
+
+<oitc-cves-decide-modal [findingIds]="modalFindingIds"
+                        [mode]="modalMode"
+                        (completed)="onDecisionCompleted($event)"></oitc-cves-decide-modal>
