@@ -70,7 +70,8 @@
                         </td>
                         <td>
                             @if (finding.decision) {
-                                <oitc-cve-decision-state-label [state]="finding.decision.state"></oitc-cve-decision-state-label>
+                                <oitc-cve-decision-state-label
+                                        [state]="finding.decision.state"></oitc-cve-decision-state-label>
                                 <div class="small text-muted">
                                     {{ finding.decision.owner }} · {{ finding.decision.review_after }}
                                 </div>
@@ -78,7 +79,7 @@
                         </td>
                         <td>
                             <oitc-cve-recommendation-label
-                                [recommendation]="finding.recommendation"></oitc-cve-recommendation-label>
+                                    [recommendation]="finding.recommendation"></oitc-cve-recommendation-label>
                         </td>
                         <td class="text-center">
                             <a [routerLink]="['/', 'cve_module', 'cves', 'finding', finding.id]"
@@ -93,8 +94,14 @@
         @if (result.findings.length === 0) {
             <oitc-no-records></oitc-no-records>
         }
-        <oitc-paginate-or-scroll
-            (paginatorChange)="onPaginatorChange($event)"
-            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+        <c-container [fluid]="true" class="mb-3 py-3">
+            <c-row>
+                <c-col>
+                    <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                </c-col>
+            </c-row>
+        </c-container>
     }
 </ng-container>
