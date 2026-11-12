@@ -223,7 +223,7 @@
                 }
 
                 @if (canDecide) {
-                    <div class="bg-secondary bg-opacity-10 py-2 px-2 rounded-bottom border border-top-0 d-flex align-items-center flex-wrap">
+                    <div class="bg-secondary bg-opacity-10 py-3 px-2 rounded-bottom border border-top-0 d-flex align-items-center flex-wrap">
                         <span class="me-3">
                             {{ t('Selected') }}: <strong>{{ selectedFindingIds.size }}</strong>
                         </span>
@@ -242,12 +242,12 @@
                     </div>
                 }
 
-                <c-container [fluid]="true">
+                <c-container [fluid]="true" class="mb-3 py-3">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="result"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>
