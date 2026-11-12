@@ -20,15 +20,14 @@ import {
     FormDirective,
     InputGroupComponent,
     InputGroupTextDirective,
+    NavComponent,
     NavItemComponent,
     RowComponent,
     TableDirective
 } from '@coreui/angular';
 import { IndexPage } from '../../../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import {
-    PaginateOrScrollComponent
-} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
@@ -36,9 +35,7 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { SelectKeyValueString } from '../../../../../layouts/primeng/select.interface';
 import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
-import {
-    ActionsButtonElementComponent
-} from '../../../../../components/actions-button-element/actions-button-element.component';
+import { ActionsButtonElementComponent } from '../../../../../components/actions-button-element/actions-button-element.component';
 import { CvesService } from '../cves.service';
 import { CveColor, CvesIndexParams, CvesIndexRoot, CvesSummary, getDefaultCvesIndexParams } from '../cves.interface';
 import { CveStateBadgeComponent } from '../../../components/cve-state-badge/cve-state-badge.component';
@@ -84,7 +81,8 @@ import { CvesPagesNavComponent } from '../../../components/cves-pages-nav/cves-p
         CveStateBadgeComponent,
         CveSeverityBarComponent,
         CvesTrendChartComponent,
-        CvesPagesNavComponent
+        CvesPagesNavComponent,
+        NavComponent
     ],
     templateUrl: './cves-index.component.html',
     styleUrl: './cves-index.component.css',

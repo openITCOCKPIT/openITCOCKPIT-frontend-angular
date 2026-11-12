@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { NavComponent, NavItemComponent } from '@coreui/angular';
-import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { PermissionDirective } from '../../../../permissions/permission.directive';
 
 export type CvesPage = 'index' | 'cves' | 'software' | 'recommendations' | 'decisions';
 
@@ -18,7 +18,7 @@ export type CvesPage = 'index' | 'cves' | 'software' | 'recommendations' | 'deci
         FaIconComponent,
         NavComponent,
         NavItemComponent,
-        XsButtonDirective
+        PermissionDirective
     ],
     templateUrl: './cves-pages-nav.component.html',
     styleUrl: './cves-pages-nav.component.css',

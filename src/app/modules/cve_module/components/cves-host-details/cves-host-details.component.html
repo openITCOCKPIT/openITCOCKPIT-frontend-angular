@@ -15,7 +15,15 @@
                     <div class="d-flex align-items-center mb-2">
                         @if (!embedded()) {
                             <h4 class="mb-0 me-2">
-                                <a [routerLink]="['/', 'hosts', 'browser', summary.host_id]">{{ summary.host.name }}</a>
+
+                                @if (this.PermissionsService.hasPermissionObservable(['hosts', 'browser'])|async) {
+                                    <a [routerLink]="['/', 'hosts', 'browser', summary.host_id]">
+                                        {{ summary.host.name }}
+                                    </a>
+                                } @else {
+                                    {{ summary.host.name }}
+                                }
+                                
                             </h4>
                         }
                         <oitc-cve-state-badge [color]="summary.state.color"
@@ -88,30 +96,30 @@
                                     <td>{{ host.inventory.agent_version }}</td>
                                 </tr>
                             }
-                            <tr>
-                                <th>{{ t('Inventory from') }}</th>
-                                <td>
-                                    {{ summary.inventory_last_update_user }}
-                                    @if (summary.state.inventory_age_days !== null) {
-                                        <span class="text-muted">
-                                            ({{ summary.state.inventory_age_days }} {{ t('days') }})
-                                        </span>
-                                    }
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ t('Evaluated') }}</th>
-                                <td>
-                                    {{ summary.evaluated_user }}
-                                    @if (summary.failed_user) {
-                                        <div class="text-danger">{{ t('Failed') }}: {{ summary.failed_user }}</div>
-                                    }
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>{{ t('Checked installations') }}</th>
-                                <td>{{ summary.evaluated_installations }} / {{ summary.installations }}</td>
-                            </tr>
+                        <tr>
+                            <th>{{ t('Inventory from') }}</th>
+                            <td>
+                                {{ summary.inventory_last_update_user }}
+                                @if (summary.state.inventory_age_days !== null) {
+                                    <span class="text-muted">
+                                        ({{ summary.state.inventory_age_days }} {{ t('days') }})
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ t('Evaluated') }}</th>
+                            <td>
+                                {{ summary.evaluated_user }}
+                                @if (summary.failed_user) {
+                                    <div class="text-danger">{{ t('Failed') }}: {{ summary.failed_user }}</div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ t('Checked installations') }}</th>
+                            <td>{{ summary.evaluated_installations }} / {{ summary.installations }}</td>
+                        </tr>
                         </tbody>
                     </table>
                 </c-col>
@@ -293,7 +301,7 @@
                                     <button cButton size="xs" color="default" (click)="toggleExpand(component)"
                                             [title]="'Show CVEs' | transloco">
                                         <fa-icon
-                                            [icon]="['fas', isExpanded(component) ? 'chevron-down' : 'chevron-right']"></fa-icon>
+                                                [icon]="['fas', isExpanded(component) ? 'chevron-down' : 'chevron-right']"></fa-icon>
                                     </button>
                                 </td>
                                 @if (allowEdit) {
@@ -311,9 +319,12 @@
                                         @if (component.is_running === true) {
                                             <c-badge color="primary" class="ms-1">{{ t('Running kernel') }}</c-badge>
                                         } @else if (component.is_running === false) {
-                                            <c-badge color="secondary" class="ms-1">{{ t('Kernel not running') }}</c-badge>
+                                            <c-badge color="secondary" class="ms-1">{{ t('Kernel not running') }}
+                                            </c-badge>
                                         } @else {
-                                            <c-badge color="warning" class="ms-1">{{ t('Kernel, running state unknown') }}</c-badge>
+                                            <c-badge color="warning"
+                                                     class="ms-1">{{ t('Kernel, running state unknown') }}
+                                            </c-badge>
                                         }
                                     }
                                     @if (component.in_progress_count > 0) {
@@ -326,7 +337,7 @@
                                 </td>
                                 <td>
                                     <oitc-cve-severity-badge
-                                        [severity]="component.highest_severity"></oitc-cve-severity-badge>
+                                            [severity]="component.highest_severity"></oitc-cve-severity-badge>
                                 </td>
                                 <td>{{ component.cve_count }}</td>
                                 <td [class.text-danger]="component.red_count > 0">{{ component.red_count }}</td>
@@ -334,20 +345,20 @@
                                 <td>{{ component.exploit_count }}</td>
                                 <td>
                                     <oitc-cve-recommendation-label
-                                        [recommendation]="component.recommendation"></oitc-cve-recommendation-label>
+                                            [recommendation]="component.recommendation"></oitc-cve-recommendation-label>
                                 </td>
                             </tr>
                             @if (isExpanded(component)) {
                                 <tr class="cves-expanded-row">
                                     <td [attr.colspan]="allowEdit ? 9 : 8" class="p-2">
                                         <oitc-cves-host-findings
-                                            [hostId]="hostId()"
-                                            [view]="currentView"
-                                            [componentName]="component.component_name"
-                                            [componentVersion]="component.component_version"
-                                            [allowEdit]="allowEdit"
-                                            [selection]="selectedFindingIds"
-                                            (selectionChanged)="onFindingSelectionChanged($event)"></oitc-cves-host-findings>
+                                                [hostId]="hostId()"
+                                                [view]="currentView"
+                                                [componentName]="component.component_name"
+                                                [componentVersion]="component.component_version"
+                                                [allowEdit]="allowEdit"
+                                                [selection]="selectedFindingIds"
+                                                (selectionChanged)="onFindingSelectionChanged($event)"></oitc-cves-host-findings>
                                     </td>
                                 </tr>
                             }
@@ -359,7 +370,7 @@
                 }
 
                 <!-- Decisions for the selection -->
-                @if (allowEdit && (PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'decide']) | async)) {
+                @if (allowEdit && ( PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'decide']) | async )) {
                     <div class="bg-secondary bg-opacity-10 py-2 px-2 rounded-bottom border border-top-0 d-flex align-items-center flex-wrap">
                         <span class="me-3">
                             {{ t('Selected') }}:
@@ -398,8 +409,8 @@
                 }
 
                 <oitc-paginate-or-scroll
-                    (paginatorChange)="onPaginatorChange($event)"
-                    [paginateOrScroll]="components"></oitc-paginate-or-scroll>
+                        (paginatorChange)="onPaginatorChange($event)"
+                        [paginateOrScroll]="components"></oitc-paginate-or-scroll>
             }
         }
 
