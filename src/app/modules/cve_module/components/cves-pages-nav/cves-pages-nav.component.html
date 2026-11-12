@@ -1,0 +1,40 @@
+<ng-container *transloco="let t">
+    <c-nav class="card-toolbar card-header-pills">
+        <c-nav-item class="px-1">
+            <button cButton size="xs" class="ripple" [color]="active() === 'index' ? 'primary' : 'default'"
+                    [routerLink]="['/', 'cve_module', 'cves', 'index']">
+                <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                {{ t('Hosts') }}
+            </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+            <button cButton size="xs" class="ripple" [color]="active() === 'cves' ? 'primary' : 'default'"
+                    [routerLink]="['/', 'cve_module', 'cves', 'cves']">
+                <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                {{ t('CVEs') }}
+            </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+            <button cButton size="xs" class="ripple" [color]="active() === 'software' ? 'primary' : 'default'"
+                    [routerLink]="['/', 'cve_module', 'cves', 'software']">
+                <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                {{ t('Software') }}
+            </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+            <button cButton size="xs" class="ripple" [color]="active() === 'recommendations' ? 'primary' : 'default'"
+                    [routerLink]="['/', 'cve_module', 'cves', 'recommendations']">
+                <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                {{ t('Recommendations') }}
+            </button>
+        </c-nav-item>
+        <c-nav-item class="px-1">
+            <button cButton size="xs" class="ripple" [color]="active() === 'decisions' ? 'primary' : 'default'"
+                    [routerLink]="['/', 'cve_module', 'cves', 'decisions']">
+                <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
+                {{ t('Decisions') }}
+            </button>
+        </c-nav-item>
+        <ng-content></ng-content>
+    </c-nav>
+</ng-container>

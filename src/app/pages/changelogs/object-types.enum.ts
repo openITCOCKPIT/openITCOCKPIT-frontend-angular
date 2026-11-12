@@ -22,7 +22,9 @@ export enum ObjectTypesEnum {
     'SERVICEESCALATION' = 1 << 18,
     'HOSTDEPENDENCY' = 1 << 19,
     'SERVICEDEPENDENCY' = 1 << 20,
-    'EXPORT' = 1 << 21
+    'EXPORT' = 1 << 21,
+    //👇👇👇 JavaScript shifts only 32 bits, 1 << 34 would be 4 (see ScmObjectTypesEnum)
+    'CVE_DECISION' = 17179869184 // 1 << 34, CveModule: decisions about CVE findings, object_id is the host
 }
 
 export const ROOT_CONTAINER = 1;

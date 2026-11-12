@@ -1,0 +1,100 @@
+<ng-container *transloco="let t">
+    @if (!result) {
+        <oitc-table-loader></oitc-table-loader>
+    } @else {
+        <table cTable small hover class="mb-1 cves-host-findings">
+            <thead>
+            <tr>
+                @if (allowEdit()) {
+                    <th class="width-50 text-center">
+                        <input cFormCheckInput type="checkbox"
+                               [checked]="allOnPageSelected()"
+                               (change)="toggleAllOnPage()"
+                               [title]="'Select all on this page' | transloco"/>
+                    </th>
+                }
+                <th>{{ t('CVE') }}</th>
+                <th>{{ t('Severity') }}</th>
+                <th>{{ t('CVSS') }}</th>
+                <th>{{ t('Rule') }}</th>
+                <th>{{ t('Fixed in') }}</th>
+                <th>{{ t('Decision') }}</th>
+                <th>{{ t('Action') }}</th>
+                <th class="width-50"></th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (finding of result.findings; track finding.id) {
+                    <tr>
+                        @if (allowEdit()) {
+                            <td class="text-center">
+                                <input cFormCheckInput type="checkbox"
+                                       [checked]="isSelected(finding)"
+                                       (change)="toggle(finding)"/>
+                            </td>
+                        }
+                        <td class="text-nowrap">
+                            <oitc-cve-state-badge [color]="finding.color" class="me-1"></oitc-cve-state-badge>
+                            <a [routerLink]="['/', 'cve_module', 'cves', 'view', finding.cve.cve_id]">
+                                {{ finding.cve.cve_id }}
+                            </a>
+                            @if (finding.cve.kev_cisa) {
+                                <fa-icon [icon]="['fas', 'skull-crossbones']" class="text-danger ms-1"
+                                         [cTooltip]="t('Exploited in the wild (CISA KEV)')"></fa-icon>
+                            }
+                            @if (finding.reopen_count > 0) {
+                                <fa-icon [icon]="['fas', 'rotate-left']" class="text-warning ms-1"
+                                         [cTooltip]="t('Reopened')"></fa-icon>
+                            }
+                        </td>
+                        <td>
+                            <oitc-cve-severity-badge [severity]="finding.severity"></oitc-cve-severity-badge>
+                        </td>
+                        <td>
+                            @if (finding.cve.cvss_score !== null) {
+                                {{ finding.cve.cvss_score | number:'1.1-1' }}
+                            }
+                        </td>
+                        <td>
+                            <oitc-cve-rule-label [rule]="finding.rule"></oitc-cve-rule-label>
+                            <div>
+                                <oitc-cve-reason-badges [reasons]="finding.reason_codes"></oitc-cve-reason-badges>
+                            </div>
+                        </td>
+                        <td>
+                            @if (finding.fixed_in) {
+                                <code>{{ finding.fixed_in }}</code>
+                            } @else if (finding.not_fixed_yet) {
+                                <span class="text-muted">{{ t('Not fixed yet') }}</span>
+                            }
+                        </td>
+                        <td>
+                            @if (finding.decision) {
+                                <oitc-cve-decision-state-label [state]="finding.decision.state"></oitc-cve-decision-state-label>
+                                <div class="small text-muted">
+                                    {{ finding.decision.owner }} · {{ finding.decision.review_after }}
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <oitc-cve-recommendation-label
+                                [recommendation]="finding.recommendation"></oitc-cve-recommendation-label>
+                        </td>
+                        <td class="text-center">
+                            <a [routerLink]="['/', 'cve_module', 'cves', 'finding', finding.id]"
+                               [title]="'Details' | transloco">
+                                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (result.findings.length === 0) {
+            <oitc-no-records></oitc-no-records>
+        }
+        <oitc-paginate-or-scroll
+            (paginatorChange)="onPaginatorChange($event)"
+            [paginateOrScroll]="result"></oitc-paginate-or-scroll>
+    }
+</ng-container>

@@ -1,0 +1,13 @@
+.cves-counters th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.cves-expanded-row > td {
+    background-color: var(--cui-tertiary-bg, #f8f9fa);
+}
+
+.cves-coverage-items {
+    max-height: 12rem;
+    overflow-y: auto;
+}

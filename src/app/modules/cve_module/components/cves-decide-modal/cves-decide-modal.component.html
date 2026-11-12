@@ -1,0 +1,167 @@
+<ng-container *transloco="let t">
+    <c-modal
+        [keyboard]="true"
+        id="cvesDecideModal"
+        size="lg">
+        <c-modal-header [class]="mode() === 'remove' ? 'bg-danger' : 'bg-primary'">
+            <h5 cModalTitle class="text-white">
+                @if (mode() === 'remove') {
+                    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    {{ t('End decision') }}
+                } @else {
+                    <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
+                    {{ t('Decide on findings') }}
+                }
+            </h5>
+            <button (click)="hideModal()" cButtonClose></button>
+        </c-modal-header>
+        <c-modal-body>
+            @if (findingIds().length === 0) {
+                <div class="alert alert-warning">
+                    {{ t('No findings are selected.') }}
+                </div>
+            } @else {
+                <c-row class="mb-3">
+                    <c-col>
+                        <strong>{{ findingIds().length }}</strong>
+                        {{ t('findings selected.') }}
+                        @if (mode() === 'remove') {
+                            {{ t('Their decisions end and the findings get classified by the policy again.') }}
+                        } @else {
+                            {{ t('The decision applies to all of them. If it is invalid for one finding, none gets saved.') }}
+                        }
+                    </c-col>
+                </c-row>
+
+                @if (mode() === 'decide') {
+                    <c-row>
+                        <c-col>
+                            <div class="mb-3">
+                                <label cLabel for="CveDecisionState">
+                                    {{ t('Decision') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <oitc-select
+                                    name="CveDecisionState"
+                                    id="CveDecisionState"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [options]="states"
+                                    [(ngModel)]="post.state"
+                                    [showClear]="false"
+                                    [appendTo]="''"
+                                    oitcFormError [errors]="errors" errorField="state">
+                                </oitc-select>
+                                <oitc-form-feedback [errors]="errors" errorField="state"></oitc-form-feedback>
+                                <div class="help-block">
+                                    @switch (post.state) {
+                                        @case (CveDecisionStates.InProgress) {
+                                            {{ t('Somebody works on it. The finding keeps its color and still counts as action required.') }}
+                                        }
+                                        @case (CveDecisionStates.Accepted) {
+                                            {{ t('The risk is known and accepted until the review date.') }}
+                                        }
+                                        @case (CveDecisionStates.NotAffected) {
+                                            {{ t('An analysis showed that the host is not affected, e.g. because the vulnerable function is not used.') }}
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="CveDecisionOwner">
+                                    {{ t('Responsible person or team') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl
+                                       id="CveDecisionOwner"
+                                       name="CveDecisionOwner"
+                                       type="text"
+                                       maxlength="255"
+                                       [(ngModel)]="post.owner"
+                                       oitcFormError [errors]="errors" errorField="owner"/>
+                                <oitc-form-feedback [errors]="errors" errorField="owner"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="CveDecisionReason">
+                                    {{ t('Reason') }}
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <textarea cFormControl
+                                          id="CveDecisionReason"
+                                          name="CveDecisionReason"
+                                          rows="3"
+                                          [(ngModel)]="post.reason"
+                                          oitcFormError [errors]="errors" errorField="reason"></textarea>
+                                <oitc-form-feedback [errors]="errors" errorField="reason"></oitc-form-feedback>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="CveDecisionReviewAfter">
+                                    @if (post.state === CveDecisionStates.InProgress) {
+                                        {{ t('Due on') }}
+                                    } @else {
+                                        {{ t('Review on') }}
+                                    }
+                                    <oitc-required-icon></oitc-required-icon>
+                                </label>
+                                <input cFormControl
+                                       id="CveDecisionReviewAfter"
+                                       name="CveDecisionReviewAfter"
+                                       type="date"
+                                       [(ngModel)]="post.review_after"
+                                       oitcFormError [errors]="errors" errorField="review_after"/>
+                                <oitc-form-feedback [errors]="errors" errorField="review_after"></oitc-form-feedback>
+                                <div class="help-block">
+                                    {{ t('After this date the finding needs a new decision.') }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label cLabel for="CveDecisionEvidenceUrl">
+                                    {{ t('Link to the analysis') }}
+                                    @if (post.state === CveDecisionStates.NotAffected) {
+                                        <oitc-required-icon></oitc-required-icon>
+                                    }
+                                </label>
+                                <input cFormControl
+                                       id="CveDecisionEvidenceUrl"
+                                       name="CveDecisionEvidenceUrl"
+                                       type="url"
+                                       maxlength="512"
+                                       [placeholder]="'https://'"
+                                       [(ngModel)]="post.evidence_url"
+                                       oitcFormError [errors]="errors" errorField="evidence_url"/>
+                                <oitc-form-feedback [errors]="errors" errorField="evidence_url"></oitc-form-feedback>
+                                @if (post.state === CveDecisionStates.NotAffected) {
+                                    <div class="help-block">
+                                        {{ t('A ticket or document that shows why the host is not affected.') }}
+                                    </div>
+                                }
+                            </div>
+                        </c-col>
+                    </c-row>
+                }
+            }
+        </c-modal-body>
+        <c-modal-footer>
+            <button (click)="submit()"
+                    [disabled]="isProcessing || findingIds().length === 0"
+                    cButton class="ripple"
+                    [color]="mode() === 'remove' ? 'danger' : 'primary'">
+                @if (isProcessing) {
+                    <fa-icon [icon]="['fas', 'spinner']" animation="spin"></fa-icon>
+                }
+                @if (mode() === 'remove') {
+                    {{ t('End decision') }}
+                } @else {
+                    {{ t('Save') }}
+                }
+            </button>
+            <button (click)="hideModal()" cButton class="ripple" color="default">
+                {{ t('Cancel') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>

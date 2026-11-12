@@ -175,6 +175,18 @@
                             </button>
                         </c-nav-item>
                     }
+
+                    @if (( PermissionsService.hasModuleObservable('CveModule')|async ) && ( PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'index'])|async ) && softwareInformation?.SoftwareInformationExists) {
+                        <c-nav-item>
+                            <button
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.Vulnerabilities}"
+                                    (click)="changeTab(HostBrowserTabs.Vulnerabilities)">
+                                <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
+                                {{ t('Vulnerabilities') }}
+                            </button>
+                        </c-nav-item>
+                    }
                     @if (( PermissionsService.hasModuleObservable('SLAModule')|async ) && SlaOverview) {
                         <c-nav-item>
                             @if (SlaOverview.state === 'not_available') {
@@ -208,7 +220,6 @@
                             }
                         </c-nav-item>
                     }
-
                 </c-nav>
             </c-card-header>
             <c-card-body>
@@ -267,8 +278,7 @@
                             }
                             <!-- External Commands Mobile View -->
                             @if (result.canSubmitExternalCommands && result.mergedHost.allowEdit && result.hoststatus.isInMonitoring) {
-                                <c-row
-                                >
+                                <c-row>
                                     <c-button-toolbar role="group" class="justify-content-center pt-2">
                                         <c-button-group role="group">
                                             <button cButton color="default"
@@ -1027,9 +1037,8 @@
                                                                 <span>
                                                                     /
                                                                     @if (container.id != null) {
-                                                                        <a
-                                                                                [routerLink]="['/', 'browsers', 'index']"
-                                                                                [queryParams]="{ containerId: container.id }">
+                                                                        <a [routerLink]="['/', 'browsers', 'index']"
+                                                                           [queryParams]="{ containerId: container.id }">
                                                                             {{ container.name }}
                                                                         </a>
                                                                     }
@@ -1419,6 +1428,18 @@
                 }
 
                 <!-- Software inventory end -->
+                <!-- CVE Module start -->
+                @if (selectedTab == HostBrowserTabs.Vulnerabilities && result.mergedHost) {
+                    @if (( PermissionsService.hasModuleObservable('CveModule')|async ) && ( PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'index'])|async )) {
+                        <oitc-cves-host-details [hostId]="Number(result.mergedHost.id)"
+                                                [embedded]="true"></oitc-cves-host-details>
+                    } @else {
+                        <label class="text-danger">
+                            {{ t('No permissions') }}
+                        </label>
+                    }
+                }
+                <!-- CVE Module end -->
                 <!-- SLA Module start -->
                 @if (selectedTab == HostBrowserTabs.SLA) {
                     <div>

@@ -1,0 +1,165 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/', 'cve_module', 'cves', 'index']">
+                    <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
+                    {{ t('Vulnerabilities') }}
+                </a>
+            </li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                {{ t('CVEs') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>{{ t('Vulnerabilities') }}
+                <small class="fw-300">
+                    {{ t('Open CVEs') }}
+                </small>
+            </h5>
+            <oitc-cves-pages-nav [active]="'cves'">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </oitc-cves-pages-nav>
+        </c-card-header>
+        <c-card-body>
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <form cForm>
+                    <c-row>
+                        <c-col [xs]="12" [md]="4" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Cves.cve_id]']"
+                                       [placeholder]="'Filter by CVE' | transloco"
+                                       cFormControl name="cveId" oitcDebounce type="text"/>
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="4" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Cves.summary]']"
+                                       [placeholder]="'Filter by description' | transloco"
+                                       cFormControl name="cveSummary" oitcDebounce type="text"/>
+                            </c-input-group>
+                        </c-col>
+                        <c-col [xs]="12" [md]="4" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>{{ t('CVSS at least') }}</span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[Cves.cvss_score]']"
+                                       cFormControl name="cvssScore" oitcDebounce type="number" min="0" max="10" step="0.1"/>
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    <c-row>
+                        <c-col>
+                            <c-form-check>
+                                <input cFormCheckInput type="checkbox" id="CvesKevOnly" name="CvesKevOnly"
+                                       [checked]="params['filter[Cves.kev_cisa]'] === 1"
+                                       (change)="toggleKevOnly($any($event.target).checked)"/>
+                                <label cFormCheckLabel for="CvesKevOnly">{{ t('Only CVEs of the CISA KEV catalog') }}</label>
+                            </c-form-check>
+                        </c-col>
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+
+            @if (!cves) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
+                   (matSortChange)="onSortChange($event)"
+                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                <thead>
+                <tr>
+                    <th scope="col" mat-sort-header="cve_id">{{ t('CVE') }}</th>
+                    <th scope="col" mat-sort-header="highest_severity">{{ t('Highest severity') }}</th>
+                    <th scope="col" mat-sort-header="cvss_score">{{ t('CVSS') }}</th>
+                    <th scope="col">{{ t('Signals') }}</th>
+                    <th scope="col" mat-sort-header="host_count">{{ t('Hosts') }}</th>
+                    <th scope="col" mat-sort-header="red_host_count">{{ t('Red') }}</th>
+                    <th scope="col" mat-sort-header="fixable_host_count">{{ t('With fix') }}</th>
+                    <th scope="col">{{ t('Description') }}</th>
+                </tr>
+                </thead>
+                @if (cves) {
+                    <tbody>
+                        @for (cve of cves.cves; track cve.id) {
+                            <tr>
+                                <td class="text-nowrap">
+                                    <a [routerLink]="['/', 'cve_module', 'cves', 'view', cve.cve_id]">{{ cve.cve_id }}</a>
+                                </td>
+                                <td>
+                                    <oitc-cve-severity-badge [severity]="cve.highest_severity"></oitc-cve-severity-badge>
+                                </td>
+                                <td>
+                                    @if (cve.cvss_score !== null) {
+                                        {{ cve.cvss_score | number:'1.1-1' }}
+                                    }
+                                </td>
+                                <td class="text-nowrap">
+                                    @if (cve.kev_cisa) {
+                                        <fa-icon [icon]="['fas', 'skull-crossbones']" class="text-danger me-1"
+                                                 [cTooltip]="t('Exploited in the wild (CISA KEV)')"></fa-icon>
+                                    }
+                                    @if (cve.kev_vulncheck) {
+                                        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-warning me-1"
+                                                 [cTooltip]="t('Exploitation reported (VulnCheck KEV)')"></fa-icon>
+                                    }
+                                    @if (cve.metasploit_count > 0 || cve.verified_exploit_count > 0) {
+                                        <fa-icon [icon]="['fas', 'bomb']" class="text-danger me-1"
+                                                 [cTooltip]="t('Public exploit')"></fa-icon>
+                                    }
+                                </td>
+                                <td>{{ cve.host_count }}</td>
+                                <td [class.text-danger]="cve.red_host_count > 0">{{ cve.red_host_count }}</td>
+                                <td>{{ cve.fixable_host_count }}</td>
+                                <td class="cves-description" [title]="cve.summary ?? ''">{{ cve.summary }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+            @if (cves && cves.cves.length === 0) {
+                <oitc-no-records></oitc-no-records>
+            }
+            <c-container [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <oitc-paginate-or-scroll
+                            (paginatorChange)="onPaginatorChange($event)"
+                            [paginateOrScroll]="cves"></oitc-paginate-or-scroll>
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+    </c-card>
+</ng-container>

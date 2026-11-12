@@ -1,0 +1,5 @@
+.cves-reason {
+    max-width: 24rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}

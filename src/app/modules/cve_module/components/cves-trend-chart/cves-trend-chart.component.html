@@ -1,0 +1,23 @@
+<ng-container *transloco="let t">
+    <div class="d-flex justify-content-end mb-2">
+        <c-button-group size="sm">
+            @for (option of dayOptions; track option) {
+                <button cButton
+                        size="xs"
+                        [color]="option === days ? 'primary' : 'default'"
+                        (click)="setDays(option)">
+                    {{ option }} {{ t('days') }}
+                </button>
+            }
+        </c-button-group>
+    </div>
+    @if (!trend) {
+        <oitc-block-loader></oitc-block-loader>
+    } @else if (trend.length === 0) {
+        <div class="text-center text-muted py-4">
+            {{ t('No values yet. The cronjob stores one value per day.') }}
+        </div>
+    } @else {
+        <div echarts [options]="chartOption" [theme]="theme" class="cves-trend-chart"></div>
+    }
+</ng-container>
