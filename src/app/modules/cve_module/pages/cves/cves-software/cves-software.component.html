@@ -84,11 +84,13 @@
                                     <td>
                                         <a [routerLink]="['/', 'cve_module', 'cves', 'host', row.host_id]">{{ row.host_name }}</a>
                                         @if (row.is_kernel && row.is_running === false) {
-                                            <c-badge color="secondary" class="ms-1">{{ t('Kernel not running') }}</c-badge>
+                                            <c-badge color="secondary" class="ms-1">{{ t('Kernel not running') }}
+                                            </c-badge>
                                         }
                                     </td>
                                     <td>
-                                        <oitc-cve-severity-badge [severity]="row.highest_severity"></oitc-cve-severity-badge>
+                                        <oitc-cve-severity-badge
+                                                [severity]="row.highest_severity"></oitc-cve-severity-badge>
                                     </td>
                                     <td>{{ row.cve_count }}</td>
                                     <td>{{ row.action_count }}</td>
@@ -105,9 +107,15 @@
                     @if (hosts.software.length === 0) {
                         <oitc-no-records></oitc-no-records>
                     }
-                    <oitc-paginate-or-scroll
-                        (paginatorChange)="onPaginatorChange($event)"
-                        [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                    <c-container [fluid]="true" class="mb-3 py-3">
+                        <c-row>
+                            <c-col>
+                                <oitc-paginate-or-scroll
+                                        (paginatorChange)="onPaginatorChange($event)"
+                                        [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                            </c-col>
+                        </c-row>
+                    </c-container>
                 }
             } @else {
                 <!-- Filter -->
@@ -116,7 +124,9 @@
                         <c-row>
                             <c-col [xs]="12" [md]="5" class="mb-2">
                                 <c-input-group>
-                                    <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[CveHostFindings.component_name]']"
                                            [placeholder]="'Filter by package or application' | transloco"
@@ -125,7 +135,9 @@
                             </c-col>
                             <c-col [xs]="12" [md]="4" class="mb-2">
                                 <c-input-group>
-                                    <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[CveHostFindings.component_version]']"
                                            [placeholder]="'Filter by version' | transloco"
@@ -134,7 +146,8 @@
                             </c-col>
                             <c-col [xs]="12" [md]="3" class="mb-2 d-flex align-items-center">
                                 <c-form-check>
-                                    <input cFormCheckInput type="checkbox" id="CvesSoftwareKernelOnly" name="CvesSoftwareKernelOnly"
+                                    <input cFormCheckInput type="checkbox" id="CvesSoftwareKernelOnly"
+                                           name="CvesSoftwareKernelOnly"
                                            [checked]="params['filter[CveHostFindings.is_kernel]'] === 1"
                                            (change)="toggleKernelOnly($any($event.target).checked)"/>
                                     <label cFormCheckLabel for="CvesSoftwareKernelOnly">{{ t('Only kernel') }}</label>
@@ -177,7 +190,8 @@
                                     </td>
                                     <td><code>{{ row.component_version }}</code></td>
                                     <td>
-                                        <oitc-cve-severity-badge [severity]="row.highest_severity"></oitc-cve-severity-badge>
+                                        <oitc-cve-severity-badge
+                                                [severity]="row.highest_severity"></oitc-cve-severity-badge>
                                     </td>
                                     <td>{{ row.cve_count }}</td>
                                     <td>{{ row.action_count }}</td>
@@ -197,12 +211,12 @@
                 @if (software && software.software.length === 0) {
                     <oitc-no-records></oitc-no-records>
                 }
-                <c-container [fluid]="true">
+                <c-container [fluid]="true" class="mb-3 py-3">
                     <c-row>
                         <c-col>
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="software"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="software"></oitc-paginate-or-scroll>
                         </c-col>
                     </c-row>
                 </c-container>

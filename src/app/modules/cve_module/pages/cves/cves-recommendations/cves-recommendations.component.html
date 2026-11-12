@@ -52,7 +52,9 @@
                     <c-row>
                         <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
-                                <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[CveHostFindings.component_name]']"
                                        [placeholder]="'Filter by package or application' | transloco"
@@ -100,7 +102,7 @@
                             <tr>
                                 <td>
                                     <oitc-cve-recommendation-label
-                                        [recommendation]="row.recommendation"></oitc-cve-recommendation-label>
+                                            [recommendation]="row.recommendation"></oitc-cve-recommendation-label>
                                 </td>
                                 <td>
                                     <a [routerLink]="['/', 'cve_module', 'cves', 'software']"
@@ -112,7 +114,8 @@
                                     }
                                 </td>
                                 <td>
-                                    <oitc-cve-severity-badge [severity]="row.highest_severity"></oitc-cve-severity-badge>
+                                    <oitc-cve-severity-badge
+                                            [severity]="row.highest_severity"></oitc-cve-severity-badge>
                                 </td>
                                 <td>{{ row.cve_count }}</td>
                                 <td [class.text-danger]="row.red_count > 0">{{ row.red_count }}</td>
@@ -128,12 +131,12 @@
             @if (recommendations && recommendations.recommendations.length === 0) {
                 <oitc-no-records></oitc-no-records>
             }
-            <c-container [fluid]="true">
+            <c-container [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            [paginateOrScroll]="recommendations"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="recommendations"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
