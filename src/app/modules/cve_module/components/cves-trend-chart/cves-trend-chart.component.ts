@@ -157,7 +157,8 @@ export class CvesTrendChartComponent implements OnDestroy {
                 }
             ],
             series: [
-                state(this.TranslocoService.translate('Open'), 'open_count', '#adb5bd'),
+                // Not 'Open', that key is the verb in other places
+                state(this.TranslocoService.translate('Open CVEs'), 'open_count', '#adb5bd'),
                 state(this.TranslocoService.translate('Action required'), 'action_count', '#f4a261'),
                 state(this.TranslocoService.translate('Red'), 'red_count', '#e5383b'),
                 state(this.TranslocoService.translate('CISA KEV'), 'kev_count', '#a4161a'),
