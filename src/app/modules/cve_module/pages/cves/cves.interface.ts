@@ -34,6 +34,7 @@ export type CveRule =
 export type CveAction =
     'review_decision'
     | 'remove_or_update_kernel'
+    | 'reboot_into_kernel'
     | 'install_os_update'
     | 'install_update'
     | 'check_fixed_version'

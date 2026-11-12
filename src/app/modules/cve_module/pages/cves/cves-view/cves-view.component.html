@@ -26,7 +26,10 @@
     </nav>
     <c-card class="mb-3">
         <c-card-header>
-            <h5 cCardTitle>{{ cveId }}
+            <h5 cCardTitle>
+                <oitc-copy-to-clipboard [data]="cveId">
+                    {{ cveId }}
+                </oitc-copy-to-clipboard>
                 <small class="fw-300">
                     {{ t('Affected hosts') }}
                 </small>
@@ -60,6 +63,14 @@
                     <c-col [xs]="12" [lg]="4">
                         <table cTable small class="mb-0">
                             <tbody>
+                            <tr>
+                                <th>{{ t('CVE') }}</th>
+                                <td>
+                                    <oitc-copy-to-clipboard [data]="cveId">
+                                        {{ cveId }}
+                                    </oitc-copy-to-clipboard>
+                                </td>
+                            </tr>
                             <tr>
                                 <th>{{ t('Published') }}</th>
                                 <td>{{ result.cve.published_user ?? '-' }}</td>
@@ -96,17 +107,18 @@
                                     · {{ t('Proof of concept') }}: {{ result.cve.poc_exploit_count }}
                                 </td>
                             </tr>
-                            @if (result.cve.source_link) {
-                                <tr>
-                                    <th>{{ t('Source') }}</th>
-                                    <td>
-                                        <a [href]="result.cve.source_link" target="_blank" rel="noopener noreferrer">
-                                            {{ t('Advisory') }}
-                                            <fa-icon [icon]="['fas', 'arrow-up-right-from-square']"></fa-icon>
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
+                                @if (result.cve.source_link) {
+                                    <tr>
+                                        <th>{{ t('Source') }}</th>
+                                        <td>
+                                            <a [href]="result.cve.source_link" target="_blank"
+                                               rel="noopener noreferrer">
+                                                {{ t('Advisory') }}
+                                                <fa-icon [icon]="['fas', 'arrow-up-right-from-square']"></fa-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </c-col>
@@ -118,7 +130,9 @@
                         <c-row>
                             <c-col [xs]="12" [md]="6" class="mb-2">
                                 <c-input-group>
-                                    <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Hosts.name]']"
                                            [placeholder]="'Filter by host name' | transloco"
@@ -127,7 +141,9 @@
                             </c-col>
                             <c-col [xs]="12" [md]="6" class="mb-2">
                                 <c-input-group>
-                                    <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                    <span cInputGroupText>
+                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[CveHostFindings.component_name]']"
                                            [placeholder]="'Filter by package or application' | transloco"
@@ -145,7 +161,7 @@
                     </form>
                 </c-container>
 
-                @let canDecide = (PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'decide']) | async);
+                @let canDecide = ( PermissionsService.hasPermissionObservable(['CveModule', 'cves', 'decide']) | async );
                 <!-- Affected hosts -->
                 <table bordered cTable class="mb-0 table table-fit" hover striped small matSort
                        (matSortChange)="onSortChange($event)"
@@ -201,12 +217,13 @@
                                 </td>
                                 <td>
                                     @if (finding.decision) {
-                                        <oitc-cve-decision-state-label [state]="finding.decision.state"></oitc-cve-decision-state-label>
+                                        <oitc-cve-decision-state-label
+                                                [state]="finding.decision.state"></oitc-cve-decision-state-label>
                                     }
                                 </td>
                                 <td>
                                     <oitc-cve-recommendation-label
-                                        [recommendation]="finding.recommendation"></oitc-cve-recommendation-label>
+                                            [recommendation]="finding.recommendation"></oitc-cve-recommendation-label>
                                 </td>
                                 <td class="text-center">
                                     <a [routerLink]="['/', 'cve_module', 'cves', 'finding', finding.id]"

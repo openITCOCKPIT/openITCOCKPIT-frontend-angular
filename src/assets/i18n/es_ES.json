@@ -5665,5 +5665,6 @@
   "24-Hour Status Events": "Eventos de estado de 24 horas",
   "Time": "Hora",
   "Number of events": "Número de eventos",
-  "Affected Hosts": "Hosts afectados"
+  "Affected Hosts": "Hosts afectados",
+  "Fix installed, reboot into the kernel": "Corrección instalada, reinicie con el kernel"
 }

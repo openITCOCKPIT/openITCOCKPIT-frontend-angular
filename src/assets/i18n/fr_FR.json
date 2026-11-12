@@ -5887,5 +5887,6 @@
   "Filter bookmark allocation": "Filtrer l'attribution des signets",
   "24-Hour Status Events": "Événements de statut sur 24 heures",
   "Number of events": "Nombre d'événements",
-  "Affected Hosts": "Hôtes concernés"
+  "Affected Hosts": "Hôtes concernés",
+  "Fix installed, reboot into the kernel": "Correctif installé, redémarrez sur le noyau"
 }

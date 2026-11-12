@@ -6611,5 +6611,6 @@
   "Filter bookmark allocation": "Фільтр призначення закладок",
   "24-Hour Status Events": "Події статусу за 24 години",
   "Number of events": "Кількість подій",
-  "Affected Hosts": "Уражені вузли"
+  "Affected Hosts": "Уражені вузли",
+  "Fix installed, reboot into the kernel": "Виправлення встановлено, перезавантажтеся в ядро"
 }

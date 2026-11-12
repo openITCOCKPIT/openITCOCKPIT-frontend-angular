@@ -5063,5 +5063,6 @@
   "Time": "Time",
   "Number of events": "Number of events",
   "Minute": "Minute",
-  "Affected Hosts": "Affected Hosts"
+  "Affected Hosts": "Affected Hosts",
+  "Fix installed, reboot into the kernel": "Fix installed, reboot into the kernel"
 }

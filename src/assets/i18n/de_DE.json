@@ -6823,5 +6823,6 @@
   "Filter bookmark allocation": "Lesezeichen-Zuordnung filtern",
   "24-Hour Status Events": "Statusereignisse der letzten 24 Stunden",
   "Number of events": "Anzahl der Ereignisse",
-  "Affected Hosts": "Betroffene Hosts"
+  "Affected Hosts": "Betroffene Hosts",
+  "Fix installed, reboot into the kernel": "Fix installiert, in den Kernel neu starten"
 }

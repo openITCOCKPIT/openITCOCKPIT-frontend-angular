@@ -6803,5 +6803,6 @@
   "Filter bookmark allocation": "Filtruj przypisanie zakładek",
   "24-Hour Status Events": "Zdarzenia statusu z 24 godzin",
   "Number of events": "Liczba zdarzeń",
-  "Affected Hosts": "Dotknięte hosty"
+  "Affected Hosts": "Dotknięte hosty",
+  "Fix installed, reboot into the kernel": "Poprawka zainstalowana, uruchom ponownie z jądrem"
 }
