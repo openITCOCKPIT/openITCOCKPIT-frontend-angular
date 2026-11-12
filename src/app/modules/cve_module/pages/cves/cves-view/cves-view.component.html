@@ -107,13 +107,14 @@
                                     · {{ t('Proof of concept') }}: {{ result.cve.poc_exploit_count }}
                                 </td>
                             </tr>
-                                @if (result.cve.source_link) {
+                                <!-- Neutral for all hosts, the advisories of the vendors are linked per host below -->
+                                @if (result.cve.nvd_link) {
                                     <tr>
-                                        <th>{{ t('Source') }}</th>
+                                        <th>{{ t('NVD') }}</th>
                                         <td>
-                                            <a [href]="result.cve.source_link" target="_blank"
+                                            <a [href]="result.cve.nvd_link" target="_blank"
                                                rel="noopener noreferrer">
-                                                {{ t('Advisory') }}
+                                                {{ result.cve.nvd_link }}
                                                 <fa-icon [icon]="['fas', 'arrow-up-right-from-square']"></fa-icon>
                                             </a>
                                         </td>
@@ -213,6 +214,13 @@
                                         <code>{{ finding.fixed_in }}</code>
                                     } @else if (finding.not_fixed_yet) {
                                         <span class="text-muted">{{ t('Not fixed yet') }}</span>
+                                    }
+                                    <!-- The fix data comes from the vendor of the operating system of this host -->
+                                    @if (finding.advisory_link) {
+                                        <a [href]="finding.advisory_link" target="_blank" rel="noopener noreferrer"
+                                           class="ms-1" [title]="t('Advisory')">
+                                            <fa-icon [icon]="['fas', 'arrow-up-right-from-square']"></fa-icon>
+                                        </a>
                                     }
                                 </td>
                                 <td>

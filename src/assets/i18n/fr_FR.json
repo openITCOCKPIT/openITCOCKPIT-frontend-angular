@@ -5888,5 +5888,6 @@
   "24-Hour Status Events": "Événements de statut sur 24 heures",
   "Number of events": "Nombre d'événements",
   "Affected Hosts": "Hôtes concernés",
-  "Fix installed, reboot into the kernel": "Correctif installé, redémarrez sur le noyau"
+  "Fix installed, reboot into the kernel": "Correctif installé, redémarrez sur le noyau",
+  "NVD": "NVD"
 }

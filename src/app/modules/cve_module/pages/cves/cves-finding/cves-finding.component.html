@@ -116,12 +116,24 @@
                                     · {{ t('Proof of concept') }}: {{ finding.cve.poc_exploit_count }}
                                 </td>
                             </tr>
-                            @if (finding.cve.source_link) {
+                            <!-- The vendor of the operating system of this host, the CVE itself is the same for all hosts -->
+                            @if (finding.advisory_link) {
                                 <tr>
-                                    <th>{{ t('Source') }}</th>
+                                    <th>{{ t('Advisory') }}</th>
                                     <td>
-                                        <a [href]="finding.cve.source_link" target="_blank" rel="noopener noreferrer">
-                                            {{ finding.cve.source_link }}
+                                        <a [href]="finding.advisory_link" target="_blank" rel="noopener noreferrer">
+                                            {{ finding.advisory_link }}
+                                            <fa-icon [icon]="['fas', 'arrow-up-right-from-square']"></fa-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            @if (finding.cve.nvd_link) {
+                                <tr>
+                                    <th>{{ t('NVD') }}</th>
+                                    <td>
+                                        <a [href]="finding.cve.nvd_link" target="_blank" rel="noopener noreferrer">
+                                            {{ finding.cve.nvd_link }}
                                             <fa-icon [icon]="['fas', 'arrow-up-right-from-square']"></fa-icon>
                                         </a>
                                     </td>

@@ -309,7 +309,8 @@ export interface CveOfFinding {
     metasploit_count: number
     verified_exploit_count: number
     poc_exploit_count: number
-    source_link?: string | null
+    // Neutral link of NVD, the link of the vendor depends on the host: CveFinding.advisory_link
+    nvd_link?: string | null
 }
 
 export interface CveDecision {
@@ -350,6 +351,8 @@ export interface CveFinding {
     not_fixed_yet: boolean
     update_available: boolean
     update_version: string | null
+    // Running kernel only: installed kernel that fixes the CVE after a reboot
+    reboot_version?: string | null
     severity: CveSeverity
     severity_source: string | null
     view_name: CveViews
@@ -370,6 +373,8 @@ export interface CveFinding {
     host: CveHostOfRow
     cve: CveOfFinding
     reason_codes: string[]
+    // Page of the vendor of the operating system of the host, e.g. the Debian Security Tracker, null if there is none
+    advisory_link: string | null
     // null if the rule is unknown to the current policy
     recommendation: CveRecommendation | null
     decision: CveDecision | null

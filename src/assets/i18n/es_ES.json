@@ -5666,5 +5666,6 @@
   "Time": "Hora",
   "Number of events": "Número de eventos",
   "Affected Hosts": "Hosts afectados",
-  "Fix installed, reboot into the kernel": "Corrección instalada, reinicie con el kernel"
+  "Fix installed, reboot into the kernel": "Corrección instalada, reinicie con el kernel",
+  "NVD": "NVD"
 }

@@ -6614,5 +6614,6 @@
   "24-Hour Status Events": "События статуса за 24 часа",
   "Number of events": "Количество событий",
   "Affected Hosts": "Затронутые узлы",
-  "Fix installed, reboot into the kernel": "Исправление установлено, перезагрузитесь в ядро"
+  "Fix installed, reboot into the kernel": "Исправление установлено, перезагрузитесь в ядро",
+  "NVD": "NVD"
 }
