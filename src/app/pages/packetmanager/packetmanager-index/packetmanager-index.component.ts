@@ -1,22 +1,32 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+    afterNextRender,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    inject,
+    Injector,
+    OnDestroy,
+    OnInit
+} from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { NgClass } from '@angular/common';
 import {
     AlertComponent,
-    BadgeComponent,
+    CardTextDirective,
+    CardFooterComponent,
     ButtonGroupComponent,
+    BadgeComponent,
+    ButtonDirective,
     CardBodyComponent,
     CardComponent,
-    CardFooterComponent,
     CardHeaderComponent,
     CardTitleDirective,
     ColComponent,
-    ContainerComponent,
-    FormCheckInputDirective,
+    FormControlDirective,
+    InputGroupComponent,
     InputGroupTextDirective,
     ModalBodyComponent,
     ModalComponent,
@@ -30,7 +40,6 @@ import {
 
 import { FormsModule } from '@angular/forms';
 
-import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { PacketmanagerIndexRoot, PacketmanagerModule } from '../packetmanager.interface';
 import { Subscription } from 'rxjs';
 import { PacketmanagerService } from '../packetmanager.service';
@@ -38,6 +47,10 @@ import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
 import { RepositoryCheckerComponent } from '../../../components/repository-checker/repository-checker.component';
 import { ConsoleCopyComponent } from '../../../components/console-copy/console-copy.component';
 import { EolAlertsComponent } from '../../administrators/administrators-debug/eol-alerts/eol-alerts.component';
+import { TitleService } from '../../../services/title.service';
+import { NotyService } from '../../../layouts/coreui/noty.service';
+
+type PacketmanagerFilter = 'all' | 'community' | 'enterprise' | 'installed';
 
 @Component({
     selector: 'oitc-packetmanager-index',
@@ -48,27 +61,27 @@ import { EolAlertsComponent } from '../../administrators/administrators-debug/eo
         RouterLink,
         CardBodyComponent,
         CardComponent,
-        CardFooterComponent,
         CardHeaderComponent,
         CardTitleDirective,
-        FormCheckInputDirective,
         FormsModule,
-        XsButtonDirective,
+        ButtonDirective,
+        FormControlDirective,
+        InputGroupComponent,
         ModalComponent,
         ModalHeaderComponent,
         ModalFooterComponent,
         ModalToggleDirective,
         ModalBodyComponent,
         AlertComponent,
+        CardTextDirective,
+        CardFooterComponent,
+        ButtonGroupComponent,
+        BadgeComponent,
         TranslocoPipe,
         ColComponent,
-        BadgeComponent,
         RowComponent,
-        NgClass,
-        ContainerComponent,
         InputGroupTextDirective,
         TrustAsHtmlPipe,
-        ButtonGroupComponent,
         RepositoryCheckerComponent,
         ConsoleCopyComponent,
         EolAlertsComponent
@@ -83,10 +96,25 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     private readonly modalService: ModalService = inject(ModalService);
     private readonly PacketmanagerService: PacketmanagerService = inject(PacketmanagerService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
+    private readonly TitleService: TitleService = inject(TitleService);
+    private readonly notyService: NotyService = inject(NotyService);
 
     public newVersionAvailable: boolean = false;
+    protected highlightedPacket: string | null = null;
 
     protected modulesToCheckboxesInstall: { [key: string]: boolean } = {};
+    protected selectedModules: string[] = [];
+
+    protected searchText: string = '';
+    protected activeFilter: PacketmanagerFilter = 'all';
+    protected visibleModules: PacketmanagerModule[] = [];
+    protected readonly filterOptions: { key: PacketmanagerFilter, label: string }[] = [
+        {key: 'all', label: 'All'},
+        {key: 'community', label: 'Community'},
+        {key: 'enterprise', label: 'Enterprise'},
+        {key: 'installed', label: 'Installed'}
+    ];
+    protected filterCounts: Record<PacketmanagerFilter, number> = {all: 0, community: 0, enterprise: 0, installed: 0};
     private packageList: string = '';
     protected debianCommand: string = '';
     protected rhelCommand: string = '';
@@ -114,9 +142,12 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     };
 
     private cdr = inject(ChangeDetectorRef);
+    private readonly ActivatedRoute: ActivatedRoute = inject(ActivatedRoute);
+    private readonly injector: Injector = inject(Injector);
 
 
     public ngOnInit() {
+        this.TitleService.setTitle(this.TranslocoService.translate('Packagemanager'));
         this.subscriptions.add(this.PacketmanagerService.getIndex().subscribe((result: PacketmanagerIndexRoot): void => {
                 this.data = result;
                 this.cdr.markForCheck();
@@ -129,8 +160,21 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
                 }
 
                 this.initializeModulesToCheckboxesInstall();
+                this.calcFilterCounts();
+                this.applyFilter();
+
+                this.highlightedPacket = this.ActivatedRoute.snapshot.queryParamMap.get('packetName');
+                if (this.highlightedPacket) {
+                    this.scrollToPacket(this.highlightedPacket);
+                }
             })
         );
+    }
+
+    private scrollToPacket(packetName: string): void {
+        afterNextRender(() => {
+            document.getElementById(packetName)?.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }, {injector: this.injector});
     }
 
     private initializeModulesToCheckboxesInstall(): void {
@@ -151,18 +195,84 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
         return tags;
     }
 
-    protected installPacket(aptName: string): void {
-        this.modulesToCheckboxesInstall[aptName] = !this.modulesToCheckboxesInstall[aptName];
+    protected isInstalled(module: PacketmanagerModule): boolean {
+        return !!this.data.installedModules[module.Module.apt_name];
+    }
 
-        let packages: string[] = [];
-        this.data.result.data.modules.forEach((module: PacketmanagerModule) => {
-            if (this.modulesToCheckboxesInstall[module.Module.apt_name]) {
-                packages.push(module.Module.apt_name);
+    private matchesFilter(module: PacketmanagerModule, filter: PacketmanagerFilter): boolean {
+        switch (filter) {
+            case 'community':
+                return !module.Module.enterprise;
+            case 'enterprise':
+                return module.Module.enterprise;
+            case 'installed':
+                return this.isInstalled(module);
+            default:
+                return true;
+        }
+    }
+
+    private calcFilterCounts(): void {
+        const modules = this.data.result.data.modules;
+        for (const option of this.filterOptions) {
+            this.filterCounts[option.key] = modules.filter(m => this.matchesFilter(m, option.key)).length;
+        }
+    }
+
+    protected setFilter(filter: PacketmanagerFilter): void {
+        this.activeFilter = filter;
+        this.applyFilter();
+    }
+
+    protected applyFilter(): void {
+        const search = this.searchText.trim().toLowerCase();
+        this.visibleModules = this.data.result.data.modules.filter((module: PacketmanagerModule) => {
+            if (!this.matchesFilter(module, this.activeFilter)) {
+                return false;
             }
+            if (search === '') {
+                return true;
+            }
+            const haystack = [
+                module.Module.name,
+                module.Module.description,
+                module.Module.author,
+                ...this.splitV3Tags(module.Module.tags || [])
+            ].join(' ').toLowerCase();
+            return haystack.includes(search);
         });
-        this.packageList = packages.join(' \\ \n');
+        this.cdr.markForCheck();
+    }
+
+    protected toggleModule(aptName: string): void {
+        this.modulesToCheckboxesInstall[aptName] = !this.modulesToCheckboxesInstall[aptName];
+        this.updateSelection();
+
+        if (this.modulesToCheckboxesInstall[aptName] && this.selectedModules.length === 1) {
+            this.notyService.genericInfo(
+                this.TranslocoService.translate('Package selected. Use the "Install packages" button at the bottom right to copy the installation command.')
+            );
+        }
+    }
+
+    protected clearSelection(): void {
+        Object.keys(this.modulesToCheckboxesInstall).forEach((aptName: string) => {
+            this.modulesToCheckboxesInstall[aptName] = false;
+        });
+        this.updateSelection();
+    }
+
+    private updateSelection(): void {
+        this.selectedModules = this.data.result.data.modules
+            .map((module: PacketmanagerModule) => module.Module.apt_name)
+            .filter((aptName: string) => this.modulesToCheckboxesInstall[aptName]);
+        this.packageList = this.selectedModules.join(' \\ \n');
 
         this.buildCommands();
+        this.cdr.markForCheck();
+    }
+
+    protected showInstallCommand(): void {
         this.modalService.toggle({
             show: true,
             id: 'installPacketModal'

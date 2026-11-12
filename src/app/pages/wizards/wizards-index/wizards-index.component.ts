@@ -10,6 +10,7 @@ import {RouterLink} from '@angular/router';
 import {XsButtonDirective} from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {BadgeOutlineComponent} from '../../../layouts/coreui/badge-outline/badge-outline.component';
 import {FormsModule} from '@angular/forms';
+import {PermissionDirective} from '../../../permissions/permission.directive';
 
 @Component({
     selector: 'oitc-wizards-index',
@@ -38,7 +39,8 @@ import {FormsModule} from '@angular/forms';
         FormsModule,
         TooltipDirective,
         InputGroupComponent,
-        InputGroupTextDirective
+        InputGroupTextDirective,
+        PermissionDirective
     ],
     templateUrl: './wizards-index.component.html',
     styleUrl: './wizards-index.component.css',

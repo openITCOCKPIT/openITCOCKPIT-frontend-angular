@@ -4584,5 +4584,8 @@
   "Sun": "Sun",
   "Notifications overview": "Notifications overview",
   "GPUs": "GPUs",
-  "GPU usage": "GPU usage"
+  "GPU usage": "GPU usage",
+  "All": "All",
+  "Selected": "Selected",
+  "selected": "selected"
 }
