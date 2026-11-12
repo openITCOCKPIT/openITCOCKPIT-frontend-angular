@@ -11,8 +11,10 @@
                             <c-col lg="6" class="px-3">
                                 <p-skeleton width="200px" height="200px"></p-skeleton>
                             </c-col>
-                        } @else {
-                            <c-col lg="12" class="h-25" [hidden]="sla_information">
+                        }
+
+                        @if (!isLoading && !sla_information) {
+                            <c-col lg="12" class="h-25">
                                 <c-col lg="12">
                                     <c-alert color="prinary" class="alert-block bg-primary-200">
                                         <div class="d-flex align-items-center">
@@ -20,8 +22,7 @@
                                                 <span class="icon-stack icon-stack-md">
                                                     <i class="base base-7 icon-stack-3x text-primary-700"></i>
                                                     <i class="base base-7 icon-stack-2x text-primary-900"></i>
-                                                    <i class="fa-solid fa-info icon-stack-1x text-white"
-                                                       style="bottom: 2px;"></i>
+                                                    <i class="fa-solid fa-info icon-stack-1x text-white"></i>
                                                 </span>
                                             </div>
                                             <div class="flex-1">
@@ -36,8 +37,19 @@
                                 </c-col>
                             </c-col>
                         }
-                        @if (sla_information !== null) {
-                            <c-col lg="6" class="px-3" [hidden]="!sla_information">
+                    </div>
+                </c-col>
+            </c-row>
+            <c-row>
+                @if (isLoading) {
+                    <c-col xs="12" sm="12" md="6" class="pt-1">
+                        <oitc-table-loader></oitc-table-loader>
+                    </c-col>
+                }
+                @if (!isLoading && sla_information !== null) {
+                    <c-col xs="12" sm="12" md="6" class="pt-1 d-flex flex-column">
+                        <c-row>
+                            <c-col [lg]="6">
                                 <h2>
                                     <fa-icon [icon]="['fas', 'arrow-up']"
                                              class="text-success pr-2"></fa-icon>
@@ -55,7 +67,6 @@
                                         </span>
                                     }
                                 </h2>
-
                                 <c-row class="pt-2">
                                     <c-col lg="7">
                                         {{ t('Status') }}
@@ -108,9 +119,8 @@
                                     </c-col>
                                 </c-row>
                             </c-col>
-                            <c-col lg="6" class="border-left sla-service-list px-3"
-                                   [hidden]="!sla_information">
-                                <c-row class="pt-2">
+                            <c-col [lg]="6" class="border-left sla-service-list font-xs">
+                                <c-row>
                                     <c-col lg="9" class="bold">
                                         {{ t('Service') }}
                                         <sub class="text-secondary">
@@ -131,11 +141,9 @@
                                     }
                                 </c-row>
                             </c-col>
-                        }
-                    </div>
-                    @if (sla_information !== null) {
-                        <div class="d-flex h-25 flex-grow" [hidden]="!sla_information">
-                            <c-col lg="4" class="px-2">
+                        </c-row>
+                        <c-row class="mt-auto">
+                            <c-col lg="4">
                                 <div class="sla-info-box bg-{{sla_information.host.state}}">
                                     <span class="sla-info-box-icon">
                                         @if (sla_information.host.state === 'success') {
@@ -171,7 +179,7 @@
                                     </div>
                                 </div>
                             </c-col>
-                            <c-col lg="4" class="px-2">
+                            <c-col lg="4">
                                 <div class="sla-info-box bg-{{sla_information.host.state}}">
                                     <span class="sla-info-box-icon">
                                         <fa-icon [icon]="['fas', 'arrow-down']"></fa-icon>
@@ -201,7 +209,7 @@
                                     </div>
                                 </div>
                             </c-col>
-                            <c-col lg="4" class="px-2">
+                            <c-col lg="4">
                                 <div class="sla-info-box bg-success">
                                     <span class="sla-info-box-icon">
                                         <fa-icon [icon]="['fas', 'check']"></fa-icon>
@@ -212,7 +220,8 @@
                                         </span>
                                         <span class="sla-info-box-number">{{ sla.minimal_availability }} %</span>
                                         <div class="progress">
-                                            <div class="progress-bar" [style.width.%]="sla.minimal_availability"></div>
+                                            <div class="progress-bar"
+                                                 [style.width.%]="sla.minimal_availability"></div>
                                         </div>
                                         <span class="progress-description">
                                             {{ t('Days total') }}:
@@ -221,17 +230,10 @@
                                     </div>
                                 </div>
                             </c-col>
-                        </div>
-                    }
-                </c-col>
-                @if (isLoading) {
-                    <c-col xs="12" sm="12" md="6" class="pt-1">
-                        <oitc-table-loader></oitc-table-loader>
+                        </c-row>
                     </c-col>
-                }
-                @if (!isLoading) {
-                    <c-col xs="12" sm="12" md="6" class="pt-1">
-                        <table bordered cTable small class="table-sm">
+                    <c-col xs="12" sm="12" md="6" class="pt-1 d-flex flex-column">
+                        <table bordered cTable small class="table-sm h-100 mb-0">
                             <tbody>
                             <tr>
                                 <th class="col-3">{{ t('Name') }}</th>
@@ -333,7 +335,7 @@
                                     <div class="gridContainer-weekdays">
                                         @for (weekday of weekdayNames; track weekday) {
                                             <div
-                                                class="child grid bg-primary text-white small">
+                                                    class="child grid bg-primary text-white small">
                                                 {{ weekday.name }}
                                             </div>
                                         }

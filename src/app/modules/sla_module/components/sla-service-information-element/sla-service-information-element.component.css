@@ -18,8 +18,8 @@
     position: relative;
     font: var(--fa-font-solid);
     font-size: 15px;
-    top: 17%;
-    right: -103%;
+    top: 8%;
+    right: -90%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-image: linear-gradient(to right, #727b84 0%, #727b84 50%, transparent 50%),
