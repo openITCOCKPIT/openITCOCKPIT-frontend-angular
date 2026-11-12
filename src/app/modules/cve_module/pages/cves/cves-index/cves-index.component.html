@@ -144,16 +144,16 @@
                         </c-col>
                         <c-col [xs]="12" [md]="6" class="mb-2 ui-fluid">
                             <oitc-multi-select
-                                class="flex-1"
-                                name="CveHostSummariesStatus"
-                                id="CveHostSummariesStatus"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="params['filter[CveHostSummaries.status][]']"
-                                [options]="statuses"
-                                [debounce]="true"
-                                [placeholder]="'Filter by result of the evaluation' | transloco"
-                                (onChange)="onFilterChange(null)">
+                                    class="flex-1"
+                                    name="CveHostSummariesStatus"
+                                    id="CveHostSummariesStatus"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="params['filter[CveHostSummaries.status][]']"
+                                    [options]="statuses"
+                                    [debounce]="true"
+                                    [placeholder]="'Filter by result of the evaluation' | transloco"
+                                    (onChange)="onFilterChange(null)">
                             </oitc-multi-select>
                         </c-col>
                     </c-row>
@@ -179,13 +179,15 @@
                                 <input cFormCheckInput type="checkbox" id="CveHasKev" name="CveHasKev"
                                        [checked]="params['filter[CveHostSummaries.kev_count]'] === 1"
                                        (change)="toggleMinimum('filter[CveHostSummaries.kev_count]', $any($event.target).checked)"/>
-                                <label cFormCheckLabel for="CveHasKev">{{ t('Only hosts with CVEs of the CISA KEV catalog') }}</label>
+                                <label cFormCheckLabel
+                                       for="CveHasKev">{{ t('Only hosts with CVEs of the CISA KEV catalog') }}</label>
                             </c-form-check>
                             <c-form-check>
                                 <input cFormCheckInput type="checkbox" id="CveHasExploit" name="CveHasExploit"
                                        [checked]="params['filter[CveHostSummaries.exploit_count]'] === 1"
                                        (change)="toggleMinimum('filter[CveHostSummaries.exploit_count]', $any($event.target).checked)"/>
-                                <label cFormCheckLabel for="CveHasExploit">{{ t('Only hosts with public exploits') }}</label>
+                                <label cFormCheckLabel
+                                       for="CveHasExploit">{{ t('Only hosts with public exploits') }}</label>
                             </c-form-check>
                         </c-col>
                     </c-row>
@@ -216,7 +218,8 @@
                     <th scope="col" mat-sort-header="CveHostSummaries.kev_count">{{ t('CISA KEV') }}</th>
                     <th scope="col" mat-sort-header="CveHostSummaries.exploit_count">{{ t('Exploits') }}</th>
                     <th scope="col" mat-sort-header="CveHostSummaries.fixable_count">{{ t('With fix') }}</th>
-                    <th scope="col" mat-sort-header="CveHostSummaries.inventory_last_update">{{ t('Inventory from') }}</th>
+                    <th scope="col" mat-sort-header="CveHostSummaries.inventory_last_update">{{ t('Inventory from') }}
+                    </th>
                     <th class="text-center width-50" scope="col">
                         <fa-icon [icon]="['fas', 'gear']"></fa-icon>
                     </th>
@@ -254,7 +257,8 @@
                                 <td>
                                     {{ summary.inventory_last_update_user }}
                                     @if (summary.state.inventory_age_days !== null && summary.state.inventory_age_days > 0) {
-                                        <span class="text-muted">({{ summary.state.inventory_age_days }} {{ t('days') }})</span>
+                                        <span class="text-muted">({{ summary.state.inventory_age_days }} {{ t('days') }}
+                                            )</span>
                                     }
                                 </td>
                                 <td class="width-50">
@@ -281,12 +285,12 @@
             @if (hosts && hosts.hosts.length === 0) {
                 <oitc-no-records></oitc-no-records>
             }
-            <c-container [fluid]="true">
+            <c-container [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
