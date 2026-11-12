@@ -136,7 +136,7 @@
                         <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Hosts.name]']"
@@ -148,52 +148,89 @@
                             </c-input-group>
                         </c-col>
                         <c-col [xs]="12" [md]="6" class="mb-2 ui-fluid">
-                            <oitc-multi-select
-                                    class="flex-1"
-                                    name="CveHostSummariesStatus"
-                                    id="CveHostSummariesStatus"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="params['filter[CveHostSummaries.status][]']"
-                                    [options]="statuses"
-                                    [debounce]="true"
-                                    [placeholder]="'Filter by result of the evaluation' | transloco"
-                                    (onChange)="onFilterChange(null)">
-                            </oitc-multi-select>
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'list-check']"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                        class="flex-1"
+                                        name="CveHostSummariesStatus"
+                                        id="CveHostSummariesStatus"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="params['filter[CveHostSummaries.status][]']"
+                                        [options]="statuses"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by result of the evaluation' | transloco"
+                                        (onChange)="onFilterChange(null)">
+                                </oitc-multi-select>
+                            </c-input-group>
                         </c-col>
                     </c-row>
                     <c-row class="my-2">
                         <c-col [xs]="12" [lg]="6">
-                            <h5>{{ t('Last result') }}</h5>
-                            @for (color of colors; track color.key) {
-                                <c-form-check [inline]="true">
-                                    <input cFormCheckInput type="checkbox"
-                                           [id]="'CveColor' + color.key"
-                                           [name]="'CveColor' + color.key"
-                                           [checked]="isColorSelected(color.key)"
-                                           (change)="toggleColor(color.key)"/>
-                                    <label cFormCheckLabel [for]="'CveColor' + color.key">
-                                        <oitc-cve-state-badge [color]="color.key"></oitc-cve-state-badge>
-                                    </label>
-                                </c-form-check>
-                            }
+                            <fieldset>
+                                <h5>{{ t('Last result') }}</h5>
+                                @for (color of colors; track color.key) {
+                                    <c-form-check>
+                                        <input
+                                                oitcDebounce
+                                                (debouncedValue)="onFilterChange($event)"
+                                                cFormCheckInput
+                                                class="checkbox-lg" [class]="'checkbox-'+color.color"
+                                                [id]="'CveColor' + color.key"
+                                                [name]="'CveColor' + color.key"
+                                                [checked]="isColorSelected(color.key)"
+                                                (change)="toggleColor(color.key)"/>
+                                        <label cFormCheckLabel class="ms-1 mt-1"
+                                               [for]="'CveColor' + color.key">
+                                            <oitc-cve-state-badge [color]="color.key"></oitc-cve-state-badge>
+                                        </label>
+                                    </c-form-check>
+                                }
+                            </fieldset>
+
                         </c-col>
                         <c-col [xs]="12" [lg]="6">
-                            <h5>{{ t('Signals') }}</h5>
-                            <c-form-check>
-                                <input cFormCheckInput type="checkbox" id="CveHasKev" name="CveHasKev"
-                                       [checked]="params['filter[CveHostSummaries.kev_count]'] === 1"
-                                       (change)="toggleMinimum('filter[CveHostSummaries.kev_count]', $any($event.target).checked)"/>
-                                <label cFormCheckLabel
-                                       for="CveHasKev">{{ t('Only hosts with CVEs of the CISA KEV catalog') }}</label>
-                            </c-form-check>
-                            <c-form-check>
-                                <input cFormCheckInput type="checkbox" id="CveHasExploit" name="CveHasExploit"
-                                       [checked]="params['filter[CveHostSummaries.exploit_count]'] === 1"
-                                       (change)="toggleMinimum('filter[CveHostSummaries.exploit_count]', $any($event.target).checked)"/>
-                                <label cFormCheckLabel
-                                       for="CveHasExploit">{{ t('Only hosts with public exploits') }}</label>
-                            </c-form-check>
+                            <fieldset>
+                                <h5>{{ t('Signals') }}</h5>
+                                <c-form-check>
+                                    <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            name="filter.CveHasKev"
+                                            id="filter.CveHasKev"
+                                            class="checkbox-lg checkbox-primary"
+                                            type="checkbox"
+                                            oitcDebounce
+                                            [trueValue]="1"
+                                            [falseValue]="''"
+                                            trueFalseValue
+                                            [(ngModel)]="params['filter[CveHostSummaries.kev_count]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.CveHasKev">
+                                        {{ t('Only hosts with CVEs of the CISA KEV catalog') }}
+                                    </label>
+                                </c-form-check>
+                                <c-form-check>
+                                    <input
+                                            (debouncedValue)="onFilterChange($event)"
+                                            cFormCheckInput
+                                            name="filter.CveHasExploit"
+                                            id="filter.CveHasExploit"
+                                            class="checkbox-lg checkbox-primary"
+                                            type="checkbox"
+                                            oitcDebounce
+                                            [trueValue]="1"
+                                            [falseValue]="''"
+                                            trueFalseValue
+                                            [(ngModel)]="params['filter[CveHostSummaries.exploit_count]']"/>
+                                    <label cFormCheckLabel class="ms-1 mt-1"
+                                           for="filter.CveHasExploit">
+                                        {{ t('Only hosts with public exploits') }}
+                                    </label>
+                                </c-form-check>
+                            </fieldset>
                         </c-col>
                     </c-row>
                     <c-row class="mt-2">
@@ -210,95 +247,101 @@
             @if (!hosts) {
                 <oitc-table-loader></oitc-table-loader>
             }
-            <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
-                   (matSortChange)="onSortChange($event)"
-                   [matSortActive]="params.sort" [matSortDirection]="params.direction">
-                <thead>
-                <tr>
-                    <th scope="col">{{ t('State') }}</th>
-                    <th scope="col" mat-sort-header="Hosts.name">{{ t('Host') }}</th>
-                    <th scope="col" mat-sort-header="CveHostSummaries.open_count">{{ t('Open CVEs by severity') }}</th>
-                    <th scope="col" mat-sort-header="CveHostSummaries.action_count">{{ t('Action required') }}</th>
-                    <th scope="col" mat-sort-header="CveHostSummaries.red_count">{{ t('Red') }}</th>
-                    <th scope="col" mat-sort-header="CveHostSummaries.kev_count">{{ t('CISA KEV') }}</th>
-                    <th scope="col" mat-sort-header="CveHostSummaries.exploit_count">{{ t('Exploits') }}</th>
-                    <th scope="col" mat-sort-header="CveHostSummaries.fixable_count">{{ t('With fix') }}</th>
-                    <th scope="col" mat-sort-header="CveHostSummaries.inventory_last_update">{{ t('Inventory from') }}
-                    </th>
-                    <th class="text-center width-50" scope="col">
-                        <fa-icon [icon]="['fas', 'gear']"></fa-icon>
-                    </th>
-                </tr>
-                </thead>
-                @if (hosts) {
-                    <tbody>
-                        @for (summary of hosts.hosts; track summary.host_id) {
-                            <tr>
-                                <td>
-                                    <oitc-cve-state-badge [color]="summary.state.color"
-                                                          [status]="summary.state.status"></oitc-cve-state-badge>
-                                </td>
-                                <td>
-                                    <a [routerLink]="['/', 'cve_module', 'cves', 'host', summary.host_id]">
-                                        {{ summary.host.name }}
-                                    </a>
-                                    @if (summary.error_message) {
-                                        <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger ms-1"
-                                                 [title]="summary.error_message"></fa-icon>
-                                    }
-                                </td>
-                                <td class="cves-bar-column">
-                                    <oitc-cve-severity-bar [critical]="summary.critical_count"
-                                                           [high]="summary.high_count"
-                                                           [medium]="summary.medium_count"
-                                                           [low]="summary.low_count"
-                                                           [unknown]="summary.unknown_count"></oitc-cve-severity-bar>
-                                </td>
-                                <td>{{ summary.action_count }}</td>
-                                <td [class.text-danger]="summary.red_count > 0">{{ summary.red_count }}</td>
-                                <td [class.text-danger]="summary.kev_count > 0">{{ summary.kev_count }}</td>
-                                <td>{{ summary.exploit_count }}</td>
-                                <td>{{ summary.fixable_count }}</td>
-                                <td>
-                                    {{ summary.inventory_last_update_user }}
-                                    @if (summary.state.inventory_age_days !== null && summary.state.inventory_age_days > 0) {
-                                        <span class="text-muted">({{ summary.state.inventory_age_days }} {{ t('days') }}
-                                            )</span>
-                                    }
-                                </td>
-                                <td class="width-50">
-                                    <oitc-actions-button [permission]="'CveModule.cves.index'"
-                                                         [icon]="['fas', 'shield-virus']"
-                                                         [url]="'/cve_module/cves/host/' + summary.host_id">
-                                        <oitc-actions-button-element [permission]="'CveModule.cves.index'"
-                                                                     [url]="'/cve_module/cves/host/' + summary.host_id">
-                                            <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
-                                            {{ t('Vulnerabilities') }}
-                                        </oitc-actions-button-element>
-                                        <oitc-actions-button-element [permission]="'hosts.browser'"
-                                                                     [url]="'/hosts/browser/' + summary.host_id">
-                                            <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
-                                            {{ t('Host browser') }}
-                                        </oitc-actions-button-element>
-                                    </oitc-actions-button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                }
-            </table>
+            @if (hosts) {
+                <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
+                       (matSortChange)="onSortChange($event)"
+                       [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                    <thead>
+                    <tr>
+                        <th scope="col">{{ t('State') }}</th>
+                        <th scope="col" mat-sort-header="Hosts.name">{{ t('Host') }}</th>
+                        <th scope="col" mat-sort-header="CveHostSummaries.open_count">{{ t('Open CVEs by severity') }}
+                        </th>
+                        <th scope="col" mat-sort-header="CveHostSummaries.action_count">{{ t('Action required') }}</th>
+                        <th scope="col" mat-sort-header="CveHostSummaries.red_count">{{ t('Red') }}</th>
+                        <th scope="col" mat-sort-header="CveHostSummaries.kev_count">{{ t('CISA KEV') }}</th>
+                        <th scope="col" mat-sort-header="CveHostSummaries.exploit_count">{{ t('Exploits') }}</th>
+                        <th scope="col" mat-sort-header="CveHostSummaries.fixable_count">{{ t('With fix') }}</th>
+                        <th scope="col"
+                            mat-sort-header="CveHostSummaries.inventory_last_update">{{ t('Inventory from') }}
+                        </th>
+                        <th class="text-center width-50" scope="col">
+                            <fa-icon [icon]="['fas', 'gear']"></fa-icon>
+                        </th>
+                    </tr>
+                    </thead>
+                    @if (hosts) {
+                        <tbody>
+                            @for (summary of hosts.hosts; track summary.host_id) {
+                                <tr>
+                                    <td>
+                                        <oitc-cve-state-badge [color]="summary.state.color"
+                                                              [status]="summary.state.status"></oitc-cve-state-badge>
+                                    </td>
+                                    <td>
+                                        <a [routerLink]="['/', 'cve_module', 'cves', 'host', summary.host_id]">
+                                            {{ summary.host.name }}
+                                        </a>
+                                        @if (summary.error_message) {
+                                            <fa-icon [icon]="['fas', 'triangle-exclamation']" class="text-danger ms-1"
+                                                     [title]="summary.error_message"></fa-icon>
+                                        }
+                                    </td>
+                                    <td class="cves-bar-column">
+                                        <oitc-cve-severity-bar [critical]="summary.critical_count"
+                                                               [high]="summary.high_count"
+                                                               [medium]="summary.medium_count"
+                                                               [low]="summary.low_count"
+                                                               [unknown]="summary.unknown_count"></oitc-cve-severity-bar>
+                                    </td>
+                                    <td>{{ summary.action_count }}</td>
+                                    <td [class.text-danger]="summary.red_count > 0">{{ summary.red_count }}</td>
+                                    <td [class.text-danger]="summary.kev_count > 0">{{ summary.kev_count }}</td>
+                                    <td>{{ summary.exploit_count }}</td>
+                                    <td>{{ summary.fixable_count }}</td>
+                                    <td>
+                                        {{ summary.inventory_last_update_user }}
+                                        @if (summary.state.inventory_age_days !== null && summary.state.inventory_age_days > 0) {
+                                            <span class="text-muted">({{ summary.state.inventory_age_days }} {{ t('days') }}
+                                                )</span>
+                                        }
+                                    </td>
+                                    <td class="width-50">
+                                        <oitc-actions-button [permission]="'CveModule.cves.index'"
+                                                             [icon]="['fas', 'shield-virus']"
+                                                             [url]="'/cve_module/cves/host/' + summary.host_id">
+                                            <oitc-actions-button-element [permission]="'CveModule.cves.index'"
+                                                                         [url]="'/cve_module/cves/host/' + summary.host_id">
+                                                <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
+                                                {{ t('Vulnerabilities') }}
+                                            </oitc-actions-button-element>
+                                            <oitc-actions-button-element [permission]="'hosts.browser'"
+                                                                         [url]="'/hosts/browser/' + summary.host_id">
+                                                <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
+                                                {{ t('Host browser') }}
+                                            </oitc-actions-button-element>
+                                        </oitc-actions-button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            }
             @if (hosts && hosts.hosts.length === 0) {
                 <oitc-no-records></oitc-no-records>
             }
-            <c-container [fluid]="true" class="mb-3 py-3">
-                <c-row>
-                    <c-col>
-                        <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
-                    </c-col>
-                </c-row>
-            </c-container>
+            @if (hosts) {
+                <c-container [fluid]="true" class="mb-3 py-3">
+                    <c-row>
+                        <c-col>
+                            <oitc-paginate-or-scroll
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="hosts"></oitc-paginate-or-scroll>
+                        </c-col>
+                    </c-row>
+                </c-container>
+            }
         </c-card-body>
     </c-card>
 

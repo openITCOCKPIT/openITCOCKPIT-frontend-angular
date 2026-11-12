@@ -42,6 +42,7 @@ import { CveStateBadgeComponent } from '../../../components/cve-state-badge/cve-
 import { CveSeverityBarComponent } from '../../../components/cve-severity-bar/cve-severity-bar.component';
 import { CvesTrendChartComponent } from '../../../components/cves-trend-chart/cves-trend-chart.component';
 import { CvesPagesNavComponent } from '../../../components/cves-pages-nav/cves-pages-nav.component';
+import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
 
 @Component({
     selector: 'oitc-cves-index',
@@ -82,7 +83,8 @@ import { CvesPagesNavComponent } from '../../../components/cves-pages-nav/cves-p
         CveSeverityBarComponent,
         CvesTrendChartComponent,
         CvesPagesNavComponent,
-        NavComponent
+        NavComponent,
+        TrueFalseDirective
     ],
     templateUrl: './cves-index.component.html',
     styleUrl: './cves-index.component.css',
@@ -101,11 +103,11 @@ export class CvesIndexComponent implements OnInit, OnDestroy, IndexPage {
     public summary?: CvesSummary;
 
     // Filter by the result of the last evaluation, a stale host keeps its last color
-    public readonly colors: { key: CveColor, value: string }[] = [
-        {key: 'red', value: this.TranslocoService.translate('Red')},
-        {key: 'yellow', value: this.TranslocoService.translate('Yellow')},
-        {key: 'green', value: this.TranslocoService.translate('Green')},
-        {key: 'gray', value: this.TranslocoService.translate('Gray')}
+    public readonly colors: { key: CveColor, value: string, color: string }[] = [
+        {key: 'red', value: this.TranslocoService.translate('Red'), color: 'danger'},
+        {key: 'yellow', value: this.TranslocoService.translate('Yellow'), color: 'warning'},
+        {key: 'green', value: this.TranslocoService.translate('Green'), color: 'success'},
+        {key: 'gray', value: this.TranslocoService.translate('Gray'), color: 'secondary'}
     ];
 
     public readonly statuses: SelectKeyValueString[] = [
@@ -188,11 +190,6 @@ export class CvesIndexComponent implements OnInit, OnDestroy, IndexPage {
         this.onFilterChange(null);
     }
 
-    public toggleMinimum(field: 'filter[CveHostSummaries.kev_count]' | 'filter[CveHostSummaries.exploit_count]', enabled: boolean): void {
-        // greater_equals filter: at least one
-        this.params[field] = enabled ? 1 : '';
-        this.onFilterChange(null);
-    }
 
     public hostsWithState(color: CveColor): number {
         return this.summary?.hosts.colors[color] ?? 0;
