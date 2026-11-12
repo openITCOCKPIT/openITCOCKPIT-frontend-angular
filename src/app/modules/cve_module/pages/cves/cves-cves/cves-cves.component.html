@@ -48,7 +48,9 @@
                     <c-row>
                         <c-col [xs]="12" [md]="4" class="mb-2">
                             <c-input-group>
-                                <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Cves.cve_id]']"
                                        [placeholder]="'Filter by CVE' | transloco"
@@ -57,7 +59,9 @@
                         </c-col>
                         <c-col [xs]="12" [md]="4" class="mb-2">
                             <c-input-group>
-                                <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Cves.summary]']"
                                        [placeholder]="'Filter by description' | transloco"
@@ -69,7 +73,8 @@
                                 <span cInputGroupText>{{ t('CVSS at least') }}</span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Cves.cvss_score]']"
-                                       cFormControl name="cvssScore" oitcDebounce type="number" min="0" max="10" step="0.1"/>
+                                       cFormControl name="cvssScore" oitcDebounce type="number" min="0" max="10"
+                                       step="0.1"/>
                             </c-input-group>
                         </c-col>
                     </c-row>
@@ -79,7 +84,8 @@
                                 <input cFormCheckInput type="checkbox" id="CvesKevOnly" name="CvesKevOnly"
                                        [checked]="params['filter[Cves.kev_cisa]'] === 1"
                                        (change)="toggleKevOnly($any($event.target).checked)"/>
-                                <label cFormCheckLabel for="CvesKevOnly">{{ t('Only CVEs of the CISA KEV catalog') }}</label>
+                                <label cFormCheckLabel
+                                       for="CvesKevOnly">{{ t('Only CVEs of the CISA KEV catalog') }}</label>
                             </c-form-check>
                         </c-col>
                         <c-col class="text-end">
@@ -118,7 +124,8 @@
                                     <a [routerLink]="['/', 'cve_module', 'cves', 'view', cve.cve_id]">{{ cve.cve_id }}</a>
                                 </td>
                                 <td>
-                                    <oitc-cve-severity-badge [severity]="cve.highest_severity"></oitc-cve-severity-badge>
+                                    <oitc-cve-severity-badge
+                                            [severity]="cve.highest_severity"></oitc-cve-severity-badge>
                                 </td>
                                 <td>
                                     @if (cve.cvss_score !== null) {
@@ -151,12 +158,12 @@
             @if (cves && cves.cves.length === 0) {
                 <oitc-no-records></oitc-no-records>
             }
-            <c-container [fluid]="true">
+            <c-container [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            [paginateOrScroll]="cves"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="cves"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>

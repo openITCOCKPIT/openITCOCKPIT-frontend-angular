@@ -48,7 +48,9 @@
                     <c-row>
                         <c-col [xs]="12" [md]="4" class="mb-2">
                             <c-input-group>
-                                <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Hosts.name]']"
                                        [placeholder]="'Filter by host name' | transloco"
@@ -57,7 +59,9 @@
                         </c-col>
                         <c-col [xs]="12" [md]="4" class="mb-2">
                             <c-input-group>
-                                <span cInputGroupText><fa-icon [icon]="['fas', 'filter']"></fa-icon></span>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Cves.cve_id]']"
                                        [placeholder]="'Filter by CVE' | transloco"
@@ -66,7 +70,9 @@
                         </c-col>
                         <c-col [xs]="12" [md]="4" class="mb-2">
                             <c-input-group>
-                                <span cInputGroupText><fa-icon [icon]="['fas', 'user']"></fa-icon></span>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[CveDecisions.owner]']"
                                        [placeholder]="'Filter by responsible person or team' | transloco"
@@ -77,16 +83,16 @@
                     <c-row>
                         <c-col [xs]="12" [md]="6" class="mb-2 ui-fluid">
                             <oitc-multi-select
-                                class="flex-1"
-                                name="CveDecisionsState"
-                                id="CveDecisionsState"
-                                optionValue="key"
-                                optionLabel="value"
-                                [(ngModel)]="params['filter[CveDecisions.state][]']"
-                                [options]="states"
-                                [debounce]="true"
-                                [placeholder]="'Filter by decision' | transloco"
-                                (onChange)="onFilterChange(null)">
+                                    class="flex-1"
+                                    name="CveDecisionsState"
+                                    id="CveDecisionsState"
+                                    optionValue="key"
+                                    optionLabel="value"
+                                    [(ngModel)]="params['filter[CveDecisions.state][]']"
+                                    [options]="states"
+                                    [debounce]="true"
+                                    [placeholder]="'Filter by decision' | transloco"
+                                    (onChange)="onFilterChange(null)">
                             </oitc-multi-select>
                         </c-col>
                         <c-col [xs]="12" [md]="6" class="mb-2">
@@ -139,7 +145,8 @@
                                     }
                                 </td>
                                 <td>
-                                    <oitc-cve-decision-state-label [state]="decision.state"></oitc-cve-decision-state-label>
+                                    <oitc-cve-decision-state-label
+                                            [state]="decision.state"></oitc-cve-decision-state-label>
                                 </td>
                                 <td>
                                     <a [routerLink]="['/', 'cve_module', 'cves', 'host', decision.host_id]">{{ decision.host_name }}</a>
@@ -172,12 +179,12 @@
             @if (decisions && decisions.decisions.length === 0) {
                 <oitc-no-records></oitc-no-records>
             }
-            <c-container [fluid]="true">
+            <c-container [fluid]="true" class="mb-3 py-3">
                 <c-row>
                     <c-col>
                         <oitc-paginate-or-scroll
-                            (paginatorChange)="onPaginatorChange($event)"
-                            [paginateOrScroll]="decisions"></oitc-paginate-or-scroll>
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="decisions"></oitc-paginate-or-scroll>
                     </c-col>
                 </c-row>
             </c-container>
