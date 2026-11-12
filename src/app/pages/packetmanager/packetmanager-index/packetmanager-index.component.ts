@@ -48,6 +48,7 @@ import { RepositoryCheckerComponent } from '../../../components/repository-check
 import { ConsoleCopyComponent } from '../../../components/console-copy/console-copy.component';
 import { EolAlertsComponent } from '../../administrators/administrators-debug/eol-alerts/eol-alerts.component';
 import { TitleService } from '../../../services/title.service';
+import { NotyService } from '../../../layouts/coreui/noty.service';
 
 type PacketmanagerFilter = 'all' | 'community' | 'enterprise' | 'installed';
 
@@ -96,6 +97,7 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     private readonly PacketmanagerService: PacketmanagerService = inject(PacketmanagerService);
     private readonly TranslocoService: TranslocoService = inject(TranslocoService);
     private readonly TitleService: TitleService = inject(TitleService);
+    private readonly notyService: NotyService = inject(NotyService);
 
     public newVersionAvailable: boolean = false;
     protected highlightedPacket: string | null = null;
@@ -245,6 +247,12 @@ export class PacketmanagerIndexComponent implements OnInit, OnDestroy {
     protected toggleModule(aptName: string): void {
         this.modulesToCheckboxesInstall[aptName] = !this.modulesToCheckboxesInstall[aptName];
         this.updateSelection();
+
+        if (this.modulesToCheckboxesInstall[aptName] && this.selectedModules.length === 1) {
+            this.notyService.genericInfo(
+                this.TranslocoService.translate('Package selected. Use the "Install packages" button at the bottom right to copy the installation command.')
+            );
+        }
     }
 
     protected clearSelection(): void {
