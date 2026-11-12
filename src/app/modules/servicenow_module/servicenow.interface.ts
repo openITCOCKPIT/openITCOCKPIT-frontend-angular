@@ -55,6 +55,7 @@ export interface ServicenowIncident {
     resolution_notes: string | null
     host_uuid: string
     service_uuid: string
+    incident_url?: string
     created: string
     modified: string
 }
@@ -62,11 +63,15 @@ export interface ServicenowIncident {
 export interface ServicenowSettings {
     id?: number
     domain: string
+    incident_url_path: null | string
     user_id?: any
     user_password?: any
     assignment_group: null | string
     assigned_to: null | string
     business_service: null | string
+    contact_type: null | string
+    category: null | string
+    subcategory: null | string
     impact: number
     urgency: number
     recovery_state: number
