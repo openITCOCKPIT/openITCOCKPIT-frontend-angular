@@ -9,7 +9,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     AlertComponent,
     BadgeComponent,
-    ColComponent,
+    ColComponent, ContainerComponent,
     FormCheckComponent,
     FormCheckInputDirective,
     FormCheckLabelDirective,
@@ -107,7 +107,8 @@ const VIEW_OF_TAB: Partial<Record<CveHostTabs, CveViews>> = {
         CveCoverageReasonLabelComponent,
         CvesHostFindingsComponent,
         CvesDecideModalComponent,
-        CvesTrendChartComponent
+        CvesTrendChartComponent,
+        ContainerComponent
     ],
     templateUrl: './cves-host-details.component.html',
     styleUrl: './cves-host-details.component.css',

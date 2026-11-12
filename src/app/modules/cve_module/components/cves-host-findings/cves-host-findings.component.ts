@@ -13,7 +13,13 @@ import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { FormCheckInputDirective, TableDirective, TooltipDirective } from '@coreui/angular';
+import {
+    ColComponent,
+    ContainerComponent,
+    FormCheckInputDirective, RowComponent,
+    TableDirective,
+    TooltipDirective
+} from '@coreui/angular';
 import { DecimalPipe } from '@angular/common';
 import { CvesService } from '../../pages/cves/cves.service';
 import {
@@ -62,7 +68,10 @@ import { CveStateBadgeComponent } from '../cve-state-badge/cve-state-badge.compo
         CveReasonBadgesComponent,
         CveRecommendationLabelComponent,
         CveDecisionStateLabelComponent,
-        CveStateBadgeComponent
+        CveStateBadgeComponent,
+        ColComponent,
+        ContainerComponent,
+        RowComponent
     ],
     templateUrl: './cves-host-findings.component.html',
     styleUrl: './cves-host-findings.component.css',
