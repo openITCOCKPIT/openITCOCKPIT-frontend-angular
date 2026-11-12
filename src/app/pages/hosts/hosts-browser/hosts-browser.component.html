@@ -2,9 +2,9 @@
 
     @if (hostBrowserConfig) {
         <oitc-hosts-browser-menu
-            [config]="hostBrowserConfig"
-            [lastUpdated]="lastUpdated"
-            (toggleRescheduling)="onToggleRescheduling($event)"></oitc-hosts-browser-menu>
+                [config]="hostBrowserConfig"
+                [lastUpdated]="lastUpdated"
+                (toggleRescheduling)="onToggleRescheduling($event)"></oitc-hosts-browser-menu>
     }
 
     <oitc-query-handler-checker></oitc-query-handler-checker>
@@ -40,27 +40,27 @@
                 <c-nav variant="underline" class="card-toolbar card-header-pills ms-3">
                     <c-nav-item>
                         <button
-                            class="nav-link"
-                            [ngClass]="{'active': selectedTab == HostBrowserTabs.StatusInformation}"
-                            (click)="changeTab(HostBrowserTabs.StatusInformation)">
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.StatusInformation}"
+                                (click)="changeTab(HostBrowserTabs.StatusInformation)">
                             <fa-icon [icon]="['fas', 'info']"></fa-icon>
                             {{ t('Status information') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item>
                         <button
-                            class="nav-link"
-                            [ngClass]="{'active': selectedTab == HostBrowserTabs.DeviceInformation}"
-                            (click)="changeTab(HostBrowserTabs.DeviceInformation)">
+                                class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.DeviceInformation}"
+                                (click)="changeTab(HostBrowserTabs.DeviceInformation)">
                             <fa-icon [icon]="['fas', 'hdd']"></fa-icon>
                             {{ t('Device information') }}
                         </button>
                     </c-nav-item>
                     <c-nav-item>
                         <button
-                            *oitcPermission="['hosts', 'timeline']" class="nav-link"
-                            [ngClass]="{'active': selectedTab == HostBrowserTabs.Timeline}"
-                            (click)="changeTab(HostBrowserTabs.Timeline)">
+                                *oitcPermission="['hosts', 'timeline']" class="nav-link"
+                                [ngClass]="{'active': selectedTab == HostBrowserTabs.Timeline}"
+                                (click)="changeTab(HostBrowserTabs.Timeline)">
                             <fa-icon [icon]="['fas', 'clock']"></fa-icon>
                             {{ t('Timeline') }}
                         </button>
@@ -68,9 +68,9 @@
                     @if (notificationsOverviewAllowed) {
                         <c-nav-item>
                             <button
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == HostBrowserTabs.NotificationPeriods}"
-                                (click)="changeTab(HostBrowserTabs.NotificationPeriods)">
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.NotificationPeriods}"
+                                    (click)="changeTab(HostBrowserTabs.NotificationPeriods)">
                                 <fa-icon [icon]="['fas', 'alarm-clock']"></fa-icon>
                                 {{ t('Notifications overview') }}
                             </button>
@@ -89,9 +89,9 @@
                     @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'hostspecific']) | async )) {
                         <c-nav-item>
                             <button
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == HostBrowserTabs.ServiceNow}"
-                                (click)="changeTab(HostBrowserTabs.ServiceNow)">
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.ServiceNow}"
+                                    (click)="changeTab(HostBrowserTabs.ServiceNow)">
                                 <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>
                                 {{ t('ServiceNow') }}
                             </button>
@@ -100,9 +100,9 @@
                     @if (( PermissionsService.hasModuleObservable('GrafanaModule')|async ) && GrafanaIframe?.GrafanaDashboardExists) {
                         <c-nav-item>
                             <button
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == HostBrowserTabs.Grafana}"
-                                (click)="changeTab(HostBrowserTabs.Grafana)">
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.Grafana}"
+                                    (click)="changeTab(HostBrowserTabs.Grafana)">
                                 <fa-icon [icon]="['fas', 'chart-bar']"></fa-icon>
                                 {{ t('Grafana') }}
                             </button>
@@ -113,9 +113,9 @@
                             @if (ExternalSystemType === ExternalSystems.Proxmox) {
                                 <c-nav-item>
                                     <button
-                                        class="nav-link"
-                                        [ngClass]="{'active': selectedTab == HostBrowserTabs.Proxmox}"
-                                        (click)="changeTab(HostBrowserTabs.Proxmox)">
+                                            class="nav-link"
+                                            [ngClass]="{'active': selectedTab == HostBrowserTabs.Proxmox}"
+                                            (click)="changeTab(HostBrowserTabs.Proxmox)">
                                         <svg [cIcon]="coreuiIcons.cibProxmox" title="Proxmox Icon"></svg>
                                         {{ t('Proxmox VE') }}
                                     </button>
@@ -124,9 +124,9 @@
                                 <!-- idoit or itop -->
                                 <c-nav-item>
                                     <button
-                                        class="nav-link"
-                                        [ngClass]="{'active': selectedTab == HostBrowserTabs.CMDB}"
-                                        (click)="changeTab(HostBrowserTabs.CMDB)">
+                                            class="nav-link"
+                                            [ngClass]="{'active': selectedTab == HostBrowserTabs.CMDB}"
+                                            (click)="changeTab(HostBrowserTabs.CMDB)">
                                         <fa-icon [icon]="['fas', 'database']"></fa-icon>
                                         {{ t('CMDB') }}
                                     </button>
@@ -138,54 +138,21 @@
                         @if (isarFlowInformationExists) {
                             <c-nav-item>
                                 <button
-                                    class="nav-link"
-                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.IsarFlow}"
-                                    (click)="changeTab(HostBrowserTabs.IsarFlow)">
+                                        class="nav-link"
+                                        [ngClass]="{'active': selectedTab == HostBrowserTabs.IsarFlow}"
+                                        (click)="changeTab(HostBrowserTabs.IsarFlow)">
                                     <fa-icon [icon]="['fas', 'square-poll-horizontal']"></fa-icon>
                                     {{ t('IsarFlow') }}
                                 </button>
                             </c-nav-item>
                         }
                     }
-                    @if (( PermissionsService.hasModuleObservable('SLAModule')|async ) && SlaOverview) {
-                        <c-nav-item>
-                            @if (SlaOverview.state === 'not_available') {
-                                <button
-                                    class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
-                                    (click)="changeTab(HostBrowserTabs.SLA)">
-                                    <span class="btn-label-bootstrap-5">
-                                        <fa-icon [icon]="['fas', 'question']"></fa-icon>
-                                    </span> {{ t('Not available') }}
-                                </button>
-                            } @else {
-                                <button
-                                    class="btn btn-labeled btn-xs btn-w-m ripple"
-                                    [ngClass]="'btn-'+SlaOverview.state"
-                                    (click)="changeTab(HostBrowserTabs.SLA)">
-                                    <span class="btn-label-bootstrap-5">
-                                        @if (SlaOverview.state == 'success') {
-                                            <fa-icon [icon]="['fas', 'check']"
-                                            ></fa-icon>
-                                        }
-                                        @if (SlaOverview.state == 'warning') {
-                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"
-                                            ></fa-icon>
-                                        }
-                                        @if (SlaOverview.state == 'danger') {
-                                            <fa-icon [icon]="['fas', 'bolt']"
-                                            ></fa-icon>
-                                        }
-                                    </span> {{ SlaOverview.determined_availability_percent }} %
-                                </button>
-                            }
-                        </c-nav-item>
-                    }
                     @if (( this.PermissionsService.hasPermissionObservable(['packages', 'index']) | async ) && softwareInformation?.SoftwareInformationExists) {
                         <c-nav-item>
                             <button
-                                class="nav-link"
-                                [ngClass]="{'active': selectedTab == HostBrowserTabs.SoftwareInventory}"
-                                (click)="changeTab(HostBrowserTabs.SoftwareInventory)">
+                                    class="nav-link"
+                                    [ngClass]="{'active': selectedTab == HostBrowserTabs.SoftwareInventory}"
+                                    (click)="changeTab(HostBrowserTabs.SoftwareInventory)">
                                 <fa-icon [icon]="['fas', 'square-binary']"></fa-icon>
                                 {{ t('Software status') }}
                                 @if (softwareInformation && softwareInformation.packagesHostDetails) {
@@ -206,6 +173,39 @@
                                     }
                                 }
                             </button>
+                        </c-nav-item>
+                    }
+                    @if (( PermissionsService.hasModuleObservable('SLAModule')|async ) && SlaOverview) {
+                        <c-nav-item>
+                            @if (SlaOverview.state === 'not_available') {
+                                <button
+                                        class="btn btn-labeled btn-primary btn-xs btn-w-m ripple"
+                                        (click)="changeTab(HostBrowserTabs.SLA)">
+                                    <span class="btn-label-bootstrap-5">
+                                        <fa-icon [icon]="['fas', 'question']"></fa-icon>
+                                    </span> {{ t('Not available') }}
+                                </button>
+                            } @else {
+                                <button
+                                        class="btn btn-labeled btn-xs btn-w-m ripple"
+                                        [ngClass]="'btn-'+SlaOverview.state"
+                                        (click)="changeTab(HostBrowserTabs.SLA)">
+                                    <span class="btn-label-bootstrap-5">
+                                        @if (SlaOverview.state == 'success') {
+                                            <fa-icon [icon]="['fas', 'check']"
+                                            ></fa-icon>
+                                        }
+                                        @if (SlaOverview.state == 'warning') {
+                                            <fa-icon [icon]="['fas', 'triangle-exclamation']"
+                                            ></fa-icon>
+                                        }
+                                        @if (SlaOverview.state == 'danger') {
+                                            <fa-icon [icon]="['fas', 'bolt']"
+                                            ></fa-icon>
+                                        }
+                                    </span> {{ SlaOverview.determined_availability_percent }} %
+                                </button>
+                            }
                         </c-nav-item>
                     }
 
@@ -374,7 +374,7 @@
                                                 <c-card-header>
                                                     <h5 class="text-info">
                                                         <fa-icon
-                                                            [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
+                                                                [icon]="(result.acknowledgement.is_sticky)?['fas', 'user']:['far', 'user']"></fa-icon>
                                                         {{ t('State of host is acknowledged') }}
                                                         <span [hidden]="!result.acknowledgement.is_sticky">
                                                             ({{ t('Sticky') }})
@@ -396,10 +396,10 @@
                                                     <div class="w-100" *oitcPermission="['acknowledgements', 'delete']">
                                                         @if (result.acknowledgement.allowEdit) {
                                                             <button
-                                                                (click)="toggleDeleteAcknowledgementModal(result.mergedHost)"
-                                                                cButton
-                                                                class="ripple float-end" color="danger"
-                                                                size="xs"
+                                                                    (click)="toggleDeleteAcknowledgementModal(result.mergedHost)"
+                                                                    cButton
+                                                                    class="ripple float-end" color="danger"
+                                                                    size="xs"
                                                             >
                                                                 <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                                                                 {{ t('Delete') }}
@@ -453,12 +453,12 @@
                                                                             <div class="w-100"
                                                                                  *oitcPermission="['downtimes', 'delete']">
                                                                                 <button
-                                                                                    (click)="toggleCancelDowntimeModal(downtime)"
-                                                                                    cButton
-                                                                                    class="ripple" color="danger"
-                                                                                    size="xs">
+                                                                                        (click)="toggleCancelDowntimeModal(downtime)"
+                                                                                        cButton
+                                                                                        class="ripple" color="danger"
+                                                                                        size="xs">
                                                                                     <fa-icon
-                                                                                        [icon]="['fas', 'trash']"></fa-icon>
+                                                                                            [icon]="['fas', 'trash']"></fa-icon>
                                                                                     {{ t('Cancel') }}
                                                                                 </button>
                                                                             </div>
@@ -495,9 +495,9 @@
                                                         <td>{{ t('Command line') }}</td>
                                                         <td>
                                                             <oitc-copy-to-clipboard
-                                                                [data]="result.mergedHost.hostCommandLine">
+                                                                    [data]="result.mergedHost.hostCommandLine">
                                                                 <code
-                                                                    [ngClass]="{'unblur-on-hover': result.blurryCommandLine}">
+                                                                        [ngClass]="{'unblur-on-hover': result.blurryCommandLine}">
                                                                     {{ result.mergedHost.hostCommandLine }}
                                                                 </code>
                                                             </oitc-copy-to-clipboard>
@@ -534,9 +534,9 @@
                                                 <td>{{ t('Check period') }}</td>
                                                 <td>
                                                     <oitc-label-link
-                                                        [objectId]=" result.checkPeriod.id"
-                                                        [route]="'/timeperiods/edit'"
-                                                        [permissions]="'timeperiods.edit'"
+                                                            [objectId]=" result.checkPeriod.id"
+                                                            [route]="'/timeperiods/edit'"
+                                                            [permissions]="'timeperiods.edit'"
                                                     >
                                                         {{ result.checkPeriod.name }}
                                                     </oitc-label-link>
@@ -595,8 +595,8 @@
                                                             @if (result.parentHostStatus.hasOwnProperty(String(parenthost.uuid))) {
                                                                 <td class="text-center">
                                                                     <oitc-hoststatus-simple-icon
-                                                                        [hoststatus]="Number(result.parentHostStatus[String(parenthost.uuid)].currentState)"
-                                                                        [hardstate]="Boolean(result.parentHostStatus[String(parenthost.uuid)].isHardstate)"></oitc-hoststatus-simple-icon>
+                                                                            [hoststatus]="Number(result.parentHostStatus[String(parenthost.uuid)].currentState)"
+                                                                            [hardstate]="Boolean(result.parentHostStatus[String(parenthost.uuid)].isHardstate)"></oitc-hoststatus-simple-icon>
                                                                 </td>
                                                                 <td>
                                                                     <a [routerLink]="['/', 'hosts', 'browser', parenthost.id]">
@@ -622,9 +622,9 @@
                                     <c-col [xs]="12" class="text-info" [hidden]="result.areContactsFromHost">
                                         {{ t('Contacts and contact groups got inherited from') }}
                                         <oitc-label-link
-                                            [objectId]="result.mergedHost.hosttemplate_id"
-                                            [route]="'/hosttemplates/edit'"
-                                            [permissions]="'hosttemplates.edit'"
+                                                [objectId]="result.mergedHost.hosttemplate_id"
+                                                [route]="'/hosttemplates/edit'"
+                                                [permissions]="'hosttemplates.edit'"
                                         >
                                             {{ t('host template') }}
                                         </oitc-label-link>
@@ -685,9 +685,9 @@
                                                     <td>{{ t('Notification period') }}</td>
                                                     <td>
                                                         <oitc-label-link
-                                                            [objectId]=" result.notifyPeriod.id"
-                                                            [route]="'/timeperiods/edit'"
-                                                            [permissions]="'timeperiods.edit'"
+                                                                [objectId]=" result.notifyPeriod.id"
+                                                                [route]="'/timeperiods/edit'"
+                                                                [permissions]="'timeperiods.edit'"
                                                         >
                                                             {{ result.notifyPeriod.name }}
                                                         </oitc-label-link>
@@ -808,11 +808,11 @@
                                     <!-- External Command Buttons -->
                                     @if (result.canSubmitExternalCommands && result.mergedHost.allowEdit && result.hoststatus.isInMonitoring) {
                                         <c-row
-                                            class="text-white">
+                                                class="text-white">
                                             <div class="browser-action d-flex p-0"
                                                  (click)="resetChecktime(result.mergedHost)">
                                                 <div
-                                                    class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                     <fa-icon [icon]="['fas', 'refresh']"></fa-icon>
                                                 </div>
                                                 <div class="flex-1 browser-action-padding-top">
@@ -822,7 +822,7 @@
                                             <div class="browser-action d-flex p-0 mt-2"
                                                  (click)="toggleDowntimeModal(result.mergedHost)">
                                                 <div
-                                                    class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                     <fa-icon [icon]="['fas', 'power-off']"></fa-icon>
                                                 </div>
                                                 <div class="flex-1 browser-action-padding-top">
@@ -833,7 +833,7 @@
                                                 <div class="browser-action d-flex p-0 mt-2"
                                                      (click)="acknowledgeStatus(result.mergedHost)">
                                                     <div
-                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                            class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                         <fa-icon [icon]="['fas', 'user']"></fa-icon>
                                                     </div>
                                                     <div class="flex-1 browser-action-padding-top">
@@ -844,7 +844,7 @@
                                             <div class="browser-action d-flex p-0 mt-2"
                                                  (click)="processCheckResult(result.mergedHost)">
                                                 <div
-                                                    class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                     <fa-icon [icon]="['fas', 'download']"></fa-icon>
                                                 </div>
                                                 <div class="flex-1 browser-action-padding-top">
@@ -855,7 +855,7 @@
                                                 <div class="browser-action d-flex p-0 mt-2"
                                                      (click)="enableFlapdetection(result.mergedHost)">
                                                     <div
-                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                            class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                         <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
                                                     </div>
                                                     <div class="flex-1 browser-action-padding-top">
@@ -867,7 +867,7 @@
                                                 <div class="browser-action d-flex p-0 mt-2"
                                                      (click)="disableFlapdetection(result.mergedHost)">
                                                     <div
-                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                            class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                         <fa-icon [icon]="['fas', 'adjust']"></fa-icon>
                                                     </div>
                                                     <div class="flex-1 browser-action-padding-top">
@@ -879,7 +879,7 @@
                                                 <div class="browser-action d-flex p-0 mt-2"
                                                      (click)="enableNotifications(result.mergedHost)">
                                                     <div
-                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                            class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                         <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                                                     </div>
                                                     <div class="flex-1 browser-action-padding-top">
@@ -891,7 +891,7 @@
                                                 <div class="browser-action d-flex p-0 mt-2"
                                                      (click)="disableNotifications(result.mergedHost)">
                                                     <div
-                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                            class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                         <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
                                                     </div>
                                                     <div class="flex-1 browser-action-padding-top">
@@ -902,7 +902,7 @@
                                             <div class="browser-action d-flex p-0 mt-2"
                                                  (click)="sendCustomNotification(result.mergedHost)">
                                                 <div
-                                                    class="browser-action-padding-top browser-action-label-bootstrap-5">
+                                                        class="browser-action-padding-top browser-action-label-bootstrap-5">
                                                     <fa-icon [icon]="['fas', 'paper-plane']"></fa-icon>
                                                 </div>
                                                 <div class="flex-1 browser-action-padding-top">
@@ -937,7 +937,7 @@
                                             <td> {{ t('IP address') }}</td>
                                             <td>
                                                 <oitc-copy-to-clipboard
-                                                    [data]="result.mergedHost.address">
+                                                        [data]="result.mergedHost.address">
                                                     {{ result.mergedHost.address }}
                                                 </oitc-copy-to-clipboard>
                                             </td>
@@ -964,9 +964,9 @@
                                             <td>
                                                 @for (priority of priorities; track priority) {
                                                     <fa-icon
-                                                        [ngClass]="priority"
-                                                        class="me-1"
-                                                        [icon]="['fas', 'fire']"></fa-icon>
+                                                            [ngClass]="priority"
+                                                            class="me-1"
+                                                            [icon]="['fas', 'fire']"></fa-icon>
                                                 }
                                             </td>
                                         </tr>
@@ -974,7 +974,7 @@
                                             <td>{{ t('UUID') }}</td>
                                             <td>
                                                 <oitc-copy-to-clipboard
-                                                    [data]="result.mergedHost.uuid">
+                                                        [data]="result.mergedHost.uuid">
                                                     <code>{{ result.mergedHost.uuid }}</code>
                                                 </oitc-copy-to-clipboard>
                                             </td>
@@ -995,8 +995,8 @@
                                                             /
                                                             @if (container.id != null) {
                                                                 <a
-                                                                    [routerLink]="['/', 'browsers', 'index']"
-                                                                    [queryParams]="{ containerId: container.id }">
+                                                                        [routerLink]="['/', 'browsers', 'index']"
+                                                                        [queryParams]="{ containerId: container.id }">
                                                                     {{ container.name }}
                                                                 </a>
                                                             }
@@ -1028,8 +1028,8 @@
                                                                     /
                                                                     @if (container.id != null) {
                                                                         <a
-                                                                            [routerLink]="['/', 'browsers', 'index']"
-                                                                            [queryParams]="{ containerId: container.id }">
+                                                                                [routerLink]="['/', 'browsers', 'index']"
+                                                                                [queryParams]="{ containerId: container.id }">
                                                                             {{ container.name }}
                                                                         </a>
                                                                     }
@@ -1062,7 +1062,7 @@
                                                     <td>
                                                         @for (tag of tags; track tag) {
                                                             <c-badge
-                                                                color="primary" class="me-1">{{ tag }}
+                                                                    color="primary" class="me-1">{{ tag }}
                                                             </c-badge>
                                                         }
                                                     </td>
@@ -1074,7 +1074,7 @@
                                                     <td>{{ t('Satellite') }}</td>
                                                     <td>
                                                         <oitc-satellite-name
-                                                            [satelliteId]="Number(result.mergedHost.satellite_id)">
+                                                                [satelliteId]="Number(result.mergedHost.satellite_id)">
                                                         </oitc-satellite-name>
                                                     </td>
                                                 </tr>
@@ -1107,9 +1107,9 @@
                                                                 <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
                                                                 >
                                                                     <span
-                                                                        class="badge border border-generic text-generic me-1">
+                                                                            class="badge border border-generic text-generic me-1">
                                                                         <fa-icon
-                                                                            [icon]="['fas', 'file-invoice']"></fa-icon>
+                                                                                [icon]="['fas', 'file-invoice']"></fa-icon>
                                                                         {{ t('Instant reports') }}
                                                                         ({{ result.objects.Instantreports.length }})
                                                                     </span>
@@ -1120,9 +1120,9 @@
                                                                     <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
                                                                     >
                                                                         <span
-                                                                            class="badge border border-generic text-generic me-1">
+                                                                                class="badge border border-generic text-generic me-1">
                                                                             <fa-icon
-                                                                                [icon]="['fas', 'file-invoice']"></fa-icon>
+                                                                                    [icon]="['fas', 'file-invoice']"></fa-icon>
                                                                             {{ t('Autoreports') }}
                                                                             ({{ result.objects.Autoreports.length }})
                                                                         </span>
@@ -1134,7 +1134,7 @@
                                                                     <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
                                                                     >
                                                                         <span
-                                                                            class="badge border border-generic text-generic me-1">
+                                                                                class="badge border border-generic text-generic me-1">
                                                                             <fa-icon [icon]="['fas', 'sitemap']"
                                                                                      [rotate]="90"></fa-icon>
                                                                             {{ t('Event Correlation') }}
@@ -1149,9 +1149,9 @@
                                                                     <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
                                                                     >
                                                                         <span
-                                                                            class="badge border border-generic text-generic me-1">
+                                                                                class="badge border border-generic text-generic me-1">
                                                                             <fa-icon
-                                                                                [icon]="['fas', 'map-marker']"></fa-icon>
+                                                                                    [icon]="['fas', 'map-marker']"></fa-icon>
                                                                             {{ t('Maps') }}
                                                                             ({{ result.objects.Maps.length }})
                                                                         </span>
@@ -1162,7 +1162,7 @@
                                                                 <a [routerLink]="['/', 'hosts', 'usedBy', result.mergedHost.id]"
                                                                 >
                                                                     <span
-                                                                        class="badge border border-generic text-generic me-1">
+                                                                            class="badge border border-generic text-generic me-1">
                                                                         <fa-icon [icon]="['fas', 'server']"></fa-icon>
                                                                         {{ t('Host groups') }}
                                                                         ({{ result.objects.Hostgroups.length }})
@@ -1186,7 +1186,7 @@
                             </div>
                             <div class="host-parents-children-tree-container border">
                                 <oitc-host-parents-children-tree
-                                    [hostParentsChildrenTree]="result.parentAndChildHostsTree"></oitc-host-parents-children-tree>
+                                        [hostParentsChildrenTree]="result.parentAndChildHostsTree"></oitc-host-parents-children-tree>
                             </div>
                         }
                     </div>
@@ -1196,8 +1196,8 @@
                 @if (selectedTab == HostBrowserTabs.Timeline && result && result.mergedHost) {
                     <div>
                         <oitc-browser-timeline
-                            [type]="'Host'"
-                            [objectId]="result.mergedHost.id">
+                                [type]="'Host'"
+                                [objectId]="result.mergedHost.id">
                             <oitc-host-timeline-legend></oitc-host-timeline-legend>
                         </oitc-browser-timeline>
                     </div>
@@ -1207,8 +1207,8 @@
                 @if (selectedTab == HostBrowserTabs.NotificationPeriods && notificationsOverviewAllowed && result && result.mergedHost) {
                     <div>
                         <oitc-notification-period-overview
-                            [objectType]="'host'"
-                            [objectId]="result.mergedHost.id">
+                                [objectType]="'host'"
+                                [objectId]="result.mergedHost.id">
                         </oitc-notification-period-overview>
                     </div>
                 }
@@ -1227,9 +1227,9 @@
                         @if (( PermissionsService.hasModuleObservable('ServicenowModule')|async ) && ( PermissionsService.hasPermissionObservable(['ServicenowModule', 'ServicenowSettings', 'hostspecific'])|async )) {
                             @if (result && result.mergedHost) {
                                 <oitc-servicenow-host-browser-tab
-                                    [hostUuid]="String(result.mergedHost.uuid)"
-                                    [allowEdit]="Boolean(result.mergedHost.allowEdit)"
-                                    [lastUpdated]="lastUpdated"></oitc-servicenow-host-browser-tab>
+                                        [hostUuid]="String(result.mergedHost.uuid)"
+                                        [allowEdit]="Boolean(result.mergedHost.allowEdit)"
+                                        [lastUpdated]="lastUpdated"></oitc-servicenow-host-browser-tab>
                             }
                         }
                     </div>
@@ -1255,9 +1255,9 @@
                     <div>
                         @if (result && result.mergedHost) {
                             <oitc-additional-host-information
-                                [hostId]="result.mergedHost.id"
-                                [hostname]="String(result.mergedHost.name)"
-                                [lastUpdated]="lastUpdated"></oitc-additional-host-information>
+                                    [hostId]="result.mergedHost.id"
+                                    [hostname]="String(result.mergedHost.name)"
+                                    [lastUpdated]="lastUpdated"></oitc-additional-host-information>
                         }
                     </div>
                 }
@@ -1267,10 +1267,10 @@
                     <div>
                         @if (result && result.mergedHost) {
                             <oitc-proxmox-host-browser-tab
-                                [hostId]="result.mergedHost.id"
-                                [hostname]="String(result.mergedHost.name)"
-                                [lastUpdated]="lastUpdated"
-                                [allowEdit]="result.mergedHost.allowEdit"></oitc-proxmox-host-browser-tab>
+                                    [hostId]="result.mergedHost.id"
+                                    [hostname]="String(result.mergedHost.name)"
+                                    [lastUpdated]="lastUpdated"
+                                    [allowEdit]="result.mergedHost.allowEdit"></oitc-proxmox-host-browser-tab>
                         }
                     </div>
                 }
@@ -1281,9 +1281,9 @@
                         @if (( PermissionsService.hasModuleObservable('IsarFlowModule')|async ) && ( PermissionsService.hasPermissionObservable(['IsarFlowModule', 'IsarflowHosts', 'isarFlowHostInformation'])|async )) {
                             @if (result && result.mergedHost) {
                                 <oitc-isar-flow-host-browser-tab
-                                    [hostId]="Number(result.mergedHost.id)"
-                                    [allowEdit]="Boolean(result.mergedHost.allowEdit)"
-                                    [lastUpdated]="lastUpdated"></oitc-isar-flow-host-browser-tab>
+                                        [hostId]="Number(result.mergedHost.id)"
+                                        [allowEdit]="Boolean(result.mergedHost.allowEdit)"
+                                        [lastUpdated]="lastUpdated"></oitc-isar-flow-host-browser-tab>
                             }
                         }
                     </div>
@@ -1299,10 +1299,10 @@
                                         <c-card-body class="card-body pt-1">
                                             <h2 class="pt-2">
                                                 <oitc-patchstatus-icon
-                                                    [type]="softwareInformation.packagesHostDetails.os_type"
-                                                    [platform]="softwareInformation.packagesHostDetails.os_name"
-                                                    [version]="softwareInformation.packagesHostDetails.os_version"
-                                                    [family]="softwareInformation.packagesHostDetails.os_family"
+                                                        [type]="softwareInformation.packagesHostDetails.os_type"
+                                                        [platform]="softwareInformation.packagesHostDetails.os_name"
+                                                        [version]="softwareInformation.packagesHostDetails.os_version"
+                                                        [family]="softwareInformation.packagesHostDetails.os_family"
                                                 ></oitc-patchstatus-icon>
                                             </h2>
 
@@ -1409,7 +1409,7 @@
                                 }
                                 @case ('macos') {
                                     <oitc-browser-software-macos
-                                        [hostId]="Number(result.mergedHost.id)">
+                                            [hostId]="Number(result.mergedHost.id)">
 
                                     </oitc-browser-software-macos>
                                 }
@@ -1425,7 +1425,7 @@
                         @if (( PermissionsService.hasModuleObservable('SLAModule')|async )
                         && ( this.PermissionsService.hasPermissionObservable(['slamodule', 'slas', 'slaHostInformation']) | async )) {
                             <oitc-sla-host-information-element
-                                [hostId]="result.mergedHost.id"></oitc-sla-host-information-element>
+                                    [hostId]="result.mergedHost.id"></oitc-sla-host-information-element>
                         } @else {
                             <label class="text-danger">
                                 {{ t('No permissions') }}
@@ -1441,9 +1441,9 @@
     <!-- List of services -->
     @if (result && result.mergedHost) {
         <oitc-hosts-browser-services-list
-            [hoststatus]="result.hoststatus"
-            [hostId]="result.mergedHost.id"
-            [lastUpdated]="lastUpdated">
+                [hoststatus]="result.hoststatus"
+                [hostId]="result.mergedHost.id"
+                [lastUpdated]="lastUpdated">
         </oitc-hosts-browser-services-list>
     }
 
