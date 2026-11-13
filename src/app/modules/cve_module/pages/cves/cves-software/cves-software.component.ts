@@ -142,6 +142,7 @@ export class CvesSoftwareComponent implements OnInit, OnDestroy, IndexPage {
             this.software = result;
             this.cdr.markForCheck();
         }));
+        this.cdr.markForCheck();
     }
 
     public toggleFilter(): void {
