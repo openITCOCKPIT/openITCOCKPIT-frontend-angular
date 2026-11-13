@@ -26,7 +26,9 @@ import {
 } from '@coreui/angular';
 import { IndexPage } from '../../../../../pages.interface';
 import { PaginatorChangeEvent } from '../../../../../layouts/coreui/paginator/paginator.interface';
-import { PaginateOrScrollComponent } from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
+import {
+    PaginateOrScrollComponent
+} from '../../../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
 import { TableLoaderComponent } from '../../../../../layouts/primeng/loading/table-loader/table-loader.component';
 import { NoRecordsComponent } from '../../../../../layouts/coreui/no-records/no-records.component';
 import { DebounceDirective } from '../../../../../directives/debounce.directive';
@@ -37,14 +39,22 @@ import { CveFinding, CvesViewParams, CvesViewRoot, getDefaultCvesViewParams } fr
 import { CveStateBadgeComponent } from '../../../components/cve-state-badge/cve-state-badge.component';
 import { CveSeverityBadgeComponent } from '../../../components/cve-severity-badge/cve-severity-badge.component';
 import { CveRuleLabelComponent } from '../../../components/cve-rule-label/cve-rule-label.component';
-import { CveRecommendationLabelComponent } from '../../../components/cve-recommendation-label/cve-recommendation-label.component';
-import { CveDecisionStateLabelComponent } from '../../../components/cve-decision-state-label/cve-decision-state-label.component';
+import {
+    CveRecommendationLabelComponent
+} from '../../../components/cve-recommendation-label/cve-recommendation-label.component';
+import {
+    CveDecisionStateLabelComponent
+} from '../../../components/cve-decision-state-label/cve-decision-state-label.component';
 import {
     CvesDecideModalComponent,
     CvesDecideModalMode
 } from '../../../components/cves-decide-modal/cves-decide-modal.component';
 import { CvesPagesNavComponent } from '../../../components/cves-pages-nav/cves-pages-nav.component';
 import { CopyToClipboardComponent } from '../../../../../layouts/coreui/copy-to-clipboard/copy-to-clipboard.component';
+import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../../../components/actions-button-element/actions-button-element.component';
 
 /**
  * One CVE and every host it affects. The findings can be decided on together,
@@ -89,7 +99,9 @@ import { CopyToClipboardComponent } from '../../../../../layouts/coreui/copy-to-
         CveDecisionStateLabelComponent,
         CvesDecideModalComponent,
         CvesPagesNavComponent,
-        CopyToClipboardComponent
+        CopyToClipboardComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent
     ],
     templateUrl: './cves-view.component.html',
     styleUrl: './cves-view.component.css',

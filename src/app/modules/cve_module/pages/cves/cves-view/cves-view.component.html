@@ -107,7 +107,7 @@
                                     · {{ t('Proof of concept') }}: {{ result.cve.poc_exploit_count }}
                                 </td>
                             </tr>
-                                <!-- Neutral for all hosts, the advisories of the vendors are linked per host below -->
+                            <!-- Neutral for all hosts, the advisories of the vendors are linked per host below -->
                                 @if (result.cve.nvd_link) {
                                     <tr>
                                         <th>{{ t('NVD') }}</th>
@@ -234,10 +234,15 @@
                                             [recommendation]="finding.recommendation"></oitc-cve-recommendation-label>
                                 </td>
                                 <td class="text-center">
-                                    <a [routerLink]="['/', 'cve_module', 'cves', 'finding', finding.id]"
-                                       [title]="'Details' | transloco">
-                                        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
-                                    </a>
+                                    <oitc-actions-button [permission]="'CveModule.cves.finding'"
+                                                         [url]="'/cve_module/cves/finding/' + finding.id"
+                                                         [icon]="['fas', 'circle-info']">
+                                        <oitc-actions-button-element [permission]="'CveModule.cves.finding'"
+                                                                     [url]="'/cve_module/cves/finding/' + finding.id">
+                                            <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                                            {{ t('Details') }}
+                                        </oitc-actions-button-element>
+                                    </oitc-actions-button>
                                 </td>
                             </tr>
                         }
