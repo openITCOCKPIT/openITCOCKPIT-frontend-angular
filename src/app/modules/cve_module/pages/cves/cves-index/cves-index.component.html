@@ -85,7 +85,7 @@
                                        [low]="summary.cves.low"
                                        [unknown]="summary.cves.unknown"></oitc-cve-severity-bar>
             </c-col>
-            <c-col [xs]="12" [lg]="4" class="small text-muted text-lg-end">
+            <c-col [xs]="12" [lg]="4" class="small text-muted text-lg-end font-xs px-0">
                 {{ t('Last evaluation') }}: {{ summary.last_evaluation_user ?? '-' }}
                 · {{ t('Database from') }}: {{ summary.feed.feed_date_user ?? '-' }}
                 · {{ t('Policy') }}: <code>{{ summary.policy_version }}</code>
