@@ -61,14 +61,26 @@
                                        cFormControl name="componentName" oitcDebounce type="text"/>
                             </c-input-group>
                         </c-col>
-                        <c-col [xs]="12" [md]="6" class="mb-2 d-flex align-items-center">
-                            <c-form-check>
-                                <input cFormCheckInput type="checkbox" id="CvesKernelOnly" name="CvesKernelOnly"
-                                       [checked]="params['filter[CveHostFindings.is_kernel]'] === 1"
-                                       (change)="toggleKernelOnly($any($event.target).checked)"/>
-                                <label cFormCheckLabel for="CvesKernelOnly">{{ t('Only kernel') }}</label>
+                        <c-col [xs]="12" [md]="5">
+                            <c-form-check class="mt-1">
+                                <input
+                                        cFormCheckInput
+                                        class="checkbox-lg"
+                                        name="CvesKernelOnly"
+                                        id="CvesKernelOnly"
+                                        type="checkbox"
+                                        [checked]="params['filter[CveHostFindings.is_kernel]'] === 1"
+                                        (change)="toggleKernelOnly($any($event.target).checked)"/>
+
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="CvesKernelOnly">
+                                    {{ t('Only kernel') }}
+                                </label>
                             </c-form-check>
-                            <button (click)="resetFilter()" cButton class="ripple ms-auto" color="danger" size="xs">
+
+                        </c-col>
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
                                 {{ t('Reset filter') }}
                             </button>
                         </c-col>
