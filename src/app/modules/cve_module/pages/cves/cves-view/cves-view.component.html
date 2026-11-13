@@ -132,7 +132,7 @@
                             <c-col [xs]="12" [md]="6" class="mb-2">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[Hosts.name]']"
@@ -143,7 +143,7 @@
                             <c-col [xs]="12" [md]="6" class="mb-2">
                                 <c-input-group>
                                     <span cInputGroupText>
-                                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                        <fa-icon [icon]="['far', 'window-maximize']"></fa-icon>
                                     </span>
                                     <input (debouncedValue)="onFilterChange($event)"
                                            [(ngModel)]="params['filter[CveHostFindings.component_name]']"

@@ -46,10 +46,10 @@
             <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                 <form cForm>
                     <c-row>
-                        <c-col [xs]="12" [md]="4" class="mb-2">
+                        <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'bug']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Cves.cve_id]']"
@@ -57,7 +57,7 @@
                                        cFormControl name="cveId" oitcDebounce type="text"/>
                             </c-input-group>
                         </c-col>
-                        <c-col [xs]="12" [md]="4" class="mb-2">
+                        <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
@@ -68,25 +68,33 @@
                                        cFormControl name="cveSummary" oitcDebounce type="text"/>
                             </c-input-group>
                         </c-col>
-                        <c-col [xs]="12" [md]="4" class="mb-2">
+                        <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>{{ t('CVSS at least') }}</span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Cves.cvss_score]']"
+                                       [placeholder]="9.0"
                                        cFormControl name="cvssScore" oitcDebounce type="number" min="0" max="10"
                                        step="0.1"/>
                             </c-input-group>
                         </c-col>
-                    </c-row>
-                    <c-row>
-                        <c-col>
-                            <c-form-check>
-                                <input cFormCheckInput type="checkbox" id="CvesKevOnly" name="CvesKevOnly"
-                                       [checked]="params['filter[Cves.kev_cisa]'] === 1"
-                                       (change)="toggleKevOnly($any($event.target).checked)"/>
-                                <label cFormCheckLabel
-                                       for="CvesKevOnly">{{ t('Only CVEs of the CISA KEV catalog') }}</label>
+                        <c-col [xs]="12" [md]="6">
+                            <c-form-check class="mt-1">
+                                <input
+                                        cFormCheckInput
+                                        class="checkbox-lg"
+                                        name="CvesKevOnly"
+                                        id="CvesKevOnly"
+                                        type="checkbox"
+                                        [checked]="params['filter[Cves.kev_cisa]'] === 1"
+                                        (change)="toggleKevOnly($any($event.target).checked)"/>
+
+                                <label cFormCheckLabel class="ms-1 mt-1"
+                                       for="CvesKevOnly">
+                                    {{ t('Only CVEs of the CISA KEV catalog') }}
+                                </label>
                             </c-form-check>
+
                         </c-col>
                         <c-col class="text-end">
                             <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">

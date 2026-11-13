@@ -49,7 +49,7 @@
                         <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'desktop']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Hosts.name]']"
@@ -82,7 +82,7 @@
                         <c-col [xs]="12" [md]="6" class="mb-2 ui-fluid">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'gavel']"></fa-icon>
                                 </span>
                                 <oitc-multi-select
                                         class="flex-1"
