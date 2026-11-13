@@ -46,10 +46,10 @@
             <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
                 <form cForm>
                     <c-row>
-                        <c-col [xs]="12" [md]="4" class="mb-2">
+                        <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'server']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Hosts.name]']"
@@ -57,10 +57,10 @@
                                        cFormControl name="hostName" oitcDebounce type="text"/>
                             </c-input-group>
                         </c-col>
-                        <c-col [xs]="12" [md]="4" class="mb-2">
+                        <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'bug']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Cves.cve_id]']"
@@ -68,7 +68,7 @@
                                        cFormControl name="cveId" oitcDebounce type="text"/>
                             </c-input-group>
                         </c-col>
-                        <c-col [xs]="12" [md]="4" class="mb-2">
+                        <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
                                     <fa-icon [icon]="['fas', 'user']"></fa-icon>
@@ -79,22 +79,27 @@
                                        cFormControl name="owner" oitcDebounce type="text"/>
                             </c-input-group>
                         </c-col>
+                        <c-col [xs]="12" [md]="6" class="mb-2 ui-fluid">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'cog']"></fa-icon>
+                                </span>
+                                <oitc-multi-select
+                                        class="flex-1"
+                                        name="CveDecisionsState"
+                                        id="CveDecisionsState"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [(ngModel)]="params['filter[CveDecisions.state][]']"
+                                        [options]="states"
+                                        [debounce]="true"
+                                        [placeholder]="'Filter by decision' | transloco"
+                                        (onChange)="onFilterChange(null)">
+                                </oitc-multi-select>
+                            </c-input-group>
+                        </c-col>
                     </c-row>
                     <c-row>
-                        <c-col [xs]="12" [md]="6" class="mb-2 ui-fluid">
-                            <oitc-multi-select
-                                    class="flex-1"
-                                    name="CveDecisionsState"
-                                    id="CveDecisionsState"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [(ngModel)]="params['filter[CveDecisions.state][]']"
-                                    [options]="states"
-                                    [debounce]="true"
-                                    [placeholder]="'Filter by decision' | transloco"
-                                    (onChange)="onFilterChange(null)">
-                            </oitc-multi-select>
-                        </c-col>
                         <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>{{ t('Due until') }}</span>
