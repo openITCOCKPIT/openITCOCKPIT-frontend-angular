@@ -5201,7 +5201,7 @@
   "Monitor paging spaces (AIX only)": "Supervisar los espacios de paginación (solo AIX)",
   "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Supervisar los thin pools de LVM (Linux) y los grupos de volúmenes (AIX)",
   "FreeBSD": "FreeBSD",
-  "There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to": "Todavía no hay paquetes de instalación para FreeBSD y AIX. Descargue el binario del agente, cópielo en",
-  "and create the directory": "y cree el directorio",
-  "The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:": "El agente todavía no está instalado como servicio. Detenga el agente en ejecución (p. ej. con kill y el ID del proceso) e inícielo de nuevo:"
+  "Install the downloaded package as root:": "Instale el paquete descargado como root:",
+  "Enable the agent at boot and start it:": "Habilite el agente al arrancar el sistema e inícielo:",
+  "The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.": "El paquete registra el agente como subsistema del System Resource Controller (SRC) y lo inicia, también al arrancar el sistema."
 }

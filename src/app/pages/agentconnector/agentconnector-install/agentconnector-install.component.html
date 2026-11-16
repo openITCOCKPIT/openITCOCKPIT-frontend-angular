@@ -83,13 +83,24 @@
                                                 </a>
                                             </div>
                                         </div>
-                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd || config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
+                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd) {
+                                            <p class="mb-2">{{ t('Install the downloaded package as root:') }}</p>
                                             <p>
-                                                {{ t('There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to') }}
-                                                <code>/usr/local/bin/openitcockpit-agent</code>
-                                                {{ t('and create the directory') }}
-                                                <code>/etc/openitcockpit-agent</code>
+                                                <code>pkg add openitcockpit-agent-&lt;version&gt;.freebsd-&lt;architecture&gt;.txz</code>
                                             </p>
+                                            <p class="mb-2">{{ t('Enable the agent at boot and start it:') }}</p>
+                                            <p>
+                                                <code>sysrc openitcockpit_agent_enable=YES</code>
+                                                <br><br>
+                                                <code>service openitcockpit_agent start</code>
+                                            </p>
+                                        }
+                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
+                                            <p class="mb-2">{{ t('Install the downloaded package as root:') }}</p>
+                                            <p>
+                                                <code>rpm -ivh openitcockpit-agent-&lt;version&gt;-1.aix.ppc.rpm</code>
+                                            </p>
+                                            <p>{{ t('The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.') }}</p>
                                         }
                                     </div>
                                 </fieldset>
@@ -173,19 +184,16 @@
                                                     <code>{{ t('sudo systemctl restart openitcockpit-agent.service') }}</code>
                                                 </c-col>
                                             }
-                                            @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd || config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
-                                                <c-col [xs]="12" class="mb-2">
-                                                    {{ t('The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:') }}
-                                                </c-col>
-                                            }
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd) {
                                                 <c-col [xs]="12" class="mb-2">
-                                                    <code>daemon -f /usr/local/bin/openitcockpit-agent --config /etc/openitcockpit-agent/config.ini</code>
+                                                    <code>service openitcockpit_agent restart</code>
                                                 </c-col>
                                             }
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
                                                 <c-col [xs]="12" class="mb-2">
-                                                    <code>nohup /usr/local/bin/openitcockpit-agent --config /etc/openitcockpit-agent/config.ini &gt;/dev/null 2&gt;&amp;1 &amp;</code>
+                                                    <code>stopsrc -s openitcockpit-agent</code>
+                                                    <br><br>
+                                                    <code>startsrc -s openitcockpit-agent</code>
                                                 </c-col>
                                             }
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Macos) {
