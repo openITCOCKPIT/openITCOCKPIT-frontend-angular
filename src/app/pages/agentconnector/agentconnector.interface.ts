@@ -379,6 +379,8 @@ export interface AgentServicesForCreate {
     multipath: AgentServiceForCreate
     network_adapters: AgentServiceForCreate[]
     paging_spaces: AgentServiceForCreate
+    powerha: AgentServiceForCreate
+    sendmail: AgentServiceForCreate
 
     packagemanager: AgentServiceForCreate
 }

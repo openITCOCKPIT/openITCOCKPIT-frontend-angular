@@ -6345,9 +6345,11 @@
   "Monitor multipath disks (AIX only)": "Monitoruj dyski multipath (tylko AIX)",
   "Monitor network adapters and EtherChannels (AIX only)": "Monitoruj karty sieciowe i EtherChannel (tylko AIX)",
   "Monitor paging spaces (AIX only)": "Monitoruj przestrzenie stronicowania (tylko AIX)",
+  "Monitor PowerHA SystemMirror cluster (AIX only, requires root)": "Monitoruj klaster PowerHA SystemMirror (tylko AIX, wymaga uprawnień root)",
+  "Monitor sendmail mail queue (AIX only, requires root)": "Monitoruj kolejkę poczty sendmail (tylko AIX, wymaga uprawnień root)",
   "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Monitoruj pule thin LVM (Linux) i grupy woluminów (AIX)",
   "FreeBSD": "FreeBSD",
-  "There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to": "Dla FreeBSD i AIX nie ma jeszcze pakietów instalacyjnych. Pobierz plik binarny agenta, skopiuj go do",
-  "and create the directory": "i utwórz katalog",
-  "The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:": "Agent nie jest jeszcze zainstalowany jako usługa. Zatrzymaj działającego agenta (np. poleceniem kill i identyfikatorem procesu) i uruchom go ponownie:"
+  "Install the downloaded package as root:": "Zainstaluj pobrany pakiet jako root:",
+  "Enable the agent at boot and start it:": "Włącz uruchamianie agenta przy starcie systemu i uruchom go:",
+  "The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.": "Pakiet rejestruje agenta jako podsystem System Resource Controller (SRC) i uruchamia go, również przy starcie systemu."
 }

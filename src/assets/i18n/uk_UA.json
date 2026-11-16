@@ -6150,9 +6150,11 @@
   "Monitor multipath disks (AIX only)": "Моніторинг дисків multipath (лише AIX)",
   "Monitor network adapters and EtherChannels (AIX only)": "Моніторинг мережевих адаптерів і EtherChannel (лише AIX)",
   "Monitor paging spaces (AIX only)": "Моніторинг областей підкачки (лише AIX)",
+  "Monitor PowerHA SystemMirror cluster (AIX only, requires root)": "Моніторинг кластера PowerHA SystemMirror (лише AIX, потрібні права root)",
+  "Monitor sendmail mail queue (AIX only, requires root)": "Моніторинг поштової черги sendmail (лише AIX, потрібні права root)",
   "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Моніторинг thin-пулів LVM (Linux) і груп томів (AIX)",
   "FreeBSD": "FreeBSD",
-  "There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to": "Для FreeBSD і AIX ще немає інсталяційних пакетів. Завантажте бінарний файл агента, скопіюйте його до",
-  "and create the directory": "і створіть каталог",
-  "The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:": "Агент ще не встановлено як службу. Зупиніть запущений агент (наприклад, командою kill з ідентифікатором процесу) і запустіть його знову:"
+  "Install the downloaded package as root:": "Встановіть завантажений пакет від імені root:",
+  "Enable the agent at boot and start it:": "Увімкніть автозапуск агента під час завантаження системи та запустіть його:",
+  "The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.": "Пакет реєструє агент як підсистему System Resource Controller (SRC) і запускає його, зокрема під час завантаження системи."
 }
