@@ -46,7 +46,7 @@ import {
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DashboardColorpickerComponent } from './dashboard-colorpicker/dashboard-colorpicker.component';
 import { DashboardTab, DashboardWidget, WidgetGet, WidgetGetForRender } from '../dashboards.interface';
 import { DashboardsService } from '../dashboards.service';
@@ -166,6 +166,8 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
 
     private cdr = inject(ChangeDetectorRef);
+    private readonly route = inject(ActivatedRoute);
+    private readonly router = inject(Router);
 
     public tabIntervalInSeconds: number = 0;
     private tabRotationInterval: any = null;
@@ -229,6 +231,13 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
         this.subscriptions.add(this.resizeSubscription);
 
+        this.subscriptions.add(this.route.queryParamMap.subscribe(params => {
+            const tabId = Number(params.get('tabId'));
+            if (tabId > 0 && tabId !== this.currentTabId && this.tabs.some(tab => tab.id === tabId)) {
+                this.onTabChange(tabId);
+            }
+        }));
+
         this.loadDashboardsIndex();
     }
 
@@ -248,8 +257,10 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
             this.availableWidgets = data.widgets;
 
             if (this.currentTabId === 0 && data.tabs.length > 0) {
-                // Mark the first tab as active
-                this.currentTabId = data.tabs[0].id;
+                // Open the tab passed via ?tabId= or fall back to the first tab
+                const requestedTabId = Number(this.route.snapshot.queryParamMap.get('tabId'));
+                const requestedTab = data.tabs.find(tab => tab.id === requestedTabId);
+                this.currentTabId = requestedTab ? requestedTab.id : data.tabs[0].id;
             }
 
             this.loadTabContent(this.currentTabId);
@@ -336,11 +347,22 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
 
     public onTabChange(tabId: number): void {
         this.currentTabId = tabId;
+        this.updateTabIdInUrl();
 
         this.loadTabContent(this.currentTabId);
 
         this.cdr.markForCheck();
 
+    }
+
+    private updateTabIdInUrl(): void {
+        // Keep the active tab in the URL, so it can be bookmarked or linked from external applications
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {tabId: this.currentTabId},
+            queryParamsHandling: 'merge',
+            replaceUrl: true
+        });
     }
 
     public onDeleteTab(tabId: number) {
@@ -355,8 +377,7 @@ export class DashboardsIndexComponent implements OnInit, OnDestroy {
                 this.tabs = this.tabs.filter(tab => tab.id !== tabId);
 
                 if (this.tabs.length > 0) {
-                    this.loadTabContent(this.tabs[0].id);
-                    this.currentTabId = this.tabs[0].id;
+                    this.onTabChange(this.tabs[0].id);
                 } else {
                     //All tabs where removed.
                     //Reload page to get new default tab
