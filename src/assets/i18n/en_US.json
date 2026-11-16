@@ -4584,5 +4584,20 @@
   "Sun": "Sun",
   "Notifications overview": "Notifications overview",
   "GPUs": "GPUs",
-  "GPU usage": "GPU usage"
+  "GPU usage": "GPU usage",
+  "AIX": "AIX",
+  "SRC subsystems": "SRC subsystems",
+  "Volume groups": "Volume groups",
+  "Network adapters": "Network adapters",
+  "Monitor LPAR processor usage (AIX only)": "Monitor LPAR processor usage (AIX only)",
+  "Monitor SRC subsystems (AIX only)": "Monitor SRC subsystems (AIX only)",
+  "Monitor AIX error log (AIX only)": "Monitor AIX error log (AIX only)",
+  "Monitor multipath disks (AIX only)": "Monitor multipath disks (AIX only)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Monitor network adapters and EtherChannels (AIX only)",
+  "Monitor paging spaces (AIX only)": "Monitor paging spaces (AIX only)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Monitor LVM thin pools (Linux) and volume groups (AIX)",
+  "FreeBSD": "FreeBSD",
+  "There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to": "There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to",
+  "and create the directory": "and create the directory",
+  "The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:": "The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:"
 }

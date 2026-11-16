@@ -6141,5 +6141,20 @@
   "Sun": "Вс",
   "Notifications overview": "Обзор уведомлений",
   "GPUs": "Графические процессоры (GPU)",
-  "GPU usage": "Загрузка GPU"
+  "GPU usage": "Загрузка GPU",
+  "AIX": "AIX",
+  "SRC subsystems": "Подсистемы SRC",
+  "Volume groups": "Группы томов",
+  "Network adapters": "Сетевые адаптеры",
+  "Monitor LPAR processor usage (AIX only)": "Мониторинг загрузки процессора LPAR (только AIX)",
+  "Monitor SRC subsystems (AIX only)": "Мониторинг подсистем SRC (только AIX)",
+  "Monitor AIX error log (AIX only)": "Мониторинг журнала ошибок AIX (только AIX)",
+  "Monitor multipath disks (AIX only)": "Мониторинг дисков multipath (только AIX)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Мониторинг сетевых адаптеров и EtherChannel (только AIX)",
+  "Monitor paging spaces (AIX only)": "Мониторинг областей подкачки (только AIX)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Мониторинг thin-пулов LVM (Linux) и групп томов (AIX)",
+  "FreeBSD": "FreeBSD",
+  "There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to": "Для FreeBSD и AIX пока нет установочных пакетов. Загрузите бинарный файл агента, скопируйте его в",
+  "and create the directory": "и создайте каталог",
+  "The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:": "Агент пока не установлен как служба. Остановите запущенный агент (например, командой kill с идентификатором процесса) и запустите его снова:"
 }

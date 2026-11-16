@@ -5188,5 +5188,20 @@
   "Sun": "Dom",
   "Notifications overview": "Resumen de notificaciones",
   "GPUs": "GPU",
-  "GPU usage": "Uso de GPU"
+  "GPU usage": "Uso de GPU",
+  "AIX": "AIX",
+  "SRC subsystems": "Subsistemas SRC",
+  "Volume groups": "Grupos de volúmenes",
+  "Network adapters": "Adaptadores de red",
+  "Monitor LPAR processor usage (AIX only)": "Supervisar el uso de procesador de la LPAR (solo AIX)",
+  "Monitor SRC subsystems (AIX only)": "Supervisar los subsistemas SRC (solo AIX)",
+  "Monitor AIX error log (AIX only)": "Supervisar el registro de errores de AIX (solo AIX)",
+  "Monitor multipath disks (AIX only)": "Supervisar los discos multipath (solo AIX)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Supervisar los adaptadores de red y EtherChannels (solo AIX)",
+  "Monitor paging spaces (AIX only)": "Supervisar los espacios de paginación (solo AIX)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Supervisar los thin pools de LVM (Linux) y los grupos de volúmenes (AIX)",
+  "FreeBSD": "FreeBSD",
+  "There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to": "Todavía no hay paquetes de instalación para FreeBSD y AIX. Descargue el binario del agente, cópielo en",
+  "and create the directory": "y cree el directorio",
+  "The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:": "El agente todavía no está instalado como servicio. Detenga el agente en ejecución (p. ej. con kill y el ID del proceso) e inícielo de nuevo:"
 }

@@ -85,6 +85,22 @@
                                                 <br>
                                                 {{ t('macOS') }}
                                             </button>
+                                            <button type="button"
+                                                    class="btn btn-outline-primary ripple"
+                                                    [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Freebsd}"
+                                                    (click)="changeOs(AgentconnectorOperatingSystems.Freebsd)">
+                                                <fa-icon [icon]="['fab', 'freebsd']" [size]="'7x'"></fa-icon>
+                                                <br>
+                                                {{ t('FreeBSD') }}
+                                            </button>
+                                            <button type="button"
+                                                    class="btn btn-outline-primary ripple"
+                                                    [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Aix}"
+                                                    (click)="changeOs(AgentconnectorOperatingSystems.Aix)">
+                                                <fa-icon [icon]="['fas', 'server']" [size]="'7x'"></fa-icon>
+                                                <br>
+                                                {{ t('AIX') }}
+                                            </button>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -946,7 +962,7 @@
                                                        type="checkbox"
                                                        [(ngModel)]="config.bool.lvm"/>
                                                 <label cFormCheckLabel for="lvm">
-                                                    {{ t('Monitor LVM thin pools (Linux only)') }}
+                                                    {{ t('Monitor LVM thin pools (Linux) and volume groups (AIX)') }}
                                                 </label>
                                             </c-form-check>
                                         </div>
@@ -1007,6 +1023,78 @@
                                                        [(ngModel)]="config.bool.systemhealth"/>
                                                 <label cFormCheckLabel for="systemhealth">
                                                     {{ t('Monitor Linux System Health') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="lpar"
+                                                       id="lpar"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.lpar"/>
+                                                <label cFormCheckLabel for="lpar">
+                                                    {{ t('Monitor LPAR processor usage (AIX only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="srcservices"
+                                                       id="srcservices"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.srcservices"/>
+                                                <label cFormCheckLabel for="srcservices">
+                                                    {{ t('Monitor SRC subsystems (AIX only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="errpt"
+                                                       id="errpt"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.errpt"/>
+                                                <label cFormCheckLabel for="errpt">
+                                                    {{ t('Monitor AIX error log (AIX only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="multipath"
+                                                       id="multipath"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.multipath"/>
+                                                <label cFormCheckLabel for="multipath">
+                                                    {{ t('Monitor multipath disks (AIX only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="networkadapters"
+                                                       id="networkadapters"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.networkadapters"/>
+                                                <label cFormCheckLabel for="networkadapters">
+                                                    {{ t('Monitor network adapters and EtherChannels (AIX only)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="pagingspaces"
+                                                       id="pagingspaces"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.pagingspaces"/>
+                                                <label cFormCheckLabel for="pagingspaces">
+                                                    {{ t('Monitor paging spaces (AIX only)') }}
                                                 </label>
                                             </c-form-check>
                                         </div>

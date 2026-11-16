@@ -83,6 +83,14 @@
                                                 </a>
                                             </div>
                                         </div>
+                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd || config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
+                                            <p>
+                                                {{ t('There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to') }}
+                                                <code>/usr/local/bin/openitcockpit-agent</code>
+                                                {{ t('and create the directory') }}
+                                                <code>/etc/openitcockpit-agent</code>
+                                            </p>
+                                        }
                                     </div>
                                 </fieldset>
                             </c-card-body>
@@ -107,7 +115,7 @@
                                         @if (config.string.operating_system === AgentconnectorOperatingSystems.Windows) {
                                             <code>{{ t('C:\\Program Files\\openitcockpit\\openitcockpit-agent\\config.ini') }}</code>
                                         }
-                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux) {
+                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux || config.string.operating_system === AgentconnectorOperatingSystems.Freebsd || config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
                                             <code
                                             >{{ t('/etc/openitcockpit-agent/config.ini') }}</code>
                                         }
@@ -163,6 +171,21 @@
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux) {
                                                 <c-col [xs]="12" class="mb-2">
                                                     <code>{{ t('sudo systemctl restart openitcockpit-agent.service') }}</code>
+                                                </c-col>
+                                            }
+                                            @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd || config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
+                                                <c-col [xs]="12" class="mb-2">
+                                                    {{ t('The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:') }}
+                                                </c-col>
+                                            }
+                                            @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd) {
+                                                <c-col [xs]="12" class="mb-2">
+                                                    <code>daemon -f /usr/local/bin/openitcockpit-agent --config /etc/openitcockpit-agent/config.ini</code>
+                                                </c-col>
+                                            }
+                                            @if (config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
+                                                <c-col [xs]="12" class="mb-2">
+                                                    <code>nohup /usr/local/bin/openitcockpit-agent --config /etc/openitcockpit-agent/config.ini &gt;/dev/null 2&gt;&amp;1 &amp;</code>
                                                 </c-col>
                                             }
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Macos) {
