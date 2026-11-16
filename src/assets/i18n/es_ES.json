@@ -5199,6 +5199,8 @@
   "Monitor multipath disks (AIX only)": "Supervisar los discos multipath (solo AIX)",
   "Monitor network adapters and EtherChannels (AIX only)": "Supervisar los adaptadores de red y EtherChannels (solo AIX)",
   "Monitor paging spaces (AIX only)": "Supervisar los espacios de paginación (solo AIX)",
+  "Monitor PowerHA SystemMirror cluster (AIX only, requires root)": "Supervisar el clúster PowerHA SystemMirror (solo AIX, requiere root)",
+  "Monitor sendmail mail queue (AIX only, requires root)": "Supervisar la cola de correo de sendmail (solo AIX, requiere root)",
   "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Supervisar los thin pools de LVM (Linux) y los grupos de volúmenes (AIX)",
   "FreeBSD": "FreeBSD",
   "Install the downloaded package as root:": "Instale el paquete descargado como root:",

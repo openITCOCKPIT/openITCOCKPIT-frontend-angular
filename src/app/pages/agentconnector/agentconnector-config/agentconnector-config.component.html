@@ -1098,6 +1098,30 @@
                                                 </label>
                                             </c-form-check>
                                         </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="powerha"
+                                                       id="powerha"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.powerha"/>
+                                                <label cFormCheckLabel for="powerha">
+                                                    {{ t('Monitor PowerHA SystemMirror cluster (AIX only, requires root)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
+                                        <div class="mb-3">
+                                            <c-form-check>
+                                                <input cFormCheckInput
+                                                       name="sendmail"
+                                                       id="sendmail"
+                                                       type="checkbox"
+                                                       [(ngModel)]="config.bool.sendmail"/>
+                                                <label cFormCheckLabel for="sendmail">
+                                                    {{ t('Monitor sendmail mail queue (AIX only, requires root)') }}
+                                                </label>
+                                            </c-form-check>
+                                        </div>
                                     </div>
                                 </fieldset>
                             </c-card-body>

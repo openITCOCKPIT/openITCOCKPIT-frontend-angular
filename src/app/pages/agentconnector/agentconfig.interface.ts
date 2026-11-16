@@ -76,6 +76,8 @@ export interface AgentConfigBoolFields {
     multipath: boolean
     networkadapters: boolean
     pagingspaces: boolean
+    powerha: boolean
+    sendmail: boolean
 }
 
 export interface AgentConfigIntFields {

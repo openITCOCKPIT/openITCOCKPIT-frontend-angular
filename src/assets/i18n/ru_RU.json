@@ -6152,6 +6152,8 @@
   "Monitor multipath disks (AIX only)": "Мониторинг дисков multipath (только AIX)",
   "Monitor network adapters and EtherChannels (AIX only)": "Мониторинг сетевых адаптеров и EtherChannel (только AIX)",
   "Monitor paging spaces (AIX only)": "Мониторинг областей подкачки (только AIX)",
+  "Monitor PowerHA SystemMirror cluster (AIX only, requires root)": "Мониторинг кластера PowerHA SystemMirror (только AIX, требуются права root)",
+  "Monitor sendmail mail queue (AIX only, requires root)": "Мониторинг почтовой очереди sendmail (только AIX, требуются права root)",
   "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Мониторинг thin-пулов LVM (Linux) и групп томов (AIX)",
   "FreeBSD": "FreeBSD",
   "Install the downloaded package as root:": "Установите загруженный пакет от имени root:",
