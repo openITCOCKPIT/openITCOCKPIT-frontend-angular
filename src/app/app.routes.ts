@@ -723,6 +723,9 @@ const coreRoutes: Routes = [{
     path: 'instantreports/generate/:id',
     loadComponent: () => import('./pages/instantreports/instantreports-generate/instantreports-generate.component').then(m => m.InstantreportsGenerateComponent)
 }, {
+    path: 'instantreports/mailLog/:id',
+    loadComponent: () => import('./pages/instantreports/instantreports-mail-log/instantreports-mail-log.component').then(m => m.InstantreportsMailLogComponent)
+}, {
     path: 'agentchecks/index',
     loadComponent: () => import('./pages/agentchecks/agentchecks-index/agentchecks-index.component').then(m => m.AgentchecksIndexComponent)
 }, {

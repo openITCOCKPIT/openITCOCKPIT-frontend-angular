@@ -8,6 +8,8 @@ import {
     InstantreportPost,
     InstantreportsIndexParams,
     InstantreportsIndexRoot,
+    InstantreportsMailLogParams,
+    InstantreportsMailLogRoot,
     InstantreportsReportHtmlParams,
     InstantreportsReportPdfParams
 } from './instantreports.interface';
@@ -173,6 +175,17 @@ export class InstantreportsService {
             params: params as {},
             responseType: 'blob'
         });
+    }
+
+    public getMailLog(id: number, params: InstantreportsMailLogParams): Observable<InstantreportsMailLogRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<InstantreportsMailLogRoot>(`${proxyPath}/instantreports/mailLog/${id}.json`, {
+            params: params as {} // cast InstantreportsMailLogParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
     }
 
     public generateReportHtml(data: InstantreportsReportHtmlParams): Observable<GenericResponseWrapper> {

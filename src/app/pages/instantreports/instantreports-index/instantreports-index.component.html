@@ -342,6 +342,11 @@
                                             <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
                                             {{ t('Generate') }}
                                         </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'instantreports.mailLog'"
+                                                                     [url]="'/instantreports/mailLog/' + instantreport.Instantreport.id">
+                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                            {{ t('Mail log') }}
+                                        </oitc-actions-button-element>
                                         @if (instantreport.allowEdit) {
                                             <li cDropdownDivider></li>
                                         }
