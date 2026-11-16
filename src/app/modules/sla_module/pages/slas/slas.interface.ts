@@ -1,4 +1,5 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
+import { ReportMailLogEntry } from '../../../../components/report-mail-log/report-mail-log.interface';
 import { GenericIdResponse } from '../../../../generic-responses';
 import { HostMappingRulesPost } from '../host-mapping-rules/host-mapping-rules.interface';
 import { Timeperiod, ViewDetailsTimeperiod } from '../../../../pages/timeperiods/timeperiods.interface';
@@ -451,4 +452,17 @@ export interface Hosts {
 export interface Availability {
     status_percent: number
     fulfill: boolean
+}
+
+/**********************
+ *  Mail log action   *
+ **********************/
+export interface SlasMailLogRoot extends PaginateOrScroll {
+    sla: {
+        id: number
+        name: string
+        container_id: number
+    }
+    mailLog: ReportMailLogEntry[]
+    _csrfToken: any
 }
