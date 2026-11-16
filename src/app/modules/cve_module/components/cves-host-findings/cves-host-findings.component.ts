@@ -41,6 +41,10 @@ import { CveReasonBadgesComponent } from '../cve-reason-badges/cve-reason-badges
 import { CveRecommendationLabelComponent } from '../cve-recommendation-label/cve-recommendation-label.component';
 import { CveDecisionStateLabelComponent } from '../cve-decision-state-label/cve-decision-state-label.component';
 import { CveStateBadgeComponent } from '../cve-state-badge/cve-state-badge.component';
+import { ActionsButtonComponent } from '../../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../../components/actions-button-element/actions-button-element.component';
 
 /**
  * The CVEs of one component of a host, shown when the component gets expanded.
@@ -71,7 +75,9 @@ import { CveStateBadgeComponent } from '../cve-state-badge/cve-state-badge.compo
         CveStateBadgeComponent,
         ColComponent,
         ContainerComponent,
-        RowComponent
+        RowComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent
     ],
     templateUrl: './cves-host-findings.component.html',
     styleUrl: './cves-host-findings.component.css',

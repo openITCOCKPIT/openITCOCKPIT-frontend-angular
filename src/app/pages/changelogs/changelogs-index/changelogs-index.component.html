@@ -28,8 +28,8 @@
             <c-nav variant="underline" class="card-toolbar card-header-pills me-3">
                 <c-nav-item *oitcPermission="['changelogs', 'index']">
                     <button
-                        class="nav-link active"
-                        [routerLink]="['/', 'changelogs', 'index']">
+                            class="nav-link active"
+                            [routerLink]="['/', 'changelogs', 'index']">
                         <fa-icon [icon]="['fas', 'timeline']" [rotate]="90"></fa-icon>
                         {{ t('Main overview') }}
                     </button>
@@ -37,8 +37,8 @@
                 @if (PermissionsService.hasModuleObservable('ImportModule')|async) {
                     <c-nav-item *oitcPermission="['ImportModule','importchangelogs', 'index']">
                         <button
-                            class="nav-link"
-                            [routerLink]="['/', 'import_module', 'import_changelogs', 'index']">
+                                class="nav-link"
+                                [routerLink]="['/', 'import_module', 'import_changelogs', 'index']">
                             <fa-icon [icon]="['fas', 'file-import']"></fa-icon>
                             {{ t('Import Module Changes') }}
                         </button>
@@ -47,10 +47,20 @@
                 @if (PermissionsService.hasModuleObservable('ScmModule')|async) {
                     <c-nav-item *oitcPermission="['ScmModule','scmchangelogs', 'index']">
                         <button
-                            class="nav-link"
-                            [routerLink]="['/', 'scm_module', 'scm_changelogs', 'index']">
+                                class="nav-link"
+                                [routerLink]="['/', 'scm_module', 'scm_changelogs', 'index']">
                             <fa-icon [icon]="['fas', 'people-roof']"></fa-icon>
                             {{ t('Scm Module Changes') }}
+                        </button>
+                    </c-nav-item>
+                }
+                @if (PermissionsService.hasModuleObservable('CveModule')|async) {
+                    <c-nav-item *oitcPermission="['CveModule','cvechangelogs', 'index']">
+                        <button
+                                class="nav-link"
+                                [routerLink]="['/', 'cve_module', 'cve_changelogs', 'index']">
+                            <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
+                            {{ t('Cve Module Changes') }}
                         </button>
                     </c-nav-item>
                 }
@@ -141,15 +151,15 @@
 
                                 <c-form-check class="mb-2">
                                     <input
-                                        cFormCheckInput
-                                        class="checkbox-lg checkbox-primary"
-                                        id="select_all_types"
-                                        name="select_all_types"
-                                        [indeterminate]="allSelectedIndeterminate"
-                                        oitcDebounce
-                                        [(ngModel)]="allSelected"
-                                        (ngModelChange)="toggleSelectAllTypes($event)"
-                                        type="checkbox"/>
+                                            cFormCheckInput
+                                            class="checkbox-lg checkbox-primary"
+                                            id="select_all_types"
+                                            name="select_all_types"
+                                            [indeterminate]="allSelectedIndeterminate"
+                                            oitcDebounce
+                                            [(ngModel)]="allSelected"
+                                            (ngModelChange)="toggleSelectAllTypes($event)"
+                                            type="checkbox"/>
                                     <label cFormCheckLabel for="select_all_types"
                                            class="ms-1 mt-1 select-all-border">
                                         {{ t('Select all') }}
@@ -446,7 +456,7 @@
 
             @if (changes && changes.all_changes) {
                 <c-container
-                    [fluid]="true">
+                        [fluid]="true">
                     <ul class="cbp_tmtimeline">
                         @for (changeLogEntry of changes.all_changes; track changeLogEntry) {
                             <li>
@@ -460,13 +470,13 @@
                 <oitc-no-records></oitc-no-records>
             }
             <c-container
-                [fluid]="true">
+                    [fluid]="true">
                 <c-row>
                     <c-col>
                         @if (changes) {
                             <oitc-paginate-or-scroll
-                                (paginatorChange)="onPaginatorChange($event)"
-                                [paginateOrScroll]="changes"></oitc-paginate-or-scroll>
+                                    (paginatorChange)="onPaginatorChange($event)"
+                                    [paginateOrScroll]="changes"></oitc-paginate-or-scroll>
                         }
                     </c-col>
                 </c-row>
