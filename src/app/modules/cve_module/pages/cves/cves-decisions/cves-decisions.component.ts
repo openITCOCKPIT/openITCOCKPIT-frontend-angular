@@ -36,6 +36,10 @@ import { CveDecisionStates } from '../cves.enum';
 import { CveDecisionStateLabelComponent } from '../../../components/cve-decision-state-label/cve-decision-state-label.component';
 import { CveStateBadgeComponent } from '../../../components/cve-state-badge/cve-state-badge.component';
 import { CvesPagesNavComponent } from '../../../components/cves-pages-nav/cves-pages-nav.component';
+import { ActionsButtonComponent } from '../../../../../components/actions-button/actions-button.component';
+import {
+    ActionsButtonElementComponent
+} from '../../../../../components/actions-button-element/actions-button-element.component';
 
 /**
  * All decisions of open findings, the next review date first, to work through them in time
@@ -72,7 +76,9 @@ import { CvesPagesNavComponent } from '../../../components/cves-pages-nav/cves-p
         MultiSelectComponent,
         CveDecisionStateLabelComponent,
         CveStateBadgeComponent,
-        CvesPagesNavComponent
+        CvesPagesNavComponent,
+        ActionsButtonComponent,
+        ActionsButtonElementComponent
     ],
     templateUrl: './cves-decisions.component.html',
     styleUrl: './cves-decisions.component.css',
