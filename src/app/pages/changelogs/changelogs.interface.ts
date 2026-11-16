@@ -84,6 +84,7 @@ export interface ChangelogIndex {
     data_unserialized: any
     ngState: string,
     routerLink: [],
+    queryParams: [],
     color: string
     icon: string,
     faIcon: IconProp

@@ -13,13 +13,13 @@
                 <strong>
                     @if (changelogentry.ngState && changelogentry.recordExists) {
                         <a [routerLink]="changelogentry.routerLink"
-                        >
+                           [queryParams]="changelogentry.queryParams">
                             {{ changelogentry.name }}
                         </a>
                     }
                     @if (!changelogentry.ngState || !changelogentry.recordExists) {
                         <span
-                            [ngClass]="{'changelog_delete': (changelogentry.action ==='delete' ||
+                                [ngClass]="{'changelog_delete': (changelogentry.action ==='delete' ||
                   (changelogentry.ngState && !changelogentry.recordExists))}">
                             {{ changelogentry.name }}
                         </span>
@@ -74,7 +74,7 @@
                                                         <footer class="blockquote-footer">
                                                             {{ old.field }}:
                                                             <span
-                                                                class="text-danger changelog_delete">{{ old.value }}</span>
+                                                                    class="text-danger changelog_delete">{{ old.value }}</span>
                                                         </footer>
                                                     </small>
                                                 }
@@ -87,12 +87,12 @@
                                                         <footer class="blockquote-footer">
                                                             {{ new.field.replace('_id', '') }}:
                                                             <span
-                                                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-danger': change.old[i].value !== new.value}">
+                                                                    [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-danger': change.old[i].value !== new.value}">
                                                                 {{ change.old[i].value }}
                                                             </span>
                                                             <fa-icon [icon]="['fas', 'caret-right']"></fa-icon>
                                                             <span
-                                                                [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-success': change.old[i].value !== new.value}">
+                                                                    [ngClass]="{'text-primary': change.old[i].value === new.value, 'text-success': change.old[i].value !== new.value}">
                                                                 {{ new.value }}
                                                             </span>
                                                         </footer>

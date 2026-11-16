@@ -24,4 +24,7 @@ export const cveModuleRoutes: Routes = [{
 }, {
     path: 'cve_module/cves/software',
     loadComponent: () => import('./pages/cves/cves-software/cves-software.component').then(m => m.CvesSoftwareComponent)
+}, {
+    path: 'cve_module/cvechangelogs/index',
+    loadComponent: () => import('./pages/cvechangelogs/cve-changelogs-index/cve-changelogs-index.component').then(m => m.CveChangelogsIndexComponent)
 }];
