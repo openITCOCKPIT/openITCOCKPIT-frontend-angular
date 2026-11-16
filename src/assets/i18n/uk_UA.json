@@ -6150,5 +6150,9 @@
   "Monitor multipath disks (AIX only)": "Моніторинг дисків multipath (лише AIX)",
   "Monitor network adapters and EtherChannels (AIX only)": "Моніторинг мережевих адаптерів і EtherChannel (лише AIX)",
   "Monitor paging spaces (AIX only)": "Моніторинг областей підкачки (лише AIX)",
-  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Моніторинг thin-пулів LVM (Linux) і груп томів (AIX)"
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Моніторинг thin-пулів LVM (Linux) і груп томів (AIX)",
+  "FreeBSD": "FreeBSD",
+  "There are no installation packages for FreeBSD and AIX yet. Download the binary of the agent, copy it to": "Для FreeBSD і AIX ще немає інсталяційних пакетів. Завантажте бінарний файл агента, скопіюйте його до",
+  "and create the directory": "і створіть каталог",
+  "The agent is not installed as a service yet. Stop the running agent (e.g. with kill and the process ID) and start it again:": "Агент ще не встановлено як службу. Зупиніть запущений агент (наприклад, командою kill з ідентифікатором процесу) і запустіть його знову:"
 }

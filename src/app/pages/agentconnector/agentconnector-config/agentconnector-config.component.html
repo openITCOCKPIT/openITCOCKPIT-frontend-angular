@@ -85,6 +85,22 @@
                                                 <br>
                                                 {{ t('macOS') }}
                                             </button>
+                                            <button type="button"
+                                                    class="btn btn-outline-primary ripple"
+                                                    [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Freebsd}"
+                                                    (click)="changeOs(AgentconnectorOperatingSystems.Freebsd)">
+                                                <fa-icon [icon]="['fab', 'freebsd']" [size]="'7x'"></fa-icon>
+                                                <br>
+                                                {{ t('FreeBSD') }}
+                                            </button>
+                                            <button type="button"
+                                                    class="btn btn-outline-primary ripple"
+                                                    [ngClass]="{'btn-primary text-white': config.string.operating_system === AgentconnectorOperatingSystems.Aix}"
+                                                    (click)="changeOs(AgentconnectorOperatingSystems.Aix)">
+                                                <fa-icon [icon]="['fas', 'server']" [size]="'7x'"></fa-icon>
+                                                <br>
+                                                {{ t('AIX') }}
+                                            </button>
                                         </div>
                                     </div>
                                 </fieldset>
