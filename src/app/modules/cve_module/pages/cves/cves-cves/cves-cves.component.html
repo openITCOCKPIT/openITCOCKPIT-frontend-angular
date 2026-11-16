@@ -14,7 +14,7 @@
                 </a>
             </li>
             <li aria-current="page" class="breadcrumb-item active">
-                <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
                 {{ t('CVEs') }}
             </li>
         </ol>
@@ -49,7 +49,7 @@
                         <c-col [xs]="12" [md]="6" class="mb-2">
                             <c-input-group>
                                 <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'bug']"></fa-icon>
+                                    <fa-icon [icon]="['fas', 'shield-virus']"></fa-icon>
                                 </span>
                                 <input (debouncedValue)="onFilterChange($event)"
                                        [(ngModel)]="params['filter[Cves.cve_id]']"
