@@ -1,0 +1,112 @@
+<ng-container *transloco="let t">
+    <c-container [fluid]="true">
+        <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
+               (matSortChange)="sortChange.emit($event)"
+               [matSortActive]="sort()" [matSortDirection]="direction()">
+            <thead>
+            <tr>
+                <th scope="col" mat-sort-header="ReportMailLog.send_time">
+                    {{ t('Send time') }}
+                </th>
+                <th scope="col">
+                    {{ t('Recipients') }}
+                </th>
+                <th scope="col" mat-sort-header="ReportMailLog.subject">
+                    {{ t('Subject') }}
+                </th>
+                <th scope="col" mat-sort-header="ReportMailLog.report_start">
+                    {{ t('Reporting period') }}
+                </th>
+                <th scope="col">
+                    {{ t('Attachments') }}
+                </th>
+                <th scope="col" mat-sort-header="ReportMailLog.has_been_sent" class="col-1">
+                    {{ t('Has been sent') }}
+                </th>
+                <th scope="col">
+                    {{ t('Message') }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (logEntry of mailLog(); track logEntry.id) {
+                    <tr>
+                        <td class="text-nowrap">
+                            {{ logEntry.send_time }}
+                        </td>
+                        <td>
+                            <ul class="mb-0 ms-1 ps-2">
+                                @for (recipient of logEntry.recipients; track $index) {
+                                    <li class="pb-1">
+                                        @if (recipient.user_id && recipient.user_exists) {
+                                            <oitc-label-link
+                                                [objectId]="recipient.user_id"
+                                                [route]="'/users/edit'"
+                                                [permissions]="'users.edit'">
+                                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                                                {{ recipient.name || recipient.email }}
+                                            </oitc-label-link>
+                                        } @else if (recipient.user_id) {
+                                            <span class="text-muted" [title]="'User has been deleted' | transloco">
+                                                <fa-icon [icon]="['fas', 'user-slash']"></fa-icon>
+                                                {{ recipient.name || recipient.email }}
+                                                <small>({{ t('deleted') }})</small>
+                                            </span>
+                                        } @else {
+                                            <fa-icon [icon]="['fas', 'at']"></fa-icon>
+                                            {{ recipient.name || recipient.email }}
+                                        }
+                                        @if (recipient.name) {
+                                            <small class="text-muted ms-1">&lt;{{ recipient.email }}&gt;</small>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            {{ logEntry.subject }}
+                        </td>
+                        <td class="text-nowrap">
+                            @if (logEntry.report_start && logEntry.report_end) {
+                                {{ logEntry.report_start }}
+                                <br/>
+                                {{ logEntry.report_end }}
+                            }
+                        </td>
+                        <td>
+                            @if (logEntry.attachments && logEntry.attachments.length > 0) {
+                                <ul class="mb-0 ms-1 ps-2">
+                                    @for (attachment of logEntry.attachments; track $index) {
+                                        <li class="pb-1 word-break">
+                                            <fa-icon [icon]="['fas', 'paperclip']"></fa-icon>
+                                            {{ attachment }}
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (logEntry.has_been_sent) {
+                                <c-badge color="success">
+                                    {{ t('Yes') }}
+                                </c-badge>
+                            } @else {
+                                <c-badge color="danger">
+                                    {{ t('No') }}
+                                </c-badge>
+                            }
+                        </td>
+                        <td class="word-break"
+                            [class.text-success]="logEntry.has_been_sent"
+                            [class.text-danger]="!logEntry.has_been_sent">
+                            {{ logEntry.message }}
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @if (mailLog().length === 0) {
+            <oitc-no-records></oitc-no-records>
+        }
+    </c-container>
+</ng-container>

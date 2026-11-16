@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestro
 import { formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import { Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import {
-    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -21,8 +20,7 @@ import {
     InputGroupTextDirective,
     NavComponent,
     NavItemComponent,
-    RowComponent,
-    TableDirective
+    RowComponent
 } from '@coreui/angular';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
@@ -32,24 +30,24 @@ import { BackButtonDirective } from '../../../directives/back-button.directive';
 import { PermissionDirective } from '../../../permissions/permission.directive';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loader/table-loader.component';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import {
     PaginateOrScrollComponent
 } from '../../../layouts/coreui/paginator/paginate-or-scroll/paginate-or-scroll.component';
-import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { InstantreportsService } from '../instantreports.service';
+import { InstantreportsMailLogRoot } from '../instantreports.interface';
 import {
-    getDefaultInstantreportsMailLogParams,
-    InstantreportsMailLogParams,
-    InstantreportsMailLogRoot
-} from '../instantreports.interface';
+    getDefaultReportMailLogParams,
+    ReportMailLogParams
+} from '../../../components/report-mail-log/report-mail-log.interface';
+import {
+    ReportMailLogTableComponent
+} from '../../../components/report-mail-log/report-mail-log-table/report-mail-log-table.component';
 
 @Component({
     selector: 'oitc-instantreports-mail-log',
     imports: [
         BackButtonDirective,
-        BadgeComponent,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,
@@ -66,17 +64,13 @@ import {
         FormsModule,
         InputGroupComponent,
         InputGroupTextDirective,
-        LabelLinkComponent,
-        MatSort,
-        MatSortHeader,
         NavComponent,
         NavItemComponent,
-        NoRecordsComponent,
         PaginateOrScrollComponent,
         PermissionDirective,
+        ReportMailLogTableComponent,
         RouterLink,
         RowComponent,
-        TableDirective,
         TableLoaderComponent,
         TranslocoDirective,
         TranslocoPipe,
@@ -95,7 +89,7 @@ export class InstantreportsMailLogComponent implements OnInit, OnDestroy, IndexP
     private instantreportId: number = 0;
 
     public hideFilter: boolean = true;
-    public params: InstantreportsMailLogParams = getDefaultInstantreportsMailLogParams();
+    public params: ReportMailLogParams = getDefaultReportMailLogParams();
     public mailLog?: InstantreportsMailLogRoot;
 
     public from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
@@ -161,7 +155,7 @@ export class InstantreportsMailLogComponent implements OnInit, OnDestroy, IndexP
     }
 
     public resetFilter(): void {
-        this.params = getDefaultInstantreportsMailLogParams();
+        this.params = getDefaultReportMailLogParams();
         this.from = formatDate(this.params['filter[from]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
         this.hasBeenSentFilter = {

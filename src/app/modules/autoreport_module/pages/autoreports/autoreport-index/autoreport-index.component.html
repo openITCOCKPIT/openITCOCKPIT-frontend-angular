@@ -190,6 +190,12 @@
                                             <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
                                             {{ t('Generate report') }}
                                         </oitc-actions-button-element>
+                                        <oitc-actions-button-element
+                                            [permission]="'autoreportmodule.autoreports.maillog'"
+                                            [url]="'/autoreport_module/autoreports/mailLog/' + autoreport.id">
+                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                            {{ t('Mail log') }}
+                                        </oitc-actions-button-element>
                                         @if (autoreport.allowEdit) {
                                             <li cDropdownDivider></li>
                                         }
