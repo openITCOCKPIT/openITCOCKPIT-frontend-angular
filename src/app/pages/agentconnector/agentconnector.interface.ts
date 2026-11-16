@@ -280,6 +280,7 @@ export interface AgentServicesForCreate {
     disks_free: AgentServiceForCreate[]
     disks_inodes: AgentServiceForCreate[]
     disks_readonly: AgentServiceForCreate
+    disks_hanging: AgentServiceForCreate
     net_io: AgentServiceForCreate[]
     net_stats: AgentServiceForCreate[]
     processes: AgentServiceForCreate[]
@@ -369,6 +370,15 @@ export interface AgentServicesForCreate {
     // GPUs: health of all GPUs and the usage per GPU
     gpus_health: AgentServiceForCreate
     gpus_usage: AgentServiceForCreate[]
+
+    // AIX: one service per active SRC subsystem, volume group and network adapter
+    lpar: AgentServiceForCreate
+    src_services: AgentServiceForCreate[]
+    errpt: AgentServiceForCreate
+    volume_groups: AgentServiceForCreate[]
+    multipath: AgentServiceForCreate
+    network_adapters: AgentServiceForCreate[]
+    paging_spaces: AgentServiceForCreate
 
     packagemanager: AgentServiceForCreate
 }

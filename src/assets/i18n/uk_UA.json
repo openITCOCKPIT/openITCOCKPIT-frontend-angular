@@ -6139,5 +6139,16 @@
   "Sun": "Нд",
   "Notifications overview": "Огляд сповіщень",
   "GPUs": "Графічні процесори (GPU)",
-  "GPU usage": "Використання GPU"
+  "GPU usage": "Використання GPU",
+  "AIX": "AIX",
+  "SRC subsystems": "Підсистеми SRC",
+  "Volume groups": "Групи томів",
+  "Network adapters": "Мережеві адаптери",
+  "Monitor LPAR processor usage (AIX only)": "Моніторинг завантаження процесора LPAR (лише AIX)",
+  "Monitor SRC subsystems (AIX only)": "Моніторинг підсистем SRC (лише AIX)",
+  "Monitor AIX error log (AIX only)": "Моніторинг журналу помилок AIX (лише AIX)",
+  "Monitor multipath disks (AIX only)": "Моніторинг дисків multipath (лише AIX)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Моніторинг мережевих адаптерів і EtherChannel (лише AIX)",
+  "Monitor paging spaces (AIX only)": "Моніторинг областей підкачки (лише AIX)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Моніторинг thin-пулів LVM (Linux) і груп томів (AIX)"
 }

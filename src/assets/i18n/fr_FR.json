@@ -5411,5 +5411,16 @@
   "Sun": "Dim",
   "Notifications overview": "Aperçu des notifications",
   "GPUs": "GPU",
-  "GPU usage": "Utilisation des GPU"
+  "GPU usage": "Utilisation des GPU",
+  "AIX": "AIX",
+  "SRC subsystems": "Sous-systèmes SRC",
+  "Volume groups": "Groupes de volumes",
+  "Network adapters": "Adaptateurs réseau",
+  "Monitor LPAR processor usage (AIX only)": "Surveiller l'utilisation processeur de la LPAR (AIX uniquement)",
+  "Monitor SRC subsystems (AIX only)": "Surveiller les sous-systèmes SRC (AIX uniquement)",
+  "Monitor AIX error log (AIX only)": "Surveiller le journal d'erreurs AIX (AIX uniquement)",
+  "Monitor multipath disks (AIX only)": "Surveiller les disques multipath (AIX uniquement)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Surveiller les adaptateurs réseau et EtherChannels (AIX uniquement)",
+  "Monitor paging spaces (AIX only)": "Surveiller les espaces de pagination (AIX uniquement)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Surveiller les thin pools LVM (Linux) et les groupes de volumes (AIX)"
 }

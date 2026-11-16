@@ -4584,5 +4584,16 @@
   "Sun": "Sun",
   "Notifications overview": "Notifications overview",
   "GPUs": "GPUs",
-  "GPU usage": "GPU usage"
+  "GPU usage": "GPU usage",
+  "AIX": "AIX",
+  "SRC subsystems": "SRC subsystems",
+  "Volume groups": "Volume groups",
+  "Network adapters": "Network adapters",
+  "Monitor LPAR processor usage (AIX only)": "Monitor LPAR processor usage (AIX only)",
+  "Monitor SRC subsystems (AIX only)": "Monitor SRC subsystems (AIX only)",
+  "Monitor AIX error log (AIX only)": "Monitor AIX error log (AIX only)",
+  "Monitor multipath disks (AIX only)": "Monitor multipath disks (AIX only)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Monitor network adapters and EtherChannels (AIX only)",
+  "Monitor paging spaces (AIX only)": "Monitor paging spaces (AIX only)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Monitor LVM thin pools (Linux) and volume groups (AIX)"
 }

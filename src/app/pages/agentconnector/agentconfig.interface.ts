@@ -70,6 +70,12 @@ export interface AgentConfigBoolFields {
     ipmi: boolean
     gpus: boolean
     systemhealth: boolean
+    lpar: boolean
+    srcservices: boolean
+    errpt: boolean
+    multipath: boolean
+    networkadapters: boolean
+    pagingspaces: boolean
 }
 
 export interface AgentConfigIntFields {
@@ -81,6 +87,7 @@ export interface AgentConfigIntFields {
     ipmi_interval: number
     ipmi_sel_window: number
     wineventlog_max_records: number
+    errpt_window: number
 }
 
 export interface AgentConfigArrayFields {

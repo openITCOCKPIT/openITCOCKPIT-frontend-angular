@@ -6141,5 +6141,16 @@
   "Sun": "Вс",
   "Notifications overview": "Обзор уведомлений",
   "GPUs": "Графические процессоры (GPU)",
-  "GPU usage": "Загрузка GPU"
+  "GPU usage": "Загрузка GPU",
+  "AIX": "AIX",
+  "SRC subsystems": "Подсистемы SRC",
+  "Volume groups": "Группы томов",
+  "Network adapters": "Сетевые адаптеры",
+  "Monitor LPAR processor usage (AIX only)": "Мониторинг загрузки процессора LPAR (только AIX)",
+  "Monitor SRC subsystems (AIX only)": "Мониторинг подсистем SRC (только AIX)",
+  "Monitor AIX error log (AIX only)": "Мониторинг журнала ошибок AIX (только AIX)",
+  "Monitor multipath disks (AIX only)": "Мониторинг дисков multipath (только AIX)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Мониторинг сетевых адаптеров и EtherChannel (только AIX)",
+  "Monitor paging spaces (AIX only)": "Мониторинг областей подкачки (только AIX)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Мониторинг thin-пулов LVM (Linux) и групп томов (AIX)"
 }
