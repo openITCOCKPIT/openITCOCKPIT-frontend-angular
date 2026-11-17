@@ -71,9 +71,13 @@
                         <td>
                             @if (finding.decision) {
                                 <oitc-cve-decision-state-label
-                                        [state]="finding.decision.state"></oitc-cve-decision-state-label>
+                                        [state]="finding.decision.state">
+                                </oitc-cve-decision-state-label>
                                 <div class="small text-muted">
-                                    {{ finding.decision.user.name }} · {{ finding.decision.review_after }}
+                                    @if (finding.decision.user) {
+                                        {{ finding.decision.user.name }} ·
+                                    }
+                                    {{ finding.decision.review_after }}
                                 </div>
                             }
                         </td>

@@ -45,6 +45,7 @@ import { ActionsButtonComponent } from '../../../../components/actions-button/ac
 import {
     ActionsButtonElementComponent
 } from '../../../../components/actions-button-element/actions-button-element.component';
+import { CveDecisionStateLabelComponent } from '../cve-decision-state-label/cve-decision-state-label.component';
 
 /**
  * The CVEs of one component of a host, shown when the component gets expanded.
@@ -72,6 +73,7 @@ import {
         CveReasonBadgesComponent,
         CveRecommendationLabelComponent,
         CveStateBadgeComponent,
+        CveDecisionStateLabelComponent,
         ColComponent,
         ContainerComponent,
         RowComponent,
