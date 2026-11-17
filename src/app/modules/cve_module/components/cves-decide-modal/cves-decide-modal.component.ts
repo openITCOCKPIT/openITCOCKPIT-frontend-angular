@@ -118,7 +118,6 @@ export class CvesDecideModalComponent implements OnDestroy {
             if (decision) {
                 this.post = {
                     state: decision.state,
-                    owner: decision.owner,
                     reason: decision.reason,
                     review_after: decision.review_after,
                     evidence_url: decision.evidence_url ?? ''
@@ -138,7 +137,6 @@ export class CvesDecideModalComponent implements OnDestroy {
         reviewAfter.setDate(reviewAfter.getDate() + DEFAULT_REVIEW_DAYS);
         return {
             state: null,
-            owner: '',
             reason: '',
             review_after: formatDate(reviewAfter, 'yyyy-MM-dd', 'en-US'),
             evidence_url: ''

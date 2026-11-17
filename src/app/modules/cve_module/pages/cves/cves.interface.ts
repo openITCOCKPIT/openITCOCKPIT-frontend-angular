@@ -317,7 +317,6 @@ export interface CveDecision {
     id: number
     cve_host_finding_id: number
     state: CveDecisionStates
-    owner: string
     reason: string
     review_after: string // Y-m-d
     evidence_url: string | null
@@ -449,7 +448,6 @@ export interface CvesFindingRoot {
 
 export interface CveDecisionPost {
     state: CveDecisionStates | null
-    owner: string
     reason: string
     review_after: string // Y-m-d
     evidence_url: string
@@ -493,7 +491,6 @@ export interface CvesDecisionsParams {
     direction: 'asc' | 'desc' | '',
     'filter[Hosts.name]': string,
     'filter[Cves.cve_id]': string,
-    'filter[CveDecisions.owner]': string,
     'filter[CveDecisions.state][]': CveDecisionStates[],
     'filter[CveDecisions.review_after]': string, // Due until, Y-m-d
 }
@@ -507,7 +504,6 @@ export function getDefaultCvesDecisionsParams(): CvesDecisionsParams {
         direction: '',
         'filter[Hosts.name]': '',
         'filter[Cves.cve_id]': '',
-        'filter[CveDecisions.owner]': '',
         'filter[CveDecisions.state][]': [],
         'filter[CveDecisions.review_after]': '',
     }

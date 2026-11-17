@@ -68,17 +68,6 @@
                                        cFormControl name="cveId" oitcDebounce type="text"/>
                             </c-input-group>
                         </c-col>
-                        <c-col [xs]="12" [md]="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[CveDecisions.owner]']"
-                                       [placeholder]="'Filter by responsible person or team' | transloco"
-                                       cFormControl name="owner" oitcDebounce type="text"/>
-                            </c-input-group>
-                        </c-col>
                         <c-col [xs]="12" [md]="6" class="mb-2 ui-fluid">
                             <c-input-group>
                                 <span cInputGroupText>
@@ -133,9 +122,8 @@
                     <th scope="col" mat-sort-header="Hosts.name">{{ t('Host') }}</th>
                     <th scope="col" mat-sort-header="Cves.cve_id">{{ t('CVE') }}</th>
                     <th scope="col">{{ t('Package / application') }}</th>
-                    <th scope="col" mat-sort-header="CveDecisions.owner">{{ t('Responsible person or team') }}</th>
-                    <th scope="col">{{ t('Reason') }}</th>
                     <th scope="col">{{ t('Decided by') }}</th>
+                    <th scope="col">{{ t('Reason') }}</th>
                     <th class="text-center width-50" scope="col"></th>
                 </tr>
                 </thead>
@@ -164,12 +152,11 @@
                                     {{ decision.component_name }}
                                     <code class="ms-1">{{ decision.component_version }}</code>
                                 </td>
-                                <td>{{ decision.owner }}</td>
-                                <td class="cves-reason">{{ decision.reason }}</td>
                                 <td>
                                     {{ decision.user?.name }}
                                     <div class="small text-muted">{{ decision.modified_user }}</div>
                                 </td>
+                                <td class="cves-reason">{{ decision.reason }}</td>
                                 <td class="text-center">
                                     <oitc-actions-button [permission]="'CveModule.cves.finding'"
                                                          [url]="'/cve_module/cves/finding/' + decision.cve_host_finding_id"

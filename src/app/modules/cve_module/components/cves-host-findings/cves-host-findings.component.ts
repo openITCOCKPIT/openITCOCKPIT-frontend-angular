@@ -16,7 +16,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
     ColComponent,
     ContainerComponent,
-    FormCheckInputDirective, RowComponent,
+    FormCheckInputDirective,
+    RowComponent,
     TableDirective,
     TooltipDirective
 } from '@coreui/angular';
@@ -39,7 +40,6 @@ import { CveSeverityBadgeComponent } from '../cve-severity-badge/cve-severity-ba
 import { CveRuleLabelComponent } from '../cve-rule-label/cve-rule-label.component';
 import { CveReasonBadgesComponent } from '../cve-reason-badges/cve-reason-badges.component';
 import { CveRecommendationLabelComponent } from '../cve-recommendation-label/cve-recommendation-label.component';
-import { CveDecisionStateLabelComponent } from '../cve-decision-state-label/cve-decision-state-label.component';
 import { CveStateBadgeComponent } from '../cve-state-badge/cve-state-badge.component';
 import { ActionsButtonComponent } from '../../../../components/actions-button/actions-button.component';
 import {
@@ -71,7 +71,6 @@ import {
         CveRuleLabelComponent,
         CveReasonBadgesComponent,
         CveRecommendationLabelComponent,
-        CveDecisionStateLabelComponent,
         CveStateBadgeComponent,
         ColComponent,
         ContainerComponent,

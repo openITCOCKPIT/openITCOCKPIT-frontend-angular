@@ -1,8 +1,8 @@
 <ng-container *transloco="let t">
     <c-modal
-        [keyboard]="true"
-        id="cvesDecideModal"
-        size="lg">
+            [keyboard]="true"
+            id="cvesDecideModal"
+            size="lg">
         <c-modal-header [class]="mode() === 'remove' ? 'bg-danger' : 'bg-primary'">
             <h5 cModalTitle class="text-white">
                 @if (mode() === 'remove') {
@@ -42,15 +42,15 @@
                                     <oitc-required-icon></oitc-required-icon>
                                 </label>
                                 <oitc-select
-                                    name="CveDecisionState"
-                                    id="CveDecisionState"
-                                    optionValue="key"
-                                    optionLabel="value"
-                                    [options]="states"
-                                    [(ngModel)]="post.state"
-                                    [showClear]="false"
-                                    [appendTo]="''"
-                                    oitcFormError [errors]="errors" errorField="state">
+                                        name="CveDecisionState"
+                                        id="CveDecisionState"
+                                        optionValue="key"
+                                        optionLabel="value"
+                                        [options]="states"
+                                        [(ngModel)]="post.state"
+                                        [showClear]="false"
+                                        [appendTo]="''"
+                                        oitcFormError [errors]="errors" errorField="state">
                                 </oitc-select>
                                 <oitc-form-feedback [errors]="errors" errorField="state"></oitc-form-feedback>
                                 <div class="help-block">
@@ -66,21 +66,6 @@
                                         }
                                     }
                                 </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label cLabel for="CveDecisionOwner">
-                                    {{ t('Responsible person or team') }}
-                                    <oitc-required-icon></oitc-required-icon>
-                                </label>
-                                <input cFormControl
-                                       id="CveDecisionOwner"
-                                       name="CveDecisionOwner"
-                                       type="text"
-                                       maxlength="255"
-                                       [(ngModel)]="post.owner"
-                                       oitcFormError [errors]="errors" errorField="owner"/>
-                                <oitc-form-feedback [errors]="errors" errorField="owner"></oitc-form-feedback>
                             </div>
 
                             <div class="mb-3">
