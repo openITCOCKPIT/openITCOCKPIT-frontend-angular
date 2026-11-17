@@ -6141,5 +6141,22 @@
   "Sun": "Вс",
   "Notifications overview": "Обзор уведомлений",
   "GPUs": "Графические процессоры (GPU)",
-  "GPU usage": "Загрузка GPU"
+  "GPU usage": "Загрузка GPU",
+  "AIX": "AIX",
+  "SRC subsystems": "Подсистемы SRC",
+  "Volume groups": "Группы томов",
+  "Network adapters": "Сетевые адаптеры",
+  "Monitor LPAR processor usage (AIX only)": "Мониторинг загрузки процессора LPAR (только AIX)",
+  "Monitor SRC subsystems (AIX only)": "Мониторинг подсистем SRC (только AIX)",
+  "Monitor AIX error log (AIX only)": "Мониторинг журнала ошибок AIX (только AIX)",
+  "Monitor multipath disks (AIX only)": "Мониторинг дисков multipath (только AIX)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Мониторинг сетевых адаптеров и EtherChannel (только AIX)",
+  "Monitor paging spaces (AIX only)": "Мониторинг областей подкачки (только AIX)",
+  "Monitor PowerHA SystemMirror cluster (AIX only, requires root)": "Мониторинг кластера PowerHA SystemMirror (только AIX, требуются права root)",
+  "Monitor sendmail mail queue (AIX only, requires root)": "Мониторинг почтовой очереди sendmail (только AIX, требуются права root)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Мониторинг thin-пулов LVM (Linux) и групп томов (AIX)",
+  "FreeBSD": "FreeBSD",
+  "Install the downloaded package as root:": "Установите загруженный пакет от имени root:",
+  "Enable the agent at boot and start it:": "Включите автозапуск агента при загрузке системы и запустите его:",
+  "The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.": "Пакет регистрирует агент как подсистему System Resource Controller (SRC) и запускает его, в том числе при загрузке системы."
 }

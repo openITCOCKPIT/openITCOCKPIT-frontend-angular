@@ -4584,5 +4584,22 @@
   "Sun": "Sun",
   "Notifications overview": "Notifications overview",
   "GPUs": "GPUs",
-  "GPU usage": "GPU usage"
+  "GPU usage": "GPU usage",
+  "AIX": "AIX",
+  "SRC subsystems": "SRC subsystems",
+  "Volume groups": "Volume groups",
+  "Network adapters": "Network adapters",
+  "Monitor LPAR processor usage (AIX only)": "Monitor LPAR processor usage (AIX only)",
+  "Monitor SRC subsystems (AIX only)": "Monitor SRC subsystems (AIX only)",
+  "Monitor AIX error log (AIX only)": "Monitor AIX error log (AIX only)",
+  "Monitor multipath disks (AIX only)": "Monitor multipath disks (AIX only)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Monitor network adapters and EtherChannels (AIX only)",
+  "Monitor paging spaces (AIX only)": "Monitor paging spaces (AIX only)",
+  "Monitor PowerHA SystemMirror cluster (AIX only, requires root)": "Monitor PowerHA SystemMirror cluster (AIX only, requires root)",
+  "Monitor sendmail mail queue (AIX only, requires root)": "Monitor sendmail mail queue (AIX only, requires root)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Monitor LVM thin pools (Linux) and volume groups (AIX)",
+  "FreeBSD": "FreeBSD",
+  "Install the downloaded package as root:": "Install the downloaded package as root:",
+  "Enable the agent at boot and start it:": "Enable the agent at boot and start it:",
+  "The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.": "The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot."
 }

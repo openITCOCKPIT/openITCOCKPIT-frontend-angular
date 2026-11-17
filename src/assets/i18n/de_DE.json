@@ -6355,5 +6355,22 @@
   "Sun": "So",
   "Notifications overview": "Benachrichtigungsübersicht",
   "GPUs": "GPUs",
-  "GPU usage": "GPU-Auslastung"
+  "GPU usage": "GPU-Auslastung",
+  "AIX": "AIX",
+  "SRC subsystems": "SRC-Subsysteme",
+  "Volume groups": "Volume Groups",
+  "Network adapters": "Netzwerkadapter",
+  "Monitor LPAR processor usage (AIX only)": "LPAR-Prozessorauslastung überwachen (nur AIX)",
+  "Monitor SRC subsystems (AIX only)": "SRC-Subsysteme überwachen (nur AIX)",
+  "Monitor AIX error log (AIX only)": "AIX-Fehlerprotokoll überwachen (nur AIX)",
+  "Monitor multipath disks (AIX only)": "Multipath-Festplatten überwachen (nur AIX)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Netzwerkadapter und EtherChannels überwachen (nur AIX)",
+  "Monitor paging spaces (AIX only)": "Paging Spaces überwachen (nur AIX)",
+  "Monitor PowerHA SystemMirror cluster (AIX only, requires root)": "PowerHA-SystemMirror-Cluster überwachen (nur AIX, erfordert root)",
+  "Monitor sendmail mail queue (AIX only, requires root)": "Sendmail-Mailwarteschlange überwachen (nur AIX, erfordert root)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "LVM-Thin-Pools (Linux) und Volume Groups (AIX) überwachen",
+  "FreeBSD": "FreeBSD",
+  "Install the downloaded package as root:": "Installieren Sie das heruntergeladene Paket als root:",
+  "Enable the agent at boot and start it:": "Aktivieren Sie den Agent für den Systemstart und starten Sie ihn:",
+  "The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.": "Das Paket registriert den Agent als Subsystem des System Resource Controllers (SRC) und startet ihn, auch beim Systemstart."
 }
