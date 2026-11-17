@@ -33,13 +33,13 @@
 
         <c-card-body class="p-0">
             <oitc-agentconnector-wizard-progressbar
-                [stepCount]="3"
-                [step]="AgentconnectorWizardStepsEnum.InstallAgent"
-                [mode]="agentModeForProgress"
-                [disableBack]="false"
-                (goBackEvent)="onBackButtonClick()"
-                [disableNext]="false"
-                (goNextEvent)="onNextButtonClick()"
+                    [stepCount]="3"
+                    [step]="AgentconnectorWizardStepsEnum.InstallAgent"
+                    [mode]="agentModeForProgress"
+                    [disableBack]="false"
+                    (goBackEvent)="onBackButtonClick()"
+                    [disableNext]="false"
+                    (goNextEvent)="onNextButtonClick()"
             ></oitc-agentconnector-wizard-progressbar>
         </c-card-body>
 
@@ -127,12 +127,10 @@
                                             <code>{{ t('C:\\Program Files\\openitcockpit\\openitcockpit-agent\\config.ini') }}</code>
                                         }
                                         @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux || config.string.operating_system === AgentconnectorOperatingSystems.Freebsd || config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
-                                            <code
-                                            >{{ t('/etc/openitcockpit-agent/config.ini') }}</code>
+                                            <code>{{ t('/etc/openitcockpit-agent/config.ini') }}</code>
                                         }
                                         @if (config.string.operating_system === AgentconnectorOperatingSystems.Macos) {
-                                            <code
-                                            >{{ t('/Applications/openitcockpit-agent/config.ini') }}</code>
+                                            <code>{{ t('/Applications/openitcockpit-agent/config.ini') }}</code>
                                         }
                                         <textarea class="form-control code-font mt-3" readonly
                                                   [ngModel]="configAsIni"
