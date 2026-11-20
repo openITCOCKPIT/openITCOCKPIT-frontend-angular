@@ -72,7 +72,8 @@ export class GrafanaUserdashboardsService {
                 angular: true,
                 from: from,
                 refresh: refresh,
-                theme: theme
+                theme: theme,
+                disableGlobalLoader: true
             }
         }).pipe(
             map(data => {

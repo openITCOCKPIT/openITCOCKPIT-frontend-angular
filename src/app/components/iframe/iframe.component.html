@@ -1,4 +1,22 @@
 @if (trustedUrl) {
-    <iframe [src]="trustedUrl" style="width: 100%;" [style.height]="height()"
-            frameborder="0"></iframe>
+    <ng-container *transloco="let t">
+        <div class="iframe-container" [style.height]="height()">
+            <div class="iframe-loader-overlay"
+                 [class.dark-theme]="isDarkTheme"
+                 [class.is-hidden]="!isFrameLoading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">
+                        {{ t('Loading...') }}
+                    </span>
+                </div>
+            </div>
+
+            <iframe
+                    [src]="trustedUrl"
+                    [class.is-ready]="!isFrameLoading"
+                    (load)="onFrameLoad()"
+                    frameborder="0">
+            </iframe>
+        </div>
+    </ng-container>
 }

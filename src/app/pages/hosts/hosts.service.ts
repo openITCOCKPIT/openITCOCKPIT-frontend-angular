@@ -581,7 +581,8 @@ export class HostsService {
                     uuid: uuid,
                     from: selectedGrafanaTimerange,
                     refresh: selectedGrafanaAutorefresh,
-                    theme: theme
+                    theme: theme,
+                    disableGlobalLoader: true
                 }
             })
             .pipe(
