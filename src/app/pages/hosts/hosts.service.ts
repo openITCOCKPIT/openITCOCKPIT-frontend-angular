@@ -572,7 +572,7 @@ export class HostsService {
             )
     }
 
-    public loadHostGrafanaIframeUrl(uuid: string, selectedGrafanaTimerange: string, selectedGrafanaAutorefresh: string): Observable<GrafanaIframeUrlForDatepicker> {
+    public loadHostGrafanaIframeUrl(uuid: string, selectedGrafanaTimerange: string, selectedGrafanaAutorefresh: string, theme: 'light' | 'dark'): Observable<GrafanaIframeUrlForDatepicker> {
         const proxyPath = this.proxyPath;
         return this
             .http.get<GrafanaIframeUrlForDatepicker>(`${proxyPath}/hosts/getGrafanaIframeUrlForDatepicker/.json`, {
@@ -580,7 +580,8 @@ export class HostsService {
                     angular: true,
                     uuid: uuid,
                     from: selectedGrafanaTimerange,
-                    refresh: selectedGrafanaAutorefresh
+                    refresh: selectedGrafanaAutorefresh,
+                    theme: theme
                 }
             })
             .pipe(

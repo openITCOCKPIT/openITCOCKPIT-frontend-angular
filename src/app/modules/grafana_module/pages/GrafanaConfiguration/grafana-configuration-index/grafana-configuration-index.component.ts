@@ -96,11 +96,6 @@ export class GrafanaConfigurationIndexComponent implements OnInit, OnDestroy {
     public hostgroups_excluded: SelectKeyValueWithDisabled[] = [];
     public errors: GenericValidationError | null = null;
 
-    public readonly dashboardStyles: SelectKeyValueString[] = [
-        {key: 'dark', value: this.TranslocoService.translate('dark')},
-        {key: 'light', value: this.TranslocoService.translate('light')},
-    ];
-
     public hasGrafanaConnectionError: boolean | null = null; // Null = not checked yet
 
     public grafanaErrors = {

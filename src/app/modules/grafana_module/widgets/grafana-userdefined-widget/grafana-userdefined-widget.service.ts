@@ -17,14 +17,15 @@ export class GrafanaUserdefinedWidgetService {
     constructor() {
     }
 
-    public loadWidgetConfig(widgetId: string): Observable<GrafanaUserdefinedWidgetConfigRootResponse> {
+    public loadWidgetConfig(widgetId: string, theme: 'light' | 'dark'): Observable<GrafanaUserdefinedWidgetConfigRootResponse> {
         const proxyPath = this.proxyPath;
 
 
         return this.http.get<GrafanaUserdefinedWidgetConfigRootResponse>(`${proxyPath}/grafana_module/grafana_userdashboards/grafanaWidget.json`, {
             params: {
                 angular: true,
-                widgetId: widgetId
+                widgetId: widgetId,
+                theme: theme
             }
         }).pipe(
             map(data => {
