@@ -10,6 +10,8 @@ import {
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
 import { AnimationEvent } from '@angular/animations';
 import { KtdGridLayout, KtdResizeEnd } from '@katoid/angular-grid-layout';
+import { distinctUntilChanged, skip } from 'rxjs';
+import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { GrafanaUserdefinedWidgetService } from './grafana-userdefined-widget.service';
 import { BaseWidgetComponent } from '../../../../pages/dashboards/widgets/base-widget/base-widget.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -47,10 +49,20 @@ export class GrafanaUserdefinedWidgetComponent extends BaseWidgetComponent imple
     public grafanaDashboards: SelectKeyValue[] = [];
 
     private readonly GrafanaUserdefinedWidgetService = inject(GrafanaUserdefinedWidgetService);
+    private readonly LayoutService = inject(LayoutService);
+
+    public constructor() {
+        super();
+
+        // Reload the iframe url, if the user switches the theme (light / dark)
+        this.subscriptions.add(this.LayoutService.theme$.pipe(skip(1), distinctUntilChanged()).subscribe(() => {
+            this.load();
+        }));
+    }
 
     public override load() {
         if (this.widget) {
-            this.GrafanaUserdefinedWidgetService.loadWidgetConfig(this.widget.id).subscribe((response) => {
+            this.GrafanaUserdefinedWidgetService.loadWidgetConfig(this.widget.id, this.LayoutService.getTheme()).subscribe((response) => {
                 this.grafana_userdashboard_id = response.grafana_userdashboard_id;
                 this.iframe_url = response.iframe_url;
                 this.cdr.markForCheck();

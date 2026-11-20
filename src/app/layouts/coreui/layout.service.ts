@@ -28,6 +28,10 @@ export class LayoutService {
     constructor() {
     }
 
+    public getTheme(): 'light' | 'dark' {
+        return this.theme$$.getValue();
+    }
+
     public setTheme(theme: 'light' | 'dark'): void {
         this.theme$$.next(theme);
 

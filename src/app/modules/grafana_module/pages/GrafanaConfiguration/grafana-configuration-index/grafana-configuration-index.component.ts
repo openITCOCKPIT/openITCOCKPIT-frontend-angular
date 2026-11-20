@@ -4,7 +4,7 @@ import { NotyService } from '../../../../../layouts/coreui/noty.service';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { GrafanaService } from '../../../grafana.service';
 import { GrafanaConfigurationPost } from '../../../grafana.interface';
-import { SelectKeyValueString, SelectKeyValueWithDisabled } from '../../../../../layouts/primeng/select.interface';
+import { SelectKeyValueWithDisabled } from '../../../../../layouts/primeng/select.interface';
 import {
     CardBodyComponent,
     CardComponent,
@@ -30,7 +30,6 @@ import { FormFeedbackComponent } from '../../../../../layouts/coreui/form-feedba
 import { RequiredIconComponent } from '../../../../../components/required-icon/required-icon.component';
 import { GenericValidationError } from '../../../../../generic-responses';
 import { TrueFalseDirective } from '../../../../../directives/true-false.directive';
-import { SelectComponent } from '../../../../../layouts/primeng/select/select/select.component';
 import { MultiSelectComponent } from '../../../../../layouts/primeng/multi-select/multi-select/multi-select.component';
 import { OitcAlertComponent } from '../../../../../components/alert/alert.component';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -61,7 +60,6 @@ import { HttpErrorResponse } from '@angular/common/http';
         FormCheckInputDirective,
         FormCheckLabelDirective,
         TrueFalseDirective,
-        SelectComponent,
         MultiSelectComponent,
         OitcAlertComponent,
         TranslocoPipe
@@ -95,11 +93,6 @@ export class GrafanaConfigurationIndexComponent implements OnInit, OnDestroy {
     public hostgroups: SelectKeyValueWithDisabled[] = [];
     public hostgroups_excluded: SelectKeyValueWithDisabled[] = [];
     public errors: GenericValidationError | null = null;
-
-    public readonly dashboardStyles: SelectKeyValueString[] = [
-        {key: 'dark', value: this.TranslocoService.translate('dark')},
-        {key: 'light', value: this.TranslocoService.translate('light')},
-    ];
 
     public hasGrafanaConnectionError: boolean | null = null; // Null = not checked yet
 
