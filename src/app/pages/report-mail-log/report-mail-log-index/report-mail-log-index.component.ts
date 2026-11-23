@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import {
+    BadgeComponent,
     CardBodyComponent,
     CardComponent,
     CardHeaderComponent,
@@ -49,6 +50,7 @@ import {
 @Component({
     selector: 'oitc-report-mail-log-index',
     imports: [
+        BadgeComponent,
         CardBodyComponent,
         CardComponent,
         CardHeaderComponent,

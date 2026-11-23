@@ -160,8 +160,11 @@
                             <th scope="col" mat-sort-header="ReportMailLog.send_time">
                                 {{ t('Send time') }}
                             </th>
+                            <th scope="col" mat-sort-header="ReportMailLog.has_been_sent" class="col-1">
+                                {{ t('Has been sent') }}
+                            </th>
                             <th scope="col">
-                                {{ t('Message') }}
+                                {{ t('Error message') }}
                             </th>
                         </tr>
                         </thead>
@@ -198,10 +201,22 @@
                                     <td class="text-nowrap">
                                         {{ logEntry.send_time }}
                                     </td>
-                                    <td class="word-break"
-                                        [class.text-success]="logEntry.has_been_sent"
-                                        [class.text-danger]="!logEntry.has_been_sent">
-                                        {{ logEntry.message }}
+                                    <td class="text-center">
+                                        @if (logEntry.has_been_sent) {
+                                            <c-badge color="success">
+                                                {{ t('Yes') }}
+                                            </c-badge>
+                                        } @else {
+                                            <c-badge color="danger">
+                                                {{ t('No') }}
+                                            </c-badge>
+                                        }
+                                    </td>
+                                    <td class="word-break text-danger">
+                                        <!-- Only errors are logged. Older entries may still contain an info text for sent emails -->
+                                        @if (!logEntry.has_been_sent) {
+                                            {{ logEntry.message }}
+                                        }
                                     </td>
                                 </tr>
                             }

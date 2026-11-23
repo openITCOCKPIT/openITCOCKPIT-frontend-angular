@@ -53,7 +53,7 @@ export interface ReportMailLogIndexEntry {
     recipients: ReportMailLogRecipient[]
     subject: string
     has_been_sent: boolean
-    message: string | null // Error message if not sent, otherwise info by which mail system the email was accepted
+    message: string | null // Error message if not sent (older entries may contain an info text for sent emails)
     send_time: string
     report_exists: boolean // false if the report has been deleted in the meantime
     allowEdit: boolean // Report exists and the user has write permissions to its container

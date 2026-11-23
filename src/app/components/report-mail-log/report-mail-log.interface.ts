@@ -51,7 +51,7 @@ export interface ReportMailLogEntry {
     recipients: ReportMailLogRecipient[]
     subject: string
     has_been_sent: boolean
-    message: string | null // Error message if not sent, otherwise info by which mail system the email was accepted
+    message: string | null // Error message if not sent (older entries may contain an info text for sent emails)
     report_start: string | null
     report_end: string | null
     send_time: string

@@ -18,7 +18,7 @@
                     {{ t('Has been sent') }}
                 </th>
                 <th scope="col">
-                    {{ t('Message') }}
+                    {{ t('Error message') }}
                 </th>
             </tr>
             </thead>
@@ -50,10 +50,11 @@
                                 </c-badge>
                             }
                         </td>
-                        <td class="word-break"
-                            [class.text-success]="logEntry.has_been_sent"
-                            [class.text-danger]="!logEntry.has_been_sent">
-                            {{ logEntry.message }}
+                        <td class="word-break text-danger">
+                            <!-- Only errors are logged. Older entries may still contain an info text for sent emails -->
+                            @if (!logEntry.has_been_sent) {
+                                {{ logEntry.message }}
+                            }
                         </td>
                     </tr>
                 }
