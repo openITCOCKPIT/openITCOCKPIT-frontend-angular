@@ -68,220 +68,216 @@
     <!-- End of life alerts -->
     @if (data && !data.result.data.isContainer) {
         <oitc-eol-alerts
-            [codename]="data.result.data.LsbRelease"
-            [phpversion]="data.result.data.php_version"></oitc-eol-alerts>
+                [codename]="data.result.data.LsbRelease"
+                [phpversion]="data.result.data.php_version"></oitc-eol-alerts>
     }
 
-    <!--- da list -->
+    <!-- Version status -->
+    <c-card class="mb-3 border-top-3" [class.border-top-success]="!newVersionAvailable"
+            [class.border-top-primary]="newVersionAvailable">
+        <c-card-header>
+            <h5 cCardTitle>
+                @if (newVersionAvailable && data.result.data.changelog.length > 0) {
+                    <fa-icon [icon]="['fas', 'rocket']" class="text-primary me-1"></fa-icon>
+                    {{ t('New version available!') }}
+                    <c-badge color="primary" class="ms-1">{{ data.result.data.changelog[0].Changelog.version }}</c-badge>
+                } @else {
+                    <fa-icon [icon]="['fas', 'circle-check']" class="text-success me-1"></fa-icon>
+                    {{ t('Your system is on the latest version!') }}
+                    @if (data.OPENITCOCKPIT_VERSION) {
+                        <c-badge color="secondary" class="ms-1">{{ data.OPENITCOCKPIT_VERSION }}</c-badge>
+                    }
+                }
+            </h5>
+        </c-card-header>
+        <c-card-body class="d-flex flex-wrap align-items-center gap-3">
+            @if (data.result.data.logoUrl) {
+                <img class="img-fluid" alt="Logo" [src]="data.result.data.logoUrl" style="max-height: 56px;">
+            }
+            <div class="flex-grow-1 text-body-secondary">
+                @if (newVersionAvailable) {
+                    {{ t('Please update your {0} installation to the latest version to get new features and latest security fixes.', {systemname: data.result.data.systemname}) }}
+                } @else if (data.OPENITCOCKPIT_VERSION) {
+                    {{ t('Installed version') }}: {{ data.OPENITCOCKPIT_VERSION }}
+                }
+            </div>
+        </c-card-body>
+        <c-card-footer class="text-end">
+            @if (newVersionAvailable) {
+                <a href="https://docs.openitcockpit.io/en/update/general/"
+                   target="_blank"
+                   class="btn btn-success ripple me-1">
+                    <fa-icon [icon]="['fas', 'rocket']"></fa-icon>
+                    {{ t('How to Update') }}
+                </a>
+            }
+            <button type="button" cButton color="secondary" variant="outline" class="ripple"
+                    (click)="openChangeLog()">
+                <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                {{ t('Changelog') }}
+            </button>
+        </c-card-footer>
+    </c-card>
+
+    <!-- Modules -->
     <c-card class="mb-3">
         <c-card-header>
             <h5 cCardTitle>
                 {{ t('Packagemanager') }}
+                <small class="text-body-secondary fw-normal ms-1">
+                    {{ visibleModules.length }} / {{ data.result.data.modules.length }}
+                </small>
             </h5>
         </c-card-header>
         <c-card-body>
-            <c-row [lg]="3">
 
-                <!-- No update available -->
-                @if (!newVersionAvailable) {
-                    <c-col>
-                        <c-card class="mb-3 mt-3">
-                            <c-card-header class="community-bg-header">
-                                <c-container>
-                                    <c-row>
-                                        <c-col>
-                                            <h4 class="text-white">
-                                                🥳
-                                                {{ t('Your system is on the latest version!') }}
-                                            </h4>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        @if (data.result.data.changelog.length > 0) {
-                                            <c-col
-                                                class="text-white text-end italic">
-                                                {{ data.OPENITCOCKPIT_VERSION }}
-                                            </c-col>
-                                        }
-                                    </c-row>
-                                </c-container>
-                            </c-card-header>
-                            <c-card-body class="packetManagerCardBody">
-                                <div>
-                                    <div class="text text-center">
-                                        <img class="img-fluid" alt="Logo" src="{{data.result.data.logoUrl}}"
-                                             style="max-height: 140px;">
-                                    </div>
-                                </div>
-                            </c-card-body>
-                            <c-card-footer class="text-end">
-                                <a class="btn btn-default ripple"
-                                   (click)="openChangeLog()">
-                                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
-                                    {{ t('Changelog') }}
-                                </a>
-                            </c-card-footer>
-                        </c-card>
-                    </c-col>
-                }
-
-                <!-- update available -->
-                @if (newVersionAvailable && data.result.data.changelog.length > 0) {
-                    <c-col>
-                        <c-card class="mb-3 mt-3">
-                            <c-card-header class="community-bg-header">
-                                <c-container>
-                                    <c-row class="row align-items-center">
-                                        <c-col>
-                                            <h4 class="text-white">
-                                                🎉
-                                                {{ t('New version available!') }}
-                                            </h4>
-                                        </c-col>
-                                    </c-row>
-                                    <c-row>
-                                        <c-col class="text-white text-end">
-                                            {{ data.result.data.changelog[0].Changelog.version }}
-                                        </c-col>
-                                    </c-row>
-                                </c-container>
-                            </c-card-header>
-                            <c-card-body class="packetManagerCardBody">
-                                {{ t('Please update your {0} installation to the latest version to get new features and latest security fixes.', {systemname: data.result.data.systemname}) }}
-                            </c-card-body>
-                            <c-card-footer class="text-end">
-                                <a href="https://docs.openitcockpit.io/en/update/general/"
-                                   target="_blank"
-                                   class="btn btn-success ripple">
-                                    <span class="btn-label">
-                                        <i class="fa fa-rocket"></i>
-                                    </span>
-                                    {{ t('How to Update') }}
-                                </a>
-                                <a class="btn btn-default ms-1 ripple"
-                                   (click)="openChangeLog()">
-                                    <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
-                                    {{ t('Changelog') }}
-                                </a>
-                            </c-card-footer>
-                        </c-card>
-                    </c-col>
-                }
-
-
-                <!-- packages -->
-                @if (data.result) {
-                    @for (module of data.result.data.modules; track module) {
-                        <c-col>
-                            <c-card class="mb-3 mt-3">
-                                <c-card-header
-                                    [ngClass]="{'enterprise-bg-header': module.Module.enterprise, 'community-bg-header': !module.Module.enterprise}"
-                                >
-                                    <c-container>
-                                        <c-row class="row align-items-center text-white">
-                                            <c-col>
-                                                <h4>
-                                                    {{ module.Module.name }}
-                                                </h4>
-                                            </c-col>
-                                        </c-row>
-                                        <c-row>
-                                            <c-col class="italic text-white">
-                                                @if (module.Module.enterprise) {
-                                                    <span>
-                                                        {{ t('Enterprise') }}
-                                                    </span>
-                                                }
-                                            </c-col>
-                                            <c-col class="italic text-end text-white">
-                                                {{ module.Module.author }}
-                                            </c-col>
-                                        </c-row>
-                                    </c-container>
-                                </c-card-header>
-                                <c-card-body class="packetManagerCardBody overflow-auto">
-                                    <div class="text">
-                                        {{ module.Module.description }}
-                                    </div>
-                                    <div class="padding-top-10">
-                                        <fa-icon [icon]="['fas', 'key']"/>
-                                        @if (module.Module.license) {
-                                            {{ module.Module.license }}
-                                        } @else if (module.Module.module_license?.name) {
-                                            {{ module.Module.module_license?.name }}
-                                        }
-
-                                    </div>
-                                    @if (module.Module.tags) {
-                                        <div>
-                                            <fa-icon [icon]="['fas', 'tags']"></fa-icon>
-                                            @for (tag of splitV3Tags(module.Module.tags); track tag) {
-                                                <c-badge
-                                                    color="secondary" class="sidebar-brand-full">
-                                                    {{ tag }}
-                                                </c-badge>
-                                            }
-                                        </div>
-                                    }
-                                </c-card-body>
-                                <c-card-footer class="text-end">
-                                    @if (module.Module.license_included) {
-                                        <div class="text-end">
-                                            @if (data.installedModules[module.Module.apt_name]) {
-                                                <button type="button"
-                                                        cButton
-                                                        [title]="'This module is already installed' | transloco"
-                                                        class="btn btn-success float-right ripple">
-                                                    <span class="btn-label">
-                                                        <fa-icon [icon]="['fas', 'check']"></fa-icon>
-                                                    </span>
-                                                    {{ t('Installed') }}
-                                                </button>
-                                            }
-                                            @if (!data.installedModules[module.Module.apt_name]) {
-                                                <c-button-group>
-                                                    <span cInputGroupText>
-                                                        <input cFormCheckInput
-                                                               type="checkbox"
-                                                               class="checkbox-lg custom-check-default"
-                                                               (click)="installPacket(module.Module.apt_name)"
-                                                               [(ngModel)]="modulesToCheckboxesInstall[module.Module.apt_name]"
-                                                        />
-                                                    </span>
-                                                    <button
-                                                        cButton
-                                                        type="button"
-                                                        class="btn btn-primary ripple"
-                                                        style="border-top-right-radius: 4px; border-bottom-right-radius: 4px;"
-                                                        (click)="installPacket(module.Module.apt_name)">
-                                                        {{ t('Install') }}
-                                                    </button>
-                                                </c-button-group>
-                                            }
-                                        </div>
-                                    }
-                                    @if (!module.Module.license_included) {
-                                        <div class="col-lg-12 padding-right-0">
-                                            <a
-                                                href="https://avendis.com/kontakt/"
-                                                target="_blank"
-                                                class="btn btn-primary float-right">
-                                                <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
-                                                {{ t('Request a quote') }}
-                                            </a>
-                                        </div>
-                                    }
-                                </c-card-footer>
-                            </c-card>
-                        </c-col>
-                    }
-                }
+            <!-- Toolbar -->
+            <c-row class="g-2 mb-3 align-items-center">
+                <c-col [md]="6" [xl]="4">
+                    <c-input-group>
+                        <span cInputGroupText>
+                            <fa-icon [icon]="['fas', 'search']"></fa-icon>
+                        </span>
+                        <input cFormControl
+                               type="search"
+                               [(ngModel)]="searchText"
+                               (ngModelChange)="applyFilter()"
+                               [placeholder]="t('Type to search')">
+                    </c-input-group>
+                </c-col>
+                <c-col md="auto">
+                    <c-button-group role="group">
+                        @for (option of filterOptions; track option.key) {
+                            <button type="button"
+                                    cButton
+                                    color="secondary"
+                                    variant="outline"
+                                    [active]="activeFilter === option.key"
+                                    (click)="setFilter(option.key)">
+                                {{ t(option.label) }}
+                                <c-badge color="secondary" class="ms-1">{{ filterCounts[option.key] }}</c-badge>
+                            </button>
+                        }
+                    </c-button-group>
+                </c-col>
             </c-row>
 
+            <c-row [xs]="1" [md]="2" [xl]="3" class="g-3">
+                @for (module of visibleModules; track module.Module.apt_name) {
+                    @let selected = !!modulesToCheckboxesInstall[module.Module.apt_name];
+                    <c-col>
+                        <c-card class="h-100 pm-module"
+                                [class.pm-module--enterprise]="module.Module.enterprise"
+                                [class.border-primary]="selected"
+                                [class.animatedcard]="module.Module.name === highlightedPacket">
+                            <c-card-header class="flex-column align-items-stretch">
+                                <div class="d-flex align-items-start justify-content-between gap-2">
+                                    <h5 cCardTitle class="mb-0 text-break" [id]="module.Module.name">
+                                        {{ module.Module.name }}
+                                    </h5>
+                                    <c-badge class="flex-shrink-0 bg-body-secondary text-body-secondary border">
+                                        {{ module.Module.enterprise ? t('Enterprise') : t('Community') }}
+                                    </c-badge>
+                                </div>
+                                <small class="text-body-secondary">{{ module.Module.author }}</small>
+                            </c-card-header>
 
+                            <c-card-body class="d-flex flex-column">
+                                <p cCardText class="pm-module__desc" [title]="module.Module.description">
+                                    {{ module.Module.description }}
+                                </p>
+
+                                <div class="mt-auto small text-body-secondary">
+                                    @if (module.Module.license || module.Module.module_license?.name) {
+                                        <div>
+                                            <fa-icon [icon]="['fas', 'key']" class="me-1"></fa-icon>
+                                            {{ module.Module.license || module.Module.module_license?.name }}
+                                        </div>
+                                    }
+                                    @if (module.Module.tags && module.Module.tags.length > 0) {
+                                        <div class="d-flex flex-wrap align-items-center gap-1 mt-2">
+                                            <fa-icon [icon]="['fas', 'tags']" class="me-1"></fa-icon>
+                                            @for (tag of splitV3Tags(module.Module.tags); track tag) {
+                                                <c-badge color="secondary">{{ tag }}</c-badge>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </c-card-body>
+
+                            <c-card-footer class="text-end">
+                                @if (isInstalled(module)) {
+                                    <button type="button"
+                                            cButton
+                                            size="sm"
+                                            color="success"
+                                            [title]="'This module is already installed' | transloco">
+                                        <fa-icon [icon]="['fas', 'check']"></fa-icon>
+                                        {{ t('Installed') }}
+                                    </button>
+                                } @else if (module.Module.license_included) {
+                                    <button type="button"
+                                            cButton
+                                            size="sm"
+                                            color="primary"
+                                            [variant]="selected ? undefined : 'outline'"
+                                            class="ripple"
+                                            [attr.aria-pressed]="selected"
+                                            (click)="toggleModule(module.Module.apt_name)">
+                                        <fa-icon [icon]="selected ? ['fas', 'square-check'] : ['far', 'square']"></fa-icon>
+                                        {{ selected ? t('Selected') : t('Install') }}
+                                    </button>
+                                } @else {
+                                    <a href="https://avendis.com/kontakt/"
+                                       target="_blank"
+                                       cButton
+                                       size="sm"
+                                       color="secondary"
+                                       variant="outline">
+                                        <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon>
+                                        {{ t('Request a quote') }}
+                                    </a>
+                                }
+                            </c-card-footer>
+                        </c-card>
+                    </c-col>
+                } @empty {
+                    <c-col class="w-100">
+                        <div class="text-center text-body-secondary py-5">
+                            <fa-icon [icon]="['fas', 'cubes']" size="2x" class="mb-2 d-block"></fa-icon>
+                            {{ t('No entries match the selection') }}
+                        </div>
+                    </c-col>
+                }
+            </c-row>
         </c-card-body>
     </c-card>
 
+    <!-- Selection bar -->
+    @if (selectedModules.length > 0) {
+        <c-card class="mb-3 shadow sticky-bottom">
+            <c-card-body class="d-flex align-items-center gap-3 py-2">
+                <fa-icon [icon]="['fas', 'cubes']"></fa-icon>
+                <span class="fw-semibold text-nowrap">
+                    {{ selectedModules.length }} {{ t('selected') }}
+                </span>
+                <span class="text-body-secondary text-truncate d-none d-md-inline">
+                    {{ selectedModules.join(', ') }}
+                </span>
+                <div class="ms-auto d-flex gap-2">
+                    <button type="button" cButton color="secondary" variant="ghost" size="sm"
+                            (click)="clearSelection()">
+                        {{ t('Reset') }}
+                    </button>
+                    <button type="button" cButton color="primary" size="sm" class="ripple text-nowrap"
+                            (click)="showInstallCommand()">
+                        <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
+                        {{ t('Install packages') }}
+                    </button>
+                </div>
+            </c-card-body>
+        </c-card>
+    }
 
     <!-- changelogModal -->
     <c-modal size="lg" id="changelogModal">
@@ -326,24 +322,18 @@
 
 
             @if (data.result && data.result.data.changelog.length > 0) {
-                <c-container>
-                    <c-row>
-                        <c-col>
-                            <h4>
-                                {{ t('Latest version') }}
-                                {{ data.result.data.changelog[0].Changelog.version }}
-                            </h4>
-                            <ul class="timeline">
-                                @for (record of data.result.data.changelog; track record) {
-                                    <li>
-                                        <span class="text-primary">{{ record.Changelog.version }}</span>
-                                        <p [innerHTML]="record.Changelog.changes | trustAsHtml"></p>
-                                    </li>
-                                }
-                            </ul>
-                        </c-col>
-                    </c-row>
-                </c-container>
+                <h4>
+                    {{ t('Latest version') }}
+                    {{ data.result.data.changelog[0].Changelog.version }}
+                </h4>
+                <ul class="timeline">
+                    @for (record of data.result.data.changelog; track record) {
+                        <li>
+                            <span class="text-primary">{{ record.Changelog.version }}</span>
+                            <p [innerHTML]="record.Changelog.changes | trustAsHtml"></p>
+                        </li>
+                    }
+                </ul>
             }
 
 
@@ -360,7 +350,7 @@
     <c-modal id="installPacketModal" size="lg">
         <c-modal-header>
             <h5>
-                <fa-icon [icon]="['fas', 'code-fork']"></fa-icon>
+                <fa-icon [icon]="['fas', 'terminal']"></fa-icon>
                 {{ t('Install packages') }}
             </h5>
         </c-modal-header>
@@ -374,9 +364,6 @@
             @if (data.result.data.isRhelBased) {
                 <oitc-console-copy [command]="rhelCommand"/>
             }
-
-            {{ t('To install two or more packages at once, close this window and select the next module you like to install. All selected modules will be added to the installation command.') }}
-
         </c-modal-body>
         <c-modal-footer>
             <button [cModalToggle]="'installPacketModal'" class="ripple" cButton color="secondary">

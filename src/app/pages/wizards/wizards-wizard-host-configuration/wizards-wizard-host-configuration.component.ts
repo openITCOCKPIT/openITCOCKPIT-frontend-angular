@@ -33,7 +33,7 @@ import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-lin
 import { PermissionsService } from '../../../permissions/permissions.service';
 import { AnimateCssService } from '../../../services/animate-css.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
-import { ValidateInputFromAngularPost, WizardElement, WizardsIndex } from '../wizards.interface';
+import { ValidateInputFromAngularPost, InstalledWizard, WizardsIndex } from '../wizards.interface';
 import { TemplateDiffComponent } from '../../../components/template-diff/template-diff.component';
 import { HosttemplatePost } from '../../hosttemplates/hosttemplates.interface';
 import { BackButtonDirective } from '../../../directives/back-button.directive';
@@ -86,7 +86,7 @@ export class WizardsWizardHostConfigurationComponent implements OnInit, OnDestro
     private readonly router = inject(Router);
 
     protected readonly PermissionsService: PermissionsService = inject(PermissionsService);
-    protected WizardElement: WizardElement = {} as WizardElement;
+    protected WizardElement: InstalledWizard = {} as InstalledWizard;
     protected hosttemplates: SelectKeyValue[] = [];
     protected hostgroups: SelectKeyValue[] = [];
     protected satellites: SelectKeyValue[] = [];
