@@ -11,14 +11,8 @@
                 <th scope="col">
                     {{ t('Recipients') }}
                 </th>
-                <th scope="col" mat-sort-header="ReportMailLog.subject">
-                    {{ t('Subject') }}
-                </th>
                 <th scope="col" mat-sort-header="ReportMailLog.report_start">
                     {{ t('Reporting period') }}
-                </th>
-                <th scope="col">
-                    {{ t('Attachments') }}
                 </th>
                 <th scope="col" mat-sort-header="ReportMailLog.has_been_sent" class="col-1">
                     {{ t('Has been sent') }}
@@ -63,26 +57,11 @@
                                 }
                             </ul>
                         </td>
-                        <td>
-                            {{ logEntry.subject }}
-                        </td>
                         <td class="text-nowrap">
                             @if (logEntry.report_start && logEntry.report_end) {
                                 {{ logEntry.report_start }}
                                 <br/>
                                 {{ logEntry.report_end }}
-                            }
-                        </td>
-                        <td>
-                            @if (logEntry.attachments && logEntry.attachments.length > 0) {
-                                <ul class="mb-0 ms-1 ps-2">
-                                    @for (attachment of logEntry.attachments; track $index) {
-                                        <li class="pb-1 word-break">
-                                            <fa-icon [icon]="['fas', 'paperclip']"></fa-icon>
-                                            {{ attachment }}
-                                        </li>
-                                    }
-                                </ul>
                             }
                         </td>
                         <td class="text-center">

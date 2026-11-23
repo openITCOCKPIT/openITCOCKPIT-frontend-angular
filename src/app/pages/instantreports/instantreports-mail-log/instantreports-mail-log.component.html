@@ -24,7 +24,7 @@
                 <h5 cCardTitle>
                     {{ t('Mail log') }}
                     <small class="fw-300">
-                        {{ mailLog.instantreport.name }}
+                        {{ t('Instant Report') }}: {{ mailLog.instantreport.name }}
                     </small>
                 </h5>
             }
@@ -111,22 +111,6 @@
                                        aria-label="MailLogRecipient"
                                        cFormControl
                                        name="MailLogRecipient"
-                                       oitcDebounce
-                                       type="text"
-                                />
-                            </c-input-group>
-                        </c-col>
-                        <c-col md="6" class="mb-2">
-                            <c-input-group>
-                                <span cInputGroupText>
-                                    <fa-icon [icon]="['fas', 'envelope']" class="px-2"></fa-icon>
-                                </span>
-                                <input (debouncedValue)="onFilterChange($event)"
-                                       [(ngModel)]="params['filter[ReportMailLog.subject]']"
-                                       [placeholder]="'Filter by subject' | transloco"
-                                       aria-label="MailLogSubject"
-                                       cFormControl
-                                       name="MailLogSubject"
                                        oitcDebounce
                                        type="text"
                                 />
