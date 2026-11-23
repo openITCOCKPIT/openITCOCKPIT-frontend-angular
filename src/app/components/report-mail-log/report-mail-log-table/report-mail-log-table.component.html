@@ -29,33 +29,8 @@
                             {{ logEntry.send_time }}
                         </td>
                         <td>
-                            <ul class="mb-0 ms-1 ps-2">
-                                @for (recipient of logEntry.recipients; track $index) {
-                                    <li class="pb-1">
-                                        @if (recipient.user_id && recipient.user_exists) {
-                                            <oitc-label-link
-                                                [objectId]="recipient.user_id"
-                                                [route]="'/users/edit'"
-                                                [permissions]="'users.edit'">
-                                                <fa-icon [icon]="['fas', 'user']"></fa-icon>
-                                                {{ recipient.name || recipient.email }}
-                                            </oitc-label-link>
-                                        } @else if (recipient.user_id) {
-                                            <span class="text-muted" [title]="'User has been deleted' | transloco">
-                                                <fa-icon [icon]="['fas', 'user-slash']"></fa-icon>
-                                                {{ recipient.name || recipient.email }}
-                                                <small>({{ t('deleted') }})</small>
-                                            </span>
-                                        } @else {
-                                            <fa-icon [icon]="['fas', 'at']"></fa-icon>
-                                            {{ recipient.name || recipient.email }}
-                                        }
-                                        @if (recipient.name) {
-                                            <small class="text-muted ms-1">&lt;{{ recipient.email }}&gt;</small>
-                                        }
-                                    </li>
-                                }
-                            </ul>
+                            <oitc-report-mail-log-recipients
+                                [recipients]="logEntry.recipients"></oitc-report-mail-log-recipients>
                         </td>
                         <td class="text-nowrap">
                             @if (logEntry.report_start && logEntry.report_end) {

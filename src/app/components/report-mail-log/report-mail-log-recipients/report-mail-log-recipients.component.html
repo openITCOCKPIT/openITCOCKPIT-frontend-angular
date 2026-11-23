@@ -1,0 +1,58 @@
+<ng-container *transloco="let t">
+    <ul class="mb-0 ms-1 ps-2">
+        @for (recipient of recipients(); track $index) {
+            <li class="pb-1">
+                @if (!recipient.is_visible) {
+                    <span class="text-muted fst-italic">
+                        <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+                        {{ t('Not allowed to see') }}
+                    </span>
+                } @else if (recipient.user_id && recipient.user_exists) {
+                    <oitc-label-link
+                        [objectId]="recipient.user_id"
+                        [route]="'/users/edit'"
+                        [permissions]="'users.edit'">
+                        <fa-icon [icon]="['fas', 'user']"></fa-icon>
+                        <ng-container *ngTemplateOutlet="displayName; context: {$implicit: recipient}"></ng-container>
+                    </oitc-label-link>
+                } @else if (recipient.user_id) {
+                    <span class="text-muted" [title]="'User has been deleted' | transloco">
+                        <fa-icon [icon]="['fas', 'user-slash']"></fa-icon>
+                        {{ recipient.name || recipient.email }}
+                        <small>({{ t('deleted') }})</small>
+                    </span>
+                } @else {
+                    <fa-icon [icon]="['fas', 'at']"></fa-icon>
+                    {{ recipient.name || recipient.email }}
+                }
+                @if (recipient.is_visible && recipient.name) {
+                    <small class="text-muted ms-1">&lt;<ng-container
+                        *ngTemplateOutlet="email; context: {$implicit: recipient}"></ng-container>&gt;</small>
+                }
+            </li>
+        }
+    </ul>
+
+    <!-- Name (or email, if there is no name), with the value at the time of sending struck through if it has changed -->
+    <ng-template #displayName let-recipient>
+        @if (recipient.name) {
+            @if (recipient.current_name) {
+                <s class="text-muted" [title]="'Name at the time of sending' | transloco">{{ recipient.name }}</s>
+                {{ recipient.current_name }}
+            } @else {
+                {{ recipient.name }}
+            }
+        } @else {
+            <ng-container *ngTemplateOutlet="email; context: {$implicit: recipient}"></ng-container>
+        }
+    </ng-template>
+
+    <ng-template #email let-recipient>
+        @if (recipient.current_email) {
+            <s [title]="'Email address at the time of sending' | transloco">{{ recipient.email }}</s>
+            {{ recipient.current_email }}
+        } @else {
+            {{ recipient.email }}
+        }
+    </ng-template>
+</ng-container>

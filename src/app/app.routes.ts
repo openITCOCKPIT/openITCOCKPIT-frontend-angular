@@ -258,6 +258,9 @@ const coreRoutes: Routes = [{
     path: 'eventlogs/index',
     loadComponent: () => import('./pages/eventlogs/eventlogs-index/eventlogs-index.component').then(m => m.EventlogsIndexComponent)
 }, {
+    path: 'report_mail_log/index',
+    loadComponent: () => import('./pages/report-mail-log/report-mail-log-index/report-mail-log-index.component').then(m => m.ReportMailLogIndexComponent)
+}, {
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {

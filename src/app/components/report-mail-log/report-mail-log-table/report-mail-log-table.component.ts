@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatSort, MatSortHeader, Sort, SortDirection } from '@angular/material/sort';
 import { BadgeComponent, ContainerComponent, TableDirective } from '@coreui/angular';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
-import { LabelLinkComponent } from '../../../layouts/coreui/label-link/label-link.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { NoRecordsComponent } from '../../../layouts/coreui/no-records/no-records.component';
 import { ReportMailLogEntry } from '../report-mail-log.interface';
+import {
+    ReportMailLogRecipientsComponent
+} from '../report-mail-log-recipients/report-mail-log-recipients.component';
 
 /**
  * Table of the central report mail log, shared by the mail log pages of all report types.
@@ -15,14 +16,12 @@ import { ReportMailLogEntry } from '../report-mail-log.interface';
     imports: [
         BadgeComponent,
         ContainerComponent,
-        FaIconComponent,
-        LabelLinkComponent,
         MatSort,
         MatSortHeader,
         NoRecordsComponent,
+        ReportMailLogRecipientsComponent,
         TableDirective,
-        TranslocoDirective,
-        TranslocoPipe
+        TranslocoDirective
     ],
     templateUrl: './report-mail-log-table.component.html',
     styleUrl: './report-mail-log-table.component.css',

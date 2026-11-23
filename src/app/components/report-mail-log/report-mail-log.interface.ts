@@ -35,8 +35,11 @@ export function getDefaultReportMailLogParams(): ReportMailLogParams {
 export interface ReportMailLogRecipient {
     user_id: number | null
     name?: string | null // Snapshot of "firstname lastname" at the time of sending (missing in older entries)
-    email: string
+    email: string | null // null if the recipient is not visible
+    current_name?: string | null // Set by the API: current name of the user, if it has changed since sending
+    current_email?: string | null // Set by the API: current email of the user, if it has changed since sending
     user_exists: boolean // Set by the API: false if the user has been deleted in the meantime
+    is_visible: boolean // Set by the API: false if the current user is not allowed to see this recipient (MY_RIGHTS)
 }
 
 export interface ReportMailLogEntry {
