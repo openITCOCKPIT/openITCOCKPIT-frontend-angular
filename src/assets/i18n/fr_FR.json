@@ -5411,5 +5411,22 @@
   "Sun": "Dim",
   "Notifications overview": "Aperçu des notifications",
   "GPUs": "GPU",
-  "GPU usage": "Utilisation des GPU"
+  "GPU usage": "Utilisation des GPU",
+  "AIX": "AIX",
+  "SRC subsystems": "Sous-systèmes SRC",
+  "Volume groups": "Groupes de volumes",
+  "Network adapters": "Adaptateurs réseau",
+  "Monitor LPAR processor usage (AIX only)": "Surveiller l'utilisation processeur de la LPAR (AIX uniquement)",
+  "Monitor SRC subsystems (AIX only)": "Surveiller les sous-systèmes SRC (AIX uniquement)",
+  "Monitor AIX error log (AIX only)": "Surveiller le journal d'erreurs AIX (AIX uniquement)",
+  "Monitor multipath disks (AIX only)": "Surveiller les disques multipath (AIX uniquement)",
+  "Monitor network adapters and EtherChannels (AIX only)": "Surveiller les adaptateurs réseau et EtherChannels (AIX uniquement)",
+  "Monitor paging spaces (AIX only)": "Surveiller les espaces de pagination (AIX uniquement)",
+  "Monitor PowerHA SystemMirror cluster (AIX only, requires root)": "Surveiller le cluster PowerHA SystemMirror (AIX uniquement, nécessite root)",
+  "Monitor sendmail mail queue (AIX only, requires root)": "Surveiller la file d'attente de sendmail (AIX uniquement, nécessite root)",
+  "Monitor LVM thin pools (Linux) and volume groups (AIX)": "Surveiller les thin pools LVM (Linux) et les groupes de volumes (AIX)",
+  "FreeBSD": "FreeBSD",
+  "Install the downloaded package as root:": "Installez le paquet téléchargé en tant que root :",
+  "Enable the agent at boot and start it:": "Activez l'agent au démarrage du système et démarrez-le :",
+  "The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.": "Le paquet enregistre l'agent comme sous-système du System Resource Controller (SRC) et le démarre, également au démarrage du système."
 }
