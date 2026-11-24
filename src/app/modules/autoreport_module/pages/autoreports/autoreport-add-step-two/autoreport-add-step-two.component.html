@@ -39,7 +39,7 @@
             <c-card-body>
                 <c-row class="m-0 text-center mb-3" style="min-height: 22px;">
                     <div
-                        class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
+                            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-success">
                         <span>
                             <!--<fa-icon [icon]="['fas', 'info-circle']"></fa-icon>-->
                             <c-badge color="secondary">1</c-badge>
@@ -49,7 +49,7 @@
                         </span>
                     </div>
                     <div
-                        class="col-xs-12 col-md-4 col-lg-3 wizard-bg-active d-inline-flex align-items-center justify-content-center wizard-active">
+                            class="col-xs-12 col-md-4 col-lg-3 wizard-bg-active d-inline-flex align-items-center justify-content-center wizard-active">
                         <span>
                             <c-badge color="secondary">2</c-badge>
                         </span>
@@ -58,7 +58,7 @@
                         </span>
                     </div>
                     <div
-                        class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right">
+                            class="col-xs-12 col-md-4 col-lg-2 wizard-bg-inactive d-inline-flex align-items-center justify-content-center wizard-border-right">
                         <span>
                             <c-badge color="secondary">3</c-badge>
                         </span>
@@ -102,15 +102,15 @@
                         <oitc-required-icon></oitc-required-icon>
                     </label>
                     <oitc-multi-select
-                        name="hosts"
-                        id="hosts"
-                        [(ngModel)]="selectedHostIds"
-                        optionValue="key"
-                        optionLabel="value"
-                        [searchCallback]="loadHosts"
-                        (onChange)="onHostChange($event)"
-                        [options]="hosts"
-                        oitcFormError [errors]="errors" errorField="report_send_interval">
+                            name="hosts"
+                            id="hosts"
+                            [(ngModel)]="selectedHostIds"
+                            optionValue="key"
+                            optionLabel="value"
+                            [searchCallback]="loadHosts"
+                            (onChange)="onHostChange($event)"
+                            [options]="hosts"
+                            oitcFormError [errors]="errors" errorField="report_send_interval">
                     </oitc-multi-select>
                     <oitc-form-feedback [errors]="errors" errorField="report_send_interval"></oitc-form-feedback>
                 </div>
@@ -138,10 +138,9 @@
                 </div>
                 <div>
                     @if (selectedHostIds.length > 0) {
-                        <table class="table-stripped" id="HostServicesSettings"
-                               style="width: 100%;">
+                        <table class="table table-sm table-striped w-100" id="HostServicesSettings">
                             <tr class="report-table-bordered">
-                                <th class="table-half-half-background col-md-4 padding-5">
+                                <th class="table-half-half-background col-md-4 col-lg-6 padding-5">
                                     <div class="half">{{ t('Host') }}</div>
                                     <div class="half">{{ t('Service') }}</div>
                                 </th>
@@ -170,49 +169,49 @@
                                 <td class="text-center">
                                     <c-form-check>
                                         <input
-                                            id="check_availibility"
-                                            name="check_availibility"
-                                            [(ngModel)]="defaultOptionsPercent"
-                                            (debouncedValue)="onDefaultOptionPercentChange($event)"
-                                            oitcDebounce
-                                            cFormCheckInput
-                                            class="checkbox-lg"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            type="checkbox"/>
+                                                id="check_availibility"
+                                                name="check_availibility"
+                                                [(ngModel)]="defaultOptionsPercent"
+                                                (debouncedValue)="onDefaultOptionPercentChange($event)"
+                                                oitcDebounce
+                                                cFormCheckInput
+                                                class="checkbox-lg"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                type="checkbox"/>
                                     </c-form-check>
                                 </td>
                                 <td class="text-center">
                                     <c-form-check>
                                         <input
-                                            id="check_minute"
-                                            name="check_minute"
-                                            [(ngModel)]="defaultOptionsMinute"
-                                            (debouncedValue)="onDefaultOptionMinuteChange($event)"
-                                            oitcDebounce
-                                            cFormCheckInput
-                                            class="checkbox-lg"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            type="checkbox"/>
+                                                id="check_minute"
+                                                name="check_minute"
+                                                [(ngModel)]="defaultOptionsMinute"
+                                                (debouncedValue)="onDefaultOptionMinuteChange($event)"
+                                                oitcDebounce
+                                                cFormCheckInput
+                                                class="checkbox-lg"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                type="checkbox"/>
                                     </c-form-check>
                                 </td>
                                 <td class="text-center">
                                     <c-form-check>
                                         <input
-                                            id="alias_graph"
-                                            name="alias_graph"
-                                            [(ngModel)]="defaultOptionsAliasGraph"
-                                            (debouncedValue)="onDefaultOptionAliasGraphChange($event)"
-                                            oitcDebounce
-                                            cFormCheckInput
-                                            class="checkbox-lg"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            type="checkbox"/>
+                                                id="alias_graph"
+                                                name="alias_graph"
+                                                [(ngModel)]="defaultOptionsAliasGraph"
+                                                (debouncedValue)="onDefaultOptionAliasGraphChange($event)"
+                                                oitcDebounce
+                                                cFormCheckInput
+                                                class="checkbox-lg"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                type="checkbox"/>
                                     </c-form-check>
                                 </td>
                                 <td class="text-center">
@@ -249,89 +248,89 @@
                                 <td class="text-center">
                                     <c-form-check>
                                         <input
-                                            id="all_failures"
-                                            name="all_failures"
-                                            [(ngModel)]="defaultOptionsAllfailures"
-                                            (debouncedValue)="onDefaultOptionsAllfailuresChange($event)"
-                                            oitcDebounce
-                                            cFormCheckInput
-                                            class="checkbox-lg"
-                                            trueFalseValue
-                                            [falseValue]="0"
-                                            [trueValue]="1"
-                                            type="checkbox"/>
+                                                id="all_failures"
+                                                name="all_failures"
+                                                [(ngModel)]="defaultOptionsAllfailures"
+                                                (debouncedValue)="onDefaultOptionsAllfailuresChange($event)"
+                                                oitcDebounce
+                                                cFormCheckInput
+                                                class="checkbox-lg"
+                                                trueFalseValue
+                                                [falseValue]="0"
+                                                [trueValue]="1"
+                                                type="checkbox"/>
                                     </c-form-check>
                                 </td>
                             </tr>
                             @for (host of hostsWithServices; track host) {
                                 @if (post.Autoreport.hosts[host.id]) {
                                     <tr class="host_row report-table-bordered">
-                                        <td class="host_option ps-1">{{ host.name }}</td>
+                                        <td class="host_option ps-1 word-break">{{ host.name }}</td>
                                         <td class="text-center">
                                             <div>
                                                 <input
-                                                    [id]="'host_percent_' + host.id"
-                                                    [name]="'host_percent_' + host.id"
-                                                    [(ngModel)]="post.Autoreport.hosts[host.id].percent"
-                                                    cFormCheckInput
-                                                    class="checkbox-lg"
-                                                    trueFalseValue
-                                                    [falseValue]="0"
-                                                    [trueValue]="1"
-                                                    type="checkbox"/>
+                                                        [id]="'host_percent_' + host.id"
+                                                        [name]="'host_percent_' + host.id"
+                                                        [(ngModel)]="post.Autoreport.hosts[host.id].percent"
+                                                        cFormCheckInput
+                                                        class="checkbox-lg"
+                                                        trueFalseValue
+                                                        [falseValue]="0"
+                                                        [trueValue]="1"
+                                                        type="checkbox"/>
                                             </div>
                                         </td>
                                         <td class="text-center">
                                             <div>
                                                 <input
-                                                    [id]="'host_minute_' + host.id"
-                                                    [name]="'host_minute_' + host.id"
-                                                    [(ngModel)]="post.Autoreport.hosts[host.id].minute"
-                                                    cFormCheckInput
-                                                    class="checkbox-lg"
-                                                    trueFalseValue
-                                                    [falseValue]="0"
-                                                    [trueValue]="1"
-                                                    type="checkbox"/>
+                                                        [id]="'host_minute_' + host.id"
+                                                        [name]="'host_minute_' + host.id"
+                                                        [(ngModel)]="post.Autoreport.hosts[host.id].minute"
+                                                        cFormCheckInput
+                                                        class="checkbox-lg"
+                                                        trueFalseValue
+                                                        [falseValue]="0"
+                                                        [trueValue]="1"
+                                                        type="checkbox"/>
                                             </div>
                                         </td>
                                         <td class="host_option text-center">
                                             <div>
                                                 <input
-                                                    [id]="'host_alias_' + host.id"
-                                                    [name]="'host_alias_' + host.id"
-                                                    [(ngModel)]="post.Autoreport.hosts[host.id].alias"
-                                                    cFormCheckInput
-                                                    class="checkbox-lg"
-                                                    trueFalseValue
-                                                    [falseValue]="0"
-                                                    [trueValue]="1"
-                                                    type="checkbox"/>
+                                                        [id]="'host_alias_' + host.id"
+                                                        [name]="'host_alias_' + host.id"
+                                                        [(ngModel)]="post.Autoreport.hosts[host.id].alias"
+                                                        cFormCheckInput
+                                                        class="checkbox-lg"
+                                                        trueFalseValue
+                                                        [falseValue]="0"
+                                                        [trueValue]="1"
+                                                        type="checkbox"/>
                                             </div>
                                         </td>
                                         <td class="text-center">
                                         </td>
                                         <td class="text-center">
                                             <input
-                                                cFormControl
-                                                [id]="'host_outage_' + host.id"
-                                                [name]="'host_outage_' + host.id"
-                                                [(ngModel)]="post.Autoreport.hosts[host.id].outage"
-                                                min="0"
-                                                type="number">
+                                                    cFormControl
+                                                    [id]="'host_outage_' + host.id"
+                                                    [name]="'host_outage_' + host.id"
+                                                    [(ngModel)]="post.Autoreport.hosts[host.id].outage"
+                                                    min="0"
+                                                    type="number">
                                         </td>
                                         <td class="text-center">
                                             <div>
                                                 <input
-                                                    [id]="'host_failures_' + host.id"
-                                                    [name]="'host_failures_' + host.id"
-                                                    [(ngModel)]="post.Autoreport.hosts[host.id].allfailures"
-                                                    cFormCheckInput
-                                                    class="checkbox-lg"
-                                                    trueFalseValue
-                                                    [falseValue]="0"
-                                                    [trueValue]="1"
-                                                    type="checkbox"/>
+                                                        [id]="'host_failures_' + host.id"
+                                                        [name]="'host_failures_' + host.id"
+                                                        [(ngModel)]="post.Autoreport.hosts[host.id].allfailures"
+                                                        cFormCheckInput
+                                                        class="checkbox-lg"
+                                                        trueFalseValue
+                                                        [falseValue]="0"
+                                                        [trueValue]="1"
+                                                        type="checkbox"/>
                                             </div>
                                         </td>
                                     </tr>
@@ -344,43 +343,43 @@
                                             <td class="text-center">
                                                 <div>
                                                     <input
-                                                        [id]="'service_percent_' + service.id"
-                                                        [name]="'service_percent_' + service.id"
-                                                        [(ngModel)]="post.Autoreport.services[service.id].percent"
-                                                        cFormCheckInput
-                                                        class="checkbox-lg"
-                                                        trueFalseValue
-                                                        [falseValue]="0"
-                                                        [trueValue]="1"
-                                                        type="checkbox"/>
+                                                            [id]="'service_percent_' + service.id"
+                                                            [name]="'service_percent_' + service.id"
+                                                            [(ngModel)]="post.Autoreport.services[service.id].percent"
+                                                            cFormCheckInput
+                                                            class="checkbox-lg"
+                                                            trueFalseValue
+                                                            [falseValue]="0"
+                                                            [trueValue]="1"
+                                                            type="checkbox"/>
                                                 </div>
                                             </td>
                                             <td class="text-center">
                                                 <div>
                                                     <input
-                                                        [id]="'service_minute_' + service.id"
-                                                        [name]="'service_minute_' + service.id"
-                                                        [(ngModel)]="post.Autoreport.services[service.id].minute"
-                                                        cFormCheckInput
-                                                        class="checkbox-lg"
-                                                        trueFalseValue
-                                                        [falseValue]="0"
-                                                        [trueValue]="1"
-                                                        type="checkbox"/>
+                                                            [id]="'service_minute_' + service.id"
+                                                            [name]="'service_minute_' + service.id"
+                                                            [(ngModel)]="post.Autoreport.services[service.id].minute"
+                                                            cFormCheckInput
+                                                            class="checkbox-lg"
+                                                            trueFalseValue
+                                                            [falseValue]="0"
+                                                            [trueValue]="1"
+                                                            type="checkbox"/>
                                                 </div>
                                             </td>
                                             <td class="service_option text-center">
                                                 <div>
                                                     <input
-                                                        [id]="'service_graph_' + service.id"
-                                                        [name]="'service_graph_' + service.id"
-                                                        [(ngModel)]="post.Autoreport.services[service.id].graph"
-                                                        cFormCheckInput
-                                                        class="checkbox-lg"
-                                                        trueFalseValue
-                                                        [falseValue]="0"
-                                                        [trueValue]="1"
-                                                        type="checkbox"/>
+                                                            [id]="'service_graph_' + service.id"
+                                                            [name]="'service_graph_' + service.id"
+                                                            [(ngModel)]="post.Autoreport.services[service.id].graph"
+                                                            cFormCheckInput
+                                                            class="checkbox-lg"
+                                                            trueFalseValue
+                                                            [falseValue]="0"
+                                                            [trueValue]="1"
+                                                            type="checkbox"/>
                                                 </div>
                                             </td>
                                             <td class="text-center">
@@ -413,15 +412,15 @@
                                             <td class="text-center">
                                                 <div>
                                                     <input
-                                                        [id]="'service_failure_' + service.id"
-                                                        [name]="'service_failure_' + service.id"
-                                                        [(ngModel)]="post.Autoreport.services[service.id].allfailures"
-                                                        cFormCheckInput
-                                                        class="checkbox-lg"
-                                                        trueFalseValue
-                                                        [falseValue]="0"
-                                                        [trueValue]="1"
-                                                        type="checkbox"/>
+                                                            [id]="'service_failure_' + service.id"
+                                                            [name]="'service_failure_' + service.id"
+                                                            [(ngModel)]="post.Autoreport.services[service.id].allfailures"
+                                                            cFormCheckInput
+                                                            class="checkbox-lg"
+                                                            trueFalseValue
+                                                            [falseValue]="0"
+                                                            [trueValue]="1"
+                                                            type="checkbox"/>
                                                 </div>
                                             </td>
                                         </tr>

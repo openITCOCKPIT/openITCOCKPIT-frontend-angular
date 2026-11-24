@@ -18,8 +18,9 @@ import { Observable, Subscription } from 'rxjs';
 import { PopoverGraphService } from '../../../../components/popover-graph/popover-graph.service';
 import { TimezoneObject } from '../../timezone.interface';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { EChartsOption, VisualMapComponentOption } from 'echarts';
+import { EChartsOption, VisualMapComponentOption, YAXisComponentOption } from 'echarts';
 import * as echarts from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
 
 import {
     AlertComponent,
@@ -45,7 +46,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectComponent } from '../../../../layouts/primeng/select/select/select.component';
 import { SelectKeyValue, SelectKeyValueString } from '../../../../layouts/primeng/select.interface';
 
-import 'echarts/theme/dark.js';
+import '../../../../components/charts/echarts-dark-theme';
 import { ScaleTypes } from '../../../../components/popover-graph/scale-types';
 import { DateTime } from "luxon";
 import { LocalStorageService } from '../../../../services/local-storage.service';
@@ -53,6 +54,7 @@ import { GenericUnixtimerange } from '../../../../generic.interfaces';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 
 import {
+    DatasetComponent,
     DataZoomComponent,
     GridComponent,
     LegendComponent,
@@ -63,7 +65,7 @@ import {
 } from 'echarts/components';
 import { BarChart, LineChart } from 'echarts/charts';
 
-echarts.use([BarChart, LineChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, DataZoomComponent]);
+echarts.use([BarChart, LineChart, DatasetComponent, GridComponent, LegendComponent, TitleComponent, TooltipComponent, ToolboxComponent, VisualMapComponent, DataZoomComponent, CanvasRenderer]);
 
 interface ServiceBrowserChartConfig {
     showDataPoint: boolean,
@@ -766,6 +768,15 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
         const axisMin = this.overviewTimeRange.start * 1000;
         const axisMax = this.overviewTimeRange.end * 1000;
 
+        const yAxisOptions: YAXisComponentOption = {type: 'value', show: false, scale: true};
+        if (gauge.datasource.min !== null) {
+            yAxisOptions.min = Number(gauge.datasource.min);
+        }
+        if (gauge.datasource.max !== null) {
+            yAxisOptions.max = Number(gauge.datasource.max);
+        }
+
+
         this.chartOption = {
             animation: false,
             tooltip: {show: false},
@@ -777,7 +788,7 @@ export class ServicesBrowserChartComponent implements OnInit, OnDestroy {
                 {type: 'time', show: false, min: axisMin, max: axisMax}, // [Axis 0]
                 {type: 'time', show: false, min: axisMin, max: axisMax}  // [Axis 1]
             ],
-            yAxis: {type: 'value', show: false, scale: true},
+            yAxis: yAxisOptions,
             grid: {show: false, left: 80, right: 50, top: 3, height: 45},
             dataZoom: [
                 {

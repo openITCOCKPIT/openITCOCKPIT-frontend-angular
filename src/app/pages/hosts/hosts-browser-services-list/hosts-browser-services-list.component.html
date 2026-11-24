@@ -99,7 +99,7 @@
                     <oitc-table-loader></oitc-table-loader>
                 }
                 @if (services) {
-                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">
                         <thead>
@@ -348,7 +348,7 @@
                                     </td>
                                     <td>{{ service.Servicestatus.last_state_change }}</td>
                                     <td>
-                                        <div [innerHTML]="service.Servicestatus.outputHtml"></div>
+                                        <div class="font-monospace font-xs" [innerHTML]="service.Servicestatus.outputHtml"></div>
                                     </td>
                                     <td class="width-50">
                                         <oitc-actions-button [permission]="'services.edit'"
@@ -510,7 +510,7 @@
                     <oitc-table-loader></oitc-table-loader>
                 }
                 @if (notMonitoredServices) {
-                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small
                            matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -654,7 +654,7 @@
                     <oitc-table-loader></oitc-table-loader>
                 }
                 @if (disabledServices) {
-                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small
                            matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">
@@ -798,7 +798,7 @@
                     <oitc-table-loader></oitc-table-loader>
                 }
                 @if (deletedServices) {
-                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small
                            matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="params.sort" [matSortDirection]="params.direction">

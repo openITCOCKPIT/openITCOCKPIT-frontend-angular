@@ -34,6 +34,7 @@ import { TableLoaderComponent } from '../../../layouts/primeng/loading/table-loa
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { TrueFalseDirective } from '../../../directives/true-false.directive';
 import { TrustAsHtmlPipe } from '../../../pipes/trust-as-html.pipe';
+import { ServiceStatusNamePipe } from '../../../pipes/service-status-name.pipe';
 import { XsButtonDirective } from '../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import {
     ServiceBrowserMenuConfig,
@@ -87,6 +88,7 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         TranslocoPipe,
         TrueFalseDirective,
         TrustAsHtmlPipe,
+        ServiceStatusNamePipe,
         XsButtonDirective,
         ServicesBrowserMenuComponent,
         ServicestatusSimpleIconComponent,

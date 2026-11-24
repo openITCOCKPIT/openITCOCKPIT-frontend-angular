@@ -21,8 +21,8 @@
                 <!-- Recursive component -->
                 @if (nestedSnapshots.length > 0) {
                     <oitc-proxmox-snapshot-nest
-                        [nestedSnapshots]="nestedSnapshots"
-                        [containerTemplate]="containerTemplate">
+                            [nestedSnapshots]="nestedSnapshots"
+                            [containerTemplate]="containerTemplate">
                     </oitc-proxmox-snapshot-nest>
                 }
 
@@ -31,8 +31,8 @@
                     <div class="dd-handle p-1">
                         @if (snapshot.children.length > 0) {
                             <button
-                                type="button" class="dd-collapse-button"
-                                (click)="component.toggleCollapsed(index)">
+                                    type="button" class="dd-collapse-button"
+                                    (click)="component.toggleCollapsed(index)">
                                 @if (!collapsed[index]) {
                                     <i class="fas fa-angle-down"></i>
                                 }
@@ -69,21 +69,25 @@
                         <!-- Buttons -->
                         @if (allowEdit() && !snapshot.isCurrent && snapshot.name) {
                             <!-- only show buttons for not "current" -->
-                            <button type="button"
-                                    class="btn btn-link text-body p-1 text-decoration-none ripple"
-                                    (click)="rollbackSnapshot(snapshot.name)">
-                                <i class="fa-solid fa-arrow-rotate-left text-secondary"></i>
-                                {{ t('Rollback') }}
-                            </button>
+                            @if (( this.PermissionsService.hasPermissionObservable(['ImportModule', 'proxmox', 'rollback_snapshot'])|async )) {
+                                <button type="button"
+                                        class="btn btn-link text-body p-1 text-decoration-none ripple"
+                                        (click)="rollbackSnapshot(snapshot.name)">
+                                    <i class="fa-solid fa-arrow-rotate-left text-secondary"></i>
+                                    {{ t('Rollback') }}
+                                </button>
+                            }
 
-                            <button type="button"
-                                    class="btn btn-link text-body text-decoration-none p-1 ripple"
-                                    (click)="deleteSnapshot(snapshot.name)">
-                                <span class="text-danger">
-                                    <i class="fas fa-trash"></i>
-                                    {{ t('Delete') }}
-                                </span>
-                            </button>
+                            @if (( this.PermissionsService.hasPermissionObservable(['ImportModule', 'proxmox', 'delete_snapshot'])|async )) {
+                                <button type="button"
+                                        class="btn btn-link text-body text-decoration-none p-1 ripple"
+                                        (click)="deleteSnapshot(snapshot.name)">
+                                    <span class="text-danger">
+                                        <i class="fas fa-trash"></i>
+                                        {{ t('Delete') }}
+                                    </span>
+                                </button>
+                            }
                         }
                         <!-- End Buttons -->
 
@@ -114,12 +118,12 @@
 
     @if (vmid() && nodeName()) {
         <oitc-proxmox-create-snapshot-modal
-            [hostId]="hostId()"
-            [vmid]="vmid()"
-            [nodeName]="nodeName()"
-            [status]="status()"
-            [virtType]="virtType()"
-            (onFinish)="loadSnapshots()"></oitc-proxmox-create-snapshot-modal>
+                [hostId]="hostId()"
+                [vmid]="vmid()"
+                [nodeName]="nodeName()"
+                [status]="status()"
+                [virtType]="virtType()"
+                (onFinish)="loadSnapshots()"></oitc-proxmox-create-snapshot-modal>
     }
 
 </ng-container>

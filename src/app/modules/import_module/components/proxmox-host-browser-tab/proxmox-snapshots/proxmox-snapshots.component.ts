@@ -15,10 +15,10 @@ import {
 import { ContainerTypesEnum } from '../../../../../pages/changelogs/object-types.enum';
 import { ProxmoxSnapshotNestComponent } from './proxmox-snapshot-nest/proxmox-snapshot-nest.component';
 import { ConfirmModalService } from '../../../../../layouts/coreui/confirm-modal/confirm-modal.service';
-import {
-    ProxmoxCreateSnapshotModalComponent
-} from '../proxmox-create-snapshot-modal/proxmox-create-snapshot-modal.component';
+import { ProxmoxCreateSnapshotModalComponent } from '../proxmox-create-snapshot-modal/proxmox-create-snapshot-modal.component';
 import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
+import { AsyncPipe } from '@angular/common';
+import { PermissionsService } from '../../../../../permissions/permissions.service';
 
 @Component({
     selector: 'oitc-proxmox-snapshots',
@@ -30,7 +30,8 @@ import { XsButtonDirective } from '../../../../../layouts/coreui/xsbutton-direct
         TranslocoPipe,
         TooltipDirective,
         ProxmoxCreateSnapshotModalComponent,
-        XsButtonDirective
+        XsButtonDirective,
+        AsyncPipe
     ],
     templateUrl: './proxmox-snapshots.component.html',
     styleUrl: './proxmox-snapshots.component.css',
@@ -56,6 +57,8 @@ export class ProxmoxSnapshotsComponent implements OnDestroy {
     private readonly ConfirmModalService = inject(ConfirmModalService);
     private readonly modalService = inject(ModalService);
     private readonly notyService = inject(NotyService);
+
+    protected readonly PermissionsService: PermissionsService = inject(PermissionsService);
 
     public constructor() {
         effect(() => {

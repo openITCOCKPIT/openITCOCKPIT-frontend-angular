@@ -9,14 +9,26 @@ import {
     OnDestroy
 } from '@angular/core';
 import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import * as echarts from 'echarts';
+import * as echarts from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import '../../../../../components/charts/echarts-dark-theme';
 import { EChartsOption } from 'echarts';
+import {
+    DataZoomComponent,
+    GridComponent,
+    LegendComponent,
+    TitleComponent,
+    TooltipComponent
+} from 'echarts/components';
+import { BarChart } from 'echarts/charts';
 import { PieChartMetric } from '../../../../../components/charts/charts.interface';
 import { Subscription } from 'rxjs';
 import { LayoutService } from '../../../../../layouts/coreui/layout.service';
 import { CustomalertStateOverview } from '../../../pages/customalert-rules/customalert-rules.interface';
 import { TranslocoService } from '@jsverse/transloco';
 import { CustomAlertsState } from '../../../pages/customalerts/customalerts.interface';
+
+echarts.use([BarChart, GridComponent, LegendComponent, TitleComponent, TooltipComponent, DataZoomComponent, CanvasRenderer]);
 
 @Component({
     selector: 'oitc-customalerts-stacked-bar-echart',

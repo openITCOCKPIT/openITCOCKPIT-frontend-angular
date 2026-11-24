@@ -13,7 +13,7 @@
             <li class="breadcrumb-item">
                 <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'index']"
                    [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'index']">
-                    <fa-icon [icon]="['fas', 'user-secret']"></fa-icon>
+                    <fa-icon [icon]="['fas', 'sitemap']"></fa-icon>
                     {{ t('Event Correlations') }}
                 </a>
             </li>
@@ -62,7 +62,7 @@
                 <c-container
                     [fluid]="true">
                     @if (usedBy) {
-                        <table bordered cTable class="mt-2 mb-0" hover striped>
+                        <table bordered cTable class="mt-2 mb-0" hover striped small>
                             <thead>
                             <tr>
                                 <th scope="col">

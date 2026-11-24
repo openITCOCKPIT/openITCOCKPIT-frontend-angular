@@ -33,13 +33,13 @@
 
         <c-card-body class="p-0">
             <oitc-agentconnector-wizard-progressbar
-                [stepCount]="3"
-                [step]="AgentconnectorWizardStepsEnum.InstallAgent"
-                [mode]="agentModeForProgress"
-                [disableBack]="false"
-                (goBackEvent)="onBackButtonClick()"
-                [disableNext]="false"
-                (goNextEvent)="onNextButtonClick()"
+                    [stepCount]="3"
+                    [step]="AgentconnectorWizardStepsEnum.InstallAgent"
+                    [mode]="agentModeForProgress"
+                    [disableBack]="false"
+                    (goBackEvent)="onBackButtonClick()"
+                    [disableNext]="false"
+                    (goNextEvent)="onNextButtonClick()"
             ></oitc-agentconnector-wizard-progressbar>
         </c-card-body>
 
@@ -83,6 +83,25 @@
                                                 </a>
                                             </div>
                                         </div>
+                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd) {
+                                            <p class="mb-2">{{ t('Install the downloaded package as root:') }}</p>
+                                            <p>
+                                                <code>pkg add openitcockpit-agent-&lt;version&gt;.freebsd-&lt;architecture&gt;.txz</code>
+                                            </p>
+                                            <p class="mb-2">{{ t('Enable the agent at boot and start it:') }}</p>
+                                            <p>
+                                                <code>sysrc openitcockpit_agent_enable=YES</code>
+                                                <br><br>
+                                                <code>service openitcockpit_agent start</code>
+                                            </p>
+                                        }
+                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
+                                            <p class="mb-2">{{ t('Install the downloaded package as root:') }}</p>
+                                            <p>
+                                                <code>rpm -ivh openitcockpit-agent-&lt;version&gt;-1.aix.ppc.rpm</code>
+                                            </p>
+                                            <p>{{ t('The package registers the agent as a subsystem of the System Resource Controller (SRC) and starts it, also at boot.') }}</p>
+                                        }
                                     </div>
                                 </fieldset>
                             </c-card-body>
@@ -107,13 +126,11 @@
                                         @if (config.string.operating_system === AgentconnectorOperatingSystems.Windows) {
                                             <code>{{ t('C:\\Program Files\\openitcockpit\\openitcockpit-agent\\config.ini') }}</code>
                                         }
-                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux) {
-                                            <code
-                                            >{{ t('/etc/openitcockpit-agent/config.ini') }}</code>
+                                        @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux || config.string.operating_system === AgentconnectorOperatingSystems.Freebsd || config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
+                                            <code>{{ t('/etc/openitcockpit-agent/config.ini') }}</code>
                                         }
                                         @if (config.string.operating_system === AgentconnectorOperatingSystems.Macos) {
-                                            <code
-                                            >{{ t('/Applications/openitcockpit-agent/config.ini') }}</code>
+                                            <code>{{ t('/Applications/openitcockpit-agent/config.ini') }}</code>
                                         }
                                         <textarea class="form-control code-font mt-3" readonly
                                                   [ngModel]="configAsIni"
@@ -163,6 +180,18 @@
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Linux) {
                                                 <c-col [xs]="12" class="mb-2">
                                                     <code>{{ t('sudo systemctl restart openitcockpit-agent.service') }}</code>
+                                                </c-col>
+                                            }
+                                            @if (config.string.operating_system === AgentconnectorOperatingSystems.Freebsd) {
+                                                <c-col [xs]="12" class="mb-2">
+                                                    <code>service openitcockpit_agent restart</code>
+                                                </c-col>
+                                            }
+                                            @if (config.string.operating_system === AgentconnectorOperatingSystems.Aix) {
+                                                <c-col [xs]="12" class="mb-2">
+                                                    <code>stopsrc -s openitcockpit-agent</code>
+                                                    <br><br>
+                                                    <code>startsrc -s openitcockpit-agent</code>
                                                 </c-col>
                                             }
                                             @if (config.string.operating_system === AgentconnectorOperatingSystems.Macos) {

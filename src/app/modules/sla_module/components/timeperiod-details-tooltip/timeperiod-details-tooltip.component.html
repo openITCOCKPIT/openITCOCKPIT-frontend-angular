@@ -10,10 +10,9 @@
         </h3>
         <div class="popover-body">
 
-            <div class="container table-responsive">
                 <fa-icon [icon]="['fas', 'calendar-days']" class="text-primary"></fa-icon>
                 {{ timeperiod?.name }}
-                <table bordered cTable class="mt-2">
+                <table bordered cTable class="mt-2" small>
                     <thead>
                     <tr class="bg-primary text-white text-center small">
                         <th>{{ t("Monday") }}</th>
@@ -59,7 +58,6 @@
                         }
                     </tbody>
                 </table>
-            </div>
 
         </div>
     </ng-template>

@@ -3,7 +3,8 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@jsverse/tr
 import {
     QueryHandlerCheckerComponent
 } from '../../../layouts/coreui/query-handler-checker/query-handler-checker.component';
-import { Subscription } from 'rxjs';
+import { distinctUntilChanged, skip, Subscription } from 'rxjs';
+import { LayoutService } from '../../../layouts/coreui/layout.service';
 import { NotyService } from '../../../layouts/coreui/noty.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HistoryService } from '../../../history.service';
@@ -97,6 +98,9 @@ import { BrowserTimelineComponent } from '../../../components/timeline/browser-t
 import {
     HostTimelineLegendComponent
 } from '../../../components/timeline/host-timeline-legend/host-timeline-legend.component';
+import {
+    NotificationPeriodOverviewComponent
+} from '../../../components/notification-periods/notification-period-overview/notification-period-overview.component';
 import {
     HostsBrowserServicesListComponent
 } from '../hosts-browser-services-list/hosts-browser-services-list.component';
@@ -211,6 +215,7 @@ import { DowntimeComponent } from '../../../components/downtimes/downtime-compon
         IconDirective,
         ProxmoxHostBrowserTabComponent,
         HostdependenciesTreeComponent,
+        NotificationPeriodOverviewComponent,
         DowntimeComponent
     ],
     templateUrl: './hosts-browser.component.html',
@@ -247,6 +252,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     public ExternalSystemType: null | ExternalSystems = null;
 
     public isarFlowInformationExists: boolean = false;
+    public notificationsOverviewAllowed: boolean = false;
     public softwareInformation?: SoftwareInformationHost;
 
     public SlaOverview: false | HostBrowserSlaOverview = false;
@@ -266,6 +272,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     private readonly DowntimesService = inject(DowntimesService);
     private readonly AcknowledgementsService = inject(AcknowledgementsService);
     private cdr = inject(ChangeDetectorRef);
+    private readonly LayoutService = inject(LayoutService);
 
     protected readonly HostBrowserTabs = HostBrowserTabs;
     protected readonly ExternalSystems = ExternalSystems;
@@ -274,6 +281,11 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        // Reload the Grafana iframe url, if the user switches the theme (light / dark)
+        this.subscriptions.add(this.LayoutService.theme$.pipe(skip(1), distinctUntilChanged()).subscribe(() => {
+            this.loadGrafanaIframeUrl();
+        }));
+
         this.subscriptions.add(this.route.paramMap.subscribe(params => {
             const idOrUuid = String(params.get('idOrUuid'));
 
@@ -337,6 +349,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.loadGrafanaIframeUrl();
             this.loadAdditionalInformation();
             this.loadIsarFlowInformation();
+            this.loadNotificationsOverviewAllowed();
             this.loadSlaInformation();
             this.loadSoftwareInformation();
 
@@ -357,7 +370,7 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
 
     public loadGrafanaIframeUrl(): void {
         if (this.result?.mergedHost) {
-            this.subscriptions.add(this.HostsService.loadHostGrafanaIframeUrl(String(this.result.mergedHost.uuid), this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh).subscribe((result) => {
+            this.subscriptions.add(this.HostsService.loadHostGrafanaIframeUrl(String(this.result.mergedHost.uuid), this.selectedGrafanaTimerange, this.selectedGrafanaAutorefresh, this.LayoutService.getTheme()).subscribe((result) => {
                 this.GrafanaIframe = result;
                 this.cdr.markForCheck();
             }));
@@ -385,6 +398,24 @@ export class HostsBrowserComponent implements OnInit, OnDestroy {
             this.subscriptions.add(this.HostsService.loadIsarFlowInformation(this.result.mergedHost.id).subscribe((result) => {
                 this.isarFlowInformationExists = result;
                 this.cdr.markForCheck();
+            }));
+        }
+    }
+
+    public loadNotificationsOverviewAllowed(): void {
+        if (this.result?.mergedHost) {
+            const hostId = this.result.mergedHost.id;
+            // Only ask the server if the user has the permission for the notifications overview at all (otherwise 403)
+            this.subscriptions.add(this.PermissionsService.hasPermissionObservable(['hosts', 'notificationsOverview']).subscribe((hasPermission) => {
+                if (!hasPermission) {
+                    this.notificationsOverviewAllowed = false;
+                    this.cdr.markForCheck();
+                    return;
+                }
+                this.subscriptions.add(this.HostsService.loadNotificationsOverviewAllowed(hostId).subscribe((result) => {
+                    this.notificationsOverviewAllowed = result;
+                    this.cdr.markForCheck();
+                }));
             }));
         }
     }

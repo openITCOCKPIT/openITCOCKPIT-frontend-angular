@@ -43,7 +43,7 @@ import { TrueFalseDirective } from '../../../../directives/true-false.directive'
 import { XsButtonDirective } from '../../../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 import { BarChart, HeatmapChart, PieChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TooltipComponent, VisualMapComponent } from 'echarts/components';
-import 'echarts/theme/dark.js';
+import '../../../../components/charts/echarts-dark-theme';
 import { LayoutService } from '../../../../layouts/coreui/layout.service';
 import { CanvasRenderer } from 'echarts/renderers';
 import {

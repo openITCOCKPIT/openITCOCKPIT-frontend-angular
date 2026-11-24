@@ -15,6 +15,7 @@ export enum ServiceBrowserTabs {
     StatusInformation = 'StatusInformation',
     ServiceInformation = 'ServiceInformation',
     Timeline = 'Timeline',
+    NotificationPeriods = 'NotificationPeriods',
     ServiceNow = 'ServiceNow',
     CustomAlerts = 'CustomAlerts',
     SLA = 'SLA',

@@ -76,8 +76,6 @@ export class MapViewComponent implements OnInit, OnDestroy {
     protected refreshInterval: number = 0;
     private toasterTimeout: any = null;
 
-    /*private timer;
-    private interval;*/
     protected map!: MapRoot;
     private acl!: Acl;
 

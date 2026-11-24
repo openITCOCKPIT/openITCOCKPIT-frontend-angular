@@ -467,6 +467,21 @@ export class ServicesService {
             )
     }
 
+    public loadNotificationsOverviewAllowed(id: number): Observable<boolean> {
+        const proxyPath = this.proxyPath;
+        return this
+            .http.get<{ notifications_overview_allowed: boolean }>(`${proxyPath}/services/notificationsOverviewAllowed/${id}.json`, {
+                params: {
+                    angular: true
+                }
+            })
+            .pipe(
+                map(data => {
+                    return data.notifications_overview_allowed;
+                })
+            )
+    }
+
     public loadSlaInformation(id: number): Observable<false | ServiceBrowserSlaOverview> {
         const proxyPath = this.proxyPath;
         return this

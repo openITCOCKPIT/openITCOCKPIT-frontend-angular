@@ -10,6 +10,8 @@ export enum AgentconnectorOperatingSystems {
     Windows = 'windows',
     Linux = 'linux',
     Macos = 'macos',
+    Freebsd = 'freebsd',
+    Aix = 'aix',
 }
 
 export enum AgentconnectorWebserverTypes {

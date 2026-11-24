@@ -285,7 +285,7 @@
                                                 <c-row>
                                                     <c-col [xs]="12" class="bold">{{ t('Output') }}</c-col>
                                                     <c-col [xs]="12">
-                                                        <div class="code-font"
+                                                        <div class="code-font font-monospace font-xs"
                                                              [innerHTML]="String(reportService.Hoststatus.outputHtml) | trustAsHtml "></div>
                                                     </c-col>
                                                 </c-row>
@@ -295,8 +295,7 @@
                                 </c-card-header>
                                 <c-card-body>
                                     @if (reportService.Services) {
-                                        <table cTable class="mt-2 mb-2 table table-fit"
-                                               hover striped>
+                                        <table cTable class="mt-2 mb-2 table table-fit" hover striped small>
                                             <thead>
                                             <tr>
                                                 <th>{{ t('State') }}</th>
@@ -381,7 +380,7 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <div class="word-break"
+                                                            <div class="word-break font-monospace font-xs"
                                                                  [innerHTML]="String(service.Servicestatus.outputHtml) | trustAsHtml "></div>
                                                         </td>
                                                         <td>

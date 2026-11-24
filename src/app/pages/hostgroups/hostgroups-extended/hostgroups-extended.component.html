@@ -203,7 +203,7 @@
                     @if (hostgroupExtended.Hostgroup.uuid === '') {
                         <oitc-table-loader></oitc-table-loader>
                     }
-                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped matSort
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
                            (matSortChange)="onSortChange($event)"
                            [matSortActive]="hostParams.sort" [matSortDirection]="hostParams.direction">
                         <thead>
@@ -497,7 +497,7 @@
                                             @if (host.Host.uuid === '') {
                                                 <oitc-table-loader></oitc-table-loader>
                                             }
-                                            <table bordered cTable hover striped>
+                                            <table bordered cTable hover striped small>
                                                 <thead>
                                                 <tr>
                                                     <td colspan="8" class="p-1 col-8">
@@ -690,7 +690,7 @@
                                                             <td>
                                                                 {{ service.Servicestatus.nextCheck }}
                                                             </td>
-                                                            <td>
+                                                            <td class="font-monospace font-xs">
                                                                 {{ service.Servicestatus.outputHtml }}
                                                             </td>
                                                             <td class="text-center">
