@@ -8,9 +8,9 @@ import {
     ServicedependencyDependentServicegroups,
     ServicedependencyEditApiResult,
     ServicedependencyElements,
-    ServicedependencyServices,
     ServicedependencyIndexRoot,
-    ServicedependencyPost
+    ServicedependencyPost,
+    ServicedependencyServices
 } from './servicedependencies.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../generic-responses';
@@ -84,7 +84,7 @@ export class ServicedependenciesService {
             params: {
                 'angular': true,
                 'containerId': containerId,
-                'filter[Services.servicename]': searchString,
+                'filter[servicename]': searchString,
                 'selected[]': servicesIds
             }
         }).pipe(
@@ -100,7 +100,7 @@ export class ServicedependenciesService {
             params: {
                 'angular': true,
                 'containerId': containerId,
-                'filter[Services.servicename]': searchString,
+                'filter[servicename]': searchString,
                 'selected[]': dependentServicesIds
             }
         }).pipe(
