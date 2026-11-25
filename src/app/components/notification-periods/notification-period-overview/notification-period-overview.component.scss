@@ -9,8 +9,12 @@
     --npo-blocked-border: #888780;
     --npo-exclude: #d85a30;
     --npo-exclude-stripe: #f0997b;
+    --npo-exclude-fill: #f8c0a8;
+    --npo-chip-bg: #fff;
+    --npo-chip-text: #712b13;
     --npo-gap: var(--cui-danger, #e55353);
-    --npo-quiet: #b4b2a9;
+    --npo-quiet: #e6e5e0;
+    --npo-quiet-dot: #77766f;
     --npo-covered: var(--cui-success-bg-subtle, #d5f1de);
     --npo-track-bg: var(--cui-tertiary-bg, #f3f4f7);
     --npo-veil: rgba(0, 0, 0, 0.07);
@@ -24,8 +28,12 @@
 :host-context([data-coreui-theme='dark']) {
     --npo-blocked: #5f5e5a;
     --npo-blocked-border: #888780;
-    --npo-quiet: #5f5e5a;
+    --npo-quiet: #34332f;
+    --npo-quiet-dot: #a8a79f;
     --npo-veil: rgba(255, 255, 255, 0.06);
+    --npo-chip-bg: #2c2c2a;
+    --npo-chip-text: #f5c4b3;
+    --npo-exclude-fill: transparent;
 }
 
 .npo-toolbar {
@@ -203,10 +211,6 @@
                 transparent 6px,
                 transparent 12px
         );
-
-        .npo-bar {
-            opacity: 0.35;
-        }
     }
 
     &--coverage {
@@ -268,7 +272,7 @@
 
     &--excluded {
         border: 1px solid var(--npo-exclude);
-        background: repeating-linear-gradient(135deg, var(--npo-exclude-stripe) 0 2px, transparent 2px 6px);
+        background: repeating-linear-gradient(135deg, var(--npo-exclude-stripe) 0 2px, var(--npo-exclude-fill) 2px 6px);
     }
 }
 
@@ -284,11 +288,7 @@
     pointer-events: none;
     color: #fff;
 
-    // Bars without a solid background: white would not be readable
-    .npo-bar--excluded & {
-        color: var(--npo-exclude);
-    }
-
+    // Bar without a solid background: white would not be readable
     .npo-bar--unsubscribed & {
         color: var(--npo-contact);
     }
@@ -304,8 +304,9 @@
         background: var(--npo-gap);
     }
 
+    // Dotted, so it can be told apart from the solid grey of .npo-bar--blocked
     &--quiet {
-        background: var(--npo-quiet);
+        background: radial-gradient(circle, var(--npo-quiet-dot) 1px, transparent 1.5px) 0 0 / 5px 5px var(--npo-quiet);
     }
 }
 
@@ -357,4 +358,43 @@
     gap: 2px;
     font-size: 0.5rem;
     vertical-align: 1px;
+}
+
+/* Contact has notifications disabled: fade only background and border of the bars,
+   an opacity on the bar would also fade the label on the hatched track */
+.npo-track--disabled {
+    .npo-bar--contact:not(.npo-bar--unsubscribed) {
+        background: color-mix(in srgb, var(--npo-contact) 35%, transparent);
+        border-color: color-mix(in srgb, var(--npo-contact-border) 35%, transparent);
+    }
+
+    .npo-bar--unsubscribed {
+        border-color: color-mix(in srgb, var(--npo-contact) 35%, transparent);
+    }
+
+    .npo-bar--blocked {
+        background: color-mix(in srgb, var(--npo-blocked) 35%, transparent);
+        border-color: color-mix(in srgb, var(--npo-blocked-border) 35%, transparent);
+    }
+
+    .npo-bar--excluded {
+        border-color: color-mix(in srgb, var(--npo-exclude) 35%, transparent);
+        background: repeating-linear-gradient(135deg,
+                color-mix(in srgb, var(--npo-exclude-stripe) 35%, transparent) 0 2px,
+                color-mix(in srgb, var(--npo-exclude-fill) 35%, transparent) 2px 6px);
+    }
+}
+
+/* Labels on hatched areas are shown as a chip, so the stripes do not run through the text */
+.npo-bar--excluded .npo-bar__label,
+.npo-track--disabled .npo-bar .npo-bar__label {
+    width: fit-content;
+    max-width: calc(100% - 4px);
+    margin: 1px auto 0;
+    padding: 0 0.5rem;
+    line-height: 14px;
+    color: var(--npo-chip-text);
+    background: var(--npo-chip-bg);
+    border: 1px solid var(--npo-exclude);
+    border-radius: 8px;
 }
