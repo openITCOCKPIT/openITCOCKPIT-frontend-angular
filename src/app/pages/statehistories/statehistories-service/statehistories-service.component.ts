@@ -21,7 +21,6 @@ import {
     TooltipDirective,
     ModalService,
 } from '@coreui/angular';
-import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
@@ -223,6 +222,5 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
             show: true,
             id: 'longOutputModal',
         });
-
     }
 }

@@ -17,7 +17,8 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    ModalService, TooltipDirective,
 } from '@coreui/angular';
 import { DebounceDirective } from '../../../directives/debounce.directive';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -50,6 +51,7 @@ import {
     StatehistoriesHostRoot,
     StatehistoryHostParams
 } from '../statehistories.interface';
+import { LongOutputModalComponent } from '../../../components/long-output-modal/long-output-modal.component';
 
 @Component({
     selector: 'oitc-statehistories-host',
@@ -89,7 +91,9 @@ import {
         HostStatusNamePipe,
         XsButtonDirective,
         NgClass,
-        CardFooterComponent
+        CardFooterComponent,
+        TooltipDirective,
+        LongOutputModalComponent
     ],
     templateUrl: './statehistories-host.component.html',
     styleUrl: './statehistories-host.component.css',
@@ -97,7 +101,8 @@ import {
 })
 export class StatehistoriesHostComponent implements OnInit, OnDestroy {
     private hostId: number = 0;
-    private StatehistoryService = inject(StatehistoryService)
+    private StatehistoryService = inject(StatehistoryService);
+    private readonly modalService = inject(ModalService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
@@ -121,6 +126,8 @@ export class StatehistoriesHostComponent implements OnInit, OnDestroy {
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
     public hostBrowserConfig?: HostBrowserMenuConfig;
+
+    public longOutputHtml = '';
 
     public ngOnInit(): void {
         this.hostId = Number(this.route.snapshot.paramMap.get('id'));
@@ -200,5 +207,13 @@ export class StatehistoriesHostComponent implements OnInit, OnDestroy {
             this.params.direction = sort.direction;
             this.loadHoststatehistories();
         }
+    }
+
+    public toggleLongOutputModal(longout: string) {
+        this.longOutputHtml = longout;
+        this.modalService.toggle({
+            show: true,
+            id: 'longOutputModal',
+        });
     }
 }
