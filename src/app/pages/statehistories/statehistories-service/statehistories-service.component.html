@@ -232,7 +232,7 @@
                             {{ t('Service output') }}
                         </th>
                         <th class="no-sort text-center width-50"
-                            [cTooltip]="'Long output' | transloco" cTooltipPlacement="top">
+                            [cTooltip]="'Long output if available' | transloco" cTooltipPlacement="top">
                             <fa-icon [icon]="['fas', 'plus-square']"></fa-icon>
                         </th>
                     </tr>
@@ -305,12 +305,14 @@
                                          [innerHTML]="statehistory.StatehistoryService.outputHtml | trustAsHtml "></div>
                                 </td>
                                 <td>
-                                    <button cButton color="info" class="ripple" size="xs"
-                                            [cTooltip]="'Long output'|transloco"
-                                            cTooltipPlacement="bottom"
-                                            (click)="toggleLongOutputModal(statehistory.StatehistoryService.longOutputHtml)">
-                                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-                                    </button>
+                                    @if(statehistory.StatehistoryService.longOutputHtml != "" &&
+                                    statehistory.StatehistoryService.longOutputHtml != statehistory.StatehistoryService.outputHtml) {
+                                        <button cButton color="info" class="ripple" size="xs"
+                                                cTooltipPlacement="bottom"
+                                                (click)="toggleLongOutputModal(statehistory.StatehistoryService.longOutputHtml)">
+                                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                        </button>
+                                    }
                                 </td>
                             </tr>
                         }

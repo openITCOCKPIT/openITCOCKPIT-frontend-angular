@@ -17,7 +17,7 @@
 
             @if (outputHtmlString) {
                 <div class="word-break font-monospace font-xs"
-                     [innerHTML]="outputHtmlString | trustAsHtml"></div>
+                     [innerHTML]="outputHtmlString | colorStatusTags | trustAsHtml"></div>
             } @else {
                 <div class="text-center text-body-secondary">
                     {{ t('No long output available') }}

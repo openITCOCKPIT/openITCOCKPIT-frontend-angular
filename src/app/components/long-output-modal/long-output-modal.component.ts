@@ -9,6 +9,7 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TrustAsHtmlPipe } from '../../pipes/trust-as-html.pipe';
+import { ColorStatusTagsPipe } from '../../pipes/color-status-tags.pipe';
 import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbutton.directive';
 
 @Component({
@@ -22,7 +23,8 @@ import { XsButtonDirective } from '../../layouts/coreui/xsbutton-directive/xsbut
         ModalBodyComponent,
         ModalFooterComponent,
         XsButtonDirective,
-        TrustAsHtmlPipe
+        TrustAsHtmlPipe,
+        ColorStatusTagsPipe
     ],
     selector: "oitc-long-output-modal",
     styleUrl: "./long-output-modal.component.css",
