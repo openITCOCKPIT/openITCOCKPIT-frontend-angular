@@ -2,6 +2,7 @@ import { InstantreportEvaluationTypes, InstantreportFormats, InstantreportObject
 import { PaginateOrScroll } from '../../layouts/coreui/paginator/paginator.interface';
 import { DateTime } from 'luxon';
 import { ChartAbsolutValue, PieChartMetric } from '../../components/charts/charts.interface';
+import { ReportMailLogEntry } from '../../components/report-mail-log/report-mail-log.interface';
 
 /**********************
  *    Index action    *
@@ -28,6 +29,19 @@ export function getDefaultInstantreportsIndexParams(): InstantreportsIndexParams
         'filter[Instantreports.evaluation][]': [],
         'filter[Instantreports.type][]': []
     }
+}
+
+/**********************
+ *  Mail log action   *
+ **********************/
+export interface InstantreportsMailLogRoot extends PaginateOrScroll {
+    instantreport: {
+        id: number
+        name: string
+        container_id: number
+    }
+    mailLog: ReportMailLogEntry[]
+    _csrfToken: any
 }
 
 export type InstantreportsIndexObjectTypesFilter = {

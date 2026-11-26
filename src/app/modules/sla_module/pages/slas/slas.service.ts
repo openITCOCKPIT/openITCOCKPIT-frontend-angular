@@ -13,8 +13,10 @@ import {
     SlasIndexParams,
     SlasIndexRoot,
     SlasViewDetailsParams,
-    SlasViewDetailsRoot
+    SlasViewDetailsRoot,
+    SlasMailLogRoot
 } from './slas.interface';
+import { ReportMailLogParams } from '../../../../components/report-mail-log/report-mail-log.interface';
 import { DeleteAllItem } from '../../../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { GenericIdResponse, GenericResponseWrapper, GenericValidationError } from '../../../../generic-responses';
 import { SelectKeyValue } from '../../../../layouts/primeng/select.interface';
@@ -184,4 +186,14 @@ export class SlasService {
         );
     }
 
+    public getMailLog(id: number, params: ReportMailLogParams): Observable<SlasMailLogRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<SlasMailLogRoot>(`${proxyPath}/sla_module/slas/mailLog/${id}.json`, {
+            params: params as {} // cast ReportMailLogParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
 }

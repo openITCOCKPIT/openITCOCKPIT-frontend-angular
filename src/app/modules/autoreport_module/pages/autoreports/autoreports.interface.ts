@@ -1,6 +1,7 @@
 import { PaginateOrScroll } from '../../../../layouts/coreui/paginator/paginator.interface';
 import { GenericResponse } from '../../../../generic-responses';
 import { Timeperiod } from '../../../../pages/timeperiods/timeperiods.interface';
+import { ReportMailLogEntry } from '../../../../components/report-mail-log/report-mail-log.interface';
 
 
 export interface AutoreportsIndexParams {
@@ -621,4 +622,17 @@ export interface GenerateReportService {
         outage_duration: number,
         service_id: number
     }
+}
+
+/**********************
+ *  Mail log action   *
+ **********************/
+export interface AutoreportsMailLogRoot extends PaginateOrScroll {
+    autoreport: {
+        id: number
+        name: string
+        container_id: number
+    }
+    mailLog: ReportMailLogEntry[]
+    _csrfToken: any
 }

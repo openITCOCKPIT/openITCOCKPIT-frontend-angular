@@ -291,6 +291,11 @@
                                             <fa-icon [icon]="['fas', 'file-invoice']"></fa-icon>
                                             {{ t('Generate report') }}
                                         </oitc-actions-button-element>
+                                        <oitc-actions-button-element [permission]="'slamodule.slas.maillog'"
+                                                                     [url]="'/sla_module/slas/mailLog/' + sla.id">
+                                            <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                                            {{ t('Mail log') }}
+                                        </oitc-actions-button-element>
                                         <li cDropdownDivider *oitcPermission="['slamodule', 'slas', 'delete']"></li>
                                         @if (sla.allowEdit) {
                                             <oitc-actions-button-element (click)="toggleDeleteAllModal(sla)"

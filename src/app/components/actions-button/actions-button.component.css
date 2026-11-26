@@ -1,1 +1,6 @@
-
+/* Hide the dropdown menu if no element is left (e.g. missing permissions or allowEdit).
+   Checks for .dropdown-item instead of li, as a divider (li.dropdown-divider) may be left over without any element.
+   ".show" is needed to win against CoreUI's ".dropdown-menu.show { display: block }" */
+ul.dropdown-menu.show:not(:has(.dropdown-item)) {
+    display: none;
+}

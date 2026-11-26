@@ -258,6 +258,9 @@ const coreRoutes: Routes = [{
     path: 'eventlogs/index',
     loadComponent: () => import('./pages/eventlogs/eventlogs-index/eventlogs-index.component').then(m => m.EventlogsIndexComponent)
 }, {
+    path: 'report_mail_log/index',
+    loadComponent: () => import('./pages/report-mail-log/report-mail-log-index/report-mail-log-index.component').then(m => m.ReportMailLogIndexComponent)
+}, {
     path: 'changelogs/entity/:type/:id',
     loadComponent: () => import('./pages/changelogs/changelogs-entity/changelogs-entity.component').then(m => m.ChangelogsEntityComponent)
 }, {
@@ -722,6 +725,9 @@ const coreRoutes: Routes = [{
 }, {
     path: 'instantreports/generate/:id',
     loadComponent: () => import('./pages/instantreports/instantreports-generate/instantreports-generate.component').then(m => m.InstantreportsGenerateComponent)
+}, {
+    path: 'instantreports/mailLog/:id',
+    loadComponent: () => import('./pages/instantreports/instantreports-mail-log/instantreports-mail-log.component').then(m => m.InstantreportsMailLogComponent)
 }, {
     path: 'agentchecks/index',
     loadComponent: () => import('./pages/agentchecks/agentchecks-index/agentchecks-index.component').then(m => m.AgentchecksIndexComponent)

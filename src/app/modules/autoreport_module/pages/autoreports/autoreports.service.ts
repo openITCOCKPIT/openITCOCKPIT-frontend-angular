@@ -17,8 +17,10 @@ import {
     AutoreportDownloadParams,
     AutoreportServiceUsedByResponse,
     AutoreportHostUsedByResponse,
-    GenerateResponse
+    GenerateResponse,
+    AutoreportsMailLogRoot
 } from './autoreports.interface';
+import { ReportMailLogParams } from '../../../../components/report-mail-log/report-mail-log.interface';
 import {
     GenericResponse,
     GenericResponseWrapper,
@@ -304,4 +306,14 @@ export class AutoreportsService {
         )
     }
 
+    public getMailLog(id: number, params: ReportMailLogParams): Observable<AutoreportsMailLogRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<AutoreportsMailLogRoot>(`${proxyPath}/autoreport_module/autoreports/mailLog/${id}.json`, {
+            params: params as {} // cast ReportMailLogParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
+    }
 }

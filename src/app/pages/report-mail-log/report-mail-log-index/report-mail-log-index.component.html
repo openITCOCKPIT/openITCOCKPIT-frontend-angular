@@ -1,0 +1,243 @@
+<ng-container *transloco="let t">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/']">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                    {{ t('Home') }}
+                </a></li>
+            <li aria-current="page" class="breadcrumb-item active">
+                <fa-icon [icon]="['fas', 'envelope-open-text']"></fa-icon>
+                {{ t('Report Mail Log') }}
+            </li>
+        </ol>
+    </nav>
+    <c-card class="mb-3">
+        <c-card-header>
+            <h5 cCardTitle>
+                {{ t('Report Mail Log') }}
+                <small class="fw-300">
+                    {{ t('overview') }}
+                </small>
+            </h5>
+            <c-nav class="card-toolbar card-header-pills">
+                <c-nav-item class="px-1">
+                    <button (click)="load()" cButton class="ripple" color="default" size="xs">
+                        <fa-icon [icon]="['fas', 'arrows-rotate']"></fa-icon>
+                        {{ t('Refresh') }}
+                    </button>
+                </c-nav-item>
+                <c-nav-item class="px-1">
+                    <button (click)="toggleFilter()" cButton class="ripple" color="primary" size="xs">
+                        <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                        {{ t('Filter') }}
+                    </button>
+                </c-nav-item>
+            </c-nav>
+        </c-card-header>
+        <c-card-body>
+            @if (!mailLog) {
+                <oitc-table-loader></oitc-table-loader>
+            }
+            <!-- Filter -->
+            <c-container [hidden]="hideFilter" class="shadow-sm p-2 mb-4 bg-body rounded" [fluid]="true">
+                <c-row>
+                    <c-col>
+                        <h6 class="pb-2 mb-3 border-bottom">
+                            <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+                            {{ t('Filter') }}
+                        </h6>
+                    </c-col>
+                </c-row>
+                <form cForm>
+                    <c-row>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('From') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="from"
+                                       [placeholder]="'From date' | transloco"
+                                       aria-label="from"
+                                       name="from"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    {{ t('To') }}
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="to"
+                                       [placeholder]="'To date' | transloco"
+                                       aria-label="to"
+                                       name="to"
+                                       cFormControl
+                                       oitcDebounce
+                                       type="datetime-local"
+                                />
+                            </c-input-group>
+                        </c-col>
+                        <c-col md="6" class="mb-2">
+                            <c-input-group>
+                                <span cInputGroupText>
+                                    <fa-icon [icon]="['fas', 'file-invoice']" class="px-2"></fa-icon>
+                                </span>
+                                <input (debouncedValue)="onFilterChange($event)"
+                                       [(ngModel)]="params['filter[ReportMailLog.report_name]']"
+                                       [placeholder]="'Filter by report name' | transloco"
+                                       aria-label="ReportMailLogReportName"
+                                       cFormControl
+                                       name="ReportMailLogReportName"
+                                       oitcDebounce
+                                       type="text"
+                                />
+                            </c-input-group>
+                        </c-col>
+                    </c-row>
+                    @if (mailLog && mailLog.reportTypes.length > 0) {
+                        <c-row class="my-2">
+                            <c-col md="6">
+                                <fieldset>
+                                    <h5>
+                                        {{ t('Report type') }}
+                                    </h5>
+                                    @for (reportType of mailLog.reportTypes; track reportType.key) {
+                                        <c-form-check>
+                                            <input (debouncedValue)="onFilterChange($event)"
+                                                   [(ngModel)]="reportTypeFilter[reportType.key]"
+                                                   cFormCheckInput
+                                                   [id]="'ReportMailLogType_' + reportType.key"
+                                                   [name]="'ReportMailLogType_' + reportType.key"
+                                                   class="checkbox-lg checkbox-primary"
+                                                   oitcDebounce
+                                                   type="checkbox"/>
+                                            <label cFormCheckLabel class="ms-1 mt-1"
+                                                   [for]="'ReportMailLogType_' + reportType.key">
+                                                {{ reportType.name }}
+                                            </label>
+                                        </c-form-check>
+                                    }
+                                </fieldset>
+                            </c-col>
+                        </c-row>
+                    }
+
+                    <c-row class="mt-2">
+                        <c-col class="text-end">
+                            <button (click)="resetFilter()" cButton class="ripple" color="danger" size="xs">
+                                {{ t('Reset filter') }}
+                            </button>
+                        </c-col>
+                    </c-row>
+                </form>
+            </c-container>
+            <!-- End Filter -->
+            @if (mailLog) {
+                <c-container [fluid]="true">
+                    <table bordered cTable class="mt-2 mb-0 table table-fit" hover striped small matSort
+                           (matSortChange)="onSortChange($event)"
+                           [matSortActive]="params.sort" [matSortDirection]="params.direction">
+                        <thead>
+                        <tr>
+                            <th scope="col" mat-sort-header="ReportMailLog.report_type">
+                                {{ t('Report type') }}
+                            </th>
+                            <th scope="col" mat-sort-header="ReportMailLog.report_name">
+                                {{ t('Report name') }}
+                            </th>
+                            <th scope="col" mat-sort-header="ReportMailLog.subject">
+                                {{ t('Mail subject') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Recipients') }}
+                            </th>
+                            <th scope="col" mat-sort-header="ReportMailLog.send_time">
+                                {{ t('Send time') }}
+                            </th>
+                            <th scope="col" mat-sort-header="ReportMailLog.has_been_sent" class="col-1">
+                                {{ t('Has been sent') }}
+                            </th>
+                            <th scope="col">
+                                {{ t('Error message') }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @for (logEntry of mailLog.mailLog; track logEntry.id) {
+                                <tr>
+                                    <td class="text-nowrap">
+                                        {{ logEntry.report_type_name }}
+                                    </td>
+                                    <td>
+                                        @if (logEntry.allowEdit && editRoutes[logEntry.report_type]) {
+                                            <oitc-label-link
+                                                [objectId]="logEntry.report_id"
+                                                [route]="editRoutes[logEntry.report_type].route"
+                                                [permissions]="editRoutes[logEntry.report_type].permission">
+                                                {{ logEntry.report_name }}
+                                            </oitc-label-link>
+                                        } @else if (!logEntry.report_exists) {
+                                            <span class="text-muted" [title]="'Report has been deleted' | transloco">
+                                                {{ logEntry.report_name }}
+                                                <small>({{ t('deleted') }})</small>
+                                            </span>
+                                        } @else {
+                                            {{ logEntry.report_name }}
+                                        }
+                                    </td>
+                                    <td>
+                                        {{ logEntry.subject }}
+                                    </td>
+                                    <td>
+                                        <oitc-report-mail-log-recipients
+                                            [recipients]="logEntry.recipients"></oitc-report-mail-log-recipients>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        {{ logEntry.send_time }}
+                                    </td>
+                                    <td class="text-center">
+                                        @if (logEntry.has_been_sent) {
+                                            <c-badge color="success">
+                                                {{ t('Yes') }}
+                                            </c-badge>
+                                        } @else {
+                                            <c-badge color="danger">
+                                                {{ t('No') }}
+                                            </c-badge>
+                                        }
+                                    </td>
+                                    <td class="word-break text-danger">
+                                        <!-- Only errors are logged. Older entries may still contain an info text for sent emails -->
+                                        @if (!logEntry.has_been_sent) {
+                                            {{ logEntry.message }}
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @if (mailLog.mailLog.length === 0) {
+                        <oitc-no-records></oitc-no-records>
+                    }
+                </c-container>
+            }
+            <c-container [fluid]="true">
+                <c-row>
+                    <c-col>
+                        @if (mailLog) {
+                            <oitc-paginate-or-scroll
+                                (paginatorChange)="onPaginatorChange($event)"
+                                [paginateOrScroll]="mailLog"></oitc-paginate-or-scroll>
+                        }
+                    </c-col>
+                </c-row>
+            </c-container>
+        </c-card-body>
+    </c-card>
+</ng-container>

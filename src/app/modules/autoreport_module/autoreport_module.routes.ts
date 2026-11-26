@@ -40,6 +40,10 @@ export const autoreportModuleRoutes: Routes = [
         loadComponent: () => import('./pages/autoreports/autoreport-service-used-by/autoreport-service-used-by.component').then(m => m.AutoreportServiceUsedByComponent)
     },
     {
+        path: 'autoreport_module/autoreports/mailLog/:id',
+        loadComponent: () => import('./pages/autoreports/autoreport-mail-log/autoreport-mail-log.component').then(m => m.AutoreportMailLogComponent)
+    },
+    {
         path: 'autoreport_module/autoreports/hostUsedBy/:id',
         loadComponent: () => import('./pages/autoreports/autoreport-host-used-by/autoreport-host-used-by.component').then(m => m.AutoreportHostUsedByComponent)
     },

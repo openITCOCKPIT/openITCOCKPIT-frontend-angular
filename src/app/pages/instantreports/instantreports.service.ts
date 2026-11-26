@@ -8,9 +8,11 @@ import {
     InstantreportPost,
     InstantreportsIndexParams,
     InstantreportsIndexRoot,
+    InstantreportsMailLogRoot,
     InstantreportsReportHtmlParams,
     InstantreportsReportPdfParams
 } from './instantreports.interface';
+import { ReportMailLogParams } from '../../components/report-mail-log/report-mail-log.interface';
 import { DeleteAllItem } from '../../layouts/coreui/delete-all-modal/delete-all.interface';
 import { SelectKeyValue } from '../../layouts/primeng/select.interface';
 import {
@@ -173,6 +175,17 @@ export class InstantreportsService {
             params: params as {},
             responseType: 'blob'
         });
+    }
+
+    public getMailLog(id: number, params: ReportMailLogParams): Observable<InstantreportsMailLogRoot> {
+        const proxyPath = this.proxyPath;
+        return this.http.get<InstantreportsMailLogRoot>(`${proxyPath}/instantreports/mailLog/${id}.json`, {
+            params: params as {} // cast ReportMailLogParams into object
+        }).pipe(
+            map(data => {
+                return data;
+            })
+        );
     }
 
     public generateReportHtml(data: InstantreportsReportHtmlParams): Observable<GenericResponseWrapper> {

@@ -22,6 +22,10 @@ export const slaModuleRoutes: Routes = [
         loadComponent: () => import('./pages/slas/slas-hosts/slas-hosts.component').then(m => m.SlasHostsComponent)
     },
     {
+        path: 'sla_module/slas/mailLog/:id',
+        loadComponent: () => import('./pages/slas/slas-mail-log/slas-mail-log.component').then(m => m.SlasMailLogComponent)
+    },
+    {
         path: 'sla_module/slas/generate/:id',
         loadComponent: () => import('./pages/slas/slas-generate/slas-generate.component').then(m => m.SlasGenerateComponent)
     },
