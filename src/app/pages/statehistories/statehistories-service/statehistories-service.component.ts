@@ -17,7 +17,9 @@ import {
     NavComponent,
     NavItemComponent,
     RowComponent,
-    TableDirective
+    TableDirective,
+    TooltipDirective,
+    ModalService,
 } from '@coreui/angular';
 import { CoreuiComponent } from '../../../layouts/coreui/coreui.component';
 import { DebounceDirective } from '../../../directives/debounce.directive';
@@ -54,6 +56,7 @@ import {
     StatehistoryServiceParams
 } from '../statehistories.interface';
 import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../notifications/notifications.interface';
+import { LongOutputModalComponent } from '../../../components/long-output-modal/long-output-modal.component';
 
 @Component({
     selector: 'oitc-statehistories-service',
@@ -93,7 +96,9 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
         ServicesBrowserMenuComponent,
         ServicestatusSimpleIconComponent,
         NgClass,
-        CardFooterComponent
+        CardFooterComponent,
+        TooltipDirective,
+        LongOutputModalComponent
     ],
     templateUrl: './statehistories-service.component.html',
     styleUrl: './statehistories-service.component.css',
@@ -101,7 +106,8 @@ import { getServiceStateForApi, ServiceNotificationsStateFilter } from '../../no
 })
 export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
     private serviceId: number = 0;
-    private StatehistoryService = inject(StatehistoryService)
+    private StatehistoryService = inject(StatehistoryService);
+    private readonly modalService = inject(ModalService);
     public readonly route = inject(ActivatedRoute);
     public readonly router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
@@ -126,6 +132,8 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
     public to = formatDate(this.params['filter[to]'], 'yyyy-MM-ddTHH:mm', 'en-US');
 
     public serviceBrowserConfig?: ServiceBrowserMenuConfig;
+
+    public longOutputHtml = '';
 
     public ngOnInit(): void {
         this.serviceId = Number(this.route.snapshot.paramMap.get('id'));
@@ -162,6 +170,7 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.StatehistoryService.getStatehistoryService(this.serviceId, this.params)
             .subscribe((result) => {
                 this.servicestatehistories = result;
+                console.log(this.servicestatehistories);
                 this.cdr.markForCheck();
             })
         );
@@ -206,5 +215,14 @@ export class StatehistoriesServiceComponent implements OnInit, OnDestroy {
             this.params.direction = sort.direction;
             this.loadServicestatehistories();
         }
+    }
+
+    public toggleLongOutputModal(longout: string) {
+        this.longOutputHtml = longout;
+        this.modalService.toggle({
+            show: true,
+            id: 'longOutputModal',
+        });
+
     }
 }

@@ -50,7 +50,8 @@ export interface StatehistoryHost {
     state_change: boolean
     state_time: string
     is_hardstate: boolean
-    outputHtml: string
+    outputHtml: string,
+    longOutputHtml: string
 }
 
 /**********************
@@ -102,5 +103,6 @@ export interface StatehistoryService {
     state_change: boolean
     state_time: string
     is_hardstate: boolean
-    outputHtml: string
+    outputHtml: string,
+    longOutputHtml: string
 }

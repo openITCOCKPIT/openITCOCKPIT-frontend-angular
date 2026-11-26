@@ -231,6 +231,10 @@
                         <th scope="col" mat-sort-header="StatehistoryServices.output">
                             {{ t('Service output') }}
                         </th>
+                        <th class="no-sort text-center width-50"
+                            [cTooltip]="'Long output' | transloco" cTooltipPlacement="top">
+                            <fa-icon [icon]="['fas', 'plus-square']"></fa-icon>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -300,6 +304,14 @@
                                     <div class="word-break font-monospace font-xs"
                                          [innerHTML]="statehistory.StatehistoryService.outputHtml | trustAsHtml "></div>
                                 </td>
+                                <td>
+                                    <button cButton color="info" class="ripple" size="xs"
+                                            [cTooltip]="'Long output'|transloco"
+                                            cTooltipPlacement="bottom"
+                                            (click)="toggleLongOutputModal(statehistory.StatehistoryService.longOutputHtml)">
+                                        <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                    </button>
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -327,3 +339,4 @@
         </c-card-footer>
     </c-card>
 </ng-container>
+<oitc-long-output-modal [outputHtmlString]="longOutputHtml"></oitc-long-output-modal>
