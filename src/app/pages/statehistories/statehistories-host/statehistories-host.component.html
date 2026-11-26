@@ -216,6 +216,10 @@
                         <th scope="col" mat-sort-header="StatehistoryHosts.output">
                             {{ t('Host output') }}
                         </th>
+                        <th class="no-sort text-center width-50"
+                            [cTooltip]="'Long output if available' | transloco" cTooltipPlacement="top">
+                            <fa-icon [icon]="['fas', 'plus-square']"></fa-icon>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -281,6 +285,16 @@
                                     <div class="word-break font-monospace font-xs"
                                          [innerHTML]="statehistory.StatehistoryHost.outputHtml | trustAsHtml "></div>
                                 </td>
+                                <td>
+                                    @if(statehistory.StatehistoryHost.longOutputHtml != "" &&
+                                    statehistory.StatehistoryHost.longOutputHtml != statehistory.StatehistoryHost.outputHtml) {
+                                        <button cButton color="info" class="ripple" size="xs"
+                                                cTooltipPlacement="bottom"
+                                                (click)="toggleLongOutputModal(statehistory.StatehistoryHost.longOutputHtml)">
+                                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                                        </button>
+                                    }
+                                </td>
                             </tr>
                         }
                     </tbody>
@@ -308,3 +322,4 @@
         </c-card-footer>
     </c-card>
 </ng-container>
+<oitc-long-output-modal [outputHtmlString]="longOutputHtml"></oitc-long-output-modal>

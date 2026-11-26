@@ -1,0 +1,33 @@
+<ng-container *transloco="let t">
+    <c-modal
+            #modal='cModal'
+            [keyboard]="true"
+            id="longOutputModal"
+            [scrollable]="true"
+            [size]="'xl'">
+
+        <c-modal-header>
+            <h5 cModalTitle>
+                <fa-icon [icon]="['fas', 'book']"></fa-icon>
+                {{ t('Long output') }}
+            </h5>
+            <button cButtonClose (click)="hideModal()"></button>
+        </c-modal-header>
+        <c-modal-body>
+
+            @if (outputHtmlString) {
+                <div class="word-break font-monospace font-xs"
+                     [innerHTML]="outputHtmlString | colorStatusTags | trustAsHtml"></div>
+            } @else {
+                <div class="text-center text-body-secondary">
+                    {{ t('No long output available') }}
+                </div>
+            }
+        </c-modal-body>
+        <c-modal-footer>
+            <button cButton color="secondary" class="ripple" (click)="hideModal()">
+                {{ t('Close') }}
+            </button>
+        </c-modal-footer>
+    </c-modal>
+</ng-container>
