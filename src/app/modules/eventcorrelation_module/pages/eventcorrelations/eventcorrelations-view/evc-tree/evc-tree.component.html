@@ -198,8 +198,17 @@
                                         ></fa-icon>
                                     }
                                     @if (node.evcNode.service.service_type === ServiceTypesEnum.EVK_SERVICE) {
-                                        <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
-                                                 class="text-primary"></fa-icon>
+                                        @if (evcId() !== node.evcNode.service.host_id) {
+                                            <a *oitcPermission="['EventcorrelationModule', 'eventcorrelations', 'view']"
+                                               [routerLink]="['/', 'eventcorrelation_module', 'eventcorrelations', 'view', node.evcNode.service.host_id]"
+                                               [queryParams]="{'highlightServiceId': node.evcNode.service.id}">
+                                                <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                                         class="text-info"></fa-icon>
+                                            </a>
+                                        } @else {
+                                            <fa-icon [icon]="['fas', 'sitemap']" [rotate]="90"
+                                                     class="text-primary"></fa-icon>
+                                        }
                                     }
                                     @if (this.PermissionsService.hasPermissionObservable(['services', 'browser'])|async) {
                                         <a [routerLink]="['/', 'services', 'browser', node.evcNode.service.id]"
