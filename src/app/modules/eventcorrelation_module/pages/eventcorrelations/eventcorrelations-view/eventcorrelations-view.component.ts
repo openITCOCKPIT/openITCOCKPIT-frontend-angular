@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
-
+import { Location } from '@angular/common';
 
 import {
     CardBodyComponent,
@@ -56,7 +56,8 @@ import { PermissionsService } from '../../../../../permissions/permissions.servi
         BlockLoaderComponent,
         EvcTreeComponent,
         NgClass,
-        AsyncPipe
+        AsyncPipe,
+        FaIconComponent
     ],
     templateUrl: './eventcorrelations-view.component.html',
     styleUrl: './eventcorrelations-view.component.css',
@@ -87,6 +88,7 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     private readonly EventcorrelationsService = inject(EventcorrelationsService);
     private readonly router: Router = inject(Router);
     private readonly route: ActivatedRoute = inject(ActivatedRoute);
+    private readonly location: Location = inject(Location);
     private cdr = inject(ChangeDetectorRef);
     public highlightHostId: number = 0;
     public highlightServiceId: number = 0;
@@ -96,19 +98,12 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     public readonly PermissionsService = inject(PermissionsService);
 
 
+
     public ngOnInit(): void {
         this.route.queryParams.subscribe(params => {
             this.id = Number(this.route.snapshot.paramMap.get('id'));
-            // Query String Parameters
-            const highlightHostId = Number(params['highlightHostId']) || 0;
-            if (highlightHostId > 0) {
-                this.highlightHostId = highlightHostId;
-            }
-
-            const highlightServiceId = Number(params['highlightServiceId']) || 0;
-            if (highlightServiceId > 0) {
-                this.highlightServiceId = highlightServiceId;
-            }
+            this.highlightHostId = Number(params['highlightHostId']) || 0;
+            this.highlightServiceId = Number(params['highlightServiceId']) || 0;
 
             this.loadEventcorrelation();
         });
@@ -129,6 +124,19 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
     }
 
     public loadEventcorrelation() {
+        if (this.highlightHostId > 0 || this.highlightServiceId > 0) {
+            const urlTree = this.router.createUrlTree([], {
+                relativeTo: this.route,
+                queryParams: {
+                    highlightHostId: null,
+                    highlightServiceId: null
+                },
+                queryParamsHandling: 'merge'
+            });
+
+            this.location.replaceState(this.router.serializeUrl(urlTree));
+        }
+
         this.subscriptions.add(this.EventcorrelationsService.getEventcorrelationView(this.id).subscribe((result) => {
             this.cdr.markForCheck();
 
@@ -145,7 +153,6 @@ export class EventcorrelationsViewComponent implements OnInit, OnDestroy {
             this.acknowledgedServices = result.acknowledgedServices;
             this.stateForDowntimedService = result.stateForDowntimedService;
             this.stateForAcknowledgedService = result.stateForAcknowledgedService;
-
         }));
     }
 
